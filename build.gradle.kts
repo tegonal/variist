@@ -1,3 +1,5 @@
+import ch.tutteli.gradle.plugins.publish.PublishPlugin
+
 //import kotlin.io.path.ExperimentalPathApi
 //import kotlin.io.path.copyToRecursively
 
@@ -73,6 +75,20 @@ jmh {
 	// transform the txt to csv via ./scripts/jmh-txt-to-csv.sh
 	// find the report in build/results/jmh/results.txt.csv
 	includes.set(project.findProperty("jmh.include")?.let { listOf(it.toString()) } ?: emptyList())
+}
+
+ifIsPublishing {
+	afterEvaluate {
+		the<PublishingExtension>().run {
+			publications {
+				withType<MavenPublication>().configureEach {
+					artifacts.removeIf {
+						it.file.name.endsWith("-jmh.jar")
+					}
+				}
+			}
+		}
+	}
 }
 
 /*
