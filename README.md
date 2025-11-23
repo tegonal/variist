@@ -24,7 +24,7 @@ case you don't have enough time to execute all of them.
 ❗ You are taking a *sneak peek* at the next version. It could be that some features you find on this page are not
 released yet.  
 Please have a look at the README of the corresponding release/git tag. Latest
-version: [README of v2.0.0-RC-3](https://github.com/tegonal/variist/tree/v2.0.0-RC-3/README.md).
+version: [README of v2.0.0-RC-3](https://github.com/tegonal/variist/tree/main/README.md).
 
 ---
 
@@ -1217,7 +1217,7 @@ Last but not least, we provide the extension method `Random.nextBigInt`.
 
 # Code Documentation
 
-Code documentation can be found on github-pages: <https://tegonal.github.io/variist/2.0.0-RC-3/kdoc>.
+Code documentation can be found on github-pages: <https://tegonal.github.io/variist/latest#/kdoc>.
 
 # Contributors and contribute
 
@@ -1236,7 +1236,7 @@ You are more than welcome to contribute as well:
   the [help wanted issues](https://github.com/tegonal/variist/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
 
 Please have a look at
-[CONTRIBUTING.md](https://github.com/tegonal/variist/tree/v2.0.0-RC-3/.github/CONTRIBUTING.md)
+[CONTRIBUTING.md](https://github.com/tegonal/variist/tree/main/.github/CONTRIBUTING.md)
 for further suggestions and guidelines.
 
 # License

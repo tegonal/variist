@@ -7,7 +7,7 @@ plugins {
 	id("me.champeau.jmh") version "0.7.3"
 }
 
-version = "2.0.0-RC-3"
+version = "2.0.0-RC-4-SNAPSHOT"
 group = "com.tegonal.variist"
 description = "Library which helps to setup and prioritise parameterized tests"
 
@@ -83,7 +83,7 @@ Release & deploy a commit
 
 
 export VARIIST_PREVIOUS_VERSION=2.0.0-RC-3
-export VARIIST_VERSION=2.0.0-RC-3
+export VARIIST_VERSION=2.0.0-RC-4
 find ./ -name "*.md" | xargs perl -0777 -i \
    -pe "s@$VARIIST_PREVIOUS_VERSION@$VARIIST_VERSION@g;" \
    -pe "s@tree/main@tree/v$VARIIST_VERSION@g;" \
@@ -184,7 +184,7 @@ cd ../variist
        done &&
        (cd "$tmpDir" && zip -r "variist-$VARIIST_VERSION.zip" .) &&
        find "$tmpDir" -name "*.jar" | head -n 1 | xargs -I {} gpg --verify "{}.asc" "{}" &&
-       echo "verify the correct gpg key was used (see above) and you might want to check the release in $tmpDir"
+       echo "verify the correct gpg key was used (see above) and you might want to check the release in file://$tmpDir"
     b) Log into https://central.sonatype.com/publishing/deployments
     c) click on publish component and upload zip
     d) click on publish once verification is done
@@ -198,7 +198,7 @@ Prepare next dev cycle
 
 
 export VARIIST_VERSION=2.0.0-RC-3
-export VARIIST_NEXT_VERSION=2.0.0-RC-3
+export VARIIST_NEXT_VERSION=2.0.0-RC-4
 find ./ -name "*.md" | xargs perl -0777 -i \
    -pe "s@tree/v$VARIIST_VERSION@tree/main@g;" \
    -pe "s@$VARIIST_VERSION/kdoc@latest#/kdoc@g;" \
