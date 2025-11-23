@@ -1,17 +1,17 @@
 <!-- for main -->
-
-[![Download](https://img.shields.io/badge/Download-v2.0.0--RC--2-%23007ec6)](https://central.sonatype.com/artifact/com.tegonal.variist/variist/2.0.0-RC-2)
+<!--
+[![Download](https://img.shields.io/badge/Download-v2.0.0--RC--2-%23007ec6)](https://central.sonatype.com/artifact/com.tegonal.variist/variist/2.0.0-RC-3)
 [![EUPL 1.2](https://img.shields.io/badge/%E2%9A%96-EUPL%201.2-%230b45a6)](https://joinup.ec.europa.eu/collection/eupl/eupl-text-11-12 "License")
 [![Quality Assurance](https://github.com/tegonal/variist/actions/workflows/quality-assurance.yml/badge.svg?event=push&branch=main)](https://github.com/tegonal/variist/actions/workflows/quality-assurance.yml?query=branch%3Amain)
 [![Newcomers Welcome](https://img.shields.io/badge/%F0%9F%91%8B-Newcomers%20Welcome-blueviolet)](https://github.com/tegonal/variist/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22 "Ask in discussions for help")
-
+-->
 <!-- for main end -->
 <!-- for release -->
-<!--
-[![Download](https://img.shields.io/badge/Download-v2.0.0--RC--2-%23007ec6)](https://central.sonatype.com/artifact/com.tegonal.variist/variist/2.0.0-RC-2)
+
+[![Download](https://img.shields.io/badge/Download-v2.0.0--RC--2-%23007ec6)](https://central.sonatype.com/artifact/com.tegonal.variist/variist/2.0.0-RC-3)
 [![EUPL](https://img.shields.io/badge/%E2%9A%96-EUPL%201.2-%230b45a6)](https://joinup.ec.europa.eu/collection/eupl/eupl-text-11-12 "License")
 [![Newcomers Welcome](https://img.shields.io/badge/%F0%9F%91%8B-Newcomers%20Welcome-blueviolet)](https://github.com/tegonal/variist/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22 "Ask in discussions for help")
--->
+
 <!-- for release end -->
 
 # Variist
@@ -24,7 +24,7 @@ case you don't have enough time to execute all of them.
 ❗ You are taking a *sneak peek* at the next version. It could be that some features you find on this page are not
 released yet.  
 Please have a look at the README of the corresponding release/git tag. Latest
-version: [README of v2.0.0-RC-2](https://github.com/tegonal/variist/tree/v2.0.0-RC-2/README.md).
+version: [README of v2.0.0-RC-3](https://github.com/tegonal/variist/tree/v2.0.0-RC-3/README.md).
 
 ---
 
@@ -96,7 +96,7 @@ repositories {
 	mavenCentral()
 }
 dependencies {
-	testImplementation("com.tegonal.variist:variist:2.0.0-RC-2")
+	testImplementation("com.tegonal.variist:variist:2.0.0-RC-3")
 }
 ```
 
@@ -1217,7 +1217,7 @@ Last but not least, we provide the extension method `Random.nextBigInt`.
 
 # Code Documentation
 
-Code documentation can be found on github-pages: <https://tegonal.github.io/variist/latest#/kdoc>.
+Code documentation can be found on github-pages: <https://tegonal.github.io/variist/2.0.0-RC-3/kdoc>.
 
 # Contributors and contribute
 
@@ -1236,7 +1236,7 @@ You are more than welcome to contribute as well:
   the [help wanted issues](https://github.com/tegonal/variist/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
 
 Please have a look at
-[CONTRIBUTING.md](https://github.com/tegonal/variist/tree/main/.github/CONTRIBUTING.md)
+[CONTRIBUTING.md](https://github.com/tegonal/variist/tree/v2.0.0-RC-3/.github/CONTRIBUTING.md)
 for further suggestions and guidelines.
 
 # License
