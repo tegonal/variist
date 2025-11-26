@@ -12,26 +12,21 @@ package com.tegonal.variist.generators
 interface SemiOrderedArgsGenerator<out T> : ArgsGenerator<T> {
 	/**
 	 * Returns the maximum of values `this` generator is able to generate before some part of it start over again.
-	 *
-	 * @since 2.0.0
 	 */
 	val size: Int
 
 	/**
 	 * Returns the value at the given [offset].
-	 *
-	 * @since 2.0.0
 	 */
-	fun generateOne(offset: Int): T =
-	// we don't use first as it checks hasNext in addition and we know that it has to have one as the
+	fun generateOne(offset: Int): T {
+		// we don't use first as it checks hasNext in addition and we know that it has to have one as the
 		// Sequence needs to be infinite according to the ArgsGenerator contract
-		generate(offset).iterator().next()
+		return generate(offset).iterator().next()
+	}
 
 	/**
 	 * Returns an infinite stream of values starting at [offset] and repeating after reaching [size] of values
 	 * where one part of the values are always the same when generated multiple times.
-	 *
-	 * @since 2.0.0
 	 */
 	fun generate(offset: Int): Sequence<T>
 }
