@@ -38,3 +38,11 @@ fun <T> ArbArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData: Annota
  */
 fun <T> ArbArgsGenerator<T>.generateAndTake(take: Int): Sequence<T> =
 	generate().take(take)
+
+/**
+ * Returns one value based on the [ArgsRange.offset] that the configured [ArgsRangeDecider] will chose.
+ *
+ * @since 2.0.0
+ */
+fun <T> SemiOrderedArgsGenerator<T>.generateOneBasedOnDecider(annotationData: AnnotationData? = null): T =
+	_components.build<ArgsRangeDecider>().decide(this, annotationData).let { generateOne(it.offset) }

@@ -845,11 +845,11 @@ Note however, that all the magic of `ArgsSource` is not available (yet). Which m
 - you need to combine ArgsGenerators manually (see [zip](#zip) and [ordered.cartesian](#ordered-cartesian)) or
   use [combineAll](#generic-combine) if you deal with generators in `Tuple`s -- the good side, you do not lose the types
   as you would with JUnit's `Arguments`.
-- A defined [SuffixArgsGenerator](#use-a-suffixArgsGeneratorDecider) is ignored (we would lose the types again)
+- A defined [SuffixArgsGenerator](#use-a-suffixArgsGeneratorDecider) is ignored (we would lose the types again).
 - definitions like `@ArgSourceOptions` are ignored, but as long as you use `generateAndTakeBasedOnDecider` the defined
-  seed and co. (see [fixing the seed](#fixing-the-seed) are taken into account
+  seed and co. (see [fixing the seed](#fixing-the-seed)) are taken into account.
 - and you can pass `AnnotationData` to `generateAndTakeBasedOnDecider` to get more or less back the same options as with
-  `ArgSourceOptions`
+  `ArgSourceOptions`.
 
 <code-dynamic-test-2>
 
@@ -1151,8 +1151,9 @@ import com.tegonal.variist.utils.createVariistRandom
 import com.tegonal.variist.utils.pickOneRandomly
 import com.tegonal.variist.utils.takeRandomly
 
-// Imagine the list is more complicated than that, because if not, then better define it via arb or ordered
-// since then it is most likely more efficient (would not allocate the memory for 1001 Ints)
+// Imagine the list is more complicated than that (involves, filtering, flatMap etc.), because if not, then
+// better define it via `arb` or `ordered` because this is most likely more efficient (would not allocate the
+// memory for 1001 Ints)
 val someList = (0..1000).toList()
 val i1: Int = someList.pickOneRandomly()
 val l1: List<Int> = someList.takeRandomly(10)

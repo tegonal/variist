@@ -20,8 +20,9 @@ class RandomHelperExample : ReadmeTest {
 	fun `code-random-helper`() {
 		//snippet-random-helper-import-insert
 
-		// Imagine the list is more complicated than that, because if not, then better define it via arb or ordered
-		// since then it is most likely more efficient (would not allocate the memory for 1001 Ints)
+		// Imagine the list is more complicated than that (involves, filtering, flatMap etc.), because if not, then
+		// better define it via `arb` or `ordered` because this is most likely more efficient (would not allocate the
+		// memory for 1001 Ints)
 		val someList = (0..1000).toList()
 		val i1: Int = someList.pickOneRandomly()
 		val l1: List<Int> = someList.takeRandomly(10)
