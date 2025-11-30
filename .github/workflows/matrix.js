@@ -5,14 +5,17 @@
 //  \__/\__/\_, /\___/_//_/\_,_/_/         It is licensed under European Union Public License v. 1.2
 //         /___/                           Please report bugs and contribute back your improvements
 //
-//                                         Version: v0.17.0
+//                                         Version: v2.0.0-RC-3
 //##################################
 // adapted version of https://github.com/vlsi/github-actions-random-matrix/blob/main/examples/matrix.js
 //##################################
 const {MatrixBuilder} = require('./matrix_builder');
-const {configureKotlinDefaults, setMatrix} = require('./matrix_commons');
+const {configureKotlinDefaults, javaDistributionAxis, javaVersionAxis, setMatrix} = require('./matrix_commons');
 
 const matrix = new MatrixBuilder();
-configureKotlinDefaults(matrix)
+// we are not ready yet for jdk25 as it requires gradle 9.x which no longer supports jdk11 but we still want
+// to support jdk11 for now
+const withoutJdk25 = {...javaVersionAxis, values: javaVersionAxis.values.filter(x => x != '25') };
+configureKotlinDefaults(matrix, javaDistributionAxis, withoutJdk25);
 
 setMatrix(matrix, 4);
