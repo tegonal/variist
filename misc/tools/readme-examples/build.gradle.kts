@@ -9,6 +9,7 @@ kotlin {
 		main {
 			dependencies {
 				implementation(project.rootProject)
+				implementation(libs.atrium.fluent)
 			}
 		}
 		val kotlinVersion = org.jetbrains.kotlin.gradle.dsl.KotlinVersion.DEFAULT.version

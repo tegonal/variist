@@ -51,6 +51,7 @@ version: [README of v2.0.0-RC-3](https://github.com/tegonal/variist/tree/main/RE
 		- [ordered.concatenation](#ordered-concatenation)
 		- [arb.mergeWeighted](#arb-mergeWeighted)
 		- [ordered.toArbArgsGenerator](#ordered-toArbArgsGenerator)
+        - [ordered.fromArbs](#ordered-fromArbs) 
 - [Use Variist in other contexts than JUnit](#use-variist-in-other-contexts-than-junit)
 - [Configuration](#configuration)
 	- [Profiles and Envs](#profiles-and-envs)
@@ -74,7 +75,7 @@ version: [README of v2.0.0-RC-3](https://github.com/tegonal/variist/tree/main/RE
 
 Variist might resemble a property based testing library but is more data-driven oriented.
 Its focus is on tests that take longer (integration, e2e and system integration tests) where shrinking is too costly.
-But of course, you can also use it for data-driven unit tests.  
+But of course, you can also use it for data-driven unit tests (see [ordered.fromArbs](#ordered-fromArbs) as an example).  
 It comes with extra support for JUnit but can
 also [be used in other contexts](#use-variist-in-other-contexts-than-junit)
 where you want to generate data (or with other test-runners).
@@ -794,9 +795,107 @@ arb.mergeWeighted(
 </code-mergeWeighted>
 
 The weighting does not need to add up to 100. If they do, then the numbers correspond to percentage. So in the above
-case, out of 100 generates values, around 80 will be between 100 and 200 (exclusive), around 10 will be 201 and
+case, out of 100 generated values, around 80 will be between 100 and 200 (exclusive), around 10 will be 201 and
 around 10 will be `null`. The defined weighting is uniformly distributed, which means that for a small number of values,
 it might be skewed; for example, 85 values could fall between 100 and 200, etc.
+
+
+
+### ordered fromArbs
+
+If you find yourself in the situation where you define multiple `ParameterizedTests` which contain all more or less the 
+same test-logic but with different ranges of values, then one is quickly tempted to include more than one expectation in 
+the test method, as the boilerplate is just too annoying (jump to the usage of [ordered.fromArbs](#ordered-fromArbs-good-solution)
+if you are not interested in knowing why it exists). Following an example:
+
+<code-fromArbs-problem>
+
+```kotlin
+@Test
+fun null_null__no_error() {
+	checkRequestedMinArgsMaxArgs(null, null)
+}
+
+@ParameterizedTest
+@ArgsSource("arbIntPositive")
+fun positiveInt_null__no_error(positiveInt: Int) {
+	checkRequestedMinArgsMaxArgs(positiveInt, null)
+}
+
+@ParameterizedTest
+@ArgsSource("arbIntPositive")
+fun null_positiveInt__no_error(positiveInt: Int) {
+	checkRequestedMinArgsMaxArgs(null, positiveInt)
+}
+
+@ParameterizedTest
+@ArgsSource("arbIntPositive")
+fun same_positiveInt__no_error(positiveInt: Int) {
+	checkRequestedMinArgsMaxArgs(positiveInt, positiveInt)
+}
+//...
+```
+
+</code-fromArbs-problem>
+
+Merging it simplifies maintenance...
+
+<code-fromArbs-bad-solution>
+
+```kotlin
+@ParameterizedTest
+@ArgsSource("arbIntPositive")
+fun checkRequestedMinArgsMaxArgs(positiveInt: Int) {
+	checkRequestedMinArgsMaxArgs(null, null)
+	checkRequestedMinArgsMaxArgs(positiveInt, null)
+	checkRequestedMinArgsMaxArgs(null, positiveInt)
+	checkRequestedMinArgsMaxArgs(positiveInt, positiveInt)
+}
+```
+
+</code-fromArbs-bad-solution>
+
+.. but in exchange for a more generic test method name. And the more expectations you add to the test method 
+the less obvious it becomes which expectation failed on failure. Re-executing just the failure case,
+debugging it etc. becomes more tedious. And you know what, we forgot to add the use case where `requestedMinArgs` is
+a positive int and `maxArgs` is greater. For this we need two arguments where the second depends on the first.
+
+At first, that might sound complicated to achieve and you might be tempted to fall back to `ValueSource` to cover the 
+5 cases with fixed values. But you don't need to give up the arbitrariness. `ordered.fromArbs` helps in such a situation
+where you re-use the test-logic and define different valid data ranges:
+
+<a name="ordered-fromArbs-good-solution"></a>
+
+<code-fromArbs>
+
+```kotlin
+@ParameterizedTest
+@ArgsSource("requestedMinArgsMaxArgsHappyCases")
+fun requestedMinArgs_maxArgs_happy_cases(requestedMinArgs: Int?, maxArgs: Int?) {
+	checkRequestedMinArgsMaxArgs(requestedMinArgs, maxArgs)
+}
+
+companion object {
+	@JvmStatic
+	fun requestedMinArgsMaxArgsHappyCases() = ordered.fromArbs(
+		arb.of(Tuple(null, null)),
+		arb.intPositive().map { Tuple(it, null) },
+		arb.intPositive().map { Tuple(null, it) },
+		arb.intPositive().map { Tuple(it, it) },
+		arb.intBounds(minInclusive = 1, minSize = 2)
+	)
+}
+```
+
+</code-fromArbs>
+
+You could also use `arb.mergeWeighted` to achieve more or less the same but with a different runtime behaviour. 
+Using `ordered.fromArbs` limits the number of generated runs by the number of specified `ArbArgsGenerators` 
+where using `arb.mergeWeighted` doesn't impose that limit and more runs than defined generators could be generated
+(see [Adjust the number of runs](#adjust-the-number-of-args)). As an example, say the profile of the test and the 
+environment the test runs in allows to run 100 variations, then `ordered.fromArbs` will result in 5 runs and 
+`arb.mergeWeighted` would result in 100. For this particular case we don't think there is much value in running
+that many variations all the time (a waste of resources and time) and prefer `ordered.fromArbs`.
 
 ### ordered toArbArgsGenerator
 
