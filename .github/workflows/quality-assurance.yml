@@ -1,6 +1,9 @@
 name: Quality Assurance
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   before_pr:
     name: before-pr.sh
