@@ -53,7 +53,8 @@ class ProfileBasedArgsRangeDeciderTest {
 				it.name to TestConfig(
 					maxArgs = when (it) {
 						Env.Local -> 2
-						Env.PR -> 3
+						Env.Push -> 3
+						Env.PR -> 4
 						Env.Main -> 5
 						Env.DeployTest -> 7
 						Env.DeployInt -> 8

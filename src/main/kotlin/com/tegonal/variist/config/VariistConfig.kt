@@ -108,6 +108,7 @@ class VariistConfig(
 		TestType.Unit to
 			listOf(
 				Env.Local to TestConfig(maxArgs = 100),
+				Env.Push to TestConfig(maxArgs = 200),
 				Env.PR to TestConfig(maxArgs = 300),
 				Env.Main to TestConfig(maxArgs = 500),
 				// we don't expect that Unit tests are run as part of a deployment
@@ -122,6 +123,7 @@ class VariistConfig(
 		TestType.Integration to
 			listOf(
 				Env.Local to TestConfig(maxArgs = 5),
+				Env.Push to TestConfig(maxArgs = 7),
 				Env.PR to TestConfig(maxArgs = 10),
 				Env.Main to TestConfig(maxArgs = 30),
 				Env.DeployTest to TestConfig(maxArgs = 60),
@@ -135,6 +137,7 @@ class VariistConfig(
 		TestType.E2E to
 			listOf(
 				Env.Local to TestConfig(maxArgs = 3),
+				Env.Push to TestConfig(maxArgs = 5),
 				Env.PR to TestConfig(maxArgs = 7),
 				Env.Main to TestConfig(maxArgs = 10),
 				Env.DeployTest to TestConfig(maxArgs = 20),
@@ -148,6 +151,7 @@ class VariistConfig(
 		TestType.SystemIntegration to
 			listOf(
 				Env.Local to TestConfig(maxArgs = 3),
+				Env.Push to TestConfig(maxArgs = 4),
 				Env.PR to TestConfig(maxArgs = 5),
 				Env.Main to TestConfig(maxArgs = 7),
 				Env.DeployTest to TestConfig(maxArgs = 10),
