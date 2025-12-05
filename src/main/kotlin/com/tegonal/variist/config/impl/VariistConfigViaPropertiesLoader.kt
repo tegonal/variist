@@ -5,6 +5,7 @@ import ch.tutteli.kbox.takeIf
 import com.tegonal.variist.config.Env
 import com.tegonal.variist.config.VariistConfig
 import com.tegonal.variist.config.VariistConfigBuilder
+import com.tegonal.variist.config.VariistDeadlineException
 import com.tegonal.variist.config.impl.VariistPropertiesParser.Companion.ERROR_DEADLINES_PREFIX
 import com.tegonal.variist.utils.impl.checkIsPositive
 import java.nio.file.Path
@@ -13,6 +14,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.io.path.appendText
+import kotlin.io.path.exists
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
@@ -29,22 +31,33 @@ class VariistConfigViaPropertiesLoader {
 		val configFileSpecifics = ConfigFileSpecifics()
 		initialConfig.toBuilder()
 			.apply {
-				setByPropertiesInResource("/variist.properties", configFileSpecifics, parser)
-				check(seed == initialConfig.seed.value) {
-					errorMessageNotAllowedToModify("seed")
-				}
-				check(skip == initialConfig.skip) {
-					errorMessageNotAllowedToModify("skip")
-				}
-				check(requestedMinArgs == initialConfig.requestedMinArgs) {
-					errorMessageNotAllowedToModify("requestedMinArgs")
-				}
-				check(maxArgs == initialConfig.maxArgs) {
-					errorMessageNotAllowedToModify("maxArgs")
+				setByPropertiesInResource("/variist.properties", configFileSpecifics, parser).also { exists ->
+					if (exists) {
+						check(seed == initialConfig.seed.value) {
+							errorMessageNotAllowedToModify("seed")
+						}
+						check(skip == initialConfig.skip) {
+							errorMessageNotAllowedToModify("skip")
+						}
+						check(requestedMinArgs == initialConfig.requestedMinArgs) {
+							errorMessageNotAllowedToModify("requestedMinArgs")
+						}
+						check(maxArgs == initialConfig.maxArgs) {
+							errorMessageNotAllowedToModify("maxArgs")
+						}
+					}
 				}
 			}
 			.apply { setByEnv() }
-			.apply { setByPropertiesInResource("/variist.local.properties", configFileSpecifics, parser) }
+			.apply {
+				setByPropertiesInResource("/variist.local.properties", configFileSpecifics, parser).let { exists ->
+					if (exists &&
+						configFileSpecifics.variistPropertiesDir.resolve("variist.local.properties").exists().not()
+					) {
+						error("variist.local.properties was found via classloader but is not defined in ${configFileSpecifics.variistPropertiesDir}. Adjust variistPropertiesDir accordingly")
+					}
+				}
+			}
 			.apply {
 				val fixedSeed = seed != initialConfig.seed.value
 
@@ -140,16 +153,13 @@ class VariistConfigViaPropertiesLoader {
 		propertiesFile: String,
 		configFileSpecifics: ConfigFileSpecifics,
 		parser: VariistPropertiesParser
-	) {
-		this::class.java.getResourceAsStream(propertiesFile)?.also {
-			it.use { input ->
-				val props = Properties()
-				props.load(input)
-				parser.mergeWithProperties(this, configFileSpecifics, props)
-			}
+	): Boolean = this::class.java.getResourceAsStream(propertiesFile)?.also {
+		it.use { input ->
+			val props = Properties()
+			props.load(input)
+			parser.mergeWithProperties(this, configFileSpecifics, props)
 		}
-	}
-
+	} != null
 
 	private fun VariistConfigBuilder.setByEnv() {
 		determineEnv()?.also { activeEnv = it }
