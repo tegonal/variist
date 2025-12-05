@@ -2,6 +2,7 @@ package com.tegonal.variist.config.impl
 
 import com.tegonal.variist.config.VariistConfigBuilder
 import com.tegonal.variist.config.TestConfig
+import com.tegonal.variist.config.VariistParseException
 import com.tegonal.variist.utils.impl.FEATURE_REQUEST_URL
 import com.tegonal.variist.utils.impl.toIntOrErrorNotValid
 import com.tegonal.variist.utils.impl.toPositiveIntOrErrorNotValid

@@ -1,4 +1,4 @@
-package com.tegonal.variist.config.impl
+package com.tegonal.variist.config
 
 abstract class VariistConfigException(message: String, cause: Throwable?) : RuntimeException(message, cause)
 class VariistParseException(message: String, cause: Throwable? = null) : VariistConfigException(message, cause)
