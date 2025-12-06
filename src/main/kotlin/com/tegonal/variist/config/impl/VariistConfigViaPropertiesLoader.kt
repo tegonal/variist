@@ -212,11 +212,12 @@ class VariistConfigViaPropertiesLoader {
 
 	private fun determinePushEnv(branch: String): Env =
 		when {
+			branch == "main" -> Env.Main
 			branch == "test" -> Env.DeployTest
 			branch == "int" -> Env.DeployInt
 			branch.startsWith("hotfix/") -> Env.Hotfix
 			branch.startsWith("release/") -> Env.Release
-			else -> Env.Main
+			else -> Env.Push
 		}
 }
 

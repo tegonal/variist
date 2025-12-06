@@ -48,12 +48,20 @@ enum class Env {
 	Local,
 
 	/**
+	 * Running tests on a push to a branch but only if neither to branch `main`, `test`, `int`
+	 * nor to hotfix/.. or release/...
+	 *
+	 * E.g. a push to feature/..., bugfix/...,
+	 */
+	Push,
+
+	/**
 	 * Running tests in a PR pipeline which shall be merged (eventually back to the main branch)
 	 */
 	PR,
 
 	/**
-	 * Running tests once a PR is merged to main.
+	 * Running tests on a push to main/ (e.g. PR was merged to main)
 	 */
 	Main,
 
@@ -83,7 +91,7 @@ enum class Env {
 	HotfixPR,
 
 	/**
-	 * Running tests once a PR is merged back to a hotfix/ branch.
+	 * Running tests on a push to hotfix/ (e.g. once a hotfix PR is merged back to a hotfix/ branch).
 	 */
 	Hotfix,
 
