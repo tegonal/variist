@@ -9,7 +9,7 @@
 #                                         Version: v0.1.0-SNAPSHOT
 ###################################
 set -euo pipefail
-shopt -s inherit_errexit
+shopt -s inherit_errexit || { echo >&2 "please update to bash 5, see errors above" && exit 1; }
 unset CDPATH
 
 if ! [[ -v scriptsDir ]]; then

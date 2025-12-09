@@ -9,7 +9,7 @@
 #                                         Version: v0.1.0-SNAPSHOT
 ###################################
 set -euo pipefail
-shopt -s inherit_errexit
+shopt -s inherit_errexit || { echo >&2 "please update to bash 5, see errors above" && exit 1; }
 unset CDPATH
 
 if ! [[ -v scriptsDir ]]; then
@@ -25,8 +25,9 @@ sourceOnce "$scriptsDir/run-shellcheck.sh"
 
 function beforePr() {
 	# using && because this function is used on the left side of an || in releaseFiles
-	customRunShellcheck && \
-	cleanupOnPushToMain
+	# this way we still have fail fast behaviour and don't mask/hide a non-zero exit code
+	customRunShellcheck &&
+		cleanupOnPushToMain
 }
 
 ${__SOURCED__:+return}

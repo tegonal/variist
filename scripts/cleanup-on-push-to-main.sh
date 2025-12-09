@@ -9,7 +9,7 @@
 #                                         Version: v0.1.0-SNAPSHOT
 ###################################
 set -euo pipefail
-shopt -s inherit_errexit
+shopt -s inherit_errexit || { echo >&2 "please update to bash 5, see errors above" && exit 1; }
 unset CDPATH
 
 if ! [[ -v scriptsDir ]]; then
@@ -27,9 +27,10 @@ if ! [[ -v dir_of_tegonal_scripts ]]; then
 	source "$dir_of_tegonal_scripts/setup.sh" "$dir_of_tegonal_scripts"
 fi
 
-sourceOnce "$dir_of_tegonal_scripts/utility/log.sh"
+sourceOnce "$scriptsDir/run-shfmt.sh"
 
 function cleanupOnPushToMain() {
+	customRunShfmt || die "was not able to format"
 	"$projectDir/gradlew" generateAll
 	"$projectDir/gradlew" :readme-examples:build
 	logSuccess "code generated"

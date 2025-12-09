@@ -33,6 +33,15 @@ jobs:
       #gt-placeholder-gh-action-checkout-end
 
       #gt-placeholder-install-dependencies-start
+      - name: install shfmt
+        run: ./lib/tegonal-scripts/src/ci/install-shfmt.sh
+      - name: install jdk 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
       #gt-placeholder-install-dependencies-end
 
       - name: Cleanup Sources
@@ -68,7 +77,6 @@ jobs:
           delete-branch: true
           token: ${{ secrets.AUTO_PR_TOKEN }}
           push-to-fork: ${{ vars.AUTO_PR_FORK_NAME != '' && vars.AUTO_PR_FORK_NAME || secrets.AUTO_PR_FORK_NAME }}
-
 
       - name: set reviewer
         if: ${{ steps.check-collaborator.outputs.reviewer != '' && steps.check-collaborator.outputs.reviewer != null && steps.create-pr.outputs.pull-request-operation == 'created' }}

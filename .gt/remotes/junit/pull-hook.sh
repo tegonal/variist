@@ -92,15 +92,16 @@ function gt_pullHook_junit_after() {
 	fi
 
 	# shellcheck disable=SC2155
-	local warning=$(cat <<-EOM
-		// -----------------------------------------------------------------------------------------------------
-		// WARNING !!!!!!!!!!!!!!
-		// Copied from JUnit and exported for internal use in Variist only
-		// No backward compatibility guarantees. As soon as JUnit breaks compatibility (which can happen
-		// even in a patch version and that is totally fine) and we \`gt update\` this file to this new version
-		// (maybe also in a patch version), we will break compatibility as well.
-		// -----------------------------------------------------------------------------------------------------
-	EOM
+	local warning=$(
+		cat <<-EOM
+			// -----------------------------------------------------------------------------------------------------
+			// WARNING !!!!!!!!!!!!!!
+			// Copied from JUnit and exported for internal use in Variist only
+			// No backward compatibility guarantees. As soon as JUnit breaks compatibility (which can happen
+			// even in a patch version and that is totally fine) and we \`gt update\` this file to this new version
+			// (maybe also in a patch version), we will break compatibility as well.
+			// -----------------------------------------------------------------------------------------------------
+		EOM
 	)
 
 	perl -0777 -i \
