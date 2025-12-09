@@ -78,4 +78,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch-token:  ${{ secrets.AUTO_PR_TOKEN }}
           push-to-fork: ${{ vars.AUTO_PR_FORK_NAME != '' && vars.AUTO_PR_FORK_NAME || secrets.AUTO_PR_FORK_NAME }}
+          maintainer-can-modify: false
           reviewers: ${{ steps.check-collaborator.outputs.reviewer }}
