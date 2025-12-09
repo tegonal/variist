@@ -75,8 +75,7 @@ jobs:
           commit-message: auto cleanup sources
           body: Looks like someone forgot to run ./scripts/cleanup-on-push-to-main.sh before committing. I did it for them :)
           delete-branch: true
-          token: ${{ secrets.AUTO_PR_TOKEN }}
-          branch-token: ${{ secrets.GITHUB_TOKEN }}
-
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch-token:  ${{ secrets.AUTO_PR_TOKEN }}
           push-to-fork: ${{ vars.AUTO_PR_FORK_NAME != '' && vars.AUTO_PR_FORK_NAME || secrets.AUTO_PR_FORK_NAME }}
           reviewers: ${{ steps.check-collaborator.outputs.reviewer }}
