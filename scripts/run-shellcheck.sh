@@ -27,9 +27,9 @@ function customRunShellcheck() {
 	declare srcDir="$scriptsDir/../src"
 
 	# shellcheck disable=SC2034   # is passed by name to runShellcheck
-		declare -a dirs=("$scriptsDir")
-		declare sourcePath="$srcDir:$scriptsDir:$dir_of_tegonal_scripts"
-		runShellcheck dirs "$sourcePath"
+	declare -a dirs=("$scriptsDir")
+	declare sourcePath="$srcDir:$scriptsDir:$dir_of_tegonal_scripts"
+	runShellcheck dirs "$sourcePath"
 
 	local -r gh_commons_dir="$scriptsDir/../.gt/remotes/tegonal-gh-commons"
 	logInfo "analysing $gh_commons_dir/pull-hook.sh"
