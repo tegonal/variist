@@ -1,7 +1,7 @@
 package com.tegonal.variist.config.impl
 
-import com.tegonal.variist.config.VariistConfigBuilder
 import com.tegonal.variist.config.TestConfig
+import com.tegonal.variist.config.VariistConfigBuilder
 import com.tegonal.variist.config.VariistParseException
 import com.tegonal.variist.utils.impl.FEATURE_REQUEST_URL
 import com.tegonal.variist.utils.impl.toIntOrErrorNotValid
@@ -19,16 +19,16 @@ import java.util.*
 class VariistPropertiesParser {
 
 	fun mergeWithProperties(
-		config: VariistConfigBuilder,
+		configBuilder: VariistConfigBuilder,
 		configFileSpecifics: ConfigFileSpecifics,
-		props: Properties
+		properties: Properties
 	) {
-		props.forEach { (keyAny, valueAny) ->
+		properties.forEach { (keyAny, valueAny) ->
 			try {
 				val key = keyAny as String
 				val value = valueAny as String
 
-				config.parseProperty(configFileSpecifics, key, value)
+				configBuilder.parseProperty(configFileSpecifics, key, value)
 			} catch (m: VariistParseException) {
 				throw m
 			} catch (e: Exception) {
@@ -36,7 +36,6 @@ class VariistPropertiesParser {
 			}
 		}
 	}
-
 
 	private fun VariistConfigBuilder.parseProperty(
 		configFileSpecifics: ConfigFileSpecifics,
@@ -58,8 +57,6 @@ class VariistPropertiesParser {
 			isKey("activeSuffixArgsGeneratorDecider") -> activeSuffixArgsGeneratorDecider = value
 			isKey("activeEnv") -> activeEnv = value
 			isKey("defaultProfile") -> defaultProfile = value
-			isKey("remindAboutFixedPropertiesAfterMinutes") -> configFileSpecifics.remindAboutFixedPropertiesAfterMinutes =
-				value.toIntOrErrorNotValid(key)
 
 			isKey(PROFILES) -> {
 				if (value == "clear") testProfiles.clear()
@@ -69,7 +66,8 @@ class VariistPropertiesParser {
 			key.startsWith(PROFILES_PREFIX) -> parseTestProfile(key, value)
 
 			isKey("variistPropertiesDir") -> configFileSpecifics.variistPropertiesDir = Paths.get(value)
-
+			isKey("remindAboutFixedPropertiesAfterMinutes") ->
+				configFileSpecifics.remindAboutFixedPropertiesAfterMinutes = value.toIntOrErrorNotValid(key)
 			key.startsWith(ERROR_DEADLINES_PREFIX) -> configFileSpecifics.parseErrorDeadlines(key, value)
 
 			else -> throwUnknownProperty(key, value, supportedKeys)
@@ -118,7 +116,7 @@ class VariistPropertiesParser {
 		within: String? = null
 	): Nothing {
 		throw VariistParseException(
-			"Unknown variist config property $key with value $value -- if you want to introduce custom config properties, then please open a feature request: $FEATURE_REQUEST_URL&title=custom%20config%20properties\nSupported Keys${within?.let { " within $it" } ?: ""}: ${
+			"Unknown Variist config property $key with value $value -- if you want to introduce custom config properties, then please open a feature request: $FEATURE_REQUEST_URL&title=custom%20config%20properties\nSupported Keys${within?.let { " within $it" } ?: ""}: ${
 				supportedKeys.sorted().joinToString(", ")
 			}"
 		)
