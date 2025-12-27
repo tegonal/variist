@@ -343,9 +343,6 @@ class ProfileBasedArgsRangeDeciderTest {
 		}
 	}
 
-	//TODO 2.0.0
-	// check that config requestedMinArgs/maxArgs and passed argsRangeOptions are taken into consideration as expected
-
 	companion object {
 
 		@JvmStatic
