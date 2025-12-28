@@ -1,5 +1,3 @@
-import ch.tutteli.gradle.plugins.publish.PublishPlugin
-
 //import kotlin.io.path.ExperimentalPathApi
 //import kotlin.io.path.copyToRecursively
 
@@ -12,7 +10,6 @@ plugins {
 version = "2.0.0-RC-4-SNAPSHOT"
 group = "com.tegonal.variist"
 description = "Library which helps to setup and prioritise parameterized tests"
-
 
 dependencies {
 	api(libs.junit.jupiter.params)

@@ -1,28 +1,14 @@
 package com.tegonal.variist.providers
 
-import ch.tutteli.atrium.api.fluent.en_GB.toBeGreaterThanOrEqualTo
-import ch.tutteli.atrium.api.fluent.en_GB.toBeLessThan
-import ch.tutteli.atrium.api.fluent.en_GB.toBeLessThanOrEqualTo
-import ch.tutteli.atrium.api.fluent.en_GB.toEqual
-import ch.tutteli.atrium.api.fluent.en_GB.toHaveSize
+import ch.tutteli.atrium.api.fluent.en_GB.*
 import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
-import com.tegonal.variist.Args
-import com.tegonal.variist.component1
-import com.tegonal.variist.component2
-import com.tegonal.variist.config.ComponentFactoryContainer
-import com.tegonal.variist.config._components
-import com.tegonal.variist.config.arb
-import com.tegonal.variist.config.create
+import com.tegonal.variist.config.*
 import com.tegonal.variist.config.impl.createVia
-import com.tegonal.variist.config.ordered
-import com.tegonal.variist.generators.ArgsGenerator
-import com.tegonal.variist.generators.arb
-import com.tegonal.variist.generators.fromList
-import com.tegonal.variist.generators.of
-import com.tegonal.variist.generators.ordered
+import com.tegonal.variist.generators.*
 import com.tegonal.variist.testutils.Tuple4LikeStructure
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
 
 class ArgsProviderTest {
 
@@ -65,27 +51,26 @@ class ArgsProviderTest {
 	@ParameterizedTest
 	@ArgsSource("rawArgs")
 	fun rawArgsIsSplit(index: Int, value: Long) {
-		val (expectedIndex, expectValue) = rawArgs()[index]
-		expect(value).toEqual(expectValue)
-		expect(index).toEqual(expectedIndex)
+		val (expectedIndex, expectValue) = rawArgs()[index].get()
+		expect(value).toEqual(expectValue as Long)
+		expect(index).toEqual(expectedIndex as Int)
 	}
 
 	@ParameterizedTest
 	@ArgsSource("orderedArgs")
 	fun orderedArgsIsSplit(index: Int, value: Long) {
-		val (expectedIndex, expectValue) = rawArgs()[index]
-		expect(value).toEqual(expectValue)
-		expect(index).toEqual(expectedIndex)
+		val (expectedIndex, expectValue) = rawArgs()[index].get()
+		expect(value).toEqual(expectValue as Long)
+		expect(index).toEqual(expectedIndex as Int)
 	}
 
 	@ParameterizedTest
 	@ArgsSource("arbArgs")
 	fun arbArgsIsSplit(index: Int, value: Long) {
-		val (expectedIndex, expectValue) = rawArgs()[index]
-		expect(value).toEqual(expectValue)
-		expect(index).toEqual(expectedIndex)
+		val (expectedIndex, expectValue) = rawArgs()[index].get()
+		expect(value).toEqual(expectValue as Long)
+		expect(index).toEqual(expectedIndex as Int)
 	}
-
 
 	@ParameterizedTest
 	@ArgsSource("rawPairs")
@@ -196,7 +181,7 @@ class ArgsProviderTest {
 
 
 		@JvmStatic
-		fun rawArgs() = rawValuesInRange().mapIndexed { index, it -> Args.of(index, it) }
+		fun rawArgs() = rawValuesInRange().mapIndexed { index, it -> Arguments.of(index, it) }
 
 		@JvmStatic
 		fun orderedArgs() = ordered.fromList(rawPairs())
@@ -209,10 +194,10 @@ class ArgsProviderTest {
 		fun rawPairs() = rawValuesInRange().mapIndexed { index, it -> index to it }
 
 		@JvmStatic
-		fun orderedPairs() = ordered.fromList(rawArgs())
+		fun orderedPairs() = ordered.fromList(rawPairs())
 
 		@JvmStatic
-		fun arbPairs() = arb.fromList(rawArgs())
+		fun arbPairs() = arb.fromList(rawPairs())
 
 		@JvmStatic
 		fun rawPairsInList() = rawValuesInRange().mapIndexed { index, it -> listOf(index to it) }

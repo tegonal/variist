@@ -8,7 +8,6 @@ module com.tegonal.variist {
 	// from the export of junit classes
 	requires org.apiguardian.api;
 
-	exports com.tegonal.variist;
 	exports com.tegonal.variist.config;
 	exports com.tegonal.variist.generators;
 	exports com.tegonal.variist.providers;

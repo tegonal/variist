@@ -4,7 +4,6 @@ import ch.tutteli.atrium.api.fluent.en_GB.*
 import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.atrium.logic.utils.expectLambda
 import ch.tutteli.kbox.toVararg
-import com.tegonal.variist.Args
 import com.tegonal.variist.config.ArgsRangeOptions
 import com.tegonal.variist.config.ComponentFactoryContainer
 import com.tegonal.variist.config.VariistConfig
@@ -16,6 +15,7 @@ import com.tegonal.variist.testutils.Tuple4LikeStructure
 import com.tegonal.variist.testutils.orderedWithSeed0
 import com.tegonal.variist.testutils.withMockedArgsRange
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ValueSource
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
@@ -98,8 +98,8 @@ class ArgsGeneratorToArgumentsConverterTest {
 
 	@Test
 	fun oneArgs_keptAsIs() {
-		val args1 = Args.of(1, 2)
-		val args2 = Args.of(3, 4)
+		val args1 = Arguments.of(1, 2)
+		val args2 = Arguments.of(3, 4)
 		val combinations = testee.toArguments(
 			requestedAtLeastArgs1000, orderedWithSeed0.of(args1, args2).map { listOf(it) }
 		).toList()
@@ -110,8 +110,8 @@ class ArgsGeneratorToArgumentsConverterTest {
 	fun multipleArgs_flattened() {
 		val combinations = testee.toArguments(
 			requestedAtLeastArgs1000, orderedWithSeed0.of(
-				listOf(Args.of(1, 2), Args.of(3, 4)),
-				listOf(Args.of(5, 6), Args.of(7, 8))
+				listOf(Arguments.of(1, 2), Arguments.of(3, 4)),
+				listOf(Arguments.of(5, 6), Arguments.of(7, 8))
 			)
 		).map { it.get().asList() }.toList()
 		expect(combinations) {

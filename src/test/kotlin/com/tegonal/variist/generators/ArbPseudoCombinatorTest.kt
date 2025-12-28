@@ -4,8 +4,7 @@ import ch.tutteli.atrium.api.fluent.en_GB.toContainExactlyElementsOf
 import ch.tutteli.atrium.api.fluent.en_GB.toEqual
 import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
-import com.tegonal.variist.Args
-import com.tegonal.variist.Args2
+import ch.tutteli.kbox.Tuple2
 import com.tegonal.variist.testutils.PseudoArbArgsGenerator
 import com.tegonal.variist.utils.repeatForever
 import kotlin.test.Test
@@ -40,7 +39,7 @@ class ArbPseudoCombinatorTest {
 
 	@Test
 	fun zipTransformed() {
-		val f: (Int, Char) -> Args2<Int, Char> = { a1, a2 -> Args.of(a1, a2) }
+		val f: (Int, Char) -> Tuple2<Int, Char> = { a1, a2 -> a1 to a2 }
 		val a1generator = PseudoArbArgsGenerator(a1s)
 		val generator = a1generator.zip(PseudoArbArgsGenerator(a2s), f)
 		val expected = a1s.zip(a2sAfterCombine, f)
