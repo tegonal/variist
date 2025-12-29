@@ -14,7 +14,7 @@ import kotlin.random.Random
  *
  * @param maxLength defines the maximum length the string can have.
  * @param minLength defined the minimum length the string shall have.
- * @param allowedRanges [UnicodeRange] ranges.
+ * @param allowedRanges [UnicodeRange]s which define what Unicode chars can be used.
  *
  * @since 2.0.0
  */
@@ -160,8 +160,6 @@ private fun checkCanGenerateRequiredLength(
 	}
 }
 
-
 //TODO 2.1.0 combinations on case
-//arb.randomCase(s: String)
-
+//arb.stringRandomCase(s: String)
 

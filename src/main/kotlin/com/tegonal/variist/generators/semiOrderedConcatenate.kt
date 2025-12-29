@@ -9,7 +9,7 @@ import com.tegonal.variist.generators.impl.SemiOrderedArgsGeneratorConcatenator
  *
  * I.e. the resulting [SemiOrderedArgsGenerator] generates the sum of [SemiOrderedArgsGenerator.size] values before repeating.
  *
- * @return The resulting [SemiOrderedArgsGenerator].
+ * @return The resulting [SemiOrderedArgsGenerator] after concatenation.
  *
  * @since 2.0.0
  */
@@ -22,7 +22,7 @@ fun <T> Sequence<SemiOrderedArgsGenerator<T>>.concatAll(): SemiOrderedArgsGenera
  *
  * I.e. the resulting [SemiOrderedArgsGenerator] generates the sum of [SemiOrderedArgsGenerator.size] values before repeating.
  *
- * @return The resulting [SemiOrderedArgsGenerator].
+ * @return The resulting [SemiOrderedArgsGenerator] after concatenation.
  *
  * @since 2.0.0
  */
@@ -40,16 +40,16 @@ private fun <T> concatAll(iterator: Iterator<SemiOrderedArgsGenerator<T>>): Semi
 }
 
 /**
- * Merges `this` [OrderedArgsGenerator] with the given [other]&nbsp;[OrderedArgsGenerator] resulting in an
- * [OrderedArgsGenerator] which yields the values of `this` [OrderedArgsGenerator] and then of the [other] before
- * repeating.
+ * Merges `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[SemiOrderedArgsGenerator] resulting in an
+ * [SemiOrderedArgsGenerator] which yields the values of `this` [SemiOrderedArgsGenerator] and then of the [other]
+ * before repeating.
  *
- * The resulting [OrderedArgsGenerator] generates
- * [this.size][OrderedArgsGenerator.size] + [other.size][OrderedArgsGenerator.size] values before repeating.
+ * The resulting [SemiOrderedArgsGenerator] generates
+ * [this.size][SemiOrderedArgsGenerator.size] + [other.size][SemiOrderedArgsGenerator.size] values before repeating.
  *
- * @param other The other [OrderedArgsGenerator].
+ * @param other The other [SemiOrderedArgsGenerator].
  *
- * @return The resulting [OrderedArgsGenerator].
+ * @return The resulting [SemiOrderedArgsGenerator] after concatenation.
  *
  * @since 2.0.0
  */

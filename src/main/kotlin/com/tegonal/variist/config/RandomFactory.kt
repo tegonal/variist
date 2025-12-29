@@ -8,5 +8,8 @@ import kotlin.random.Random
  * @since 2.0.0
  */
 interface RandomFactory {
+	/**
+	 * Creates a [Random] based on the given [seed].
+	 */
 	fun create(seed: Int): Random
 }

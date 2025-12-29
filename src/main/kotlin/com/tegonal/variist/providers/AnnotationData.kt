@@ -4,6 +4,8 @@ import com.tegonal.variist.config.ArgsRangeOptions
 import com.tegonal.variist.config.merge
 
 /**
+ * Data which is typically defined via an [Annotation] and is used as specific configuration for the test method/class.
+ *
  * @since 2.0.0
  */
 class AnnotationData(
@@ -25,6 +27,9 @@ class AnnotationData(
 }
 
 /**
+ * Merges this [AnnotationData] with the given [other] where the other takes precedence for properties which are not
+ * merged.
+ *
  * @since 2.0.0
  */
 fun AnnotationData.merge(other: AnnotationData): AnnotationData {
@@ -41,6 +46,8 @@ fun AnnotationData.merge(other: AnnotationData): AnnotationData {
 
 
 /**
+ * Helper method to create [AnnotationData] based on [ArgsSourceOptions].
+ *
  * @since 2.0.0
  */
 fun AnnotationData.Companion.fromOptions(

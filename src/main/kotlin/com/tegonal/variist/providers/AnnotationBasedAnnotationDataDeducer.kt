@@ -7,7 +7,8 @@ import kotlin.jvm.optionals.getOrNull
 import kotlin.reflect.KClass
 
 /**
- * Deduces [AnnotationData] based on a given annotation [A] where the annotation is searched on the class and the method
+ * Deduces [AnnotationData] based on a given annotation [A] where the annotation is searched
+ * on the class and the method.
  *
  * @since 2.0.0
  */

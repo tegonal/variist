@@ -1,6 +1,7 @@
 package com.tegonal.variist.config
 
 /**
+ * Indicates if the given [testType] is used as profile name in this [TestProfiles] collection or not.
  * @since 2.0.0
  */
 operator fun TestProfiles.contains(testType: TestType) = contains(testType.name)

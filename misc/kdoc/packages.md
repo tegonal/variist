@@ -1,7 +1,3 @@
-# Package com.tegonal.variist
-
-Contains `Args`, `Args1` etc.
-
 # Package com.tegonal.variist.config
 
 Configuration related classes such as `VariistConfig`.
@@ -20,7 +16,7 @@ No backward compatibility guarantees! The implementations behind the generators.
 
 # Package com.tegonal.variist.providers
 
-`ArgsSource` and co. as well as `Predefined.
+`ArgsSource` and co. as well as `PredefinedArgsProviders`.
 
 # Package com.tegonal.variist.providers.impl
 

@@ -1,6 +1,9 @@
 package com.tegonal.variist.generators.impl
 
+import com.tegonal.variist.generators.ArbArgsGenerator
+import com.tegonal.variist.generators.ArbExtensionPoint
 import com.tegonal.variist.generators.ArgsGenerator
+import com.tegonal.variist.generators.intFromUntil
 import com.tegonal.variist.utils.impl.FEATURE_REQUEST_URL
 import com.tegonal.variist.utils.repeatForever
 
@@ -23,6 +26,24 @@ inline fun <A, B, R> zipForever(
 		transform(iterA.next(), iterB.next())
 	}
 }
+
+/**
+ * !! No backward compatibility guarantees !!
+ * Reuse at your own risk
+ *
+ * Checks that the given [size] is not 0, returns `null` if [size] is 1 and otherwise
+ * [arb.intFromUntil][ArbExtensionPoint.intFromUntil] with from = 0 and until = [size].
+ *
+ * @param size represents the number of elements passed to an [ArbArgsGenerator] factory.
+ *
+ * @since 2.0.0
+ */
+fun ArbExtensionPoint.checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize(size: Int) =
+	when (size) {
+		0 -> error("You must define at least one element, 0 given, cannot create an ArbArgsGenerator")
+		1 -> null
+		else -> intFromUntil(0, size)
+	}
 
 /**
  * !! No backward compatibility guarantees !!

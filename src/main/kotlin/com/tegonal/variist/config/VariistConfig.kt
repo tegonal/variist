@@ -14,6 +14,8 @@ import com.tegonal.variist.utils.seedToOffset
 import kotlin.random.Random
 
 /**
+ * The configuration of Variist which steers the generation of values.
+ *
  * @since 2.0.0
  */
 class VariistConfig(
@@ -216,6 +218,9 @@ class VariistConfigBuilder(
 ) {
 
 	fun build(): VariistConfig = VariistConfig(
+	/**
+	 * Creates a [VariistConfig] based on this builder.
+	 */
 		seed = Seed(seed),
 		skip = skip,
 		requestedMinArgs = requestedMinArgs,

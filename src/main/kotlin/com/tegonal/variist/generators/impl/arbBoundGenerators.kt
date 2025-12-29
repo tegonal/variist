@@ -5,7 +5,6 @@ import com.tegonal.variist.generators.*
 import com.tegonal.variist.utils.BigInt
 import com.tegonal.variist.utils.impl.checkIsPositive
 import com.tegonal.variist.utils.toBigInt
-import java.math.BigInteger
 
 /**
  * !! No backward compatibility guarantees !!
@@ -72,7 +71,7 @@ const val possibleMaxSizeSafeInLongDomain = 4_294_967_295L
 // since we first multiply and then divide, it is actually only safe for
 // Int.MAX_SIZE ≥ possibleMaxSize * (possibleMaxSize + 1) which yields 46340.5
 // as a trick we first divide possibleMaxSize or possibleMaxSize + 1 (depending on which one is even, we don't
-// want to truncate due to Int division) but for this we need one additional if with
+// want to truncate due to Int division) but for this we need one additional if
 /**
  * !! No backward compatibility guarantees !!
  * Reuse at your own risk
@@ -195,7 +194,7 @@ private fun validateNumbersAndReturnEffectiveAndPossibleMaxSize(
 	maxInclusive: Long,
 	minSize: Long,
 	maxSize: BigInt?
-): Pair<BigInteger, BigInteger> {
+): Pair<BigInt, BigInt> {
 	checkIsPositive(minSize, "minSize")
 	maxSize?.also {
 		checkIsPositive(maxSize, "maxSize")

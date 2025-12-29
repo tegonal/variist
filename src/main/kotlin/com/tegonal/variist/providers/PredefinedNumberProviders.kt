@@ -3,6 +3,8 @@ package com.tegonal.variist.providers
 import com.tegonal.variist.generators.*
 
 /**
+ * Provides predefined providers around [Int], [Long] and other [Number] based on the default [arb] and [ordered].
+ *
  * @since 2.0.0
  */
 interface PredefinedNumberProviders {

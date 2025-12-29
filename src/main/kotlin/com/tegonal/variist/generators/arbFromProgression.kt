@@ -12,7 +12,6 @@ import kotlin.math.abs
 /**
  * Returns an [ArbArgsGenerator] generating [Char]s based on the given [progression].
  *
- * @return an [ArbArgsGenerator] based on the given [progression].
  * @since 2.0.0
  */
 fun ArbExtensionPoint.fromProgression(progression: CharProgression): ArbArgsGenerator<Char> =
@@ -23,7 +22,6 @@ fun ArbExtensionPoint.fromProgression(progression: CharProgression): ArbArgsGene
 /**
  * Returns an [ArbArgsGenerator] generating [Int]s based on the given [progression].
  *
- * @return an [ArbArgsGenerator] based on the given [progression].
  * @since 2.0.0
  */
 fun ArbExtensionPoint.fromProgression(progression: IntProgression): ArbArgsGenerator<Int> =
@@ -60,7 +58,6 @@ fun ArbExtensionPoint.fromProgression(progression: IntProgression): ArbArgsGener
 /**
  * Returns an [ArbArgsGenerator] generating [Long]s based on the given [progression].
  *
- * @return an [ArbArgsGenerator] based on the given [progression].
  * @since 2.0.0
  */
 fun ArbExtensionPoint.fromProgression(progression: LongProgression): ArbArgsGenerator<Long> =
@@ -93,3 +90,4 @@ fun ArbExtensionPoint.fromProgression(progression: LongProgression): ArbArgsGene
 		}
 	}
 
+//TODO 2.1.0 introduce BigIntProgression?

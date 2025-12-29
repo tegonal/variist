@@ -7,7 +7,6 @@ import com.tegonal.variist.generators.impl.LongFromToOrderedArgsGenerator
 /**
  * Returns an [OrderedArgsGenerator] generating [Char]s based on the given [progression].
  *
- * @return an [OrderedArgsGenerator] based on the given [progression].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromProgression(progression: CharProgression): OrderedArgsGenerator<Char> =
@@ -21,7 +20,6 @@ fun OrderedExtensionPoint.fromProgression(progression: CharProgression): Ordered
 /**
  * Returns an [OrderedArgsGenerator] generating [Int]s based on the given [progression].
  *
- * @return an [OrderedArgsGenerator] based on the given [progression].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromProgression(progression: IntProgression): OrderedArgsGenerator<Int> =
@@ -34,7 +32,6 @@ fun OrderedExtensionPoint.fromProgression(progression: IntProgression): OrderedA
 /**
  * Returns an [OrderedArgsGenerator] generating [Long]s based on the given [progression].
  *
- * @return an [OrderedArgsGenerator] based on the given [progression].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromProgression(progression: LongProgression): OrderedArgsGenerator<Long> =

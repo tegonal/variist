@@ -13,6 +13,7 @@ typealias BigInt = BigInteger
 
 /**
  * Converts `this` [Int] to a [BigInt].
+ *
  * @since 2.0.0
  */
 @Suppress("NOTHING_TO_INLINE")
@@ -20,6 +21,7 @@ inline fun Int.toBigInt() = this.toBigInteger()
 
 /**
  * Converts `this` [Long] to a [BigInt].
+ *
  * @since 2.0.0
  */
 @Suppress("NOTHING_TO_INLINE")
