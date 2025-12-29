@@ -5,8 +5,11 @@ import com.tegonal.variist.generators.ArbArgsGenerator
 import com.tegonal.variist.generators.arb
 import com.tegonal.variist.generators.intBounds
 import com.tegonal.variist.generators.longBounds
+import com.tegonal.variist.generators.ordered
 
 /**
+ * Provides predefined providers around bounds which are based on the default [arb] and [ordered].
+ *
  * @since 2.0.0
  */
 interface PredefinedBoundProviders {

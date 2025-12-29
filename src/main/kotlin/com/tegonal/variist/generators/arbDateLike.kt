@@ -1,14 +1,7 @@
 package com.tegonal.variist.generators
 
 import com.tegonal.variist.config._components
-import com.tegonal.variist.generators.impl.LocalDateFromToArbArgsGenerator
-import com.tegonal.variist.generators.impl.LocalDateFromUntilArbArgsGenerator
-import com.tegonal.variist.generators.impl.LocalDateTimeFromToArbArgsGenerator
-import com.tegonal.variist.generators.impl.LocalDateTimeFromUntilArbArgsGenerator
-import com.tegonal.variist.generators.impl.OffsetDateTimeFromToArbArgsGenerator
-import com.tegonal.variist.generators.impl.OffsetDateTimeFromUntilArbArgsGenerator
-import com.tegonal.variist.generators.impl.ZonedDateTimeFromToArbArgsGenerator
-import com.tegonal.variist.generators.impl.ZonedDateTimeFromUntilArbArgsGenerator
+import com.tegonal.variist.generators.impl.*
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
@@ -20,7 +13,6 @@ import java.time.temporal.TemporalUnit
  * Returns an [ArbArgsGenerator] which generates [LocalDate]s ranging [from] (inclusive) to [toExclusive]
  * where [temporalUnit] defines the steps.
  *
- * @return an [ArbArgsGenerator] which generates [LocalDate]s ranging [from] (inclusive) to [toExclusive].
  * @since 2.0.0
  */
 fun ArbExtensionPoint.localDateFromUntil(
@@ -34,7 +26,6 @@ fun ArbExtensionPoint.localDateFromUntil(
  * Returns an [ArbArgsGenerator] which generates [LocalDateTime]s ranging [from] (inclusive) to [toExclusive]
  * where [temporalUnit] defines the steps.
  *
- * @return an [ArbArgsGenerator] which generates [LocalDateTime]s ranging [from] (inclusive) to [toExclusive].
  * @since 2.0.0
  */
 fun ArbExtensionPoint.localDateTimeFromUntil(
@@ -48,7 +39,6 @@ fun ArbExtensionPoint.localDateTimeFromUntil(
  * Returns an [ArbArgsGenerator] which generates [ZonedDateTime]s ranging [from] (inclusive) to [toExclusive]
  * where [temporalUnit] defines the steps.
  *
- * @return an [ArbArgsGenerator] which generates [ZonedDateTime]s ranging [from] (inclusive) to [toExclusive].
  * @since 2.0.0
  */
 //TODO 2.1.0 also define a parameter to steer timezone
@@ -63,7 +53,6 @@ fun ArbExtensionPoint.zonedDateTimeFromUntil(
  * Returns an [ArbArgsGenerator] which generates [OffsetDateTime]s ranging [from] (inclusive) to [toExclusive]
  * where [temporalUnit] defines the steps.
  *
- * @return an [ArbArgsGenerator] which generates [OffsetDateTime]s ranging [from] (inclusive) to [toExclusive].
  * @since 2.0.0
  */
 //TODO 2.1.0 also define a parameter to steer the offset
@@ -78,7 +67,6 @@ fun ArbExtensionPoint.offsetDateTimeFromUntil(
  * Returns an [ArbArgsGenerator] which generates [LocalDate]s ranging [from] (inclusive) to [toExclusive]
  * where [temporalUnit] defines the steps.
  *
- * @return an [ArbArgsGenerator] which generates [LocalDate]s ranging [from] (inclusive) to [toExclusive].
  * @since 2.0.0
  */
 fun ArbExtensionPoint.localDateFromTo(
@@ -92,7 +80,6 @@ fun ArbExtensionPoint.localDateFromTo(
  * Returns an [ArbArgsGenerator] which generates [LocalDateTime]s ranging [from] (inclusive) to [toExclusive]
  * where [temporalUnit] defines the steps.
  *
- * @return an [ArbArgsGenerator] which generates [LocalDateTime]s ranging [from] (inclusive) to [toExclusive].
  * @since 2.0.0
  */
 fun ArbExtensionPoint.localDateTimeFromTo(
@@ -106,7 +93,6 @@ fun ArbExtensionPoint.localDateTimeFromTo(
  * Returns an [ArbArgsGenerator] which generates [ZonedDateTime]s ranging [from] (inclusive) to [toExclusive]
  * where [temporalUnit] defines the steps.
  *
- * @return an [ArbArgsGenerator] which generates [ZonedDateTime]s ranging [from] (inclusive) to [toExclusive].
  * @since 2.0.0
  */
 //TODO 2.1.0 also define a parameter to steer timezone
@@ -122,7 +108,6 @@ fun ArbExtensionPoint.zonedDateTimeFromTo(
  * Returns an [ArbArgsGenerator] which generates [OffsetDateTime]s ranging [from] (inclusive) to [toExclusive]
  * where [temporalUnit] defines the steps.
  *
- * @return an [ArbArgsGenerator] which generates [OffsetDateTime]s ranging [from] (inclusive) to [toExclusive].
  * @since 2.0.0
  */
 //TODO 2.1.0 also define a parameter to steer the offset

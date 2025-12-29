@@ -3,13 +3,15 @@ package com.tegonal.variist.providers
 import com.tegonal.variist.generators.*
 
 /**
+ * Provides predefined providers around [Boolean] based on the default [arb] and [ordered].
+ *
  * @since 2.0.0
  */
 interface PredefinedBooleanProviders {
 	companion object {
 
 		/**
-		 * See [ordered.boolean()][OrderedExtensionPoint.boolean]
+		 * See [ordered].[boolean()][OrderedExtensionPoint.boolean]
 		 */
 		@JvmStatic
 		fun boolean() = ordered.boolean()
@@ -21,7 +23,7 @@ interface PredefinedBooleanProviders {
 		fun booleanAndNull() = ordered.of(false, true, null)
 
 		/**
-		 * See [arb.boolean()][ArbExtensionPoint.boolean]
+		 * See [arb].[boolean()][ArbExtensionPoint.boolean]
 		 */
 		@JvmStatic
 		fun arbBoolean() = arb.boolean()

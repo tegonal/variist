@@ -12,7 +12,9 @@ import com.tegonal.variist.generators.impl.throwUnsupportedArgsGenerator
  *   - a [SemiOrderedArgsGenerator] is combined using [cartesian]
  *   - an [ArbArgsGenerator] is combined using [zip]
  *
- * @return The resulting [OrderedArgsGenerator] which generates values of type [R].
+ * @return The resulting [SemiOrderedArgsGenerator] which generates values of type [R].
+ * @throws UnsupportedOperationException in case the [other]&nbsp;[ArgsGenerator] is neither
+ *   a [SemiOrderedArgsGenerator] nor an [ArbArgsGenerator].
  *
  * @since 2.0.0
  */

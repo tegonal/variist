@@ -1262,7 +1262,7 @@ val l1: List<Int> = someList.takeRandomly(10)
 val complicatedSetup = ordered.of(1, 2, 3)
 val i2: Int = complicatedSetup.pickOneRandomly()
 val l2: List<Int> = complicatedSetup.takeRandomly(100)
-// and of course, if you want to do more than that, then you can always turn your OrderedArgsGenerator
+// and of course, if you want to do more than that, then you can always turn your (Semi)OrderedArgsGenerator
 // into an ArbArgsGenerator and then work on Sequence:
 val l3: Set<Int> = complicatedSetup.toArbArgsGenerator().generate()
 	.map { it + i1 + i2 }

@@ -4,6 +4,7 @@ import com.tegonal.variist.config.*
 import com.tegonal.variist.config.impl.VariistConfigViaPropertiesLoader
 
 /**
+ * Base class for extension points.
  *
  * @since 2.0.0
  */
@@ -31,9 +32,6 @@ interface ArbExtensionPoint : GeneratorExtensionPoint {
 	val seedBaseOffset: Int
 }
 
-/**
- * @since 2.0.0
- */
 private val propertiesBasedComponentFactoryContainer: ComponentFactoryContainer = run {
 	val config = VariistConfigViaPropertiesLoader().config
 	ComponentFactoryContainer.createBasedOnConfig(config)

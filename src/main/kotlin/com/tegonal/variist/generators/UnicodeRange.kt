@@ -38,6 +38,10 @@ class UnicodeRange(override val start: Int, override val endInclusive: Int) : Cl
 		}
 	}
 
+	/**
+	 * Indicates if this Range is a BMP (Basic Multilingual Plane) or not.
+	 * @return `true` if it is a BMP range, false otherwise.
+	 */
 	fun isBmpRange(): Boolean {
 		// since we don't allow that a Unicode rang starts in BMP and ends in non-BMP it is enough to just check start
 		return Character.isBmpCodePoint(start)
@@ -46,8 +50,8 @@ class UnicodeRange(override val start: Int, override val endInclusive: Int) : Cl
 	override fun toString(): String = "${start.formatAsCodepoint()}..${endInclusive.formatAsCodepoint()}"
 
 	companion object {
-
 		private fun Int.formatAsCodepoint() = "0x" + this.toString(16).uppercase().padStart(4, '0')
+
 		const val SURROGATES_START = 0xD800
 		const val SURROGATES_END = 0xDFFF
 		const val BEFORE_SURROGATES_START = SURROGATES_START - 1
@@ -65,7 +69,7 @@ class UnicodeRange(override val start: Int, override val endInclusive: Int) : Cl
 }
 
 /**
- * Don't depend on order, we might break it
+ * Predefined [UnicodeRange] collections -- don't depend on enum order, we might break it.
  *
  * @since 2.0.0
  */
@@ -2344,6 +2348,9 @@ enum class UnicodeRanges(open vararg val ranges: UnicodeRange) {
 	},
 	;
 
+	/**
+	 * Indicates whether the given [codePoint] is part of this [UnicodeRange] collection or not.
+	 */
 	operator fun contains(codePoint: Int): Boolean =
 		if (ranges.size <= 10) {
 			ranges.any { codePoint in it }

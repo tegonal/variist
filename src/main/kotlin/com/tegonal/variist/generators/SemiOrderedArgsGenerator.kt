@@ -25,7 +25,7 @@ interface SemiOrderedArgsGenerator<out T> : ArgsGenerator<T> {
 	}
 
 	/**
-	 * Returns an infinite stream of values starting at [offset] and repeating after reaching [size] of values
+	 * Returns an infinite [Sequence] of values starting at [offset] and repeating after reaching [size] of values
 	 * where one part of the values are always the same when generated multiple times.
 	 */
 	fun generate(offset: Int): Sequence<T>

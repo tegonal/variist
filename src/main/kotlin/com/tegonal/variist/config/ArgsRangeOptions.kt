@@ -8,6 +8,7 @@ import com.tegonal.variist.utils.impl.checkRequestedMinArgsMaxArgs
 
 /**
  * Represents options which influences an [ArgsRangeDecider] on what [ArgsRange] to choose.
+ *
  * @since 2.0.0
  */
 class ArgsRangeOptions(
@@ -35,6 +36,9 @@ class ArgsRangeOptions(
 }
 
 /**
+ * Merges this [ArgsRangeOptions] with the given [other] where the properties of the [other] [ArgsRangeOptions] take
+ * precedence.
+ *
  * @since 2.0.0
  */
 fun ArgsRangeOptions.merge(other: ArgsRangeOptions): ArgsRangeOptions {

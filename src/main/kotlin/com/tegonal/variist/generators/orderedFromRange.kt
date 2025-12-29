@@ -3,7 +3,6 @@ package com.tegonal.variist.generators
 /**
  * Returns an [OrderedArgsGenerator] generating [Char]s based on the given [args].
  *
- * @return an [OrderedArgsGenerator] based on the given [args].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromRange(args: CharRange): OrderedArgsGenerator<Char> =
@@ -12,7 +11,6 @@ fun OrderedExtensionPoint.fromRange(args: CharRange): OrderedArgsGenerator<Char>
 /**
  * Returns an [OrderedArgsGenerator] generating [Char]s based on the given [args].
  *
- * @return an [OrderedArgsGenerator] based on the given [args].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromRange(args: IntRange): OrderedArgsGenerator<Int> =
@@ -21,7 +19,6 @@ fun OrderedExtensionPoint.fromRange(args: IntRange): OrderedArgsGenerator<Int> =
 /**
  * Returns an [OrderedArgsGenerator] generating [Char]s based on the given [args].
  *
- * @return an [OrderedArgsGenerator] based on the given [args].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromRange(args: LongRange): OrderedArgsGenerator<Long> =

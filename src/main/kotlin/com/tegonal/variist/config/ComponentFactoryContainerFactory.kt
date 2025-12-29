@@ -1,7 +1,7 @@
 package com.tegonal.variist.config
 
 /**
- * Responsible to create a ComponentFactoryContainer
+ * Responsible to create a [ComponentFactoryContainer].
  *
  * @since 2.0.0
  */

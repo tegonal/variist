@@ -2,10 +2,11 @@ package com.tegonal.variist.generators
 
 /**
  * Returns a [SemiOrderedArgsGenerator] based on the given [ArbArgsGenerator]s where the fixed part of it is the number
- * of [generators], the value it produces are arbitrary in respect to the given generators.
+ * of [generators], which one is next to contribute a value, the values as such are arbitrary in respect
+ * to the given generators.
  *
- * @return an [SemiOrderedArgsGenerator] based on the given [generators] which produces values in a round-robin fashion
- *   based on the given [ArbArgsGenerator]s.
+ * @return an [SemiOrderedArgsGenerator] based on the given [generators] where they are used in round-robin fashion
+ *   to generate values.
  *
  * @since 2.0.0
  */

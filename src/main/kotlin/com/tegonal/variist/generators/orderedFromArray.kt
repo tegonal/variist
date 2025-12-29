@@ -7,7 +7,6 @@ import com.tegonal.variist.generators.impl.RandomAccessOrderedArgsGenerator
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
  *
- * @return an [OrderedArgsGenerator] based on the given [args].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: ByteArray): OrderedArgsGenerator<Byte> =
@@ -16,7 +15,6 @@ fun OrderedExtensionPoint.fromArray(args: ByteArray): OrderedArgsGenerator<Byte>
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
  *
- * @return an [OrderedArgsGenerator] based on the given [args].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: CharArray): OrderedArgsGenerator<Char> =
@@ -26,7 +24,6 @@ fun OrderedExtensionPoint.fromArray(args: CharArray): OrderedArgsGenerator<Char>
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
  *
- * @return an [OrderedArgsGenerator] based on the given [args].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: ShortArray): OrderedArgsGenerator<Short> =
@@ -35,7 +32,6 @@ fun OrderedExtensionPoint.fromArray(args: ShortArray): OrderedArgsGenerator<Shor
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
  *
- * @return an [OrderedArgsGenerator] based on the given [args].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: IntArray): OrderedArgsGenerator<Int> =
@@ -44,7 +40,6 @@ fun OrderedExtensionPoint.fromArray(args: IntArray): OrderedArgsGenerator<Int> =
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
  *
- * @return an [OrderedArgsGenerator] based on the given [args].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: LongArray): OrderedArgsGenerator<Long> =
@@ -53,7 +48,6 @@ fun OrderedExtensionPoint.fromArray(args: LongArray): OrderedArgsGenerator<Long>
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
  *
- * @return an [OrderedArgsGenerator] based on the given [args].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: FloatArray): OrderedArgsGenerator<Float> =
@@ -62,7 +56,6 @@ fun OrderedExtensionPoint.fromArray(args: FloatArray): OrderedArgsGenerator<Floa
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
  *
- * @return an [OrderedArgsGenerator] based on the given [args].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: DoubleArray): OrderedArgsGenerator<Double> =
@@ -71,7 +64,6 @@ fun OrderedExtensionPoint.fromArray(args: DoubleArray): OrderedArgsGenerator<Dou
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
  *
- * @return an [OrderedArgsGenerator] based on the given [args].
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: BooleanArray): OrderedArgsGenerator<Boolean> =
@@ -80,7 +72,6 @@ fun OrderedExtensionPoint.fromArray(args: BooleanArray): OrderedArgsGenerator<Bo
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
  *
- * @return an [OrderedArgsGenerator] based on the given [args].
  * @since 2.0.0
  */
 fun <T> OrderedExtensionPoint.fromArray(args: Array<out T>): OrderedArgsGenerator<T> =

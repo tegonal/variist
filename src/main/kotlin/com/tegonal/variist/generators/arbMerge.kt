@@ -38,3 +38,5 @@ fun <T> ArbExtensionPoint.mergeWeighted(
 		MultiArbArgsGeneratorIndexOfMerger(first, second, others)
 	}
 }
+
+//TODO 2.1.0 add mergeRoundRobin

@@ -13,6 +13,11 @@ import kotlin.random.Random
 import kotlin.reflect.KClass
 
 /**
+ * Creates a [ComponentFactoryContainer] based on the given [config].
+ *
+ * The given [config] is used as [VariistConfig] and influences
+ * [SuffixArgsGeneratorDecider] ([VariistConfig.activeSuffixArgsGeneratorDecider]) and
+ * [ArgsRangeDecider] ([VariistConfig.activeArgsRangeDecider])
  *
  * @since 2.0.0
  */
@@ -44,6 +49,7 @@ fun ComponentFactoryContainer.Companion.createBasedOnConfig(config: VariistConfi
 	)
 
 /**
+ * Creates a [ComponentFactoryContainer] based on the given [components] and [chainedComponents].
  *
  * @since 2.0.0
  */
@@ -53,12 +59,15 @@ fun ComponentFactoryContainer.Companion.create(
 ) = DefaultComponentFactoryContainer.create(components, chainedComponents)
 
 /**
+ * Quick access to build a [VariistConfig] from this [ComponentFactoryContainer].
  *
  * @since 2.0.0
  */
 val ComponentFactoryContainer.config: VariistConfig get() = build<VariistConfig>()
 
 /**
+ * Creates a [Random] whose seed is based on the [VariistConfig.seed] of this [ComponentFactoryContainer] and the given
+ * [seedOffset].
  *
  * @since 2.0.0
  */
@@ -68,12 +77,14 @@ fun ComponentFactoryContainer.createVariistRandom(seedOffset: Int): Random =
 	}
 
 /**
+ * Creates an [OrderedExtensionPoint] based on this [ComponentFactoryContainer].
  *
  * @since 2.0.0
  */
 val ComponentFactoryContainer.ordered get() : OrderedExtensionPoint = DefaultOrderedExtensionPoint(this)
 
 /**
+ * Creates an [ArbExtensionPoint] based on this [ComponentFactoryContainer].
  *
  * @since 2.0.0
  */

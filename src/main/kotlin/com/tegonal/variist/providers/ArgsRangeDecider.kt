@@ -18,7 +18,6 @@ interface ArgsRangeDecider {
 	fun decide(argsGenerator: ArgsGenerator<*>, annotationData: AnnotationData? = null): ArgsRange
 }
 
-
 /**
  * Represents a range which an [ArgsGenerator] should generate.
  *

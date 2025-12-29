@@ -1,10 +1,11 @@
 package com.tegonal.variist.config
 
+import com.tegonal.variist.providers.ArgsRangeDecider
 import kotlin.reflect.KClass
-
 
 /**
  * Manages the factories to create the different components of Variist.
+ *
  * It takes basically the responsibility of a dependency injection facility, tailored for Variist - initially copied
  * from [Atrium](https://atriumlib.org).
  *
@@ -40,15 +41,14 @@ interface ComponentFactoryContainer {
 	 */
 	fun getFactoryForChainedOrNull(kClass: KClass<*>): Sequence<ComponentFactory>?
 
-
 	/**
 	 * Merges the given [componentFactoryContainer] (if not `null`) with `this` [ComponentFactoryContainer]
 	 * creating a new [ComponentFactoryContainer] where defined dependencies in [componentFactoryContainer]
 	 * will have precedence over dependencies defined in this instance.
 	 *
-	 * For instance, this object has defined a [Reporter] and
-	 * the given [componentFactoryContainer] as well, then the resulting [ComponentFactoryContainer] will return the [Reporter]
-	 * of [componentFactoryContainer] when asked for it.
+	 * For instance, if this object has defined a [ArgsRangeDecider] and
+	 * the given [componentFactoryContainer] as well, then the resulting [ComponentFactoryContainer] will return
+	 * the [ArgsRangeDecider] of [componentFactoryContainer] when asked for it.
 	 */
 	fun merge(componentFactoryContainer: ComponentFactoryContainer?): ComponentFactoryContainer
 

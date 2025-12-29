@@ -9,7 +9,7 @@ import com.tegonal.variist.generators.impl.OrderedArgsGeneratorConcatenator
  *
  * I.e. the resulting [OrderedArgsGenerator] generates the sum of [OrderedArgsGenerator.size] values before repeating.
  *
- * @return The resulting [OrderedArgsGenerator].
+ * @return The resulting [OrderedArgsGenerator] after concatenation.
  *
  * @since 2.0.0
  */
@@ -22,7 +22,7 @@ fun <T> Sequence<OrderedArgsGenerator<T>>.concatAll(): OrderedArgsGenerator<T> =
  *
  * I.e. the resulting [OrderedArgsGenerator] generates the sum of [OrderedArgsGenerator.size] values before repeating.
  *
- * @return The resulting [OrderedArgsGenerator].
+ * @return The resulting [OrderedArgsGenerator] after concatenation.
  *
  * @since 2.0.0
  */
@@ -49,7 +49,7 @@ private fun <T> concatAll(iterator: Iterator<OrderedArgsGenerator<T>>): OrderedA
  *
  * @param other The other [OrderedArgsGenerator].
  *
- * @return The resulting [OrderedArgsGenerator].
+ * @return The resulting [OrderedArgsGenerator] after concatenation.
  *
  * @since 2.0.0
  */

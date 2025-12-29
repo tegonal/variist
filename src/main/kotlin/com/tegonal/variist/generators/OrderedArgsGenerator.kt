@@ -21,7 +21,7 @@ interface OrderedArgsGenerator<out T> : SemiOrderedArgsGenerator<T> {
 	override val size: Int
 
 	/**
-	 * Returns an infinite stream of values starting at [offset] and repeating after reaching [size] of values
+	 * Returns an infinite [Sequence] of values starting at [offset] and repeating after reaching [size] of values
 	 * where always the same values are generated when called multiple times.
 	 *
 	 * @since 2.0.0

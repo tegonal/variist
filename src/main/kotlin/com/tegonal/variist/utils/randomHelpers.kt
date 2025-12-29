@@ -8,9 +8,10 @@ import com.tegonal.variist.generators.SemiOrderedArgsGenerator
 import com.tegonal.variist.generators.ordered
 import com.tegonal.variist.generators.toArbArgsGenerator
 import kotlin.random.Random
-import com.tegonal.variist.generators.ArbArgsGenerator
+
 /**
- * Picks randomly one element from `this` [Collection] based on the configured [VariistConfig.seed]
+ * Picks randomly one element from `this` [Collection] based on the configured [VariistConfig.seed].
+ *
  * @since 2.0.0
  */
 fun <T> Collection<T>.pickOneRandomly(): T =
@@ -34,6 +35,7 @@ fun <T> Collection<T>.pickOneRandomly(): T =
 //TODO 2.1.0 we could provide overloads for specialised array types such as IntArray
 /**
  * Picks randomly one element from `this` [Collection] based on the configured [VariistConfig.seed].
+ *
  * @since 2.0.0
  */
 fun <T> Array<T>.pickOneRandomly(): T =
@@ -69,6 +71,8 @@ fun <T> SemiOrderedArgsGenerator<T>.takeRandomly(amount: Int, seedOffset: Int = 
  * Takes the given [amount] of elements from `this` [Iterable] (likewise [Iterable.take]) but in a random way
  * based on the configured [VariistConfig.seed].
  *
+ * @throws OutOfMemoryError in case of an infinite [Iterable].
+ *
  * @since 2.0.0
  */
 fun <T> Iterable<T>.takeRandomly(amount: Int): List<T> {
@@ -94,7 +98,7 @@ fun <T> Array<T>.takeRandomly(amount: Int): List<T> {
  *
  * The operation is intermediate and stateful.
  *
- * @throws OutOfMemoryError in case of an infinite Sequence
+ * @throws OutOfMemoryError in case of an infinite [Sequence].
  *
  * @since 2.0.0
  */
@@ -121,6 +125,8 @@ fun createVariistRandom(): Random = ordered._components.createVariistRandom(seed
 
 
 /**
- * Makes sure the given [seed] is positive, so that it can be used as offset.
+ * Makes sure the given [seed] is positive, so that it can be used as offset in an [SemiOrderedArgsGenerator].
+ *
+ * @since 2.0.0
  */
 fun seedToOffset(seed: Int): Int = seed ushr 1
