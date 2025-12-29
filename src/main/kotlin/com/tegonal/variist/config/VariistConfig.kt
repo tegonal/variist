@@ -1,7 +1,6 @@
 package com.tegonal.variist.config
 
 import com.tegonal.variist.generators.ArgsGenerator
-import com.tegonal.variist.generators.SemiOrderedArgsGenerator
 import com.tegonal.variist.providers.ArgsRange
 import com.tegonal.variist.providers.ArgsRangeDecider
 import com.tegonal.variist.providers.SuffixArgsGeneratorDecider
@@ -10,7 +9,6 @@ import com.tegonal.variist.providers.impl.SuffixArgsGeneratorNeverDecider
 import com.tegonal.variist.utils.impl.checkIsNotBlank
 import com.tegonal.variist.utils.impl.checkIsPositive
 import com.tegonal.variist.utils.impl.checkRequestedMinArgsMaxArgs
-import com.tegonal.variist.utils.seedToOffset
 import kotlin.random.Random
 
 /**
@@ -76,7 +74,7 @@ class VariistConfig(
 	 * Per default, the corresponding class is loaded via [java.util.ServiceLoader].
 	 */
 	val activeArgsRangeDecider: String = ProfileBasedArgsRangeDecider::class.qualifiedName ?: error(
-		"cannot determine qualified name of ProfileBasedArgsRangeDecider "
+		"cannot determine qualified name of ${ProfileBasedArgsRangeDecider::class.simpleName} "
 	),
 
 	/**
@@ -84,7 +82,7 @@ class VariistConfig(
 	 * Per default, the corresponding class is loaded via [java.util.ServiceLoader].
 	 */
 	val activeSuffixArgsGeneratorDecider: String = SuffixArgsGeneratorNeverDecider::class.qualifiedName ?: error(
-		"cannot determine qualified name of EmptyArgsGeneratorSuffixProvider "
+		"cannot determine qualified name of ${SuffixArgsGeneratorNeverDecider::class.simpleName} "
 	),
 
 	/**
@@ -106,64 +104,7 @@ class VariistConfig(
 	 * [TestProfiles] works on [String]s in the end, you can also choose your own names.
 	 *
 	 */
-	val testProfiles: TestProfiles = TestProfiles.create(
-		TestType.Unit to
-			listOf(
-				Env.Local to TestConfig(maxArgs = 100),
-				Env.Push to TestConfig(maxArgs = 200),
-				Env.PR to TestConfig(maxArgs = 300),
-				Env.Main to TestConfig(maxArgs = 500),
-				// we don't expect that Unit tests are run as part of a deployment
-				// Environment.DeployTest to 1000,
-				// Environment.DeployInt to 1500,
-				Env.NightlyTest to TestConfig(maxArgs = 2000),
-				Env.NightlyInt to TestConfig(maxArgs = 4000),
-				Env.HotfixPR to TestConfig(maxArgs = 600),
-				Env.Hotfix to TestConfig(maxArgs = 1000),
-				Env.Release to TestConfig(maxArgs = 1000),
-			),
-		TestType.Integration to
-			listOf(
-				Env.Local to TestConfig(maxArgs = 5),
-				Env.Push to TestConfig(maxArgs = 7),
-				Env.PR to TestConfig(maxArgs = 10),
-				Env.Main to TestConfig(maxArgs = 30),
-				Env.DeployTest to TestConfig(maxArgs = 60),
-				Env.DeployInt to TestConfig(maxArgs = 80),
-				Env.NightlyTest to TestConfig(maxArgs = 150),
-				Env.NightlyInt to TestConfig(maxArgs = 200),
-				Env.HotfixPR to TestConfig(maxArgs = 50),
-				Env.Hotfix to TestConfig(maxArgs = 100),
-				Env.Release to TestConfig(maxArgs = 100),
-			),
-		TestType.E2E to
-			listOf(
-				Env.Local to TestConfig(maxArgs = 3),
-				Env.Push to TestConfig(maxArgs = 5),
-				Env.PR to TestConfig(maxArgs = 7),
-				Env.Main to TestConfig(maxArgs = 10),
-				Env.DeployTest to TestConfig(maxArgs = 20),
-				Env.DeployInt to TestConfig(maxArgs = 30),
-				Env.NightlyTest to TestConfig(maxArgs = 50),
-				Env.NightlyInt to TestConfig(maxArgs = 60),
-				Env.HotfixPR to TestConfig(maxArgs = 15),
-				Env.Hotfix to TestConfig(maxArgs = 50),
-				Env.Release to TestConfig(maxArgs = 50),
-			),
-		TestType.SystemIntegration to
-			listOf(
-				Env.Local to TestConfig(maxArgs = 3),
-				Env.Push to TestConfig(maxArgs = 4),
-				Env.PR to TestConfig(maxArgs = 5),
-				Env.Main to TestConfig(maxArgs = 7),
-				Env.DeployTest to TestConfig(maxArgs = 10),
-				Env.DeployInt to TestConfig(maxArgs = 15),
-				Env.NightlyTest to TestConfig(maxArgs = 40),
-				Env.NightlyInt to TestConfig(maxArgs = 50),
-				Env.HotfixPR to TestConfig(maxArgs = 10),
-				Env.Release to TestConfig(maxArgs = 20),
-			),
-	),
+	val testProfiles: TestProfiles = defaultTestProfiles,
 ) {
 
 	init {
@@ -171,6 +112,7 @@ class VariistConfig(
 		checkRequestedMinArgsMaxArgs(requestedMinArgs, maxArgs)
 
 		checkIsNotBlank(activeArgsRangeDecider, "activeArgsRangeDecider")
+		checkIsNotBlank(activeSuffixArgsGeneratorDecider, "activeSuffixArgsGeneratorDecider")
 		checkIsNotBlank(defaultProfile, "defaultProfile")
 		checkIsNotBlank(activeEnv, "activeEnv")
 
@@ -189,18 +131,79 @@ class VariistConfig(
 	fun copy(configure: VariistConfigBuilder.() -> Unit): VariistConfig =
 		toBuilder().apply(configure).build()
 
-	fun toBuilder(): VariistConfigBuilder = VariistConfigBuilder(
-		seed = seed.value,
-		skip = skip,
-		maxArgs = maxArgs,
-		requestedMinArgs = requestedMinArgs,
-		activeArgsRangeDecider = activeArgsRangeDecider,
-		activeSuffixArgsGeneratorDecider = activeSuffixArgsGeneratorDecider,
-		activeEnv = activeEnv,
-		defaultProfile = defaultProfile,
-		testProfiles = testProfiles.toHashMap()
-	)
+	companion object {
+		val defaultTestProfiles = TestProfiles.create(
+			TestType.Unit to
+				listOf(
+					Env.Local to TestConfig(maxArgs = 100),
+					Env.Push to TestConfig(maxArgs = 200),
+					Env.PR to TestConfig(maxArgs = 300),
+					Env.Main to TestConfig(maxArgs = 500),
+					// we don't expect that Unit tests are run as part of a deployment
+					// Environment.DeployTest to 1000,
+					// Environment.DeployInt to 1500,
+					Env.NightlyTest to TestConfig(maxArgs = 2000),
+					Env.NightlyInt to TestConfig(maxArgs = 4000),
+					Env.HotfixPR to TestConfig(maxArgs = 600),
+					Env.Hotfix to TestConfig(maxArgs = 1000),
+					Env.Release to TestConfig(maxArgs = 1000),
+				),
+			TestType.Integration to
+				listOf(
+					Env.Local to TestConfig(maxArgs = 5),
+					Env.Push to TestConfig(maxArgs = 7),
+					Env.PR to TestConfig(maxArgs = 10),
+					Env.Main to TestConfig(maxArgs = 30),
+					Env.DeployTest to TestConfig(maxArgs = 60),
+					Env.DeployInt to TestConfig(maxArgs = 80),
+					Env.NightlyTest to TestConfig(maxArgs = 150),
+					Env.NightlyInt to TestConfig(maxArgs = 200),
+					Env.HotfixPR to TestConfig(maxArgs = 50),
+					Env.Hotfix to TestConfig(maxArgs = 100),
+					Env.Release to TestConfig(maxArgs = 100),
+				),
+			TestType.E2E to
+				listOf(
+					Env.Local to TestConfig(maxArgs = 3),
+					Env.Push to TestConfig(maxArgs = 5),
+					Env.PR to TestConfig(maxArgs = 7),
+					Env.Main to TestConfig(maxArgs = 10),
+					Env.DeployTest to TestConfig(maxArgs = 20),
+					Env.DeployInt to TestConfig(maxArgs = 30),
+					Env.NightlyTest to TestConfig(maxArgs = 50),
+					Env.NightlyInt to TestConfig(maxArgs = 60),
+					Env.HotfixPR to TestConfig(maxArgs = 15),
+					Env.Hotfix to TestConfig(maxArgs = 50),
+					Env.Release to TestConfig(maxArgs = 50),
+				),
+			TestType.SystemIntegration to
+				listOf(
+					Env.Local to TestConfig(maxArgs = 3),
+					Env.Push to TestConfig(maxArgs = 4),
+					Env.PR to TestConfig(maxArgs = 5),
+					Env.Main to TestConfig(maxArgs = 7),
+					Env.DeployTest to TestConfig(maxArgs = 10),
+					Env.DeployInt to TestConfig(maxArgs = 15),
+					Env.NightlyTest to TestConfig(maxArgs = 40),
+					Env.NightlyInt to TestConfig(maxArgs = 50),
+					Env.HotfixPR to TestConfig(maxArgs = 10),
+					Env.Release to TestConfig(maxArgs = 20),
+				),
+		)
+	}
 }
+
+fun VariistConfig.toBuilder(): VariistConfigBuilder = VariistConfigBuilder(
+	seed = seed.value,
+	skip = skip,
+	maxArgs = maxArgs,
+	requestedMinArgs = requestedMinArgs,
+	activeArgsRangeDecider = activeArgsRangeDecider,
+	activeSuffixArgsGeneratorDecider = activeSuffixArgsGeneratorDecider,
+	activeEnv = activeEnv,
+	defaultProfile = defaultProfile,
+	testProfiles = testProfiles.toMutableList()
+)
 
 /**
  * @since 2.0.0
@@ -214,13 +217,13 @@ class VariistConfigBuilder(
 	var activeSuffixArgsGeneratorDecider: String,
 	var activeEnv: String,
 	var defaultProfile: String,
-	var testProfiles: HashMap<String, HashMap<String, TestConfig>>,
+	var testProfiles: MutableList<Pair<String, MutableList<Pair<String, TestConfig>>>>,
 ) {
 
-	fun build(): VariistConfig = VariistConfig(
 	/**
 	 * Creates a [VariistConfig] based on this builder.
 	 */
+	fun build(): VariistConfig = VariistConfig(
 		seed = Seed(seed),
 		skip = skip,
 		requestedMinArgs = requestedMinArgs,
@@ -232,19 +235,3 @@ class VariistConfigBuilder(
 		testProfiles = TestProfiles.create(testProfiles),
 	)
 }
-
-/**
- * Represents the Variist seed, typically used for [Random] and as offset in [SemiOrderedArgsGenerator.generate].
- *
- * Use [value] to retrieve the seed as such (e.g. for [Random]) and [toOffset] in case it shall be used as random offset
- * @since 2.0.0
- */
-@JvmInline
-value class Seed(val value: Int) {
-	override fun toString(): String = value.toString()
-}
-
-/**
- * @since 2.0.0
- */
-fun Seed.toOffset() = seedToOffset(value)

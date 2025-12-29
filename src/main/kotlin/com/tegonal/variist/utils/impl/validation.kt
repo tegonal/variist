@@ -112,7 +112,7 @@ fun checkIsNotBlank(value: String, description: String) =
  *
  * @since 2.0.0
  */
-fun <T> checkNoDuplicates(list: List<T>, errMsg: (duplicates: Set<T>) -> String) {
+fun <T> requireNoDuplicates(list: List<T>, errMsg: (duplicates: Set<T>) -> String) {
 	val seen = HashSet<T>(list.size)
 	val duplicates = HashSet<T>(4)
 	list.forEach {
@@ -120,7 +120,7 @@ fun <T> checkNoDuplicates(list: List<T>, errMsg: (duplicates: Set<T>) -> String)
 			duplicates.add(it)
 		}
 	}
-	check(duplicates.isEmpty()) {
+	require(duplicates.isEmpty()) {
 		errMsg(duplicates)
 	}
 }

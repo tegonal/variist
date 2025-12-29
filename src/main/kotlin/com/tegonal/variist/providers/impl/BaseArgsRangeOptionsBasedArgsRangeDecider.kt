@@ -57,7 +57,7 @@ abstract class BaseArgsRangeOptionsBasedArgsRangeDecider : ArgsRangeDecider {
 	): ArgsRange =
 		run {
 			config.skip
-				?.let { this.copy(offset = seedToOffset(this.offset + it)) }
+				?.let { ArgsRange(offset = seedToOffset(this.offset + it), take = this.take) }
 				?: this
 		}.let { argsRange ->
 			val maxArgs = config.maxArgs ?: argsRangeOptions?.maxArgs
@@ -114,7 +114,7 @@ abstract class BaseArgsRangeOptionsBasedArgsRangeDecider : ArgsRangeDecider {
 				}
 
 			argsRange.letIf(newTake != argsRange.take) {
-				argsRange.copy(take = newTake)
+				ArgsRange(offset = argsRange.offset, take = newTake)
 			}
 		}
 }

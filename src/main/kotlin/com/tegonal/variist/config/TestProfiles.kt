@@ -1,64 +1,53 @@
 package com.tegonal.variist.config
 
-import ch.tutteli.kbox.mapFirst
-import com.tegonal.variist.utils.impl.checkIsNotBlank
-import com.tegonal.variist.utils.impl.checkNoDuplicates
+import ch.tutteli.kbox.glue
+import com.tegonal.variist.config.impl.DefaultTestProfiles
+import com.tegonal.variist.utils.impl.requireNoDuplicates
 
 /**
+ * A collection of [TestConfig]s grouped by environment and profile name.
+ *
+ * I.e. a data structure which maps profile names to [TestConfig] per environment.
+ *
  * @since 2.0.0
  */
-class TestProfiles private constructor(profiles: Map<String, Map<String, TestConfig>>) {
-	private val profiles: Map<String, Map<String, TestConfig>> = buildMap {
-		check(profiles.isNotEmpty()) {
-			"You need to define at least one test profile"
-		}
+interface TestProfiles {
+	/**
+	 * Indicates if the given [profileName] is part of this collection or not.
+	 */
+	operator fun contains(profileName: String): Boolean
 
-		profiles.forEach { (profile, testConfigPerEnv) ->
-			checkIsNotBlank(profile, "profile")
-			check(testConfigPerEnv.isNotEmpty()) {
-				"You need to define at least one environment in test profile $profile"
-			}
-			testConfigPerEnv.keys.forEach { it ->
-				checkIsNotBlank(it, "env in profile $profile")
-			}
-			put(profile, testConfigPerEnv.toMap())
-		}
-	}
+	/**
+	 * Returns the [TestConfig] of the given [profileName] and [env].
+	 */
+	fun get(profileName: String, env: String): TestConfig
 
-	operator fun contains(profileName: String) = profiles.contains(profileName)
-
-	fun get(profileName: String, env: String): TestConfig =
-		find(profileName, env) ?: throw IllegalArgumentException(
-			"profile $profileName not defined, available profiles: ${
-				profiles.keys.joinToString(", ")
-			}"
-		)
-
-	fun find(profileName: String, env: String): TestConfig? = profiles[profileName]?.get(env)
-
-	fun profileNames(): Set<String> = profiles.keys
-	fun envs(profileName: String): Set<String> = run {
-		profiles[profileName] ?: error("profile $profileName does not exist")
-	}.keys
-
-	fun toHashMap(): HashMap<String, HashMap<String, TestConfig>> =
-		HashMap<String, HashMap<String, TestConfig>>(profiles.size)
-			.also { it.putAll(profiles.entries.map { (k, v) -> k to HashMap(v) }) }
+	/**
+	 * Returns the [TestConfig] of the given [profileName] and [env] or `null` in case the profile or
+	 * environment does not exist.
+	 */
+	fun find(profileName: String, env: String): TestConfig?
 
 	companion object {
 		/**
-		 * Creates a [TestProfiles] based on the given [profiles]
-		 * which use one of the predefined [TestType] as profile name and [Env]  category names.
+		 * Creates a [TestProfiles] collection based on the given [profile] and optionally the [otherProfiles].
+		 * @throws IllegalArgumentException in case a profile name is duplicated, in case an env name per profile name
+		 *         is duplicated.
 		 */
-		fun create(vararg profiles: Pair<TestType, List<Pair<Env, TestConfig>>>): TestProfiles {
-			checkNoDuplicates(profiles.map { it.first }) { duplicates ->
+		fun create(
+			profile: Pair<String, List<Pair<String, TestConfig>>>,
+			vararg otherProfiles: Pair<String, List<Pair<String, TestConfig>>>
+		): TestProfiles = create(profile glue otherProfiles)
+
+		fun create(profiles: List<Pair<String, List<Pair<String, TestConfig>>>>): TestProfiles {
+			requireNoDuplicates(profiles.map { it.first }) { duplicates ->
 				"Looks like you defined some profiles multiple times: ${duplicates.joinToString(", ")}"
 			}
 			return create(profiles.associate { (profile, testConfigPerEnv) ->
-				checkNoDuplicates(testConfigPerEnv.map { it.first }) { duplicates ->
+				requireNoDuplicates(testConfigPerEnv.map { it.first }) { duplicates ->
 					"Looks like you defined some envs in profile $profile multiple times: ${duplicates.joinToString(", ")}"
 				}
-				profile.name to testConfigPerEnv.associate { it.mapFirst { env -> env.name } }
+				profile to testConfigPerEnv.toMap()
 			})
 		}
 
@@ -69,6 +58,27 @@ class TestProfiles private constructor(profiles: Map<String, Map<String, TestCon
 		 * Also take a look at the overload which expects one of the predefined [TestType] as category names.
 		 */
 		fun create(profiles: Map<String, Map<String, TestConfig>>): TestProfiles =
-			TestProfiles(profiles)
+			DefaultTestProfiles(profiles)
 	}
+
+	/**
+	 * Returns all specified profile names.
+	 */
+	fun profileNames(): Set<String>
+
+	/**
+	 * Returns all specified environments for the given [profileName] and throws in case the profile name is
+	 * not specified in this collection.
+	 *
+	 * @throws IllegalStateException if the given [profileName] is not part of this collection.
+	 */
+	fun envs(profileName: String): Set<String>
+
+
+	/**
+	 * Returns a copy of this collection as a [MutableList] where the [Pair.first] are the profile names
+	 * and [Pair.second] is again a [MutableList] where [Pair.first] are the envs and
+	 * [Pair.second] the associated [TestConfig].
+	 */
+	fun toMutableList(): MutableList<Pair<String, MutableList<Pair<String, TestConfig>>>>
 }
