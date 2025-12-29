@@ -1,18 +1,17 @@
 package readme.examples
 
 import com.tegonal.variist.config.ArgsRangeOptions
+import com.tegonal.variist.config.TestType
 import com.tegonal.variist.generators.generateAndTakeBasedOnDecider
 import com.tegonal.variist.generators.intFromUntil
 import com.tegonal.variist.generators.ordered
 import com.tegonal.variist.providers.AnnotationData
-import com.tegonal.variist.providers.outsideParameterizedTest
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Order
-import readme.examples.jupiter.ReadmeTest
-
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
+import readme.examples.jupiter.ReadmeTest
 
 @Order(2)
 class DynamicTestExample : ReadmeTest {
@@ -35,9 +34,7 @@ class DynamicTestExample : ReadmeTest {
 	fun orderedExample() =
 		ordered.intFromUntil(1, 100)
 			.generateAndTakeBasedOnDecider(
-				AnnotationData.outsideParameterizedTest(
-					argsRangeOptions = ArgsRangeOptions(profile = "Integration", maxArgs = 20)
-				)
+				AnnotationData(ArgsRangeOptions(profile = TestType.Integration.name, maxArgs = 20))
 			)
 			.map { positiveNumber ->
 				dynamicTest("$positiveNumber") {

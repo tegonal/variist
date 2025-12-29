@@ -14,7 +14,6 @@ import com.tegonal.variist.providers.fromOptions
 class DefaultAnnotationDataDeducer : BaseAnnotationDataDeducer<ArgsSourceOptions>(ArgsSourceOptions::class) {
 
 	override fun annotationToAnnotationData(
-		argsSourceMethodName: String,
 		annotation: ArgsSourceOptions
-	): AnnotationData = AnnotationData.fromOptions(argsSourceMethodName, annotation)
+	): AnnotationData = AnnotationData.fromOptions(annotation)
 }

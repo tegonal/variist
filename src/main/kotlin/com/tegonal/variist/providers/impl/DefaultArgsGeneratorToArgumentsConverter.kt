@@ -2,8 +2,8 @@ package com.tegonal.variist.providers.impl
 
 import com.tegonal.variist.config._components
 import com.tegonal.variist.config.build
-import com.tegonal.variist.generators.ArgsGenerator
 import com.tegonal.variist.generators.ArbArgsGenerator
+import com.tegonal.variist.generators.ArgsGenerator
 import com.tegonal.variist.generators.SemiOrderedArgsGenerator
 import com.tegonal.variist.generators.impl.throwUnsupportedArgsGenerator
 import com.tegonal.variist.providers.AnnotationData
@@ -21,6 +21,7 @@ import org.junit.jupiter.params.provider.Arguments
 class DefaultArgsGeneratorToArgumentsConverter : ArgsGeneratorToArgumentsConverter {
 
 	override fun toArguments(
+		argsSourceId: String,
 		annotationData: AnnotationData,
 		argsGenerator: ArgsGenerator<List<*>>,
 	): Sequence<Arguments> {
@@ -33,7 +34,7 @@ class DefaultArgsGeneratorToArgumentsConverter : ArgsGeneratorToArgumentsConvert
 		return sequenceOfList.map { generatorResults ->
 			when (generatorResults.size) {
 				0 -> error(
-					"The ${ArgsGenerator::class.simpleName}(s) returned by ${annotationData.argsSourceMethodName} do not generate any value"
+					"The ${ArgsGenerator::class.simpleName}(s) returned by $argsSourceId do not generate any value"
 				)
 
 				1 -> generatorResults.first().let { result ->
