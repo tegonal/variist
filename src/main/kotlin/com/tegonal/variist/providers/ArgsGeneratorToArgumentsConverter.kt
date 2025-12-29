@@ -27,11 +27,13 @@ interface ArgsGeneratorToArgumentsConverter {
 	 * - lists with one [Arguments] with 2 and one [Arguments] with 4 elements,
 	 *   then the resulting Sequence contains [Arguments] with 6 values.
 	 *
+	 * @param argsSourceId an identifier (e.q. fully qualified name) of the method which provided the [ArgsGenerator]s.
 	 * @param annotationData
 	 * @param argsGenerator A generator which generates [List]s where the elements represent individual generation
 	 *   results of combined [ArgsGenerator]. See description how they are turned into [Arguments].
 	 */
 	fun toArguments(
+		argsSourceId: String,
 		annotationData: AnnotationData,
 		//TODO 2.2.0 consider to switch to Array<*> for performance reasons? we never mutate
 		argsGenerator: ArgsGenerator<List<*>>,

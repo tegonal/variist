@@ -4,11 +4,7 @@ import ch.tutteli.atrium.api.fluent.en_GB.*
 import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.atrium.logic.utils.expectLambda
 import ch.tutteli.kbox.toVararg
-import com.tegonal.variist.config.ArgsRangeOptions
-import com.tegonal.variist.config.ComponentFactoryContainer
-import com.tegonal.variist.config.VariistConfig
-import com.tegonal.variist.config.createBasedOnConfig
-import com.tegonal.variist.config.ordered
+import com.tegonal.variist.config.*
 import com.tegonal.variist.generators.*
 import com.tegonal.variist.providers.impl.DefaultArgsGeneratorToArgumentsConverter
 import com.tegonal.variist.testutils.Tuple4LikeStructure
@@ -26,8 +22,7 @@ class ArgsGeneratorToArgumentsConverterTest {
 	val testee = DefaultArgsGeneratorToArgumentsConverter()
 
 	val requestedAtLeastArgs1000 = AnnotationData(
-		argsSourceMethodName = "dummy",
-		argsRangeOptions = ArgsRangeOptions(requestedMinArgs = 1000)
+		ArgsRangeOptions(requestedMinArgs = 1000)
 	)
 
 	@Test
@@ -39,9 +34,9 @@ class ArgsGeneratorToArgumentsConverterTest {
 		).withMockedArgsRange(0, 1000).ordered
 
 		// ... nor the AnnotationData
-		val maxArgs100 = AnnotationData("dummy", argsRangeOptions = ArgsRangeOptions(maxArgs = 100))
+		val maxArgs100 = AnnotationData(ArgsRangeOptions(maxArgs = 100))
 		val combinations = testee.toArguments(
-			maxArgs100, orderedWithRange0To100.of(1, 2, 3).map { listOf(it) }
+			"id", maxArgs100, orderedWithRange0To100.of(1, 2, 3).map { listOf(it) }
 		).map { it.get().asList() }.toList()
 
 		expect(combinations).toHaveSize(1000)
@@ -50,7 +45,7 @@ class ArgsGeneratorToArgumentsConverterTest {
 	@Test
 	fun pairs_splitIntoArgs() {
 		val combinations = testee.toArguments(
-			requestedAtLeastArgs1000, orderedWithSeed0.of(1 to 2, 3 to 4).map { listOf(it) }
+			"id", requestedAtLeastArgs1000, orderedWithSeed0.of(1 to 2, 3 to 4).map { listOf(it) }
 		).map { it.get().asList() }.toList()
 
 		expect(combinations) {
@@ -63,7 +58,7 @@ class ArgsGeneratorToArgumentsConverterTest {
 	@Test
 	fun multiplePairs_splitIntoArgs() {
 		val combinations = testee.toArguments(
-			requestedAtLeastArgs1000, orderedWithSeed0.of(listOf(1 to 2, 3 to 4), listOf(5 to 6, 7 to 8))
+			"id", requestedAtLeastArgs1000, orderedWithSeed0.of(listOf(1 to 2, 3 to 4), listOf(5 to 6, 7 to 8))
 		).map { it.get().asList() }.toList()
 		expect(combinations) {
 			toHaveSize(2)
@@ -76,7 +71,7 @@ class ArgsGeneratorToArgumentsConverterTest {
 	fun tupleLike_notSplitIntoArgs() {
 		val tupleLike = Tuple4LikeStructure(1, 2L, 3.0, 4f)
 		val combinations = testee.toArguments(
-			requestedAtLeastArgs1000, orderedWithSeed0.of(tupleLike).map { listOf(it) }
+			"id", requestedAtLeastArgs1000, orderedWithSeed0.of(tupleLike).map { listOf(it) }
 		).map { it.get().asList() }.toList()
 		expect(combinations) {
 			toHaveSize(1)
@@ -87,7 +82,7 @@ class ArgsGeneratorToArgumentsConverterTest {
 	@Test
 	fun listOfTuples_notSplitIntoArgs() {
 		val combinations = testee.toArguments(
-			requestedAtLeastArgs1000, orderedWithSeed0.of(listOf(listOf(1 to 2, 3 to 4)), listOf(5 to 6, 7 to 8))
+			"id", requestedAtLeastArgs1000, orderedWithSeed0.of(listOf(listOf(1 to 2, 3 to 4)), listOf(5 to 6, 7 to 8))
 		).map { it.get().asList() }.toList()
 		expect(combinations) {
 			toHaveSize(2)
@@ -101,7 +96,7 @@ class ArgsGeneratorToArgumentsConverterTest {
 		val args1 = Arguments.of(1, 2)
 		val args2 = Arguments.of(3, 4)
 		val combinations = testee.toArguments(
-			requestedAtLeastArgs1000, orderedWithSeed0.of(args1, args2).map { listOf(it) }
+			"id", requestedAtLeastArgs1000, orderedWithSeed0.of(args1, args2).map { listOf(it) }
 		).toList()
 		expect(combinations).toContainExactly(args1, args2)
 	}
@@ -109,7 +104,7 @@ class ArgsGeneratorToArgumentsConverterTest {
 	@Test
 	fun multipleArgs_flattened() {
 		val combinations = testee.toArguments(
-			requestedAtLeastArgs1000, orderedWithSeed0.of(
+			"id", requestedAtLeastArgs1000, orderedWithSeed0.of(
 				listOf(Arguments.of(1, 2), Arguments.of(3, 4)),
 				listOf(Arguments.of(5, 6), Arguments.of(7, 8))
 			)
@@ -127,7 +122,7 @@ class ArgsGeneratorToArgumentsConverterTest {
 		val firstList = arb.fromRange(0 until 10).map { mutableListOf(it) }
 
 		val combinations = testee.toArguments(
-			requestedAtLeastArgs1000,
+			"id", requestedAtLeastArgs1000,
 			(1 until numOfGenerators).fold(firstList) { generator, from ->
 				generator.zip(arb.fromRange(from * 10 until from * 10 + 10)) { list, num ->
 					list.also { it.add(num) }
@@ -169,7 +164,7 @@ class ArgsGeneratorToArgumentsConverterTest {
 			arb.localDateFromUntil(startDate, startDate.plusYears(1))
 		}.map { listOf(it) }
 
-		val combinations = testee.toArguments(requestedAtLeastArgs1000, startAndEndDates).toList()
+		val combinations = testee.toArguments("id", requestedAtLeastArgs1000, startAndEndDates).toList()
 
 		expect(combinations) {
 			toHaveSize(1000)

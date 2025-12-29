@@ -15,23 +15,23 @@ import kotlin.reflect.KClass
 abstract class BaseAnnotationDataDeducer<A : Annotation>(
 	private val annotationClass: KClass<A>
 ) : AnnotationDataDeducer {
-	final override fun deduce(
-		testMethod: Method,
-		argsSourceMethodName: String
-	): AnnotationData? {
-		val classData = deduceData(testMethod.declaringClass, argsSourceMethodName)
-		val methodData = deduceData(testMethod, argsSourceMethodName)
+
+	final override fun deduce(testMethod: Method): AnnotationData? {
+		val classData = deduceData(testMethod.declaringClass)
+		val methodData = deduceData(testMethod)
 		return when {
-			classData != null && methodData != null -> classData.merge(methodData)
-			classData != null && methodData == null -> classData
-			methodData != null -> methodData
-			else -> null
+			classData == null -> methodData
+			methodData == null -> classData
+			else -> classData.merge(methodData)
 		}
 	}
 
-	private fun deduceData(element: AnnotatedElement, argsSourceMethodName: String): AnnotationData? =
+	private fun deduceData(element: AnnotatedElement): AnnotationData? =
 		AnnotationSupport.findAnnotation(element, annotationClass.java)
-			.map { annotationToAnnotationData(argsSourceMethodName, it) }.getOrNull()
+			.map { annotationToAnnotationData(it) }.getOrNull()
 
-	abstract fun annotationToAnnotationData(argsSourceMethodName: String, annotation: A): AnnotationData
+	/**
+	 * Responsible to deduce the [AnnotationData] based on a given [annotation].
+	 */
+	protected abstract fun annotationToAnnotationData(annotation: A): AnnotationData
 }

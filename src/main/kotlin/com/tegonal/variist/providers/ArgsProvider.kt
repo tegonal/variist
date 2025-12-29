@@ -62,14 +62,10 @@ class ArgsProvider : ArgumentsProvider {
 			.also { MethodArgumentsProvider.validateFactoryMethod(it, testInstance) }
 
 		val factoryResult = context.executableInvoker.invoke(factoryMethod, testInstance)
-		return factoryResultToArguments(factoryResult, testMethod, methodName).asStream()
+		return factoryResultToArguments(factoryResult, testMethod).asStream()
 	}
 
-	private fun factoryResultToArguments(
-		result: Any,
-		testMethod: Method,
-		argsSourceMethodName: String
-	): Sequence<Arguments> {
+	private fun factoryResultToArguments(result: Any, testMethod: Method): Sequence<Arguments> {
 		val maybeArgGenerators = toListOfMaybeArgGenerators(result)
 		check(maybeArgGenerators.isNotEmpty()) { "no ArgGenerators/Args defined" }
 		val (first, maybeArgGeneratorsRest) = when (val first = maybeArgGenerators.first()) {
@@ -80,7 +76,7 @@ class ArgsProvider : ArgumentsProvider {
 				ordered.fromList(maybeArgGenerators) to emptyList()
 			}
 		}
-		return generateArguments(first, maybeArgGeneratorsRest, testMethod, argsSourceMethodName)
+		return generateArguments(first, maybeArgGeneratorsRest, testMethod)
 	}
 
 	private fun toListOfMaybeArgGenerators(result: Any): List<Any?> = tupleAndTupleLikeToList(result) ?: when (result) {
@@ -104,7 +100,6 @@ class ArgsProvider : ArgumentsProvider {
 		argsGenerator: ArgsGenerator<*>,
 		restMaybeArgGenerators: List<*>,
 		testMethod: Method,
-		argsSourceMethodName: String,
 	): Sequence<Arguments> = argsGenerator._components.let { components ->
 		val annotationDataDeducers = components.buildChained<AnnotationDataDeducer>()
 		val suffixArgsGeneratorDecider = components.build<SuffixArgsGeneratorDecider>()
@@ -112,19 +107,22 @@ class ArgsProvider : ArgumentsProvider {
 		val argsGeneratorToArgumentsConverter = components.build<ArgsGeneratorToArgumentsConverter>()
 
 		val annotationData = annotationDataDeducers.fold(
-			AnnotationData(argsSourceMethodName, ArgsRangeOptions())
+			AnnotationData(ArgsRangeOptions())
 		) { data, deducer ->
-			deducer.deduce(testMethod, argsSourceMethodName)?.let { data.merge(it) } ?: data
+			deducer.deduce(testMethod)?.let { data.merge(it) } ?: data
 		}
 
-		val restMaybeArgGeneratorsWithSuffix = suffixArgsGeneratorDecider
-			.computeSuffixArgsGenerator(annotationData)?.let { suffixArgsGenerator ->
-				restMaybeArgGenerators + listOf(suffixArgsGenerator)
-			} ?: restMaybeArgGenerators
+		val restMaybeArgGeneratorsWithSuffix = suffixArgsGeneratorDecider.computeSuffixArgsGenerator(annotationData)
+			?.let { suffixArgsGenerator -> restMaybeArgGenerators + listOf(suffixArgsGenerator) }
+			?: restMaybeArgGenerators
 
 		genericArgsGeneratorCombiner.combineFirstWithRest(argsGenerator, restMaybeArgGeneratorsWithSuffix)
 			.let { argsGeneratorsCombined ->
-				argsGeneratorToArgumentsConverter.toArguments(annotationData, argsGeneratorsCombined)
+				argsGeneratorToArgumentsConverter.toArguments(
+					testMethod.declaringClass.name + "#" + testMethod.name,
+					annotationData,
+					argsGeneratorsCombined
+				)
 			}
 	}
 }

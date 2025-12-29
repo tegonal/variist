@@ -957,9 +957,7 @@ Note however, that all the magic of `ArgsSource` is not available (yet). Which m
 fun orderedExample() =
 	ordered.intFromUntil(1, 100)
 		.generateAndTakeBasedOnDecider(
-			AnnotationData.outsideParameterizedTest(
-				argsRangeOptions = ArgsRangeOptions(profile = "Integration", maxArgs = 20)
-			)
+			AnnotationData(ArgsRangeOptions(profile = TestType.Integration.name, maxArgs = 20))
 		)
 		.map { positiveNumber ->
 			dynamicTest("$positiveNumber") {

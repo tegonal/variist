@@ -107,7 +107,7 @@ class ProfileBasedArgsRangeDeciderTest {
 		).ordered
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			orderedMaxArgs5.intFromUntil(1, 100),
-			AnnotationData("bla", ArgsRangeOptions(requestedMinArgs = 10))
+			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
 		)
 		expect(argsRange) {
 			feature(ArgsRange::take).toEqual(5)
@@ -122,7 +122,7 @@ class ProfileBasedArgsRangeDeciderTest {
 		).ordered
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			orderedMaxArgs5.intFromUntil(1, 100).zip(arb.intPositive()),
-			AnnotationData("bla", ArgsRangeOptions(requestedMinArgs = 10))
+			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
 		)
 		expect(argsRange) {
 			feature(ArgsRange::take).toEqual(5)
@@ -137,7 +137,7 @@ class ProfileBasedArgsRangeDeciderTest {
 		).arb
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			arbWithMaxArgs5.intFromUntil(1, 100),
-			AnnotationData("bla", ArgsRangeOptions(requestedMinArgs = 10))
+			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
 		)
 		expect(argsRange) {
 			feature(ArgsRange::take).toEqual(5)
@@ -204,7 +204,7 @@ class ProfileBasedArgsRangeDeciderTest {
 		).ordered
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			orderedMaxArgs5.intFromUntil(1, 10),
-			AnnotationData("bla", ArgsRangeOptions(requestedMinArgs = 10))
+			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
 		)
 		expect(argsRange) {
 			feature(ArgsRange::take).toEqual(9)
@@ -219,7 +219,7 @@ class ProfileBasedArgsRangeDeciderTest {
 		).ordered
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			orderedMaxArgs5.intFromUntil(1, 10).zip(arb.intPositive()),
-			AnnotationData("bla", ArgsRangeOptions(maxArgs = 20))
+			AnnotationData(ArgsRangeOptions(maxArgs = 20))
 		)
 		expect(argsRange) {
 			feature(ArgsRange::take).toEqual(9)
@@ -235,7 +235,7 @@ class ProfileBasedArgsRangeDeciderTest {
 		).ordered
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			orderedRequestedMinArgs1000.intFromUntil(1, 10000),
-			AnnotationData("bla", ArgsRangeOptions(requestedMinArgs = 2000))
+			AnnotationData(ArgsRangeOptions(requestedMinArgs = 2000))
 		)
 		expect(argsRange) {
 			feature(ArgsRange::take).toEqual(1000)
@@ -250,7 +250,7 @@ class ProfileBasedArgsRangeDeciderTest {
 		).ordered
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			orderedRequestedMinArgs1000.intFromUntil(1, 10000).zip(arb.intPositive()),
-			AnnotationData("bla", ArgsRangeOptions(requestedMinArgs = 2000))
+			AnnotationData(ArgsRangeOptions(requestedMinArgs = 2000))
 		)
 		expect(argsRange) {
 			feature(ArgsRange::take).toEqual(1000)
@@ -265,7 +265,7 @@ class ProfileBasedArgsRangeDeciderTest {
 		).arb
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			arbWithRequestedMinArgs1000.intFromUntil(1, 10000),
-			AnnotationData("bla", ArgsRangeOptions(requestedMinArgs = 2000))
+			AnnotationData(ArgsRangeOptions(requestedMinArgs = 2000))
 		)
 		expect(argsRange) {
 			feature(ArgsRange::take).toEqual(1000)
@@ -280,7 +280,7 @@ class ProfileBasedArgsRangeDeciderTest {
 		).ordered
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			orderedWithRequestedMinArgs1000.intFromUntil(1, 10000),
-			AnnotationData("bla", ArgsRangeOptions(maxArgs = 999))
+			AnnotationData(ArgsRangeOptions(maxArgs = 999))
 		)
 		expect(argsRange) {
 			feature(ArgsRange::take).toEqual(1000)
@@ -295,7 +295,7 @@ class ProfileBasedArgsRangeDeciderTest {
 		).ordered
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			orderedWithRequestedMinArgs1000.intFromUntil(1, 10000).zip(arb.intPositive()),
-			AnnotationData("bla", ArgsRangeOptions(maxArgs = 999))
+			AnnotationData(ArgsRangeOptions(maxArgs = 999))
 		)
 		expect(argsRange) {
 			feature(ArgsRange::take).toEqual(1000)
@@ -310,7 +310,7 @@ class ProfileBasedArgsRangeDeciderTest {
 		).arb
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			arbWithRequestedMinArgs1000.intFromUntil(1, 100),
-			AnnotationData("bla", ArgsRangeOptions(maxArgs = 999))
+			AnnotationData(ArgsRangeOptions(maxArgs = 999))
 		)
 		expect(argsRange) {
 			feature(ArgsRange::take).toEqual(1000)
@@ -323,7 +323,7 @@ class ProfileBasedArgsRangeDeciderTest {
 	fun ordered_requiredMinIgnoredIfOrderedSizeIsSmaller() {
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			ordered.of(1, 2),
-			AnnotationData("bla", ArgsRangeOptions(requestedMinArgs = 10))
+			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
 		)
 		expect(argsRange) {
 			feature(ArgsRange::take).toEqual(2)
@@ -335,7 +335,7 @@ class ProfileBasedArgsRangeDeciderTest {
 	fun semiOrdered_requiredMinTakenIntoAccountEvenIfSizeOfSemiOrderedIsSmaller() {
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			ordered.of(1, 2).zip(arb.of('A')),
-			AnnotationData("bla", ArgsRangeOptions(requestedMinArgs = 10))
+			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
 		)
 		expect(argsRange) {
 			feature(ArgsRange::take).toEqual(10)

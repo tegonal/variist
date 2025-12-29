@@ -8,5 +8,8 @@ import java.lang.reflect.Method
  * @since 2.0.0
  */
 interface AnnotationDataDeducer {
-	fun deduce(testMethod: Method, argsSourceMethodName: String): AnnotationData?
+	/**
+	 * Deduces [AnnotationData] based on the given [testMethod] or returns `null` in case it cannot be deduced.
+	 */
+	fun deduce(testMethod: Method): AnnotationData?
 }
