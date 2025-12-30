@@ -30,7 +30,7 @@ interface RequestedMinAndMaxArgsTest {
 
 	companion object {
 		@JvmStatic
-		fun requestedMinArgsMaxArgsHappyCases() = ordered.fromArbs(
+		fun requestedMinArgsMaxArgsHappyCases() = semiOrdered.fromArbs(
 			arb.of(Tuple(null, null)),
 			arb.intPositive().map { Tuple(it, null) },
 			arb.intPositive().map { Tuple(null, it) },
@@ -39,7 +39,7 @@ interface RequestedMinAndMaxArgsTest {
 		)
 
 		@JvmStatic
-		fun requestedMinArgsMaxArgsFailureCases() = ordered.fromArbs(
+		fun requestedMinArgsMaxArgsFailureCases() = semiOrdered.fromArbs(
 			arb.intFromUntil(10, Int.MAX_VALUE).zipDependent({ arb.intFromTo(1, it - 1) }) { min, max ->
 				Tuple(min, max, "requestedMinArgs ($min) must be less than or equal to maxArgs ($max)")
 			},

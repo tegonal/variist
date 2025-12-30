@@ -7,16 +7,16 @@ class FromArbsExample : ReadmeTest {
 
 	@Test
 	fun `code-fromArbs-problem`() {
-		//snippet-ordered-fromArbs-problem-insert
+		//snippet-semiOrdered-fromArbs-problem-insert
 	}
 
 	@Test
 	fun `code-fromArbs-bad-solution`() {
-		//snippet-ordered-fromArbs-bad-solution-insert
+		//snippet-semiOrdered-fromArbs-bad-solution-insert
 	}
 
 	@Test
 	fun `code-fromArbs`() {
-		//snippet-ordered-fromArbs-insert
+		//snippet-semiOrdered-fromArbs-insert
 	}
 }

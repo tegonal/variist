@@ -11,6 +11,7 @@ import com.tegonal.variist.config.impl.VariistConfigViaPropertiesLoader
 interface GeneratorExtensionPoint : IsComponentFactoryContainerProvider {
 	val arb: ArbExtensionPoint
 	val ordered: OrderedExtensionPoint
+	val semiOrdered: SemiOrderedExtensionPoint
 }
 
 /**
@@ -19,6 +20,14 @@ interface GeneratorExtensionPoint : IsComponentFactoryContainerProvider {
  * @since 2.0.0
  */
 interface OrderedExtensionPoint : GeneratorExtensionPoint
+
+/**
+ * Extension point for factories which generate [SemiOrderedArgsGenerator].
+ *
+ * @since 2.0.0
+ */
+interface SemiOrderedExtensionPoint : GeneratorExtensionPoint
+
 
 /**
  * Extension point for factories which generate [ArbArgsGenerator].
@@ -38,14 +47,21 @@ private val propertiesBasedComponentFactoryContainer: ComponentFactoryContainer 
 }
 
 /**
- * Access to [OrderedArgsGenerator] factory methods like [ordered].[of][OrderedExtensionPoint.of].
+ * Access to [OrderedArgsGenerator]-factory methods like [ordered].[of][OrderedExtensionPoint.of].
  *
  * @since 2.0.0
  */
 val ordered: OrderedExtensionPoint = propertiesBasedComponentFactoryContainer.ordered
 
 /**
- * Access to [ArbArgsGenerator] factory methods like [arb].[of][ArbExtensionPoint.of].
+ * Access to [SemiOrderedArgsGenerator]-factory methods like [semiOrdered].[fromArbs][SemiOrderedExtensionPoint.fromArbs].
+ *
+ * @since 2.0.0
+ */
+val semiOrdered: SemiOrderedExtensionPoint = propertiesBasedComponentFactoryContainer.semiOrdered
+
+/**
+ * Access to [ArbArgsGenerator]-factory methods like [arb].[of][ArbExtensionPoint.of].
  *
  * @since 2.0.0
  */

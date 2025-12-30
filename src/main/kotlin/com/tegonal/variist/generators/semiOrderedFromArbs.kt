@@ -1,5 +1,8 @@
 package com.tegonal.variist.generators
 
+import com.tegonal.variist.config._components
+import com.tegonal.variist.config.ordered
+
 /**
  * Returns a [SemiOrderedArgsGenerator] based on the given [ArbArgsGenerator]s where the fixed part of it is the number
  * of [generators], which one is next to contribute a value, the values as such are arbitrary in respect
@@ -10,8 +13,7 @@ package com.tegonal.variist.generators
  *
  * @since 2.0.0
  */
-fun <T> OrderedExtensionPoint.fromArbs(vararg generators: ArbArgsGenerator<T>): SemiOrderedArgsGenerator<T> =
-	intFromUntil(0, generators.size).zipDependent({ useCase ->
+fun <T> SemiOrderedExtensionPoint.fromArbs(vararg generators: ArbArgsGenerator<T>): SemiOrderedArgsGenerator<T> =
+	_components.ordered.intFromUntil(0, generators.size).zipDependent({ useCase ->
 		generators[useCase]
 	}) { _, arb -> arb }
-
