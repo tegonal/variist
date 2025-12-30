@@ -2,10 +2,7 @@ package com.tegonal.variist.config.impl
 
 import ch.tutteli.kbox.blankToNull
 import ch.tutteli.kbox.takeIf
-import com.tegonal.variist.config.Env
-import com.tegonal.variist.config.VariistConfig
-import com.tegonal.variist.config.VariistConfigBuilder
-import com.tegonal.variist.config.VariistDeadlineException
+import com.tegonal.variist.config.*
 import com.tegonal.variist.config.impl.VariistPropertiesParser.Companion.ERROR_DEADLINES_PREFIX
 import com.tegonal.variist.utils.impl.checkIsPositive
 import java.nio.file.Path
@@ -167,13 +164,15 @@ class VariistConfigViaPropertiesLoader {
 
 	private fun VariistConfigBuilder.determineEnv(): String? =
 		System.getenv("VARIIST_ENV") ?: run {
-			val envs = testProfiles[defaultProfile] ?: error("profile $defaultProfile does not exist")
+			val envs = testProfiles.firstOrNull { it.first == defaultProfile }?.second?.map { it.first }?.toSet()
+				?: error("profile $defaultProfile does not exist")
+
 			// only determine envs if at least one standard env is defined (as others we don't know how to map)
 			takeIf(Env.entries.any { it.name in envs }) {
 				determineEnvBasedOnGitHubActions()
 					?: determineEnvBasedOnGitLab()
 					?: determineEnvBasedOnBitBucket()
-			}?.let { it.name.takeIf { env -> env in envs.keys } }
+			}?.let { it.name.takeIf { env -> env in envs } }
 		}
 
 	private fun determineEnvBasedOnGitHubActions(): Env? =

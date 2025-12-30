@@ -1,15 +1,32 @@
 package com.tegonal.variist.config
 
+import ch.tutteli.kbox.mapFirst
+import com.tegonal.variist.utils.impl.requireNoDuplicates
+
 /**
  * Indicates if the given [testType] is used as profile name in this [TestProfiles] collection or not.
+ *
  * @since 2.0.0
  */
 operator fun TestProfiles.contains(testType: TestType) = contains(testType.name)
 
 /**
+ * Creates a [TestProfiles] based on the given [profiles]
+ * which use one of the predefined [TestType] as profile name and [Env]  category names.
+ *
  * @since 2.0.0
  */
-operator fun TestProfiles.get(testType: TestType, env: Env) = get(testType.name, env.name)
+fun TestProfiles.Companion.create(vararg profiles: Pair<TestType, List<Pair<Env, TestConfig>>>): TestProfiles {
+	requireNoDuplicates(profiles.map { it.first }) { duplicates ->
+		"Looks like you defined some profiles multiple times: ${duplicates.joinToString(", ")}"
+	}
+	return TestProfiles.Companion.create(profiles.associate { (profile, testConfigPerEnv) ->
+		requireNoDuplicates(testConfigPerEnv.map { it.first }) { duplicates ->
+			"Looks like you defined some envs in profile $profile multiple times: ${duplicates.joinToString(", ")}"
+		}
+		profile.name to testConfigPerEnv.associate { it.mapFirst { env -> env.name } }
+	})
+}
 
 /**
  * Predefined test type names (e.g. to use as profile names for [TestProfiles]).

@@ -25,7 +25,7 @@ class TestProfilesTest {
 					Env.Local to TestConfig(maxArgs = 2),
 				)
 			)
-		}.toThrow<IllegalStateException> {
+		}.toThrow<IllegalArgumentException> {
 			message.toEqual("Looks like you defined some profiles multiple times: Integration")
 		}
 	}
@@ -48,7 +48,7 @@ class TestProfilesTest {
 					Env.Local to TestConfig(maxArgs = 4),
 				)
 			)
-		}.toThrow<IllegalStateException> {
+		}.toThrow<IllegalArgumentException> {
 			messageToContain("Looks like you defined some envs in profile Unit multiple times", "PR", "Local")
 		}
 	}

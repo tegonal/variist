@@ -23,7 +23,7 @@ interface ArgsRangeDecider {
  *
  * @since 2.0.0
  */
-data class ArgsRange(val offset: Int, val take: Int) {
+class ArgsRange(val offset: Int, val take: Int) {
 	init {
 		failIfNegative(offset, "offset")
 		checkIsPositive(take, "take")

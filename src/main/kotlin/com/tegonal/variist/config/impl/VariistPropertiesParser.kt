@@ -25,8 +25,10 @@ class VariistPropertiesParser {
 	) {
 		properties.forEach { (keyAny, valueAny) ->
 			try {
-				val key = keyAny as String
-				val value = valueAny as String
+				val key = keyAny as? String
+					?: error("property key was not a String, was ${keyAny::class.qualifiedName} ($keyAny)")
+				val value = valueAny as? String
+					?: error("property value was not a String, was ${valueAny::class.qualifiedName} ($valueAny)")
 
 				configBuilder.parseProperty(configFileSpecifics, key, value)
 			} catch (m: VariistParseException) {
@@ -68,6 +70,7 @@ class VariistPropertiesParser {
 			isKey("variistPropertiesDir") -> configFileSpecifics.variistPropertiesDir = Paths.get(value)
 			isKey("remindAboutFixedPropertiesAfterMinutes") ->
 				configFileSpecifics.remindAboutFixedPropertiesAfterMinutes = value.toIntOrErrorNotValid(key)
+
 			key.startsWith(ERROR_DEADLINES_PREFIX) -> configFileSpecifics.parseErrorDeadlines(key, value)
 
 			else -> throwUnknownProperty(key, value, supportedKeys)
@@ -75,20 +78,30 @@ class VariistPropertiesParser {
 	}
 
 	private fun VariistConfigBuilder.parseTestProfile(key: String, value: String) {
-		//TODO 2.1.0 warn about duplicates profile Names / envs ? i.e. copy to own maps first and merge in the end
-		// (we don't want to error in case we override an existing profile name / env)
 		val remainingAfterPrefix = key.substringAfter(PROFILES_PREFIX)
-		val profile = remainingAfterPrefix.substringBefore(".")
-		if (remainingAfterPrefix == profile) {
-			if (value == "clear") testProfiles[profile]?.clear()
-			else parseError("don't know how to interpret $value for $key")
+		val profileName = remainingAfterPrefix.substringBefore(".")
+		if (remainingAfterPrefix == profileName) {
+			if (value == "clear") {
+				//TODO 2.1.0 replace with removeFirst {..} from kbox once 3.4.0 is out
+				testProfiles.indexOfFirst { it.first == profileName }.takeIf { it >= 0 }?.also { index ->
+					testProfiles.removeAt(index)
+				}
+			} else parseError("don't know how to interpret $value for $key")
 		} else {
-			val testConfigsPerEnv = testProfiles.computeIfAbsent(profile) { HashMap() }
-			val remainingAfterProfile = remainingAfterPrefix.substringAfter("$profile.")
+			val (_, testConfigsPerEnv) = testProfiles.firstOrNull { it.first == profileName }
+				?: (profileName to mutableListOf<Pair<String, TestConfig>>()).also {
+					testProfiles.add(it)
+				}
+
+			val remainingAfterProfile = remainingAfterPrefix.substringAfter("$profileName.")
 			val env = remainingAfterProfile.substringBefore(".")
 			if (remainingAfterProfile == env) {
-				if (value == "clear") testConfigsPerEnv.clear()
-				else parseError("don't know how to interpret $value for $key")
+				if (value == "clear") {
+					//TODO 2.1.0 replace with removeFirst {..} from kbox once 3.4.0 is out
+					testConfigsPerEnv.indexOfFirst { it.first == env }.takeIf { it >= 0 }?.also { index ->
+						testConfigsPerEnv.removeAt(index)
+					}
+				} else parseError("don't know how to interpret $value for $key")
 			} else {
 				val testConfig = when (remainingAfterProfile.substringAfter("$env.")) {
 					"maxArgs" -> TestConfig(maxArgs = value.toPositiveIntOrErrorNotValid(key))
@@ -99,7 +112,7 @@ class VariistPropertiesParser {
 						within = "$PROFILES_PREFIX.$env."
 					)
 				}
-				testConfigsPerEnv[env] = testConfig
+				testConfigsPerEnv.add(env to testConfig)
 			}
 		}
 	}

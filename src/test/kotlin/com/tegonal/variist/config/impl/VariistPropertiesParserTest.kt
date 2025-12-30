@@ -24,7 +24,7 @@ class VariistPropertiesParserTest {
 			activeSuffixArgsGeneratorDecider = "activeSuffixArgsGeneratorDecider",
 			activeEnv = "activeEnv",
 			defaultProfile = "defaultProfile",
-			testProfiles = HashMap(),
+			testProfiles = mutableListOf(),
 		)
 
 		val properties = Properties()
