@@ -125,7 +125,12 @@ abstract class BaseBigIntFromUntilRepeatingIterator<T>(
 }
 
 /**
- * Convenience method which convert to [Long] and then calls determineStartingIndex and converts the result back to Int
+ * Convenience method which converts to [Long] and then calls determineStartingIndex and converts the result back to Int
+ *
+ * !! No backward compatibility guarantees !!
+ * Reuse at your own risk
+ *
+ * @since 2.0.0
  */
 fun determineStartingIndex(
 	from: Int,
@@ -134,6 +139,12 @@ fun determineStartingIndex(
 	step: Int
 ): Int = determineStartingIndex(from.toLong(), toExclusive.toLong(), offset.toLong(), step.toLong()).toInt()
 
+/**
+ * !! No backward compatibility guarantees !!
+ * Reuse at your own risk
+ *
+ * @since 2.0.0
+ */
 fun determineStartingIndex(
 	from: Long,
 	toExclusive: Long,
@@ -152,6 +163,12 @@ fun determineStartingIndex(
 	1
 )
 
+/**
+ * !! No backward compatibility guarantees !!
+ * Reuse at your own risk
+ *
+ * @since 2.0.0
+ */
 fun determineStartingIndex(
 	from: BigInt,
 	toExclusive: BigInt,

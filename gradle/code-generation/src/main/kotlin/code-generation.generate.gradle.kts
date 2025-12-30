@@ -106,9 +106,7 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 
 		(1..numOfArgs).forEach { upperNumber ->
 			val numbers = (1..upperNumber).toList()
-			val typeArgs = numbers.joinToString {
-				//TODO 2.0.0 should be out for Args1 and co. requires that we define append and co. as extension methods
-				"A$it" }
+			val typeArgs = numbers.joinToString { "A$it" }
 
 			if (upperNumber > 1) {
 
