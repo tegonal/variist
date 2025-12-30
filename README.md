@@ -51,7 +51,7 @@ version: [README of v2.0.0-RC-3](https://github.com/tegonal/variist/tree/main/RE
 		- [ordered.concatenation](#ordered-concatenation)
 		- [arb.mergeWeighted](#arb-mergeWeighted)
 		- [ordered.toArbArgsGenerator](#ordered-toArbArgsGenerator)
-        - [ordered.fromArbs](#ordered-fromArbs) 
+        - [semiOrdered.fromArbs](#semiOrdered-fromArbs) 
 - [Use Variist in other contexts than JUnit](#use-variist-in-other-contexts-than-junit)
 - [Configuration](#configuration)
 	- [Profiles and Envs](#profiles-and-envs)
@@ -75,7 +75,7 @@ version: [README of v2.0.0-RC-3](https://github.com/tegonal/variist/tree/main/RE
 
 Variist might resemble a property based testing library but is more data-driven oriented.
 Its focus is on tests that take longer (integration, e2e and system integration tests) where shrinking is too costly.
-But of course, you can also use it for data-driven unit tests (see [ordered.fromArbs](#ordered-fromArbs) as an example).  
+But of course, you can also use it for data-driven unit tests (see [semiOrdered.fromArbs](#semiOrdered-fromArbs) as an example).  
 It comes with extra support for JUnit but can
 also [be used in other contexts](#use-variist-in-other-contexts-than-junit)
 where you want to generate data (or with other test-runners).
@@ -178,7 +178,7 @@ Raw values are turned into a `List` and then passed to `ordered.fromList`. The n
 
 ## Ordered and arbitrary arguments generators
 
-Variist provides two entry points to create an `ArgsGenenerator`: `ordered` and `arb`.
+Variist provides three entry points to create an `ArgsGenenerator`: `ordered`, `arb` and `semiOrdered`.
 
 `ordered` can be used to define an ordered (not to be confused with sorted) list of finite
 values where the corresponding `OrderedArgsGenerator` generates a sequence which repeats them indefinitely.
@@ -195,7 +195,13 @@ The number of runs of such a provider is in theory infinite as well (`ArbArgsGen
 limited by the [profile](#profiles-and-envs) the test falls into, the [environment](#profiles-and-envs) where the test
 runs and what configuration was set up for this combination.
 Also `OrderedArgsGenerator` are limited by profile/env but introduce an own limit in
-addition by its `size` property. Following an example of how to use an `ArgsGenerator` as an `ArgsSource` provider.
+addition by its `size` property. 
+
+The third entry point `semiOrdered`, which creates a `SemiOrderedArgsGenerator`, is a mixture of the previous two, 
+it has an ordered part and an arbitrary part.
+Since it is a more advanced concept, we will skip it here (you find more information in [semiOrdered.fromArbs](#semiOrdered-fromArbs)).
+
+Following an example of how to use an `ArgsGenerator` as an `ArgsSource` provider.
 
 <code-arb-provider>
 
@@ -407,7 +413,8 @@ Combining two `OrderedArgsGenerator`s A and B (or `SemiOrderedArgsGenerator`s) r
 representing their cartesian product and the size correspondingly `A.size * B.size`. I.e. such combinations can
 grow quickly, but Variist has you covered in therms that this is just a definition (nothing generated yet) and
 you still execute only a window of those values in a fast and efficient way.
-On the other hand, combining two `ArbArgsGenerator` means zipping them and results in another `ArbArgsGenerator`.
+Combining two `ArbArgsGenerator` means zipping them and results in another `ArbArgsGenerator` (again, nothing generated,
+only a definition).
 
 Combining an `OrderedArgsGenerators` and an `ArbArgsGenerator` works as well (as shown in the example) and uses
 again zip behaviour, where the result is no longer an `OrderedArgsGenerators` but a `SemiOrderedArgsGenerators` (which
@@ -801,12 +808,13 @@ it might be skewed; for example, 85 values could fall between 100 and 200, etc.
 
 
 
-### ordered fromArbs
+### semiOrdered fromArbs
 
 If you find yourself in the situation where you define multiple `ParameterizedTests` which contain all more or less the 
 same test-logic but with different ranges of values, then one is quickly tempted to include more than one expectation in 
-the test method, as the boilerplate is just too annoying (jump to the usage of [ordered.fromArbs](#ordered-fromArbs-good-solution)
-if you are not interested in knowing why it exists). Following an example:
+the test method, as the boilerplate is just too annoying (jump to the usage of 
+[semiOrdered.fromArbs](#semisemiOrdered-fromArbs-good-solution) if you are not interested in knowing why it exists).
+Following an example:
 
 <code-fromArbs-problem>
 
@@ -855,7 +863,7 @@ fun checkRequestedMinArgsMaxArgs(positiveInt: Int) {
 
 </code-fromArbs-bad-solution>
 
-.. but in exchange for a more generic test method name. And the more expectations you add to the test method 
+...but in exchange for a more generic test method name. And the more expectations you add to the test method 
 the less obvious it becomes which expectation failed on failure. Re-executing just the failure case,
 debugging it etc. becomes more tedious. And you know what, we forgot to add the use case where `requestedMinArgs` is
 a positive int and `maxArgs` is greater. For this we need two arguments where the second depends on the first.
@@ -864,7 +872,7 @@ At first, that might sound complicated to achieve and you might be tempted to fa
 5 cases with fixed values. But you don't need to give up the arbitrariness. `ordered.fromArbs` helps in such a situation
 where you re-use the test-logic and define different valid data ranges:
 
-<a name="ordered-fromArbs-good-solution"></a>
+<a name="semiOrdered-fromArbs-good-solution"></a>
 
 <code-fromArbs>
 
@@ -877,7 +885,7 @@ fun requestedMinArgs_maxArgs_happy_cases(requestedMinArgs: Int?, maxArgs: Int?) 
 
 companion object {
 	@JvmStatic
-	fun requestedMinArgsMaxArgsHappyCases() = ordered.fromArbs(
+	fun requestedMinArgsMaxArgsHappyCases() = semiOrdered.fromArbs(
 		arb.of(Tuple(null, null)),
 		arb.intPositive().map { Tuple(it, null) },
 		arb.intPositive().map { Tuple(null, it) },

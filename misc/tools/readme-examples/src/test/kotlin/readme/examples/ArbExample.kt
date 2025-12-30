@@ -11,7 +11,6 @@ import kotlin.test.Test
 @Suppress("unused", "UNUSED_PARAMETER")
 class ArbExample : ReadmeTest {
 
-
 	@Test
 	fun `code-arb-provider`() {
 		//snippet-arb-provider-insert

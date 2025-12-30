@@ -1,11 +1,6 @@
 package readme.examples
 
-import ch.tutteli.atrium.api.fluent.en_GB.messageToContain
-import ch.tutteli.atrium.api.fluent.en_GB.notToThrow
-import ch.tutteli.atrium.api.fluent.en_GB.toThrow
-import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
-import ch.tutteli.kbox.append
 import com.tegonal.variist.generators.*
 import com.tegonal.variist.providers.ArgsSource
 import com.tegonal.variist.utils.impl.checkRequestedMinArgsMaxArgs
@@ -16,7 +11,7 @@ import kotlin.test.Test
 @Order(1)
 class FromArbsTest : PredefinedArgsProviders {
 
-	//snippet-ordered-fromArbs-problem-start
+	//snippet-semiOrdered-fromArbs-problem-start
 	@Test
 	fun null_null__no_error() {
 		checkRequestedMinArgsMaxArgs(null, null)
@@ -40,9 +35,9 @@ class FromArbsTest : PredefinedArgsProviders {
 		checkRequestedMinArgsMaxArgs(positiveInt, positiveInt)
 	}
 	//...
-	//snippet-ordered-fromArbs-problem-end
+	//snippet-semiOrdered-fromArbs-problem-end
 
-	//snippet-ordered-fromArbs-bad-solution-start
+	//snippet-semiOrdered-fromArbs-bad-solution-start
 	@ParameterizedTest
 	@ArgsSource("arbIntPositive")
 	fun checkRequestedMinArgsMaxArgs(positiveInt: Int) {
@@ -51,9 +46,9 @@ class FromArbsTest : PredefinedArgsProviders {
 		checkRequestedMinArgsMaxArgs(null, positiveInt)
 		checkRequestedMinArgsMaxArgs(positiveInt, positiveInt)
 	}
-	//snippet-ordered-fromArbs-bad-solution-end
+	//snippet-semiOrdered-fromArbs-bad-solution-end
 
-	//snippet-ordered-fromArbs-start
+	//snippet-semiOrdered-fromArbs-start
 	@ParameterizedTest
 	@ArgsSource("requestedMinArgsMaxArgsHappyCases")
 	fun requestedMinArgs_maxArgs_happy_cases(requestedMinArgs: Int?, maxArgs: Int?) {
@@ -62,7 +57,7 @@ class FromArbsTest : PredefinedArgsProviders {
 
 	companion object {
 		@JvmStatic
-		fun requestedMinArgsMaxArgsHappyCases() = ordered.fromArbs(
+		fun requestedMinArgsMaxArgsHappyCases() = semiOrdered.fromArbs(
 			arb.of(Tuple(null, null)),
 			arb.intPositive().map { Tuple(it, null) },
 			arb.intPositive().map { Tuple(null, it) },
@@ -70,5 +65,5 @@ class FromArbsTest : PredefinedArgsProviders {
 			arb.intBounds(minInclusive = 1, minSize = 2)
 		)
 	}
-	//snippet-ordered-fromArbs-end
+	//snippet-semiOrdered-fromArbs-end
 }

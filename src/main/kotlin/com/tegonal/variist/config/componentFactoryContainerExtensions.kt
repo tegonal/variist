@@ -3,8 +3,10 @@ package com.tegonal.variist.config
 import com.tegonal.variist.config.impl.*
 import com.tegonal.variist.generators.ArbExtensionPoint
 import com.tegonal.variist.generators.OrderedExtensionPoint
+import com.tegonal.variist.generators.SemiOrderedExtensionPoint
 import com.tegonal.variist.generators.impl.DefaultArbExtensionPoint
 import com.tegonal.variist.generators.impl.DefaultOrderedExtensionPoint
+import com.tegonal.variist.generators.impl.DefaultSemiOrderedExtensionPoint
 import com.tegonal.variist.providers.*
 import com.tegonal.variist.providers.impl.DefaultArgsGeneratorToArgumentsConverter
 import com.tegonal.variist.providers.impl.DefaultGenericArgsGeneratorCombiner
@@ -82,6 +84,13 @@ fun ComponentFactoryContainer.createVariistRandom(seedOffset: Int): Random =
  * @since 2.0.0
  */
 val ComponentFactoryContainer.ordered get() : OrderedExtensionPoint = DefaultOrderedExtensionPoint(this)
+
+/**
+ * Creates an [SemiOrderedExtensionPoint] based on this [ComponentFactoryContainer].
+ *
+ * @since 2.0.0
+ */
+val ComponentFactoryContainer.semiOrdered get() : SemiOrderedExtensionPoint = DefaultSemiOrderedExtensionPoint(this)
 
 /**
  * Creates an [ArbExtensionPoint] based on this [ComponentFactoryContainer].
