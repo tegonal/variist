@@ -1,8 +1,8 @@
 package com.tegonal.variist.utils
 
+import com.tegonal.variist.utils.impl.ForeverConstantSequence
 import com.tegonal.variist.utils.impl.ForeverUnitSequence
 import com.tegonal.variist.utils.impl.RepeatingArraySequence
-import com.tegonal.variist.utils.impl.RepeatingConstantSequence
 import com.tegonal.variist.utils.impl.RepeatingListSequence
 
 /**
@@ -10,7 +10,7 @@ import com.tegonal.variist.utils.impl.RepeatingListSequence
  *
  * @since 2.0.0
  */
-fun repeatForever(): Sequence<Unit> = ForeverUnitSequence()
+fun repeatForever(): Sequence<Unit> = ForeverUnitSequence
 
 /**
  * Returns an infinite [Sequence] backed by the given [list], starting at the given [offset].
@@ -31,4 +31,4 @@ fun <T> repeatForever(array: Array<T>, offset: Int = 0): Sequence<T> = Repeating
  *
  * @since 2.0.0
  */
-fun <T> repeatForever(constant: T): Sequence<T> = RepeatingConstantSequence(constant)
+fun <T> repeatForever(constant: T): Sequence<T> = ForeverConstantSequence(constant)
