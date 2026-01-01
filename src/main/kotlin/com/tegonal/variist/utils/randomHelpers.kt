@@ -129,4 +129,5 @@ fun createVariistRandom(): Random = ordered._components.createVariistRandom(seed
  *
  * @since 2.0.0
  */
-fun seedToOffset(seed: Int): Int = seed ushr 1
+fun seedToOffset(seed: Int): Int =
+	seed and Int.MAX_VALUE
