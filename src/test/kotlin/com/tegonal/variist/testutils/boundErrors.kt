@@ -1,8 +1,13 @@
 package com.tegonal.variist.testutils
 
 import ch.tutteli.kbox.Tuple
+import ch.tutteli.kbox.Tuple3
 import com.tegonal.variist.generators.*
 import com.tegonal.variist.providers.PredefinedBoundProviders
+import org.junit.jupiter.api.Named
+
+fun intMinSizeMaxSizeError(description: String, factory: (Int, Int) -> () -> ArbArgsGenerator<*>) =
+	intBoundError("minSize", "maxSize").lowerUpperBoundCase(description, factory)
 
 fun intBoundError(lowerBoundName: String, upperBoundName: String) =
 	boundErrors(
@@ -13,6 +18,10 @@ fun intBoundError(lowerBoundName: String, upperBoundName: String) =
 		fromUntilZero = { arb.intFromUntil(it, 0) }
 	)
 
+fun longMinSizeMaxSizeError(description: String, factory: (Long, Long) -> () -> ArbArgsGenerator<*>) =
+	longBoundError("minSize", "maxSize").lowerUpperBoundCase(description, factory)
+
+
 fun longBoundError(lowerBoundName: String, upperBoundName: String) =
 	boundErrors(
 		lowerBoundName, upperBoundName,
@@ -21,6 +30,26 @@ fun longBoundError(lowerBoundName: String, upperBoundName: String) =
 		arb.longPositive(),
 		fromUntilZero = { arb.longFromUntil(it, 0) }
 	)
+
+
+fun <T : Number> SemiOrderedArgsGenerator<Tuple3<T, T, String>>.lowerUpperBoundCase(
+	description: String,
+	factory: (T, T) -> () -> ArbArgsGenerator<*>
+) = map { (lower, upper, errMsg) -> Tuple(description, errMsg, Named.of("f", factory(lower, upper))) }
+
+fun minInclusiveMustBeLessThanMaxInclusive(lowerBound: Any, upperBound: Any, minSize: Any) =
+	"minInclusive ($upperBound) must be less than or equal to `maxInclusive ($lowerBound) - minSize ($minSize) + 1`"
+
+fun <T : Any> ArbArgsGenerator<Tuple3<T, T, T>>.minMaxInclusiveCase(
+	description: String,
+	factory: (T, T, T) -> () -> ArbArgsGenerator<*>
+) = map { (lower, upper, minSize) ->
+	Tuple(
+		description,
+		minInclusiveMustBeLessThanMaxInclusive(lower, upper, minSize),
+		Named.of("f", factory(lower, upper, minSize))
+	)
+}
 
 private fun <T : Number> boundErrors(
 	lowerBoundName: String, upperBoundName: String,

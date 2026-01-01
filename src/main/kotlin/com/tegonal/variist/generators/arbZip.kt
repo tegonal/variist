@@ -18,7 +18,7 @@ package com.tegonal.variist.generators
  *
  * @since 2.0.0
  */
-//TODO 2.1.0 add ordered.zip as well, which has size = minOf(this.size, other.size)
+//TODO 2.1.0 add ordered.zip as well, which has size = minOf(this.size, other.size) ?
 fun <A1, A2, R> ArbArgsGenerator<A1>.zip(
 	other: ArbArgsGenerator<A2>,
 	transform: (A1, A2) -> R

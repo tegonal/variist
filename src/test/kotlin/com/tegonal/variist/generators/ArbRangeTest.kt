@@ -1,6 +1,17 @@
 package com.tegonal.variist.generators
 
+import ch.tutteli.atrium.api.fluent.en_GB.messageToContain
+import ch.tutteli.atrium.api.fluent.en_GB.toThrow
+import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
+import ch.tutteli.kbox.mapFirst
+import com.tegonal.variist.providers.ArgsSource
+import com.tegonal.variist.testutils.intMinSizeMaxSizeError
+import com.tegonal.variist.testutils.longMinSizeMaxSizeError
+import com.tegonal.variist.testutils.minInclusiveMustBeLessThanMaxInclusive
+import com.tegonal.variist.testutils.minMaxInclusiveCase
+import org.junit.jupiter.api.Named
+import org.junit.jupiter.params.ParameterizedTest
 
 class ArbRangeTest : AbstractArbArgsGeneratorTest<Any>() {
 
@@ -42,6 +53,40 @@ class ArbRangeTest : AbstractArbArgsGeneratorTest<Any>() {
 		)
 	}
 
+	@ParameterizedTest
+	@ArgsSource("validationErrors")
+	fun check_invariants(@Suppress("unused") what: String, errorMsg: String, factory: () -> ArbArgsGenerator<*>) {
+		expect(factory).toThrow<IllegalStateException> {
+			messageToContain(errorMsg)
+		}
+	}
 
-	//TODO 2.0.0 error in case of wrong min/max etc.
+	companion object {
+		@JvmStatic
+		fun validationErrors() = run {
+			listOf(
+				intMinSizeMaxSizeError("charRange") { l, u -> { arb.charRange(minSize = l, maxSize = u) } },
+				intMinSizeMaxSizeError("intRange") { l, u -> { arb.intRange(minSize = l, maxSize = u) } },
+				longMinSizeMaxSizeError("longRange") { l, u -> { arb.longRange(minSize = l, maxSize = u) } },
+			).concatAll()
+		} + run {
+			val charBounds = arb.charBounds().zip(arb.intPositive())
+			val intBounds = arb.intBounds().zip(arb.intPositive())
+			val longBounds = arb.longBounds().zip(arb.longPositive())
+
+			semiOrdered.fromArbs(
+				charBounds.map { (l, u, minSize) ->
+					Tuple("charRange", minInclusiveMustBeLessThanMaxInclusive(l.code, u.code, minSize), Named.of("f") {
+						arb.charRange(minInclusive = u, maxInclusive = l, minSize = minSize)
+					})
+				},
+				intBounds.minMaxInclusiveCase("intRange") { l, u, minSize ->
+					{ arb.intRange(minInclusive = u, maxInclusive = l, minSize = minSize) }
+				},
+				longBounds.minMaxInclusiveCase("longRange") { l, u, minSize ->
+					{ arb.longRange(minInclusive = u, maxInclusive = l, minSize = minSize) }
+				},
+			)
+		}.map { p -> p.mapFirst { "$it minInclusive > maxInclusive - minSize + 1" } }
+	}
 }

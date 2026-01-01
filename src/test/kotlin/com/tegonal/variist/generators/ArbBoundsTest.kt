@@ -4,15 +4,16 @@ import ch.tutteli.atrium.api.fluent.en_GB.*
 import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
 import ch.tutteli.kbox.Tuple2
-import ch.tutteli.kbox.Tuple3
 import ch.tutteli.kbox.mapFirst
 import com.tegonal.variist.generators.impl.createBoundsArbGenerator
 import com.tegonal.variist.generators.impl.createIntDomainBasedBoundsArbGenerator
 import com.tegonal.variist.generators.impl.possibleMaxSizeSafeInIntDomain
 import com.tegonal.variist.generators.impl.possibleMaxSizeSafeInLongDomain
 import com.tegonal.variist.providers.ArgsSource
-import com.tegonal.variist.testutils.intBoundError
-import com.tegonal.variist.testutils.longBoundError
+import com.tegonal.variist.testutils.intMinSizeMaxSizeError
+import com.tegonal.variist.testutils.longMinSizeMaxSizeError
+import com.tegonal.variist.testutils.minInclusiveMustBeLessThanMaxInclusive
+import com.tegonal.variist.testutils.minMaxInclusiveCase
 import com.tegonal.variist.utils.BigInt
 import com.tegonal.variist.utils.toBigInt
 import org.junit.jupiter.api.Named
@@ -174,71 +175,57 @@ class ArbBoundsTest : AbstractArbArgsGeneratorTest<Any>() {
 
 		@JvmStatic
 		fun validationErrors() = run {
-			fun <T : Number> SemiOrderedArgsGenerator<Tuple3<T, T, String>>.case(
-				description: String,
-				factory: (T, T) -> () -> ArbArgsGenerator<*>
-			) = map { (lower, upper, errMsg) -> Tuple(description, errMsg, Named.of("f", factory(lower, upper))) }
-
 			listOf(
-				intBoundError("minSize", "maxSize").case("charBounds") { l, u ->
-					{ arb.charBounds(minSize = l, maxSize = u) }
-				},
-				intBoundError("minSize", "maxSize").case("charBoundsBased") { l, u ->
+				intMinSizeMaxSizeError("charBounds") { l, u -> { arb.charBounds(minSize = l, maxSize = u) } },
+				intMinSizeMaxSizeError("charBoundsBased") { l, u ->
 					{ arb.charBoundsBased(minSize = l, maxSize = u, factory = ::Tuple2) }
 				},
-				intBoundError("minSize", "maxSize").case("intBounds") { l, u ->
-					{ arb.intBounds(minSize = l, maxSize = u) }
-				},
-				intBoundError("minSize", "maxSize").case("intBoundsBased") { l, u ->
+				intMinSizeMaxSizeError("intBounds") { l, u -> { arb.intBounds(minSize = l, maxSize = u) } },
+				intMinSizeMaxSizeError("intBoundsBased") { l, u ->
 					{ arb.intBoundsBased(minSize = l, maxSize = u, factory = ::Tuple2) }
 				},
-				longBoundError("minSize", "maxSize").case("longBounds") { l, u ->
-					{ arb.longBounds(minSize = l, maxSize = u) }
-				},
-				longBoundError("minSize", "maxSize").case("longBoundsBased") { l, u ->
+				longMinSizeMaxSizeError("longBounds") { l, u -> { arb.longBounds(minSize = l, maxSize = u) } },
+				longMinSizeMaxSizeError("longBoundsBased") { l, u ->
 					{ arb.longBoundsBased(minSize = l, maxSize = u, factory = ::Tuple2) }
 				},
 			).concatAll()
 		} + run {
-			fun errMsg(lowerBound: Any, upperBound: Any, minSize: Any) =
-				"minInclusive ($upperBound) must be less than or equal to `maxInclusive ($lowerBound) - minSize ($minSize) + 1`"
-
-			fun <T : Any> ArbArgsGenerator<Tuple3<T, T, T>>.case(
-				description: String,
-				factory: (T, T, T) -> () -> ArbArgsGenerator<*>
-			) = map { (lower, upper, minSize) ->
-				Tuple(description, errMsg(lower, upper, minSize), Named.of("f", factory(lower, upper, minSize)))
-			}
-
 			val charBounds = arb.charBounds().zip(arb.intPositive())
 			val intBounds = arb.intBounds().zip(arb.intPositive())
 			val longBounds = arb.longBounds().zip(arb.longPositive())
 
 			semiOrdered.fromArbs(
 				charBounds.map { (l, u, minSize) ->
-					Tuple("charBounds", errMsg(l.code, u.code, minSize), Named.of("f") {
+					Tuple("charBounds", minInclusiveMustBeLessThanMaxInclusive(l.code, u.code, minSize), Named.of("f") {
 						arb.charBounds(minInclusive = u, maxInclusive = l, minSize = minSize)
 					})
 				},
 				charBounds.map { (l, u, minSize) ->
-					Tuple("charBoundsBased", errMsg(l.code, u.code, minSize = minSize), Named.of("f") {
-						arb.charBoundsBased(minInclusive = u, maxInclusive = l, minSize = minSize, factory = ::Tuple2)
-					})
+					Tuple(
+						"charBoundsBased",
+						minInclusiveMustBeLessThanMaxInclusive(l.code, u.code, minSize = minSize),
+						Named.of("f") {
+							arb.charBoundsBased(
+								minInclusive = u,
+								maxInclusive = l,
+								minSize = minSize,
+								factory = ::Tuple2
+							)
+						})
 				},
-				intBounds.case("intBounds") { l, u, minSize ->
+				intBounds.minMaxInclusiveCase("intBounds") { l, u, minSize ->
 					{ arb.intBounds(minInclusive = u, maxInclusive = l, minSize = minSize) }
 				},
-				intBounds.case("intBoundsBased") { l, u, minSize ->
+				intBounds.minMaxInclusiveCase("intBoundsBased") { l, u, minSize ->
 					{ arb.intBoundsBased(minInclusive = u, maxInclusive = l, minSize = minSize, factory = ::Tuple2) }
 				},
-				longBounds.case("longBounds") { l, u, minSize ->
+				longBounds.minMaxInclusiveCase("longBounds") { l, u, minSize ->
 					{ arb.longBounds(minInclusive = u, maxInclusive = l, minSize = minSize) }
 				},
-				longBounds.case("longBoundsBased") { l, u, minSize ->
+				longBounds.minMaxInclusiveCase("longBoundsBased") { l, u, minSize ->
 					{ arb.longBoundsBased(minInclusive = u, maxInclusive = l, minSize = minSize, factory = ::Tuple2) }
 				}
 			)
-
 		}.map { p -> p.mapFirst { "$it minInclusive > maxInclusive - minSize + 1" } }
 	}
 }
