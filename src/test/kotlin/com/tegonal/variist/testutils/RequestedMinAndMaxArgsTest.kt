@@ -20,7 +20,11 @@ interface RequestedMinAndMaxArgsTest {
 
 	@ParameterizedTest
 	@ArgsSource("requestedMinArgsMaxArgsFailureCases")
-	fun requestedMinArgs_maxArgs_failure_cases(requestedMinArgs: Int?, maxArgs: Int?, exceptionMessageContains: String) {
+	fun requestedMinArgs_maxArgs_failure_cases(
+		requestedMinArgs: Int?,
+		maxArgs: Int?,
+		exceptionMessageContains: String
+	) {
 		expect {
 			setupRequestedMinArgsMaxArgs(requestedMinArgs, maxArgs)
 		}.toThrow<IllegalStateException> {
@@ -39,24 +43,6 @@ interface RequestedMinAndMaxArgsTest {
 		)
 
 		@JvmStatic
-		fun requestedMinArgsMaxArgsFailureCases() = semiOrdered.fromArbs(
-			arb.intFromUntil(10, Int.MAX_VALUE).zipDependent({ arb.intFromTo(1, it - 1) }) { min, max ->
-				Tuple(min, max, "requestedMinArgs ($min) must be less than or equal to maxArgs ($max)")
-			},
-
-			arb.intNegativeAndZero().zipDependent({ arb.intPositive() }) { min, max ->
-				Tuple(min, max, "$min is not a valid requestedMinArgs, must be greater than 0")
-			},
-
-			arb.intPositive().zipDependent({ arb.intNegativeAndZero() }) { min, max ->
-				Tuple(min, max, "$max is not a valid maxArgs, must be greater than 0")
-			},
-
-			arb.intNegativeAndZero().zipDependent({ arb.intFromUntil(it, 0) }) { min, max ->
-				// we know requestedMinArgs is validated first, the important bit is that it still fails even if
-				// min <= max
-				Tuple(min, max, "$min is not a valid requestedMinArgs, must be greater than 0")
-			},
-		)
+		fun requestedMinArgsMaxArgsFailureCases() = intBoundError("requestedMinArgs", "maxArgs")
 	}
 }

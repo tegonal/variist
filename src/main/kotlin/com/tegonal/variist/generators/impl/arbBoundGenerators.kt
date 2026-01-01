@@ -23,7 +23,7 @@ fun <T> ArbExtensionPoint.createIntDomainBasedBoundsArbGenerator(
 		minInclusive = minInclusive.toLong(),
 		maxInclusive = maxInclusive.toLong(),
 		minSize = minSize.toLong(),
-		maxSize = maxSize?.toBigInt()
+		maxSize = maxSize?.toLong()
 	)
 	check(possibleMaxSize.toLong() <= possibleMaxSizeSafeInIntDomain) {
 		"only use createIntDomainBasedClosedRangeArbGenerator if you are sure that possibleMaxSize is less than or equal to $possibleMaxSizeSafeInIntDomain (was $possibleMaxSize)"
@@ -98,7 +98,7 @@ fun <T> ArbExtensionPoint.createBoundsArbGenerator(
 	minInclusive: Long,
 	maxInclusive: Long,
 	minSize: Long,
-	maxSize: BigInt?,
+	maxSize: Long?,
 	factory: (lowerBound: Long, upperBound: Long) -> T
 ): ArbArgsGenerator<T> {
 	val (effectiveMaxSize, possibleMaxSize) = validateNumbersAndReturnEffectiveAndPossibleMaxSize(
@@ -193,28 +193,26 @@ private fun validateNumbersAndReturnEffectiveAndPossibleMaxSize(
 	minInclusive: Long,
 	maxInclusive: Long,
 	minSize: Long,
-	maxSize: BigInt?
+	maxSize: Long?
 ): Pair<BigInt, BigInt> {
 	checkIsPositive(minSize, "minSize")
 	maxSize?.also {
 		checkIsPositive(maxSize, "maxSize")
-		check(minSize.toBigInt() <= maxSize) {
+		check(minSize <= maxSize) {
 			"minSize ($minSize) must be less than or equal to maxSize ($maxSize)"
 		}
 	}
-	val maxInclusiveMinusMinSizePlusOne = Math.subtractExact(maxInclusive, minSize) + 1
-	check(minInclusive <= maxInclusiveMinusMinSizePlusOne) {
-		"minInclusive ($minInclusive) must be less than or equal to maxInclusive ($maxInclusive) - minSize ($minSize) + 1 which is $maxInclusiveMinusMinSizePlusOne"
+	val maxInclusiveBigIntPlusOne = maxInclusive.toBigInt() + BigInt.ONE
+	val minInclusiveBigInt = minInclusive.toBigInt()
+
+	val maxInclusiveMinusMinSizePlusOne = maxInclusiveBigIntPlusOne - minSize.toBigInt()
+	check(minInclusiveBigInt <= maxInclusiveMinusMinSizePlusOne) {
+		"minInclusive ($minInclusive) must be less than or equal to `maxInclusive ($maxInclusive) - minSize ($minSize) + 1` which is $maxInclusiveMinusMinSizePlusOne"
 	}
 
-	val possibleMaxSize = maxInclusive.toBigInt() - minInclusive.toBigInt() + BigInt.ONE
-	val effectiveMaxSize = when {
-		maxSize == null -> possibleMaxSize
-		maxSize <= possibleMaxSize -> maxSize
-		else -> error(
-			"maxSize ($maxSize) was greater than the possible maxSize $possibleMaxSize based on the given minInclusive ($minInclusive) and maxInclusive ($maxInclusive)"
-		)
-	}
+	val possibleMaxSize = maxInclusiveBigIntPlusOne - minInclusiveBigInt
+	val maxSizeBigInt = maxSize?.toBigInt()
+	val effectiveMaxSize = maxSizeBigInt?.let { minOf(it, possibleMaxSize) } ?: possibleMaxSize
 	return Pair(effectiveMaxSize, possibleMaxSize)
 }
 
@@ -307,7 +305,7 @@ private inline fun <NumberT, T> ArbExtensionPoint.arbBoundsNumberBased(
 	// 3..4
 	// We know split the ranges according to their sizes using a prefix sum (we don't calculate all of them but for
 	// your record in our example those are):
-	// 2 = 3 candidates (prefix sum = 3)
+	// 2 = 3 candidates - first column above (prefix sum = 3)
 	// 3 = 2 (prefix sum 3+2 = 5)
 	// 4 = 1 (prefix sum 5 + 1 = 6
 	// we don't need to calculate the intermediate sums because the number of ranges with a specific size form an

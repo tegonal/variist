@@ -1,18 +1,21 @@
 package com.tegonal.variist.generators
 
-import ch.tutteli.atrium.api.fluent.en_GB.first
-import ch.tutteli.atrium.api.fluent.en_GB.second
-import ch.tutteli.atrium.api.fluent.en_GB.toBeGreaterThanOrEqualTo
-import ch.tutteli.atrium.api.fluent.en_GB.toBeLessThanOrEqualTo
+import ch.tutteli.atrium.api.fluent.en_GB.*
 import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
+import ch.tutteli.kbox.Tuple2
+import ch.tutteli.kbox.Tuple3
+import ch.tutteli.kbox.mapFirst
 import com.tegonal.variist.generators.impl.createBoundsArbGenerator
 import com.tegonal.variist.generators.impl.createIntDomainBasedBoundsArbGenerator
 import com.tegonal.variist.generators.impl.possibleMaxSizeSafeInIntDomain
 import com.tegonal.variist.generators.impl.possibleMaxSizeSafeInLongDomain
 import com.tegonal.variist.providers.ArgsSource
+import com.tegonal.variist.testutils.intBoundError
+import com.tegonal.variist.testutils.longBoundError
 import com.tegonal.variist.utils.BigInt
 import com.tegonal.variist.utils.toBigInt
+import org.junit.jupiter.api.Named
 import org.junit.jupiter.params.ParameterizedTest
 
 class ArbBoundsTest : AbstractArbArgsGeneratorTest<Any>() {
@@ -122,7 +125,13 @@ class ArbBoundsTest : AbstractArbArgsGeneratorTest<Any>() {
 		}
 	}
 
-	//TODO 2.0.0 error in case of wrong min/max etc.
+	@ParameterizedTest
+	@ArgsSource("validationErrors")
+	fun check_invariants(@Suppress("unused") what: String, errorMsg: String, factory: () -> ArbArgsGenerator<*>) {
+		expect(factory).toThrow<IllegalStateException> {
+			messageToContain(errorMsg)
+		}
+	}
 
 	companion object {
 		@JvmStatic
@@ -162,5 +171,74 @@ class ArbBoundsTest : AbstractArbArgsGeneratorTest<Any>() {
 					(it.second.toBigInt() - it.first.toBigInt() + BigInt.ONE).min(Long.MAX_VALUE.toBigInt()).toLong()
 				)
 			}
+
+		@JvmStatic
+		fun validationErrors() = run {
+			fun <T : Number> SemiOrderedArgsGenerator<Tuple3<T, T, String>>.case(
+				description: String,
+				factory: (T, T) -> () -> ArbArgsGenerator<*>
+			) = map { (lower, upper, errMsg) -> Tuple(description, errMsg, Named.of("f", factory(lower, upper))) }
+
+			listOf(
+				intBoundError("minSize", "maxSize").case("charBounds") { l, u ->
+					{ arb.charBounds(minSize = l, maxSize = u) }
+				},
+				intBoundError("minSize", "maxSize").case("charBoundsBased") { l, u ->
+					{ arb.charBoundsBased(minSize = l, maxSize = u, factory = ::Tuple2) }
+				},
+				intBoundError("minSize", "maxSize").case("intBounds") { l, u ->
+					{ arb.intBounds(minSize = l, maxSize = u) }
+				},
+				intBoundError("minSize", "maxSize").case("intBoundsBased") { l, u ->
+					{ arb.intBoundsBased(minSize = l, maxSize = u, factory = ::Tuple2) }
+				},
+				longBoundError("minSize", "maxSize").case("longBounds") { l, u ->
+					{ arb.longBounds(minSize = l, maxSize = u) }
+				},
+				longBoundError("minSize", "maxSize").case("longBoundsBased") { l, u ->
+					{ arb.longBoundsBased(minSize = l, maxSize = u, factory = ::Tuple2) }
+				},
+			).concatAll()
+		} + run {
+			fun errMsg(lowerBound: Any, upperBound: Any, minSize: Any) =
+				"minInclusive ($upperBound) must be less than or equal to `maxInclusive ($lowerBound) - minSize ($minSize) + 1`"
+
+			fun <T : Any> ArbArgsGenerator<Tuple3<T, T, T>>.case(
+				description: String,
+				factory: (T, T, T) -> () -> ArbArgsGenerator<*>
+			) = map { (lower, upper, minSize) ->
+				Tuple(description, errMsg(lower, upper, minSize), Named.of("f", factory(lower, upper, minSize)))
+			}
+
+			val charBounds = arb.charBounds().zip(arb.intPositive())
+			val intBounds = arb.intBounds().zip(arb.intPositive())
+			val longBounds = arb.longBounds().zip(arb.longPositive())
+
+			semiOrdered.fromArbs(
+				charBounds.map { (l, u, minSize) ->
+					Tuple("charBounds", errMsg(l.code, u.code, minSize), Named.of("f") {
+						arb.charBounds(minInclusive = u, maxInclusive = l, minSize = minSize)
+					})
+				},
+				charBounds.map { (l, u, minSize) ->
+					Tuple("charBoundsBased", errMsg(l.code, u.code, minSize = minSize), Named.of("f") {
+						arb.charBoundsBased(minInclusive = u, maxInclusive = l, minSize = minSize, factory = ::Tuple2)
+					})
+				},
+				intBounds.case("intBounds") { l, u, minSize ->
+					{ arb.intBounds(minInclusive = u, maxInclusive = l, minSize = minSize) }
+				},
+				intBounds.case("intBoundsBased") { l, u, minSize ->
+					{ arb.intBoundsBased(minInclusive = u, maxInclusive = l, minSize = minSize, factory = ::Tuple2) }
+				},
+				longBounds.case("longBounds") { l, u, minSize ->
+					{ arb.longBounds(minInclusive = u, maxInclusive = l, minSize = minSize) }
+				},
+				longBounds.case("longBoundsBased") { l, u, minSize ->
+					{ arb.longBoundsBased(minInclusive = u, maxInclusive = l, minSize = minSize, factory = ::Tuple2) }
+				}
+			)
+
+		}.map { p -> p.mapFirst { "$it minInclusive > maxInclusive - minSize + 1" } }
 	}
 }

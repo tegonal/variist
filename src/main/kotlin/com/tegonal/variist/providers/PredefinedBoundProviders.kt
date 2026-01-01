@@ -25,10 +25,26 @@ interface PredefinedBoundProviders {
 
 		/**
 		 * Returns an [ArbArgsGenerator] which generates [Tuple2] representing a lower and upper bound where the bounds
+		 * range from `1` to [Int.MAX_VALUE] where their difference is at least 1 and thus results in a
+		 * minimal size of 2 if the upper bound is treated as inclusive.
+		 */
+		@JvmStatic
+		fun arbIntPositiveBoundsMinSize2() = arb.intBounds(minSize = 2, minInclusive = 1)
+
+		/**
+		 * Returns an [ArbArgsGenerator] which generates [Tuple2] representing a lower and upper bound where the bounds
 		 * range from [Long.MIN_VALUE] to [Long.MAX_VALUE] where their difference is at least 1 and thus results in a
 		 * minimal size of 2 if the upper bound is treated as inclusive.
 		 */
 		@JvmStatic
 		fun arbLongBoundsMinSize2() = arb.longBounds(minSize = 2)
+
+		/**
+		 * Returns an [ArbArgsGenerator] which generates [Tuple2] representing a lower and upper bound where the bounds
+		 * range from `1` to [Long.MAX_VALUE] where their difference is at least 1 and thus results in a
+		 * minimal size of 2 if the upper bound is treated as inclusive.
+		 */
+		@JvmStatic
+		fun arbLongPositiveBoundsMinSize2() = arb.longBounds(minSize = 2, minInclusive = 1)
 	}
 }
