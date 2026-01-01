@@ -107,65 +107,64 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 		(1..numOfArgs).forEach { upperNumber ->
 			val numbers = (1..upperNumber).toList()
 			val typeArgs = numbers.joinToString { "A$it" }
+			val tupleX = tupleTypeWithTypeArgs(upperNumber, typeArgs)
 
 			if (upperNumber > 1) {
 
 				if (upperNumber <= 9) {
-					semiOrderedArgsLikeGeneratorCombineAll
-						.forEach { (_, _, className, methodName, sb) ->
-							val combine3ToX = (if (upperNumber > 3) "\n\t\t" else "") +
-								(3..upperNumber).joinToString("\n\t\t") { ".$methodName(component$it()) { args, a$it -> args.append(a$it) }" }
-							val otherClassName =
-								if (className == "SemiOrderedArgsGenerator") "ArgsGenerator" else className
-							val argsGenerators = (2..upperNumber).joinToString(",\n\t") { "$otherClassName<A$it>" }
+					semiOrderedArgsLikeGeneratorCombineAll.forEach { (_, _, className, methodName, sb) ->
+						val combine3ToX = (if (upperNumber > 3) "\n\t\t" else "") +
+							(3..upperNumber).joinToString("\n\t\t") { ".$methodName(component$it()) { args, a$it -> args.append(a$it) }" }
+						val otherClassName =
+							if (className == "SemiOrderedArgsGenerator") "ArgsGenerator" else className
+						val argsGenerators = (2..upperNumber).joinToString(",\n\t") { "$otherClassName<A$it>" }
 
-							//TODO 2.1.0 come up with a solution which combines in one go so that we don't have to
-							// create intermediate Pair, Triple .. until reaching the final TupleN
-							// Moreover, such an implementation would also allow to provide a custom transform function
-							sb.append(
-								"""
-								|/**
-								| * ${if (className == "ArbArgsGenerator") "Zips" else "Combines"} the [component1] [$className] with ${if (upperNumber < 3) "the [component2] [$otherClassName]" else "all other [$otherClassName] from left to right"}
-								| * resulting in a [$className] which generates [${"Tuple$upperNumber"}].
-								|${
-									when (className) {
-										"OrderedArgsGenerator" -> {
-											"""
-											| *
-											| * The resulting [OrderedArgsGenerator] generates the product of all [OrderedArgsGenerator.size] values before repeating.
-											| *""".trimMargin()
-										}
-
-										"SemiOrderedArgsGenerator" -> {
-											"""
-											| *
-											| * How the [ArgsGenerator]s are combined depends on their type:
-											| *   - [SemiOrderedArgsGenerator]s are combined using [cartesian]
-											| *   - [ArbArgsGenerator]s are combined using [zip]
-											| *""".trimMargin()
-										}
-
-										else -> " *"
+						//TODO 2.1.0 come up with a solution which combines in one go so that we don't have to
+						// create intermediate Pair, Triple .. until reaching the final TupleN
+						// Moreover, such an implementation would also allow to provide a custom transform function
+						sb.append(
+							"""
+							|/**
+							| * ${if (className == "ArbArgsGenerator") "Zips" else "Combines"} the [component1] [$className] with ${if (upperNumber < 3) "the [component2] [$otherClassName]" else "all other [$otherClassName] from left to right"}
+							| * resulting in a [$className] which generates [${"Tuple$upperNumber"}].
+							|${
+								when (className) {
+									"OrderedArgsGenerator" -> {
+										"""
+										| *
+										| * The resulting [OrderedArgsGenerator] generates the product of all [OrderedArgsGenerator.size] values before repeating.
+										| *""".trimMargin()
 									}
+
+									"SemiOrderedArgsGenerator" -> {
+										"""
+										| *
+										| * How the [ArgsGenerator]s are combined depends on their type:
+										| *   - [SemiOrderedArgsGenerator]s are combined using [cartesian]
+										| *   - [ArbArgsGenerator]s are combined using [zip]
+										| *""".trimMargin()
+									}
+
+									else -> " *"
 								}
-								| * @since 2.0.0
-								| */
-								|fun <$typeArgs> ${"Tuple$upperNumber"}<
-								|	$className<A1>,
-								|	$argsGenerators
-								|>.combineAll(): $className<${tupleTypeWithTypeArgs(upperNumber, typeArgs)}> =
-								|	component1().$methodName(component2(), ::Tuple2)$combine3ToX
-								|
-								""".trimMargin()
-							).appendLine()
-						}
+							}
+							| * @since 2.0.0
+							| */
+							|fun <$typeArgs> ${"Tuple$upperNumber"}<
+							|	$className<A1>,
+							|	$argsGenerators
+							|>.combineAll(): $className<${tupleTypeWithTypeArgs(upperNumber, typeArgs)}> =
+							|	component1().$methodName(component2(), ::Tuple2)$combine3ToX
+							|
+							""".trimMargin()
+						).appendLine()
+					}
 				}
 			}
 
 			val upperNumberPlus1 = upperNumber + 1
 			if (upperNumberPlus1 <= 9) {
 				val typeArgsPlus1 = (1..upperNumberPlus1).joinToString { "A$it" }
-				val tupleX = tupleTypeWithTypeArgs(upperNumber, typeArgs)
 				val tupleXPlus1 = tupleTypeWithTypeArgs(upperNumberPlus1, typeArgsPlus1)
 
 				semiOrderedArgsLikeGeneratorCartesian.forEach { (_, _, className, sb) ->
@@ -256,6 +255,7 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 					).appendLine()
 				}
 			}
+
 		}
 
 		semiOrderedArgsLikeGeneratorCombineAll.forEach { (fileName, _, _, _, sb) ->

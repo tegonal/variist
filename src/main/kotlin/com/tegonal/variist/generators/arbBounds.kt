@@ -4,7 +4,6 @@ import ch.tutteli.kbox.Tuple2
 import com.tegonal.variist.generators.impl.createBoundsArbGenerator
 import com.tegonal.variist.generators.impl.createIntDomainBasedBoundsArbGenerator
 import com.tegonal.variist.generators.impl.possibleMaxSizeSafeInIntDomain
-import com.tegonal.variist.utils.toBigInt
 
 /**
  * Returns an [ArbArgsGenerator] which generates [Tuple2] representing a lower and upper bound where the bounds
@@ -70,7 +69,7 @@ private fun <T> ArbExtensionPoint.charBoundsBasedInternal(
 		minInclusive = minInclusive.code.toLong(),
 		maxInclusive = maxInclusive.code.toLong(),
 		minSize = minSize.toLong(),
-		maxSize = maxSize?.toBigInt()
+		maxSize = maxSize?.toLong()
 	) { lowerBound, upperBound ->
 		factory(lowerBound.toInt().toChar(), upperBound.toInt().toChar())
 	}
@@ -141,7 +140,7 @@ private fun <T> ArbExtensionPoint.intBoundsBasedInternal(
 			minInclusive = minInclusive.toLong(),
 			maxInclusive = maxInclusive.toLong(),
 			minSize = minSize.toLong(),
-			maxSize = maxSize?.toBigInt()
+			maxSize = maxSize?.toLong()
 		) { lowerBound, upperBound ->
 			factory(lowerBound.toInt(), upperBound.toInt())
 		}
@@ -164,7 +163,8 @@ fun ArbExtensionPoint.longBounds(
 	maxInclusive: Long = Long.MAX_VALUE,
 	minSize: Long = 1,
 	maxSize: Long? = null,
-): ArbArgsGenerator<Tuple2<Long, Long>> = longBoundsBasedInternal(minInclusive, maxInclusive, minSize, maxSize, ::Tuple2)
+): ArbArgsGenerator<Tuple2<Long, Long>> =
+	longBoundsBasedInternal(minInclusive, maxInclusive, minSize, maxSize, ::Tuple2)
 
 /**
  * Returns an [ArbArgsGenerator] which generates a [T] based on generated lower and upper bounds and the given [factory]
@@ -200,7 +200,7 @@ private fun <T> ArbExtensionPoint.longBoundsBasedInternal(
 	minInclusive = minInclusive,
 	maxInclusive = maxInclusive,
 	minSize = minSize,
-	maxSize = maxSize?.toBigInt(),
+	maxSize = maxSize,
 	factory = factory
 )
 

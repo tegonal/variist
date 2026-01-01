@@ -5,10 +5,9 @@ import com.tegonal.variist.config.ordered
 
 /**
  * Returns a [SemiOrderedArgsGenerator] based on the given [ArbArgsGenerator]s where the fixed part of it is the number
- * of [generators], which one is next to contribute a value, the values as such are arbitrary in respect
- * to the given generators.
+ * of [generators], the values as such are arbitrary in respect to the given generators.
  *
- * @return an [SemiOrderedArgsGenerator] based on the given [generators] where they are used in round-robin fashion
+ * @return a [SemiOrderedArgsGenerator] based on the given [generators] where they are used in round-robin fashion
  *   to generate values.
  *
  * @since 2.0.0
