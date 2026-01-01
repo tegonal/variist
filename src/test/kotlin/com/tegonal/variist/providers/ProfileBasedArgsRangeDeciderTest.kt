@@ -1,6 +1,5 @@
 package com.tegonal.variist.providers
 
-import ch.tutteli.atrium.api.fluent.en_GB.feature
 import ch.tutteli.atrium.api.fluent.en_GB.notToThrow
 import ch.tutteli.atrium.api.fluent.en_GB.toEqual
 import ch.tutteli.atrium.api.verbs.expect
@@ -9,14 +8,66 @@ import com.tegonal.variist.config.*
 import com.tegonal.variist.generators.*
 import com.tegonal.variist.generators.impl.DefaultArbExtensionPoint
 import com.tegonal.variist.providers.impl.ProfileBasedArgsRangeDecider
+import com.tegonal.variist.testutils.BaseTest
+import com.tegonal.variist.testutils.atrium.offset
+import com.tegonal.variist.testutils.atrium.take
 import com.tegonal.variist.testutils.createArbWithCustomConfig
 import com.tegonal.variist.testutils.createOrderedWithCustomConfig
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-@ArgsSourceOptions(profile = TestType.ForAnnotation.Unit)
-class ProfileBasedArgsRangeDeciderTest {
+class ProfileBasedArgsRangeDeciderTest : BaseTest() {
+
+	@Test
+	fun seed_0_and_skip_max__offset_max() {
+		val ordered = createOrderedWithCustomConfig(
+			ordered._components.config.copy { seed = 0; skip = Int.MAX_VALUE }
+		).ordered
+		val argsRange = ProfileBasedArgsRangeDecider().decide(ordered.of(1, 2, 3, 4))
+		expect(argsRange) {
+			offset.toEqual(Int.MAX_VALUE)
+		}
+	}
+
+	@Test
+	fun seed_max_skip_not_defined__offset_max() {
+		val ordered = createOrderedWithCustomConfig(
+			ordered._components.config.copy { seed = Int.MAX_VALUE; skip = null }
+		).ordered
+		val argsRange = ProfileBasedArgsRangeDecider().decide(ordered.of(1, 2, 3, 4))
+		expect(argsRange) {
+			offset.toEqual(Int.MAX_VALUE)
+		}
+	}
+
+	@ParameterizedTest
+	@ValueSource(ints = [1, 2, 3, 4, 5])
+	fun seed_plus_skip_max_overflows__offset_in_range_of_ordered_plus_skip(seed: Int) {
+		val ordered = createOrderedWithCustomConfig(
+			ordered._components.config.copy { this.seed = seed; this.skip = Int.MAX_VALUE }
+		)
+		val argsRange = ProfileBasedArgsRangeDecider().decide(ordered.of(1, 2, 3, 4))
+
+		expect(argsRange) {
+			// Int.MAX_VALUE + 1 % 4 == 0
+			offset.toEqual((seed - 1) % 4)
+		}
+	}
+
+	@ParameterizedTest
+	@ValueSource(ints = [1, 2, 3, 4, 5])
+	fun seed_max_plus_skip_overflows__offset_in_range_of_ordered_plus_skip(skip: Int) {
+		val ordered = createOrderedWithCustomConfig(
+			ordered._components.config.copy { this.seed = Int.MAX_VALUE; this.skip = skip }
+		)
+		val argsRange = ProfileBasedArgsRangeDecider().decide(ordered.of(1, 2, 3, 4))
+
+		expect(argsRange) {
+			// Int.MAX_VALUE + 1 % 4 == 0
+			offset.toEqual((skip - 1) % 4)
+		}
+	}
 
 	@ParameterizedTest
 	@ValueSource(ints = [Int.MAX_VALUE, Int.MIN_VALUE])
@@ -27,11 +78,11 @@ class ProfileBasedArgsRangeDeciderTest {
 	}
 
 	@Test
-	fun canCopeWithALargeOffsetToDecidedOffset() {
+	fun canCopeWithALargeSkip() {
 		expect {
 			val ordered = createOrderedWithCustomConfig(
 				ordered._components.config.copy { skip = Int.MAX_VALUE }
-			).ordered
+			)
 			ordered.of(1, 2, 3, 4).generateAndTakeBasedOnDecider().count()
 		}.notToThrow()
 	}
@@ -42,7 +93,7 @@ class ProfileBasedArgsRangeDeciderTest {
 		expect {
 			val ordered = createOrderedWithCustomConfig(
 				ordered._components.config.copy { seed = offset }
-			).ordered
+			)
 			ordered.of(1, 2, 3, 4).generateAndTakeBasedOnDecider().count()
 		}.notToThrow()
 	}
@@ -90,8 +141,8 @@ class ProfileBasedArgsRangeDeciderTest {
 		val argsRange = ProfileBasedArgsRangeDecider().decide(argsGenerator)
 
 		expect(argsRange) {
-			feature(ArgsRange::offset).toEqual(config.seed.toOffset())
-			feature(ArgsRange::take).toEqual(
+			offset.toEqual(config.seed.toOffset())
+			take.toEqual(
 				minOf(
 					argsGeneratorSize,
 					ownTestProfiles.get(testType.name, env.name).maxArgs
@@ -104,14 +155,14 @@ class ProfileBasedArgsRangeDeciderTest {
 	fun ordered_maxArgsInConfigTakesPrecedenceOverRequestedMinArgsInAnnotation() {
 		val orderedMaxArgs5 = createOrderedWithCustomConfig(
 			ordered._components.config.copy { maxArgs = 5 }
-		).ordered
+		)
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			orderedMaxArgs5.intFromUntil(1, 100),
 			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(5)
-			feature(ArgsRange::offset).toEqual(orderedMaxArgs5._components.config.seed.toOffset())
+			take.toEqual(5)
+			offset.toEqual(orderedMaxArgs5._components.config.seed.toOffset())
 		}
 	}
 
@@ -125,8 +176,8 @@ class ProfileBasedArgsRangeDeciderTest {
 			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(5)
-			feature(ArgsRange::offset).toEqual(orderedMaxArgs5._components.config.seed.toOffset())
+			take.toEqual(5)
+			offset.toEqual(orderedMaxArgs5._components.config.seed.toOffset())
 		}
 	}
 
@@ -140,8 +191,8 @@ class ProfileBasedArgsRangeDeciderTest {
 			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(5)
-			feature(ArgsRange::offset).toEqual(arbWithMaxArgs5._components.config.seed.toOffset())
+			take.toEqual(5)
+			offset.toEqual(arbWithMaxArgs5._components.config.seed.toOffset())
 		}
 	}
 
@@ -156,8 +207,8 @@ class ProfileBasedArgsRangeDeciderTest {
 		).ordered
 		val argsRange = ProfileBasedArgsRangeDecider().decide(orderedWithMaxArgs10Profile2.intFromUntil(1, 20))
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(2)
-			feature(ArgsRange::offset).toEqual(orderedWithMaxArgs10Profile2._components.config.seed.toOffset())
+			take.toEqual(2)
+			offset.toEqual(orderedWithMaxArgs10Profile2._components.config.seed.toOffset())
 		}
 	}
 
@@ -174,8 +225,8 @@ class ProfileBasedArgsRangeDeciderTest {
 			orderedWithMaxArgs10Profile2.intFromUntil(1, 10).zip(arb.intPositive())
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(2)
-			feature(ArgsRange::offset).toEqual(orderedWithMaxArgs10Profile2._components.config.seed.toOffset())
+			take.toEqual(2)
+			offset.toEqual(orderedWithMaxArgs10Profile2._components.config.seed.toOffset())
 		}
 	}
 
@@ -191,8 +242,8 @@ class ProfileBasedArgsRangeDeciderTest {
 		).arb
 		val argsRange = ProfileBasedArgsRangeDecider().decide(arbWithMaxArgs10Profile2.intFromUntil(1, 10))
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(2)
-			feature(ArgsRange::offset).toEqual(arbWithMaxArgs10Profile2._components.config.seed.toOffset())
+			take.toEqual(2)
+			offset.toEqual(arbWithMaxArgs10Profile2._components.config.seed.toOffset())
 		}
 	}
 
@@ -207,8 +258,8 @@ class ProfileBasedArgsRangeDeciderTest {
 			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(9)
-			feature(ArgsRange::offset).toEqual(orderedMaxArgs5._components.config.seed.toOffset())
+			take.toEqual(9)
+			offset.toEqual(orderedMaxArgs5._components.config.seed.toOffset())
 		}
 	}
 
@@ -222,8 +273,8 @@ class ProfileBasedArgsRangeDeciderTest {
 			AnnotationData(ArgsRangeOptions(maxArgs = 20))
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(9)
-			feature(ArgsRange::offset).toEqual(orderedMaxArgs5._components.config.seed.toOffset())
+			take.toEqual(9)
+			offset.toEqual(orderedMaxArgs5._components.config.seed.toOffset())
 		}
 	}
 
@@ -238,8 +289,8 @@ class ProfileBasedArgsRangeDeciderTest {
 			AnnotationData(ArgsRangeOptions(requestedMinArgs = 2000))
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(1000)
-			feature(ArgsRange::offset).toEqual(orderedRequestedMinArgs1000._components.config.seed.toOffset())
+			take.toEqual(1000)
+			offset.toEqual(orderedRequestedMinArgs1000._components.config.seed.toOffset())
 		}
 	}
 
@@ -253,8 +304,8 @@ class ProfileBasedArgsRangeDeciderTest {
 			AnnotationData(ArgsRangeOptions(requestedMinArgs = 2000))
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(1000)
-			feature(ArgsRange::offset).toEqual(orderedRequestedMinArgs1000._components.config.seed.toOffset())
+			take.toEqual(1000)
+			offset.toEqual(orderedRequestedMinArgs1000._components.config.seed.toOffset())
 		}
 	}
 
@@ -268,8 +319,8 @@ class ProfileBasedArgsRangeDeciderTest {
 			AnnotationData(ArgsRangeOptions(requestedMinArgs = 2000))
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(1000)
-			feature(ArgsRange::offset).toEqual(arbWithRequestedMinArgs1000._components.config.seed.toOffset())
+			take.toEqual(1000)
+			offset.toEqual(arbWithRequestedMinArgs1000._components.config.seed.toOffset())
 		}
 	}
 
@@ -283,8 +334,8 @@ class ProfileBasedArgsRangeDeciderTest {
 			AnnotationData(ArgsRangeOptions(maxArgs = 999))
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(1000)
-			feature(ArgsRange::offset).toEqual(orderedWithRequestedMinArgs1000._components.config.seed.toOffset())
+			take.toEqual(1000)
+			offset.toEqual(orderedWithRequestedMinArgs1000._components.config.seed.toOffset())
 		}
 	}
 
@@ -298,8 +349,8 @@ class ProfileBasedArgsRangeDeciderTest {
 			AnnotationData(ArgsRangeOptions(maxArgs = 999))
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(1000)
-			feature(ArgsRange::offset).toEqual(orderedWithRequestedMinArgs1000._components.config.seed.toOffset())
+			take.toEqual(1000)
+			offset.toEqual(orderedWithRequestedMinArgs1000._components.config.seed.toOffset())
 		}
 	}
 
@@ -313,8 +364,8 @@ class ProfileBasedArgsRangeDeciderTest {
 			AnnotationData(ArgsRangeOptions(maxArgs = 999))
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(1000)
-			feature(ArgsRange::offset).toEqual(arbWithRequestedMinArgs1000._components.config.seed.toOffset())
+			take.toEqual(1000)
+			offset.toEqual(arbWithRequestedMinArgs1000._components.config.seed.toOffset())
 		}
 	}
 
@@ -326,8 +377,8 @@ class ProfileBasedArgsRangeDeciderTest {
 			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(2)
-			feature(ArgsRange::offset).toEqual(ordered._components.config.seed.toOffset())
+			take.toEqual(2)
+			offset.toEqual(ordered._components.config.seed.toOffset())
 		}
 	}
 
@@ -338,8 +389,8 @@ class ProfileBasedArgsRangeDeciderTest {
 			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
 		)
 		expect(argsRange) {
-			feature(ArgsRange::take).toEqual(10)
-			feature(ArgsRange::offset).toEqual(ordered._components.config.seed.toOffset())
+			take.toEqual(10)
+			offset.toEqual(ordered._components.config.seed.toOffset())
 		}
 	}
 
@@ -351,5 +402,6 @@ class ProfileBasedArgsRangeDeciderTest {
 			ordered.fromEnum<Env>(),
 			ordered.fromRange(1..11),
 		)
+
 	}
 }
