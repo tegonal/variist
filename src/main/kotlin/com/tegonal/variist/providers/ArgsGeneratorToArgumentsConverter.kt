@@ -35,7 +35,6 @@ interface ArgsGeneratorToArgumentsConverter {
 	fun toArguments(
 		argsSourceId: String,
 		annotationData: AnnotationData,
-		//TODO 2.2.0 consider to switch to Array<*> for performance reasons? we never mutate
 		argsGenerator: ArgsGenerator<List<*>>,
 	): Sequence<Arguments>
 }
