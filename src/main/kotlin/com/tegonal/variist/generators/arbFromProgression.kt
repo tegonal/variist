@@ -39,7 +39,7 @@ fun ArbExtensionPoint.fromProgression(progression: IntProgression): ArbArgsGener
 			//TODO 2.1.0 bench at what point it makes sense to calculate it, I just guess that for small progressions
 			// storing it in a list is more efficient and memory is neglectable. But maybe this can be increased to x
 			// or should be decreased to y
-			if (numberOfSteps < 50) fromList(progression.toList())
+			if (numberOfSteps < 50L) fromList(progression.toList())
 			else {
 				// check that toInt() did not overflow
 				if (numberOfSteps == numberOfStepsI.toLong()) {
@@ -66,7 +66,7 @@ fun ArbExtensionPoint.fromProgression(progression: LongProgression): ArbArgsGene
 		-1L -> longFromTo(progression.last, progression.first)
 		else -> {
 			val (start, endInclusive) =
-				if (step > 0) Tuple(progression.first, progression.last)
+				if (step > 0L) Tuple(progression.first, progression.last)
 				else Tuple(progression.last, progression.first)
 			val stepAbs = abs(step)
 			val diff = endInclusive.toBigInt() - start.toBigInt()

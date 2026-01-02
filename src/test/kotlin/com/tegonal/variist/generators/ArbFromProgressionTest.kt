@@ -1,6 +1,11 @@
 package com.tegonal.variist.generators
 
+import ch.tutteli.atrium.api.fluent.en_GB.toBeGreaterThanOrEqualTo
+import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
+import com.tegonal.variist.providers.ArgsSource
+import com.tegonal.variist.providers.ArgsSourceOptions
+import org.junit.jupiter.params.ParameterizedTest
 
 class ArbFromProgressionTest : AbstractArbArgsGeneratorTest<Any>() {
 
@@ -10,5 +15,19 @@ class ArbFromProgressionTest : AbstractArbArgsGeneratorTest<Any>() {
 		Tuple("fromLongProgression", modifiedArb.fromProgression(1L..3L step 1), listOf(1L, 2L, 3L)),
 	)
 
-	//TODO 2.0.0 add tests which cover the case that numberOfSteps is out of Int/Long range (i.e. would overflow)
+	@ParameterizedTest
+	@ArgsSource("arbIntNegative")
+	@ArgsSourceOptions(maxArgs = 1)
+	fun intProgression_numberOfSteps_overflow_Int__still_works(from: Int) {
+		expect(arb.fromProgression(from..Int.MAX_VALUE step 1).generate().first())
+			.toBeGreaterThanOrEqualTo(from)
+	}
+
+	@ParameterizedTest
+	@ArgsSource("arbLongNegative")
+	@ArgsSourceOptions(maxArgs = 1)
+	fun longProgression_numberOfSteps_overflow_Long__still_works(from: Long) {
+		expect(arb.fromProgression(from..Long.MAX_VALUE step 1).generate().first())
+			.toBeGreaterThanOrEqualTo(from)
+	}
 }

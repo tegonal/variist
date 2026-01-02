@@ -1,11 +1,15 @@
 package com.tegonal.variist.generators
 
+import ch.tutteli.atrium.api.fluent.en_GB.messageToContain
 import ch.tutteli.atrium.api.fluent.en_GB.toEqual
+import ch.tutteli.atrium.api.fluent.en_GB.toThrow
 import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
 import com.tegonal.variist.providers.ArgsRange
 import com.tegonal.variist.providers.ArgsSource
+import com.tegonal.variist.providers.ArgsSourceOptions
 import com.tegonal.variist.utils.repeatForever
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 
 class OrderedFromProgressionTest : AbstractOrderedArgsGeneratorTest<Any>() {
@@ -34,7 +38,38 @@ class OrderedFromProgressionTest : AbstractOrderedArgsGeneratorTest<Any>() {
 		)
 	}
 
-	//TODO 2.0.0 write test for intProgression and longProgression, especially for cases where the range size overflows Int/Long Domain
+	@ParameterizedTest
+	@ArgsSource("arbIntNegative")
+	@ArgsSourceOptions(maxArgs = 1)
+	fun intProgression_numberOfSteps_overflow_Int__throws(from: Int) {
+		expect {
+			ordered.fromProgression(from..Int.MAX_VALUE step 1)
+		}.toThrow<IllegalStateException> {
+			messageToContain("OrderedArgsGenerator.size only supports Int")
+		}
+	}
+
+	@ParameterizedTest
+	@ArgsSource("arbIntNegative")
+	@ArgsSourceOptions(maxArgs = 1)
+	fun longProgression_numberOfSteps_overflow_Int__throws(from: Int) {
+		expect {
+			ordered.fromProgression(from.toLong()..Int.MAX_VALUE.toLong() step 1)
+		}.toThrow<IllegalStateException> {
+			messageToContain("OrderedArgsGenerator.size only supports Int")
+		}
+	}
+
+	@ParameterizedTest
+	@ArgsSource("arbLongNegative")
+	@ArgsSourceOptions(maxArgs = 1)
+	fun longProgression_numberOfSteps_overflow_Long__throws(from: Long) {
+		expect {
+			ordered.fromProgression(from..Long.MAX_VALUE step 1)
+		}.toThrow<IllegalStateException> {
+			messageToContain("OrderedArgsGenerator.size only supports Int")
+		}
+	}
 
 	companion object {
 		@JvmStatic
