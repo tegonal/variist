@@ -11,7 +11,7 @@ plugins {
 }
 
 tasks.configureEach<KotlinCompile> {
-	compilerOptions{
+	compilerOptions {
 		jvmTarget.set(JvmTarget.fromTarget(buildParameters.defaultJdkVersion.toString()))
 	}
 }
