@@ -1,7 +1,7 @@
 plugins {
-    `embedded-kotlin` apply false
+	`embedded-kotlin` apply false
 }
 
 allprojects {
-    group = "com.tegonal.variist.build-logic"
+	group = "com.tegonal.variist.build-logic"
 }

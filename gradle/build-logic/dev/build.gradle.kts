@@ -1,9 +1,9 @@
 plugins {
-    id("build-logic.kotlin-dsl-gradle-plugin")
+	id("build-logic.kotlin-dsl-gradle-plugin")
 }
 
 dependencies {
-    api(projects.basics)
+	api(projects.basics)
 
 	api(buildLibs.kotlin)
 	api(buildLibs.bundles.dokka)
