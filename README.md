@@ -51,7 +51,7 @@ version: [README of v2.0.0-RC-3](https://github.com/tegonal/variist/tree/main/RE
 		- [ordered.concatenation](#ordered-concatenation)
 		- [arb.mergeWeighted](#arb-mergeWeighted)
 		- [ordered.toArbArgsGenerator](#ordered-toArbArgsGenerator)
-        - [semiOrdered.fromArbs](#semiOrdered-fromArbs) 
+		- [semiOrdered.fromArbs](#semiOrdered-fromArbs)
 - [Use Variist in other contexts than JUnit](#use-variist-in-other-contexts-than-junit)
 - [Configuration](#configuration)
 	- [Profiles and Envs](#profiles-and-envs)
@@ -59,10 +59,13 @@ version: [README of v2.0.0-RC-3](https://github.com/tegonal/variist/tree/main/RE
 		- [maxArgs](#maxArgs)
 		- [requestedMinArgs](#requestedMinArgs)
 	- [Fixing the seed](#fixing-the-seed)
-		- [Error Deadlines](#errordeadlines)
 	- [Change the ArgsRangeDecider](#change-the-ArgsRangeDecider)
 	- [Use an own AnnotationDataDeducer](#use-an-own-AnnotationDataDeducer)
 	- [Use a SuffixArgsGeneratorDecider](#use-a-SuffixArgsGeneratorDecider)
+	- [Properties Loader Configuration](#properties-loader-configuration)
+		- [Error deadlines](#error-deadlines)
+		- [Change directory](#change-directory)
+		- [Integrate into other properties file](#integrate-in-other-properties-file)
 - [Helpers](#helpers)
 	- [Random helpers](#random-helpers)
 	- [Sequence helpers](#sequence-helpers)
@@ -75,8 +78,8 @@ version: [README of v2.0.0-RC-3](https://github.com/tegonal/variist/tree/main/RE
 
 Variist might resemble a property based testing library but is more data-driven oriented.
 Its focus is on tests that take longer (integration, e2e and system integration tests) where shrinking is too costly.
-But of course, you can also use it for data-driven unit tests (see [semiOrdered.fromArbs](#semiOrdered-fromArbs) as an example).  
-It comes with extra support for JUnit but can
+But of course, you can also use it for data-driven unit tests (see [semiOrdered.fromArbs](#semiOrdered-fromArbs)
+as an example). It comes with extra support for JUnit but can
 also [be used in other contexts](#use-variist-in-other-contexts-than-junit)
 where you want to generate data (or with other test-runners).
 
@@ -195,11 +198,12 @@ The number of runs of such a provider is in theory infinite as well (`ArbArgsGen
 limited by the [profile](#profiles-and-envs) the test falls into, the [environment](#profiles-and-envs) where the test
 runs and what configuration was set up for this combination.
 Also `OrderedArgsGenerator` are limited by profile/env but introduce an own limit in
-addition by its `size` property. 
+addition by its `size` property.
 
-The third entry point `semiOrdered`, which creates a `SemiOrderedArgsGenerator`, is a mixture of the previous two, 
+The third entry point `semiOrdered`, which creates a `SemiOrderedArgsGenerator`, is a mixture of the previous two,
 it has an ordered part and an arbitrary part.
-Since it is a more advanced concept, we will skip it here (you find more information in [semiOrdered.fromArbs](#semiOrdered-fromArbs)).
+Since it is a more advanced concept, we will skip it here (you find more
+information in [semiOrdered.fromArbs](#semiOrdered-fromArbs)).
 
 Following an example of how to use an `ArgsGenerator` as an `ArgsSource` provider.
 
@@ -806,14 +810,12 @@ case, out of 100 generated values, around 80 will be between 100 and 200 (exclus
 around 10 will be `null`. The defined weighting is uniformly distributed, which means that for a small number of values,
 it might be skewed; for example, 85 values could fall between 100 and 200, etc.
 
-
-
 ### semiOrdered fromArbs
 
-If you find yourself in the situation where you define multiple `ParameterizedTests` which contain all more or less the 
-same test-logic but with different ranges of values, then one is quickly tempted to include more than one expectation in 
-the test method, as the boilerplate is just too annoying (jump to the usage of 
-[semiOrdered.fromArbs](#semisemiOrdered-fromArbs-good-solution) if you are not interested in knowing why it exists).
+If you find yourself in the situation where you define multiple `ParameterizedTests` which contain all more or less the
+same test-logic but with different ranges of values, then one is quickly tempted to include more than one expectation in
+the test method, as the boilerplate is just too annoying (jump to the usage of
+[semiOrdered.fromArbs](#semiOrdered-fromArbs-good-solution) if you are not interested in knowing why it exists).
 Following an example:
 
 <code-fromArbs-problem>
@@ -863,12 +865,12 @@ fun checkRequestedMinArgsMaxArgs(positiveInt: Int) {
 
 </code-fromArbs-bad-solution>
 
-...but in exchange for a more generic test method name. And the more expectations you add to the test method 
+...but in exchange for a more generic test method name. And the more expectations you add to the test method
 the less obvious it becomes which expectation failed on failure. Re-executing just the failure case,
 debugging it etc. becomes more tedious. And you know what, we forgot to add the use case where `requestedMinArgs` is
 a positive int and `maxArgs` is greater. For this we need two arguments where the second depends on the first.
 
-At first, that might sound complicated to achieve and you might be tempted to fall back to `ValueSource` to cover the 
+At first, that might sound complicated to achieve and you might be tempted to fall back to `ValueSource` to cover the
 5 cases with fixed values. But you don't need to give up the arbitrariness. `ordered.fromArbs` helps in such a situation
 where you re-use the test-logic and define different valid data ranges:
 
@@ -897,11 +899,11 @@ companion object {
 
 </code-fromArbs>
 
-You could also use `arb.mergeWeighted` to achieve more or less the same but with a different runtime behaviour. 
-Using `ordered.fromArbs` limits the number of generated runs by the number of specified `ArbArgsGenerators` 
+You could also use `arb.mergeWeighted` to achieve more or less the same but with a different runtime behaviour.
+Using `ordered.fromArbs` limits the number of generated runs by the number of specified `ArbArgsGenerators`
 where using `arb.mergeWeighted` doesn't impose that limit and more runs than defined generators could be generated
-(see [Adjust the number of runs](#adjust-the-number-of-args)). As an example, say the profile of the test and the 
-environment the test runs in allows to run 100 variations, then `ordered.fromArbs` will result in 5 runs and 
+(see [Adjust the number of runs](#adjust-the-number-of-args)). As an example, say the profile of the test and the
+environment the test runs in allows to run 100 variations, then `ordered.fromArbs` will result in 5 runs and
 `arb.mergeWeighted` would result in 100. For this particular case we don't think there is much value in running
 that many variations all the time (a waste of resources and time) and prefer `ordered.fromArbs`.
 
@@ -986,7 +988,8 @@ Next to `variist.properties` which is intended to make project based adjustments
 `variist.local.properties` which you should add on your git ignore list.
 This file overwrites settings in `variist.properties` and is intended for personal adjustments and debugging.
 
-More documentation about the configuration will follow, in the meantime, take a look at the KDoc of VariistConfig.
+The following subsections which follow explain `VariistConfig` as well as
+[Properties Loader Configuration](#properties-loader-configuration) properties.
 
 ## Profiles and Envs
 
@@ -1077,30 +1080,9 @@ See `VariistConfig.testProfiles` for what `maxArgs` are defined per default.
 
 Variist outputs the used seed once the config is fully loaded. Use it in `variist.local.properties` to fix the
 seed to e.g. a previous run. You might want to restrict `maxArgs` in such a case as well and use `skip`
-to skip some runs, i.e. jump to a particular run.
-
-### ErrorDeadlines
-
-If you fix one of the following properties, then an error deadline is added to your `variist.local.properties`:
-
-- seed
-- skip
-- maxArgs
-- requestedMinArgs
-
-The deadline will remind you that you should remove (comment out) those values again, as they are intended for debugging
-or when you temporarily want to execute more tests than defined by your [activeEnv](#profiles-and-envs).
-
-You can adjust the default deadline (60 minutes) via `remindAboutFixedPropertiesAfterMinutes`.
-
-Variist assumes your `variist.local.properties` is located under `./src/test/resources` relative to the
-the directory from which you execute java -- if you run tests in IntelliJ this corresponds to the project dir.
-If you place it under a different directory, then use the property `variistPropertiesDir` to adjust it (e.g. in the
-`variist.properties`-file or directly in `variist.local.properties`). Following an example:
-
-```properties
-variistPropertiesDir=./src/jvmTest/resources
-```
+to skip some runs, i.e. jump to a particular run. Note, that you are not allowed to fix the seed in `variist.properties`
+this needs to be done in `variist.local.properties`. Fixing the seed creates a [deadline](#error-deadlines) where an
+error will be thrown if the seed is still fixed afterwards.
 
 ## Change the ArgsRangeDecider
 
@@ -1109,6 +1091,7 @@ An `ArgsRangeDecider` is responsible to decide from which offset and how many ar
 
 The default implementation is solely based on the configured [profiles](#profiles-and-envs) - more implementations will
 follow in an upcoming version of Variist.
+
 ```
 @ArgsSourceOptions(profile = TestType.ForAnnotation.E2E)
 ```
@@ -1135,7 +1118,8 @@ other data which an [own AnnotationDataDeducer](#use-an-own-AnnotationDataDeduce
 
 As outlined in [profile and envs](#profiles-and-envs), the number of runs is primarily determined based on the active
 profile and env, its defined `TestConfig` respectively, where the property `maxArgs` restricts the maximum
-number of runs. If you use an `(Semi)OrderedArgsGenerator` as `ArgsSource`, then its `size` limits the maximum number of runs
+number of runs. If you use an `(Semi)OrderedArgsGenerator` as `ArgsSource`, then its `size` limits the maximum number of
+runs
 as well -- this is at least the default behaviour, you could
 also [use your own ArgsRangeDecider](#change-the-ArgsRangeDecider) which takes other limiting factors into account.
 
@@ -1174,7 +1158,7 @@ in an annotation can overrule what was defined in `VariistConfig.testProfiles`. 
 not limit a `requestedMinArgs` as it has an arbitrary part which does not repeat. In other words,
 if `requestedMinArgs=50` but `SemiOrderedArgsGenerators.size=10` then nevertheless, 50 runs will be the result.
 
-`requestedMinArgs` is especially useful if you write a new test and want to execute a greater number of test runs 
+`requestedMinArgs` is especially useful if you write a new test and want to execute a greater number of test runs
 than what you would usually want in the `Local` env.
 
 As with `maxArgs`, you can define `requestedMinArgs` in `ArgsSourceOptions` and `variist.local.properties` where
@@ -1239,6 +1223,52 @@ a [ParameterResolver](https://docs.junit.org/current/user-guide/#writing-tests-d
 instead (or in addition). Variist is only an addition to JUnit, you can use all other constructs as well.
 There is a difference though, if you define that your `SuffixArgsGeneratorDecider` returns an `OrderedArgsGenerator`
 then the cartesian product results as explained in [generic combine](#generic-combine).
+
+## Properties Loader Configuration
+
+Next to `VariistConfig` there is a meta configuration `VariistPropertiesLoaderConfig` which influences the default
+loading mechanism of the `variist.local.properties` file next to other mechanisms involved in using the local properties
+file.
+
+### Error deadlines
+
+If you fix one of the following `VariistConfig` properties, then an error deadline is added to your
+`variist.local.properties`:
+
+- seed
+- skip
+- maxArgs
+- requestedMinArgs
+
+The deadline will remind you that you should remove (comment out) those values again, as they are intended for debugging
+or when you temporarily want to execute more tests than defined by your [activeEnv](#profiles-and-envs).
+
+You can adjust the default deadline (60 minutes) via `remindAboutFixedPropertiesAfterMinutes`.
+
+### Change directory
+
+Variist assumes your `variist.local.properties` is located under `./src/test/resources` relative to the
+directory from which you execute java -- if you run tests in IntelliJ this corresponds to the project directory.
+If you want place it into a different directory, then use the property `localPropertiesDir` to adjust it (e.g. in the
+`variist.properties`-file or directly in `variist.local.properties`). Following an example:
+
+```properties
+localPropertiesDir=./src/jvmTest/resources
+```
+
+You need to adjust it so that Variist can still write [error deadlines](#error-deadlines) into it.
+
+### Integrate in other properties file
+
+If you prefer to define the Variist config properties in an existing file rather than in `variist.local.properties`
+then you can use `localPropertiesResourceName` together with `localPropertiesPrefix`.
+You are not allowed to set one but not the other. `localPropertiesResourceName` specifies the properties file as such
+and `localPropertiesPrefix` the prefix used within this properties file for the Variist's properties.
+Typically, you use `variist` as prefix. [Fixing the seed](#fixing-the-seed) in such a file looks then as follows:
+
+```properties
+variist.seed=123
+```
 
 # Helpers
 
