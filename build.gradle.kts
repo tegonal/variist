@@ -7,7 +7,7 @@ plugins {
 	id("me.champeau.jmh") version "0.7.3"
 }
 
-version = "2.0.0"
+version = "2.1.0-SNAPSHOT"
 group = "com.tegonal.variist"
 description = "Library which helps to setup and prioritise parameterized tests"
 
@@ -96,7 +96,7 @@ Release & deploy a commit
 
 
 export VARIIST_PREVIOUS_VERSION=2.0.0
-export VARIIST_VERSION=2.0.0
+export VARIIST_VERSION=2.1.0
 find ./ -name "*.md" | xargs perl -0777 -i \
    -pe "s@$VARIIST_PREVIOUS_VERSION@$VARIIST_VERSION@g;" \
    -pe "s@tree/main@tree/v$VARIIST_VERSION@g;" \
@@ -198,7 +198,7 @@ cd ../variist
        (cd "$tmpDir" && zip -r "variist-$VARIIST_VERSION.zip" .) &&
        find "$tmpDir" -name "*.jar" | head -n 1 | xargs -I {} gpg --verify "{}.asc" "{}" &&
        echo "verify the correct gpg key was used (see above) and you might want to check the release in file://$tmpDir"
-    b) Log into https://central.sonatype.com/publishing/deployments
+    b) Log into https://central.sonatype.com/publishing/
     c) click on publish component and upload zip
     d) click on publish once verification is done
 
@@ -210,14 +210,14 @@ Prepare next dev cycle
     1. update main:
 
 
-export VARIIST_VERSION=2.0.0
-export VARIIST_NEXT_VERSION=2.0.0-RC-4
+export VARIIST_VERSION=2.1.0
+export VARIIST_NEXT_VERSION=2.1.0
 find ./ -name "*.md" | xargs perl -0777 -i \
    -pe "s@tree/v$VARIIST_VERSION@tree/main@g;" \
    -pe "s@$VARIIST_VERSION/kdoc@latest#/kdoc@g;" \
    -pe "s/add \\\`\@since $VARIIST_VERSION\\\` \(adapt to current/add \\\`\@since $VARIIST_NEXT_VERSION\\\` \(adapt to current/g;"
 perl -0777 -i \
-  -pe "s/rootProject.version = \"$VARIIST_VERSION\"/rootProject.version = \"${VARIIST_NEXT_VERSION}-SNAPSHOT\"/;" \
+  -pe "s/version = \"$VARIIST_VERSION\"/version = \"${VARIIST_NEXT_VERSION}-SNAPSHOT\"/;" \
   -pe "s/VARIIST_VERSION=$VARIIST_VERSION/VARIIST_VERSION=$VARIIST_NEXT_VERSION/;" \
   ./build.gradle.kts
 perl -0777 -i \
@@ -231,3 +231,4 @@ check changes
 git push
 
 */
+
