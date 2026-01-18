@@ -4,6 +4,7 @@ import ch.tutteli.kbox.blankToNull
 import ch.tutteli.kbox.takeIf
 import com.tegonal.variist.config.*
 import com.tegonal.variist.config.impl.VariistPropertiesParser.Companion.ERROR_DEADLINES_PREFIX
+import com.tegonal.variist.utils.impl.checkIsNotBlank
 import com.tegonal.variist.utils.impl.checkIsPositive
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -25,82 +26,142 @@ class VariistConfigViaPropertiesLoader {
 	val config: VariistConfig by lazy {
 		val parser = VariistPropertiesParser()
 		val initialConfig = VariistConfig()
-		val configFileSpecifics = ConfigFileSpecifics()
-		initialConfig.toBuilder()
-			.apply {
-				setByPropertiesInResource("/variist.properties", configFileSpecifics, parser).also { exists ->
-					if (exists) {
-						check(seed == initialConfig.seed.value) {
-							errorMessageNotAllowedToModify("seed")
-						}
-						check(skip == initialConfig.skip) {
-							errorMessageNotAllowedToModify("skip")
-						}
-						check(requestedMinArgs == initialConfig.requestedMinArgs) {
-							errorMessageNotAllowedToModify("requestedMinArgs")
-						}
-						check(maxArgs == initialConfig.maxArgs) {
-							errorMessageNotAllowedToModify("maxArgs")
-						}
-					}
-				}
-			}
-			.apply { setByEnv() }
-			.apply {
-				setByPropertiesInResource("/variist.local.properties", configFileSpecifics, parser).let { exists ->
-					if (exists &&
-						configFileSpecifics.variistPropertiesDir.resolve("variist.local.properties").exists().not()
-					) {
-						error("variist.local.properties was found via classloader but is not defined in ${configFileSpecifics.variistPropertiesDir}. Adjust variistPropertiesDir accordingly")
-					}
-				}
-			}
-			.apply {
-				val fixedSeed = seed != initialConfig.seed.value
-
-				println("Variist${if (fixedSeed) " fixed" else ""} seed $seed ${if (skip != null) "skipping $skip " else ""}in env $activeEnv")
-
-				with(configFileSpecifics) {
-					checkIsPositive(
-						remindAboutFixedPropertiesAfterMinutes,
-						"remindAboutFixedPropertiesAfterMinutes"
-					)
-					val projectRootDir = Paths.get("").toAbsolutePath().normalize()
-					val localPropertiesPath =
-						configFileSpecifics.variistPropertiesDir.resolve("variist.local.properties")
-							.toAbsolutePath()
-							.normalize()
-					check(localPropertiesPath.startsWith(projectRootDir)) {
-						"localPropertiesPath (l) must be within the projects root directory (p)\nl: $localPropertiesPath\np: $projectRootDir"
-					}
-					checkDeadline(localPropertiesPath, seed.takeIf { fixedSeed }, "seed")
-					checkDeadline(localPropertiesPath, skip, "skip")
-					checkDeadline(localPropertiesPath, maxArgs, "maxArgs")
-					checkDeadline(localPropertiesPath, requestedMinArgs, "requestedMinArgs")
-				}
-			}.build()
-
+		val builder = initialConfig.toBuilder()
+		val variistPropertiesLoaderConfig = VariistPropertiesLoaderConfig()
+		ConfigBuilderAndLoaderConfig(builder, variistPropertiesLoaderConfig)
+			.setByVariistPropertiesFile(parser, initialConfig)
+			.setByEnv()
+			.setByVariistLocalPropertiesFile(parser)
+			.checkInvariantsAndDeadlinesPrintValues(initialConfig)
+			.build()
 	}
 
-	private fun errorMessageNotAllowedToModify(what: String) =
-		"You are not allowed to modify $what via variist.properties use variist.local.properties to fix a seed"
+	private fun ConfigBuilderAndLoaderConfig.setByVariistPropertiesFile(
+		parser: VariistPropertiesParser,
+		initialConfig: VariistConfig
+	) = apply {
+		setByPropertiesFileInResource("/variist.properties", prefix = null, parser).also { exists ->
+			if (exists) {
+				checkValuesNotFixedShouldBeDoneInLocalProperties(initialConfig)
+			}
+		}
+	}
 
+	private fun ConfigBuilderAndLoaderConfig.checkValuesNotFixedShouldBeDoneInLocalProperties(
+		initialConfig: VariistConfig
+	) {
+		val errorMessageNotAllowedToModify = { what: String ->
+			"You are not allowed to modify $what via variist.properties use ${
+				getLocalPropertiesResourceNameAndPrefix(loaderConfig).first
+			} to fix a seed"
+		}
+		check(builder.seed == initialConfig.seed.value) {
+			errorMessageNotAllowedToModify("seed")
+		}
+		check(builder.skip == initialConfig.skip) {
+			errorMessageNotAllowedToModify("skip")
+		}
+		check(builder.requestedMinArgs == initialConfig.requestedMinArgs) {
+			errorMessageNotAllowedToModify("requestedMinArgs")
+		}
+		check(builder.maxArgs == initialConfig.maxArgs) {
+			errorMessageNotAllowedToModify("maxArgs")
+		}
+	}
 
-	private fun ConfigFileSpecifics.checkDeadline(
+	private fun ConfigBuilderAndLoaderConfig.setByVariistLocalPropertiesFile(
+		parser: VariistPropertiesParser
+	) = apply {
+		loaderConfig.checkVariistConfigLoaderConfigInvariants()
+
+		val (localPropertiesResourceName, prefix) = getLocalPropertiesResourceNameAndPrefix(loaderConfig)
+
+		setByPropertiesFileInResource("/$localPropertiesResourceName", prefix = prefix, parser).let { exists ->
+			if (exists &&
+				loaderConfig.localPropertiesDir.resolve(localPropertiesResourceName).exists().not()
+			) {
+				error("$localPropertiesResourceName was found via classloader but is not defined in ${loaderConfig.localPropertiesDir}. Adjust ${VariistPropertiesLoaderConfig::localPropertiesDir.name} accordingly.")
+			}
+		}
+	}
+
+	private fun getLocalPropertiesResourceNameAndPrefix(variistPropertiesLoaderConfig: VariistPropertiesLoaderConfig): Pair<String, String?> {
+		val localPropertiesResourceName =
+			variistPropertiesLoaderConfig.localPropertiesResourceName ?: "variist.local.properties"
+
+		val prefix = variistPropertiesLoaderConfig.localPropertiesPrefix?.let {
+			if (it.endsWith(".")) it else "$it."
+		}
+		return localPropertiesResourceName to prefix
+	}
+
+	private fun ConfigBuilderAndLoaderConfig.checkInvariantsAndDeadlinesPrintValues(
+		initialConfig: VariistConfig
+	) = apply {
+		loaderConfig.checkVariistConfigLoaderConfigInvariants()
+
+		val fixedSeed = builder.seed != initialConfig.seed.value
+
+		println("Variist${if (fixedSeed) " fixed" else ""} seed ${builder.seed} ${if (builder.skip != null) "skipping ${builder.skip} " else ""}in env ${builder.activeEnv}")
+
+		val (localPropertiesResourceName, prefix) = getLocalPropertiesResourceNameAndPrefix(loaderConfig)
+		with(loaderConfig) {
+			val projectRootDir = Paths.get("").toAbsolutePath().normalize()
+			val localPropertiesPath =
+				localPropertiesDir.resolve(localPropertiesResourceName)
+					.toAbsolutePath()
+					.normalize()
+			check(localPropertiesPath.startsWith(projectRootDir)) {
+				"localPropertiesPath (l) must be within the projects root directory (p)\nl: $localPropertiesPath\np: $projectRootDir"
+			}
+			val nonNullPrefix = prefix ?: ""
+			checkDeadline(localPropertiesPath, nonNullPrefix, builder.seed.takeIf { fixedSeed }, "seed")
+			checkDeadline(localPropertiesPath, nonNullPrefix, builder.skip, "skip")
+			checkDeadline(localPropertiesPath, nonNullPrefix, builder.maxArgs, "maxArgs")
+			checkDeadline(localPropertiesPath, nonNullPrefix, builder.requestedMinArgs, "requestedMinArgs")
+		}
+	}
+
+	private fun VariistPropertiesLoaderConfig.checkVariistConfigLoaderConfigInvariants() {
+		localPropertiesResourceName?.let {
+			checkIsNotBlank(it, "localPropertiesResourceName")
+			// although this file could be in a different directory we don't want that confusion
+			check(it != "variist.properties") {
+				"you are not allowed to define \"variist.properties\" as ${VariistPropertiesLoaderConfig::localPropertiesResourceName.name}"
+			}
+		}
+
+		localPropertiesPrefix?.let {
+			checkIsNotBlank(it, "localPropertiesPrefix")
+		}
+
+		check((localPropertiesResourceName == null) == (localPropertiesPrefix == null)) {
+			"Either you define both ${VariistPropertiesLoaderConfig::localPropertiesResourceName.name} (${localPropertiesResourceName}) and ${VariistPropertiesLoaderConfig::localPropertiesPrefix.name} (${localPropertiesPrefix}) or none."
+		}
+
+		checkIsPositive(
+			remindAboutFixedPropertiesAfterMinutes,
+			"remindAboutFixedPropertiesAfterMinutes"
+		)
+	}
+
+	private fun VariistPropertiesLoaderConfig.checkDeadline(
 		localPropertiesPath: Path,
+		localPropertiesPrefix: String,
 		propertyValue: Any?,
 		propertyName: String,
 	) {
 		val definedDeadline = errorDeadlines[propertyName]
-		val deadlinePropertyName = """${ERROR_DEADLINES_PREFIX}${propertyName}"""
+		val deadlinePropertyName = deadlinePropertyName(localPropertiesPrefix, propertyName)
 		if (propertyValue == null) {
 			if (definedDeadline != null) {
-				localPropertiesPath.unsetErrorDeadlineFor(deadlinePropertyName)
+				localPropertiesPath.unsetErrorDeadlineFor(deadlinePropertyName, localPropertiesPrefix)
 			}
 		} else {
 			if (definedDeadline == null) {
 				localPropertiesPath.setErrorDeadlineFor(
 					propertyName,
+					localPropertiesPrefix,
 					LocalDateTime.now().plusMinutes(remindAboutFixedPropertiesAfterMinutes.toLong())
 				)
 			} else if (definedDeadline.isBefore(LocalDateTime.now())) {
@@ -122,21 +183,32 @@ class VariistConfigViaPropertiesLoader {
 
 	private fun Path.setErrorDeadlineFor(
 		propertyName: String,
+		localPropertiesPrefix: String,
 		deadline: LocalDateTime
 	) {
 		appendText(
 			"""
             |
-            |# You have set `$propertyName` and this deadline will remind you to remove it again.
-            |${ERROR_DEADLINES_PREFIX}$propertyName=${deadline.format(DateTimeFormatter.ISO_DATE_TIME)}
+            |# You have set `$localPropertiesPrefix$propertyName` and this deadline will remind you to remove it again.
+            |${
+				deadlinePropertyName(
+					localPropertiesPrefix,
+					propertyName
+				)
+			}=${deadline.format(DateTimeFormatter.ISO_DATE_TIME)}
 			|
             """.trimMargin()
 		)
 	}
 
-	private fun Path.unsetErrorDeadlineFor(deadlinePropertyName: String) {
+	private fun deadlinePropertyName(localPropertiesPrefix: String, propertyName: String): String {
+		val deadlinePropertyName = "$localPropertiesPrefix$ERROR_DEADLINES_PREFIX$propertyName"
+		return deadlinePropertyName
+	}
+
+	private fun Path.unsetErrorDeadlineFor(deadlinePropertyName: String, localPropertiesPrefix: String) {
 		replaceText {
-			it.replace(Regex("\n(#.*\n)*${deadlinePropertyName}=.*"), "")
+			it.replace(Regex("\n(#.*\n)*${localPropertiesPrefix}${deadlinePropertyName}=.*"), "")
 		}
 	}
 
@@ -145,21 +217,20 @@ class VariistConfigViaPropertiesLoader {
 		writeText(content)
 	}
 
-
-	private fun VariistConfigBuilder.setByPropertiesInResource(
+	private fun ConfigBuilderAndLoaderConfig.setByPropertiesFileInResource(
 		propertiesFile: String,
-		configFileSpecifics: ConfigFileSpecifics,
+		prefix: String?,
 		parser: VariistPropertiesParser
 	): Boolean = this::class.java.getResourceAsStream(propertiesFile)?.also {
 		it.use { input ->
 			val props = Properties()
 			props.load(input)
-			parser.mergeWithProperties(this, configFileSpecifics, props)
+			parser.mergePropertiesInto(props, this, prefix)
 		}
 	} != null
 
-	private fun VariistConfigBuilder.setByEnv() {
-		determineEnv()?.also { activeEnv = it }
+	private fun ConfigBuilderAndLoaderConfig.setByEnv() = apply {
+		builder.determineEnv()?.also { builder.activeEnv = it }
 	}
 
 	private fun VariistConfigBuilder.determineEnv(): String? =
@@ -219,23 +290,3 @@ class VariistConfigViaPropertiesLoader {
 			else -> Env.Push
 		}
 }
-
-/**
- * Contains properties which are not exposed via [VariistConfig] and are used during parsing a [VariistConfig]
- * file.
- *
- * !! No backward compatibility guarantees !!
- * Reuse at your own risk
- *
- * @since 2.0.0
- */
-class ConfigFileSpecifics(
-	/**
-	 * Defines in about how many minutes the reminder triggers when fixing a property (such as
-	 * [VariistConfigBuilder.seed], [VariistConfigBuilder.skip],
-	 * [VariistConfigBuilder.requestedMinArgs], [VariistConfigBuilder.maxArgs]).
-	 */
-	var remindAboutFixedPropertiesAfterMinutes: Int = 60,
-	var variistPropertiesDir: Path = Paths.get("./src/test/resources"),
-	var errorDeadlines: HashMap<String, LocalDateTime> = HashMap(),
-)

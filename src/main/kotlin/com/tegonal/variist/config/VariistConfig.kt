@@ -206,17 +206,36 @@ fun VariistConfig.toBuilder(): VariistConfigBuilder = VariistConfigBuilder(
 )
 
 /**
+ * Builder to create a [VariistConfig] in a mutable way.
+ *
  * @since 2.0.0
  */
 class VariistConfigBuilder(
+	/** @see VariistConfig.seed */
 	var seed: Int,
+
+	/** @see VariistConfig.skip */
 	var skip: Int?,
+
+	/** @see VariistConfig.maxArgs */
 	var maxArgs: Int?,
+
+	/** @see VariistConfig.requestedMinArgs */
 	var requestedMinArgs: Int?,
+
+	/** @see VariistConfig.activeArgsRangeDecider */
 	var activeArgsRangeDecider: String,
+
+	/** @see VariistConfig.activeSuffixArgsGeneratorDecider */
 	var activeSuffixArgsGeneratorDecider: String,
+
+	/** @see VariistConfig.activeEnv */
 	var activeEnv: String,
+
+	/** @see VariistConfig.defaultProfile */
 	var defaultProfile: String,
+
+	/** @see VariistConfig.testProfiles */
 	var testProfiles: MutableList<Pair<String, MutableList<Pair<String, TestConfig>>>>,
 ) {
 

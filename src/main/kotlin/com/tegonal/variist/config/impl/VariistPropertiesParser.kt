@@ -3,6 +3,7 @@ package com.tegonal.variist.config.impl
 import com.tegonal.variist.config.TestConfig
 import com.tegonal.variist.config.VariistConfigBuilder
 import com.tegonal.variist.config.VariistParseException
+import com.tegonal.variist.config.VariistPropertiesLoaderConfig
 import com.tegonal.variist.utils.impl.FEATURE_REQUEST_URL
 import com.tegonal.variist.utils.impl.toIntOrErrorNotValid
 import com.tegonal.variist.utils.impl.toPositiveIntOrErrorNotValid
@@ -18,11 +19,19 @@ import java.util.*
  */
 class VariistPropertiesParser {
 
-	fun mergeWithProperties(
-		configBuilder: VariistConfigBuilder,
-		configFileSpecifics: ConfigFileSpecifics,
-		properties: Properties
+	/**
+	 * @param prefix if defined, then only properties with the given [prefix] are considered to be Variist properties.
+	 */
+	fun mergePropertiesInto(
+		properties: Properties,
+		builderAndLoaderConfig: ConfigBuilderAndLoaderConfig,
+		prefix: String? = null
 	) {
+		// we only check for what Java considers to be blank, good enough (e.g. we allow a zero-width prefix)
+		check(prefix == null || prefix.isNotBlank()) {
+			"prefix cannot be blank if defined, was `$prefix`"
+		}
+		val prefixWithDot = prefix?.let { if (it.endsWith(".")) it else "$it." }
 		properties.forEach { (keyAny, valueAny) ->
 			try {
 				val key = keyAny as? String
@@ -30,7 +39,10 @@ class VariistPropertiesParser {
 				val value = valueAny as? String
 					?: error("property value was not a String, was ${valueAny::class.qualifiedName} ($valueAny)")
 
-				configBuilder.parseProperty(configFileSpecifics, key, value)
+				if (prefixWithDot == null || key.startsWith(prefixWithDot)) {
+					val keyWithoutPrefix = if (prefixWithDot == null) key else key.substringAfter(prefixWithDot)
+					builderAndLoaderConfig.parseProperty(keyWithoutPrefix, value)
+				}
 			} catch (m: VariistParseException) {
 				throw m
 			} catch (e: Exception) {
@@ -39,8 +51,7 @@ class VariistPropertiesParser {
 		}
 	}
 
-	private fun VariistConfigBuilder.parseProperty(
-		configFileSpecifics: ConfigFileSpecifics,
+	private fun ConfigBuilderAndLoaderConfig.parseProperty(
 		key: String,
 		value: String
 	) {
@@ -50,28 +61,35 @@ class VariistPropertiesParser {
 			supportedKeys.add(supportedKey)
 		}
 		when {
-			isKey("seed") -> seed = value.toIntOrErrorNotValid(key)
-			isKey("skip") -> skip = value.toIntOrErrorNotValid(key)
+			isKey("seed") -> builder.seed = value.toIntOrErrorNotValid(key)
+			isKey("skip") -> builder.skip = value.toIntOrErrorNotValid(key)
 
-			isKey("maxArgs") -> maxArgs = value.toIntOrErrorNotValid(key)
-			isKey("requestedMinArgs") -> requestedMinArgs = value.toIntOrErrorNotValid(key)
-			isKey("activeArgsRangeDecider") -> activeArgsRangeDecider = value
-			isKey("activeSuffixArgsGeneratorDecider") -> activeSuffixArgsGeneratorDecider = value
-			isKey("activeEnv") -> activeEnv = value
-			isKey("defaultProfile") -> defaultProfile = value
+			isKey("maxArgs") -> builder.maxArgs = value.toIntOrErrorNotValid(key)
+			isKey("requestedMinArgs") -> builder.requestedMinArgs = value.toIntOrErrorNotValid(key)
+			isKey("activeArgsRangeDecider") -> builder.activeArgsRangeDecider = value
+			isKey("activeSuffixArgsGeneratorDecider") -> builder.activeSuffixArgsGeneratorDecider = value
+			isKey("activeEnv") -> builder.activeEnv = value
+			isKey("defaultProfile") -> builder.defaultProfile = value
 
 			isKey(PROFILES) -> {
-				if (value == "clear") testProfiles.clear()
+				if (value == "clear") builder.testProfiles.clear()
 				else parseError("don't know how to interpret $value for $key")
 			}
 
-			key.startsWith(PROFILES_PREFIX) -> parseTestProfile(key, value)
+			key.startsWith(PROFILES_PREFIX) -> builder.parseTestProfile(key, value)
 
-			isKey("variistPropertiesDir") -> configFileSpecifics.variistPropertiesDir = Paths.get(value)
+			// ---------------------------------------------------------------------------------------------
+			// VariistPropertiesLoaderConfig -------------------------------------------------------------------------
+			// ---------------------------------------------------------------------------------------------
+
+			isKey("variistPropertiesDir") -> loaderConfig.localPropertiesDir = Paths.get(value)
 			isKey("remindAboutFixedPropertiesAfterMinutes") ->
-				configFileSpecifics.remindAboutFixedPropertiesAfterMinutes = value.toIntOrErrorNotValid(key)
+				loaderConfig.remindAboutFixedPropertiesAfterMinutes = value.toIntOrErrorNotValid(key)
 
-			key.startsWith(ERROR_DEADLINES_PREFIX) -> configFileSpecifics.parseErrorDeadlines(key, value)
+			key.startsWith(ERROR_DEADLINES_PREFIX) -> loaderConfig.parseErrorDeadlines(key, value)
+
+			isKey("localPropertiesResourceName") -> loaderConfig.localPropertiesResourceName = value
+			isKey("localPropertiesPrefix") -> loaderConfig.localPropertiesPrefix = value
 
 			else -> throwUnknownProperty(key, value, supportedKeys)
 		}
@@ -117,7 +135,7 @@ class VariistPropertiesParser {
 		}
 	}
 
-	private fun ConfigFileSpecifics.parseErrorDeadlines(key: String, value: String) {
+	private fun VariistPropertiesLoaderConfig.parseErrorDeadlines(key: String, value: String) {
 		val remainingAfterPrefix = key.substringAfter(ERROR_DEADLINES_PREFIX)
 		errorDeadlines[remainingAfterPrefix] = LocalDateTime.parse(value)
 	}
