@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>toArguments</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+                    <a class="library-name--link" href="../../../index.html">
+                            Variist
+                    </a>
+            </div>
+            <div class="library-version">
+2.0.0            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":dokkaHtml/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="member" id="content" pageIds="Variist::com.tegonal.variist.providers/ArgsGeneratorToArgumentsConverter/toArguments/#kotlin.String#com.tegonal.variist.providers.AnnotationData#com.tegonal.variist.generators.ArgsGenerator[kotlin.collections.List[*]]/PointingToDeclaration//769193423">
+  <div class="breadcrumbs"><a href="../../../index.html">Variist</a><span class="delimiter">/</span><a href="../index.html">com.tegonal.variist.providers</a><span class="delimiter">/</span><a href="index.html">ArgsGeneratorToArgumentsConverter</a><span class="delimiter">/</span><span class="current">toArguments</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>to</span><wbr></wbr><span><span>Arguments</span></span></h1>
+  </div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="to-arguments.html"><span class="token function">toArguments</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">argsSourceId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">annotationData<span class="token operator">: </span><a href="../-annotation-data/index.html">AnnotationData</a><span class="token punctuation">, </span></span><span class="parameter ">argsGenerator<span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-args-generator/index.html">ArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.sequences/-sequence/index.html">Sequence</a><span class="token operator">&lt;</span><span data-unresolved-link="org.junit.jupiter.params.provider/Arguments///PointingToDeclaration/">Arguments</span><span class="token operator">&gt;</span><span class="clearfix"><span class="floating-right">(<a href="https://github.com/tegonal/variist/tree/v2.0.0/src/main/kotlin/com/tegonal/variist/providers/ArgsGeneratorToArgumentsConverter.kt#L35">source</a>)</span></span></div><p class="paragraph">Uses the given <a href="to-arguments.html">argsGenerator</a> to generate values and turning them into <span data-unresolved-link="org.junit.jupiter.params.provider/Arguments///PointingToDeclaration/">Arguments</span>.</p><p class="paragraph">It typically uses an <a href="../-args-range-decider/index.html">ArgsRangeDecider</a> to decide what <a href="../-args-range/index.html">ArgsRange</a> to generate.</p><p class="paragraph">The <a href="to-arguments.html">argsGenerator</a> generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.collections/-list/index.html">List</a>s where the elements represent individual generation results of combined <a href="../../com.tegonal.variist.generators/-args-generator/index.html">ArgsGenerator</a>. They correspond to the arguments when only raw values (non-<span data-unresolved-link="org.junit.jupiter.params.provider/Arguments///PointingToDeclaration/">Arguments</span> and non-tuples) and are generated. <span data-unresolved-link="org.junit.jupiter.params.provider/Arguments///PointingToDeclaration/">Arguments</span> and tuples (<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-pair/index.html">Pair</a>, <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-triple/index.html">Triple</a>, <span data-unresolved-link="ch.tutteli.kbox/Tuple4///PointingToDeclaration/">Tuple4</span> etc.) are flattened.</p><p class="paragraph">Some examples, if <a href="to-arguments.html">argsGenerator</a> generates:</p><ul><li><p class="paragraph">lists with two <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-pair/index.html">Pair</a>s, then the resulting Sequence contains <span data-unresolved-link="org.junit.jupiter.params.provider/Arguments///PointingToDeclaration/">Arguments</span> with 4 values.</p></li><li><p class="paragraph">lists with one <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-triple/index.html">Triple</a> and one <span data-unresolved-link="org.junit.jupiter.params.provider/Arguments///PointingToDeclaration/">Arguments</span> with 1 element, then the resulting Sequence contains <span data-unresolved-link="org.junit.jupiter.params.provider/Arguments///PointingToDeclaration/">Arguments</span> with 4 values.</p></li><li><p class="paragraph">lists with one <span data-unresolved-link="org.junit.jupiter.params.provider/Arguments///PointingToDeclaration/">Arguments</span> with 2 and one <span data-unresolved-link="org.junit.jupiter.params.provider/Arguments///PointingToDeclaration/">Arguments</span> with 4 elements, then the resulting Sequence contains <span data-unresolved-link="org.junit.jupiter.params.provider/Arguments///PointingToDeclaration/">Arguments</span> with 6 values.</p></li></ul><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>args</span><wbr></wbr><span>Source</span><wbr></wbr><span><span>Id</span></span></u></div></span></div><div><div class="title"><p class="paragraph">an identifier (e.q. fully qualified name) of the method which provided the <a href="../../com.tegonal.variist.generators/-args-generator/index.html">ArgsGenerator</a>s.</p></div></div></div></div><div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>annotation</span><wbr></wbr><span><span>Data</span></span></u></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>args</span><wbr></wbr><span><span>Generator</span></span></u></div></span></div><div><div class="title"><p class="paragraph">A generator which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.collections/-list/index.html">List</a>s where the elements represent individual generation results of combined <a href="../../com.tegonal.variist.generators/-args-generator/index.html">ArgsGenerator</a>. See description how they are turned into <span data-unresolved-link="org.junit.jupiter.params.provider/Arguments///PointingToDeclaration/">Arguments</span>.</p></div></div></div></div></div></div></div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>Variist &copy; Copyright <a href="https://tegonal.com">Tegonal Genossenschaft</a></span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

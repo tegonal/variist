@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>DefaultArbExtensionPoint</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+                    <a class="library-name--link" href="../../../index.html">
+                            Variist
+                    </a>
+            </div>
+            <div class="library-version">
+2.0.0            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":dokkaHtml/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="Variist::com.tegonal.variist.generators.impl/DefaultArbExtensionPoint///PointingToDeclaration//769193423">
+  <div class="breadcrumbs"><a href="../../../index.html">Variist</a><span class="delimiter">/</span><a href="../index.html">com.tegonal.variist.generators.impl</a><span class="delimiter">/</span><span class="current">DefaultArbExtensionPoint</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Default</span><wbr></wbr><span>Arb</span><wbr></wbr><span>Extension</span><wbr></wbr><span><span>Point</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">DefaultArbExtensionPoint</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>componentFactoryContainer<span class="token operator">: </span><a href="../../com.tegonal.variist.config/-component-factory-container/index.html">ComponentFactoryContainer</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>seedBaseOffset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span> : <a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a>, <a href="../../com.tegonal.variist.config/-component-factory-container-provider/index.html">ComponentFactoryContainerProvider</a><span class="clearfix"><span class="floating-right">(<a href="https://github.com/tegonal/variist/tree/v2.0.0/src/main/kotlin/com/tegonal/variist/generators/impl/generatorExtensionPoints.kt#L46">source</a>)</span></span></div><p class="paragraph">!! No backward compatibility guarantees !! Reuse at your own risk</p><span class="kdoc-tag"><h4 class="">Since</h4><p class="paragraph">2.0.0</p></span></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="2079776278%2FConstructors%2F769193423" anchor-label="DefaultArbExtensionPoint" id="2079776278%2FConstructors%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-default-arb-extension-point.html"><span>Default</span><wbr></wbr><span>Arb</span><wbr></wbr><span>Extension</span><wbr></wbr><span><span>Point</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2079776278%2FConstructors%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">componentFactoryContainer<span class="token operator">: </span><a href="../../com.tegonal.variist.config/-component-factory-container/index.html">ComponentFactoryContainer</a><span class="token punctuation">, </span></span><span class="parameter ">seedBaseOffset<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-1986109701%2FProperties%2F769193423" anchor-label="_components" id="-1986109701%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.config/_components.html"><span><span>_components</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1986109701%2FProperties%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="../../com.tegonal.variist.config/-is-component-factory-container-provider/index.html">IsComponentFactoryContainerProvider</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.config/_components.html">_components</a><span class="token operator">: </span><a href="../../com.tegonal.variist.config/-component-factory-container/index.html">ComponentFactoryContainer</a></div><div class="brief "><p class="paragraph">Casts <code class="lang-kotlin">this</code> to a <a href="../../com.tegonal.variist.config/-component-factory-container-provider/index.html">ComponentFactoryContainerProvider</a> and returns the <a href="../../com.tegonal.variist.config/-component-factory-container-provider/component-factory-container.html">ComponentFactoryContainerProvider.componentFactoryContainer</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1549559736%2FProperties%2F769193423" anchor-label="arb" id="1549559736%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="arb.html"><span><span>arb</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1549559736%2FProperties%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="arb.html">arb</a><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1461292875%2FProperties%2F769193423" anchor-label="componentFactoryContainer" id="-1461292875%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="component-factory-container.html"><span>component</span><wbr></wbr><span>Factory</span><wbr></wbr><span><span>Container</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1461292875%2FProperties%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="component-factory-container.html">componentFactoryContainer</a><span class="token operator">: </span><a href="../../com.tegonal.variist.config/-component-factory-container/index.html">ComponentFactoryContainer</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1752478948%2FProperties%2F769193423" anchor-label="ordered" id="-1752478948%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ordered.html"><span><span>ordered</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1752478948%2FProperties%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="ordered.html">ordered</a><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-ordered-extension-point/index.html">OrderedExtensionPoint</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-583972708%2FProperties%2F769193423" anchor-label="seedBaseOffset" id="-583972708%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="seed-base-offset.html"><span>seed</span><wbr></wbr><span>Base</span><wbr></wbr><span><span>Offset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-583972708%2FProperties%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="seed-base-offset.html">seedBaseOffset</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">Will be added to <a href="../../com.tegonal.variist.config/-variist-config/seed.html">com.tegonal.variist.config.VariistConfig.seed</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1027182422%2FProperties%2F769193423" anchor-label="semiOrdered" id="-1027182422%2FProperties%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="semi-ordered.html"><span>semi</span><wbr></wbr><span><span>Ordered</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1027182422%2FProperties%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="semi-ordered.html">semiOrdered</a><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-semi-ordered-extension-point/index.html">SemiOrderedExtensionPoint</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-431678622%2FFunctions%2F769193423" anchor-label="bigIntFromTo" id="-431678622%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/big-int-from-to.html"><span>big</span><wbr></wbr><span>Int</span><wbr></wbr><span>From</span><wbr></wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-431678622%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/big-int-from-to.html"><span class="token function">bigIntFromTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="../../com.tegonal.variist.utils/-big-int/index.html">BigInt</a><span class="token punctuation">, </span></span><span class="parameter ">toInclusive<span class="token operator">: </span><a href="../../com.tegonal.variist.utils/-big-int/index.html">BigInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.utils/-big-int/index.html">BigInt</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="../../com.tegonal.variist.utils/-big-int/index.html">BigInt</a>s ranging <a href="../../com.tegonal.variist.generators/big-int-from-to.html">from</a> (inclusive) to <a href="../../com.tegonal.variist.generators/big-int-from-to.html">toInclusive</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="893705553%2FFunctions%2F769193423" anchor-label="bigIntFromUntil" id="893705553%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/big-int-from-until.html"><span>big</span><wbr></wbr><span>Int</span><wbr></wbr><span>From</span><wbr></wbr><span><span>Until</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="893705553%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/big-int-from-until.html"><span class="token function">bigIntFromUntil</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="../../com.tegonal.variist.utils/-big-int/index.html">BigInt</a><span class="token punctuation">, </span></span><span class="parameter ">toExclusive<span class="token operator">: </span><a href="../../com.tegonal.variist.utils/-big-int/index.html">BigInt</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.utils/-big-int/index.html">BigInt</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="../../com.tegonal.variist.utils/-big-int/index.html">BigInt</a>s ranging <a href="../../com.tegonal.variist.generators/big-int-from-until.html">from</a> (inclusive) until <a href="../../com.tegonal.variist.generators/big-int-from-until.html">toExclusive</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="126159979%2FFunctions%2F769193423" anchor-label="boolean" id="126159979%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/boolean.html"><span><span>boolean</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="126159979%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/boolean.html"><span class="token function">boolean</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1691680923%2FFunctions%2F769193423" anchor-label="char" id="1691680923%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/char.html"><span><span>char</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1691680923%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/char.html"><span class="token function">char</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a>s ranging from <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/-companion/-m-i-n_-v-a-l-u-e.html">Char.MIN_VALUE</a> (inclusive) to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/-companion/-m-a-x_-v-a-l-u-e.html">Char.MAX_VALUE</a> (inclusive).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1821699178%2FFunctions%2F769193423" anchor-label="charBounds" id="1821699178%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/char-bounds.html"><span>char</span><wbr></wbr><span><span>Bounds</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1821699178%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/char-bounds.html"><span class="token function">charBounds</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">minInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>Char.MIN_VALUE<span class="token punctuation">, </span></span><span class="parameter ">maxInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>Char.MAX_VALUE<span class="token punctuation">, </span></span><span class="parameter ">minSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">1</span><span class="token punctuation">, </span></span><span class="parameter ">maxSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><span data-unresolved-link="ch.tutteli.kbox/Tuple2///PointingToDeclaration/">Tuple2</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <span data-unresolved-link="ch.tutteli.kbox/Tuple2///PointingToDeclaration/">Tuple2</span> representing a lower and upper bound where the bounds range from <a href="../../com.tegonal.variist.generators/char-bounds.html">minInclusive</a> to <a href="../../com.tegonal.variist.generators/char-bounds.html">maxInclusive</a> respecting the given <a href="../../com.tegonal.variist.generators/char-bounds.html">minSize</a> as well as <a href="../../com.tegonal.variist.generators/char-bounds.html">maxSize</a> if defined.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-293836615%2FFunctions%2F769193423" anchor-label="charBoundsBased" id="-293836615%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/char-bounds-based.html"><span>char</span><wbr></wbr><span>Bounds</span><wbr></wbr><span><span>Based</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-293836615%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/char-bounds-based.html">T</a><span class="token operator">&gt; </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/char-bounds-based.html"><span class="token function">charBoundsBased</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">minInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>Char.MIN_VALUE<span class="token punctuation">, </span></span><span class="parameter ">maxInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>Char.MAX_VALUE<span class="token punctuation">, </span></span><span class="parameter ">minSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">maxSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">factory<span class="token operator">: </span><span class="token punctuation">(</span>lowerBound<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token punctuation">, </span>upperBound<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../../com.tegonal.variist.generators/char-bounds-based.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/char-bounds-based.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates a <a href="../../com.tegonal.variist.generators/char-bounds-based.html">T</a> based on generated lower and upper bounds and the given <a href="../../com.tegonal.variist.generators/char-bounds-based.html">factory</a> where the bounds range from <a href="../../com.tegonal.variist.generators/char-bounds-based.html">minInclusive</a> to <a href="../../com.tegonal.variist.generators/char-bounds-based.html">maxInclusive</a> respecting the given <a href="../../com.tegonal.variist.generators/char-bounds-based.html">minSize</a> as well as <a href="../../com.tegonal.variist.generators/char-bounds-based.html">maxSize</a> if defined.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1440537719%2FFunctions%2F769193423" anchor-label="charFromTo" id="-1440537719%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/char-from-to.html"><span>char</span><wbr></wbr><span>From</span><wbr></wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1440537719%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/char-from-to.html"><span class="token function">charFromTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token punctuation">, </span></span><span class="parameter ">toInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a>s ranging <a href="../../com.tegonal.variist.generators/char-from-to.html">from</a> (inclusive) to <a href="../../com.tegonal.variist.generators/char-from-to.html">toInclusive</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1654688496%2FFunctions%2F769193423" anchor-label="charRange" id="1654688496%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/char-range.html"><span>char</span><wbr></wbr><span><span>Range</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1654688496%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/char-range.html"><span class="token function">charRange</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">minInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>Char.MIN_VALUE<span class="token punctuation">, </span></span><span class="parameter ">maxInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator"> = </span>Char.MAX_VALUE<span class="token punctuation">, </span></span><span class="parameter ">minSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter ">maxSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.ranges/-char-range/index.html">CharRange</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.ranges/-int-range/index.html">IntRange</a>s ranging from a lower bound <a href="../../com.tegonal.variist.generators/char-range.html">minInclusive</a> to an upper bound <a href="../../com.tegonal.variist.generators/char-range.html">maxInclusive</a> respecting the given <a href="../../com.tegonal.variist.generators/char-range.html">minSize</a> as well as <a href="../../com.tegonal.variist.generators/char-range.html">maxSize</a> if defined.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-634829330%2FFunctions%2F769193423" anchor-label="checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize" id="-634829330%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../check-not-empty-return-null-if-one-element-and-otherwise-int-from-until-size.html"><span>check</span><wbr></wbr><span>Not</span><wbr></wbr><span>Empty</span><wbr></wbr><span>Return</span><wbr></wbr><span>Null</span><wbr></wbr><span>If</span><wbr></wbr><span>One</span><wbr></wbr><span>Element</span><wbr></wbr><span>And</span><wbr></wbr><span>Otherwise</span><wbr></wbr><span>Int</span><wbr></wbr><span>From</span><wbr></wbr><span>Until</span><wbr></wbr><span><span>Size</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-634829330%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../check-not-empty-return-null-if-one-element-and-otherwise-int-from-until-size.html"><span class="token function">checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">size<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="token operator">?</span></div><div class="brief "><p class="paragraph">!! No backward compatibility guarantees !! Reuse at your own risk</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1986666212%2FFunctions%2F769193423" anchor-label="createBoundsArbGenerator" id="1986666212%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../create-bounds-arb-generator.html"><span>create</span><wbr></wbr><span>Bounds</span><wbr></wbr><span>Arb</span><wbr></wbr><span><span>Generator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1986666212%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../create-bounds-arb-generator.html">T</a><span class="token operator">&gt; </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../create-bounds-arb-generator.html"><span class="token function">createBoundsArbGenerator</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">minInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">maxInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">minSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">maxSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">factory<span class="token operator">: </span><span class="token punctuation">(</span>lowerBound<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span>upperBound<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../create-bounds-arb-generator.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../create-bounds-arb-generator.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">!! No backward compatibility guarantees !! Reuse at your own risk</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1254653330%2FFunctions%2F769193423" anchor-label="createIntDomainBasedBoundsArbGenerator" id="1254653330%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../create-int-domain-based-bounds-arb-generator.html"><span>create</span><wbr></wbr><span>Int</span><wbr></wbr><span>Domain</span><wbr></wbr><span>Based</span><wbr></wbr><span>Bounds</span><wbr></wbr><span>Arb</span><wbr></wbr><span><span>Generator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1254653330%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../create-int-domain-based-bounds-arb-generator.html">T</a><span class="token operator">&gt; </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../create-int-domain-based-bounds-arb-generator.html"><span class="token function">createIntDomainBasedBoundsArbGenerator</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">minInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">maxInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">minSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">maxSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">factory<span class="token operator">: </span><span class="token punctuation">(</span>lowerBound<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span>upperBound<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../create-int-domain-based-bounds-arb-generator.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../create-int-domain-based-bounds-arb-generator.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">!! No backward compatibility guarantees !! Reuse at your own risk</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1456168640%2FFunctions%2F769193423" anchor-label="double" id="1456168640%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/double.html"><span><span>double</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1456168640%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/double.html"><span class="token function">double</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a>s ranging from <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-double/-companion/-m-i-n_-v-a-l-u-e.html">Double.MIN_VALUE</a> (inclusive) to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-double/-companion/-m-a-x_-v-a-l-u-e.html">Double.MAX_VALUE</a> (inclusive).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-475121543%2FFunctions%2F769193423" anchor-label="doubleFromUntil" id="-475121543%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/double-from-until.html"><span>double</span><wbr></wbr><span>From</span><wbr></wbr><span><span>Until</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-475121543%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/double-from-until.html"><span class="token function">doubleFromUntil</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">toExclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-double/index.html">Double</a>s ranging <a href="../../com.tegonal.variist.generators/double-from-until.html">from</a> (inclusive) until <a href="../../com.tegonal.variist.generators/double-from-until.html">toExclusive</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-147899812%2FFunctions%2F769193423" anchor-label="fromArray" id="-147899812%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/from-array.html"><span>from</span><wbr></wbr><span><span>Array</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-147899812%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/from-array.html">T</a><span class="token operator">&gt; </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-array.html"><span class="token function">fromArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="../../com.tegonal.variist.generators/from-array.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/from-array.html">T</a><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-array.html"><span class="token function">fromArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-boolean-array/index.html">BooleanArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-array.html"><span class="token function">fromArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-byte-array/index.html">ByteArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-byte/index.html">Byte</a><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-array.html"><span class="token function">fromArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char-array/index.html">CharArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-array.html"><span class="token function">fromArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-double-array/index.html">DoubleArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-array.html"><span class="token function">fromArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-float-array/index.html">FloatArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-array.html"><span class="token function">fromArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int-array/index.html">IntArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-array.html"><span class="token function">fromArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long-array/index.html">LongArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-array.html"><span class="token function">fromArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-short-array/index.html">ShortArray</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-short/index.html">Short</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> based on the given <a href="../../com.tegonal.variist.generators/from-array.html">args</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="447368262%2FFunctions%2F769193423" anchor-label="fromEnum" id="447368262%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/from-enum.html"><span>from</span><wbr></wbr><span><span>Enum</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="447368262%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/from-enum.html">E</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/from-enum.html">E</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-enum.html"><span class="token function">fromEnum</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/from-enum.html">E</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-ordered-args-generator/index.html">OrderedArgsGenerator</a> for the given Enum of type <a href="../../com.tegonal.variist.generators/from-enum.html">E</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="619763737%2FFunctions%2F769193423" anchor-label="fromList" id="619763737%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/from-list.html"><span>from</span><wbr></wbr><span><span>List</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="619763737%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.jvm/-jvm-name/index.html"><span class="token annotation builtin">JvmName</span></a><span class="token punctuation">(</span><span>name<span class="token operator"> = </span><span class="breakable-word"><span class="token string">&quot;fromValueList&quot;</span></span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/from-list.html">T</a><span class="token operator">&gt; </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-list.html"><span class="token function">fromList</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">args<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/from-list.html">T</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/from-list.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> based on the given <a href="../../com.tegonal.variist.generators/from-list.html">args</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-121093933%2FFunctions%2F769193423" anchor-label="fromProgression" id="-121093933%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/from-progression.html"><span>from</span><wbr></wbr><span><span>Progression</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-121093933%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-progression.html"><span class="token function">fromProgression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">progression<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.ranges/-char-progression/index.html">CharProgression</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> generating <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a>s based on the given <a href="../../com.tegonal.variist.generators/from-progression.html">progression</a>.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-progression.html"><span class="token function">fromProgression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">progression<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.ranges/-int-progression/index.html">IntProgression</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> generating <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a>s based on the given <a href="../../com.tegonal.variist.generators/from-progression.html">progression</a>.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-progression.html"><span class="token function">fromProgression</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">progression<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.ranges/-long-progression/index.html">LongProgression</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> generating <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a>s based on the given <a href="../../com.tegonal.variist.generators/from-progression.html">progression</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-834436393%2FFunctions%2F769193423" anchor-label="fromRange" id="-834436393%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/from-range.html"><span>from</span><wbr></wbr><span><span>Range</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-834436393%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-range.html"><span class="token function">fromRange</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">range<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.ranges/-char-range/index.html">CharRange</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-range.html"><span class="token function">fromRange</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">range<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.ranges/-int-range/index.html">IntRange</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/from-range.html"><span class="token function">fromRange</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">range<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.ranges/-long-range/index.html">LongRange</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> generating <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-char/index.html">Char</a>s based on the given <a href="../../com.tegonal.variist.generators/from-range.html">range</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1113648892%2FFunctions%2F769193423" anchor-label="int" id="-1113648892%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/int.html"><span><span>int</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1113648892%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/int.html"><span class="token function">int</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a>s ranging from <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/-companion/-m-i-n_-v-a-l-u-e.html">Int.MIN_VALUE</a> (inclusive) to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/-companion/-m-a-x_-v-a-l-u-e.html">Int.MAX_VALUE</a> (inclusive).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-737494797%2FFunctions%2F769193423" anchor-label="intBounds" id="-737494797%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/int-bounds.html"><span>int</span><wbr></wbr><span><span>Bounds</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-737494797%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/int-bounds.html"><span class="token function">intBounds</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">minInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>Int.MIN_VALUE<span class="token punctuation">, </span></span><span class="parameter ">maxInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>Int.MAX_VALUE<span class="token punctuation">, </span></span><span class="parameter ">minSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">1</span><span class="token punctuation">, </span></span><span class="parameter ">maxSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><span data-unresolved-link="ch.tutteli.kbox/Tuple2///PointingToDeclaration/">Tuple2</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <span data-unresolved-link="ch.tutteli.kbox/Tuple2///PointingToDeclaration/">Tuple2</span> representing a lower and upper bound where the bounds range from <a href="../../com.tegonal.variist.generators/int-bounds.html">minInclusive</a> to <a href="../../com.tegonal.variist.generators/int-bounds.html">maxInclusive</a> respecting the given <a href="../../com.tegonal.variist.generators/int-bounds.html">minSize</a> as well as <a href="../../com.tegonal.variist.generators/int-bounds.html">maxSize</a> if defined.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-484176094%2FFunctions%2F769193423" anchor-label="intBoundsBased" id="-484176094%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/int-bounds-based.html"><span>int</span><wbr></wbr><span>Bounds</span><wbr></wbr><span><span>Based</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-484176094%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/int-bounds-based.html">T</a><span class="token operator">&gt; </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/int-bounds-based.html"><span class="token function">intBoundsBased</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">minInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>Int.MIN_VALUE<span class="token punctuation">, </span></span><span class="parameter ">maxInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>Int.MAX_VALUE<span class="token punctuation">, </span></span><span class="parameter ">minSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">maxSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">factory<span class="token operator">: </span><span class="token punctuation">(</span>lowerBound<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span>upperBound<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../../com.tegonal.variist.generators/int-bounds-based.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/int-bounds-based.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates a <a href="../../com.tegonal.variist.generators/int-bounds-based.html">T</a> based on generated lower and upper bounds and the given <a href="../../com.tegonal.variist.generators/int-bounds-based.html">factory</a> where the bounds range from <a href="../../com.tegonal.variist.generators/int-bounds-based.html">minInclusive</a> to <a href="../../com.tegonal.variist.generators/int-bounds-based.html">maxInclusive</a> respecting the given <a href="../../com.tegonal.variist.generators/int-bounds-based.html">minSize</a> as well as <a href="../../com.tegonal.variist.generators/int-bounds-based.html">maxSize</a> if defined.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1388020000%2FFunctions%2F769193423" anchor-label="intFromTo" id="1388020000%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/int-from-to.html"><span>int</span><wbr></wbr><span>From</span><wbr></wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1388020000%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/int-from-to.html"><span class="token function">intFromTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">toInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a>s ranging <a href="../../com.tegonal.variist.generators/int-from-to.html">from</a> (inclusive) to <a href="../../com.tegonal.variist.generators/int-from-to.html">toInclusive</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-177637037%2FFunctions%2F769193423" anchor-label="intFromUntil" id="-177637037%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/int-from-until.html"><span>int</span><wbr></wbr><span>From</span><wbr></wbr><span><span>Until</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-177637037%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/int-from-until.html"><span class="token function">intFromUntil</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">toExclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a>s ranging <a href="../../com.tegonal.variist.generators/int-from-until.html">from</a> (inclusive) until <a href="../../com.tegonal.variist.generators/int-from-until.html">toExclusive</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1693107791%2FFunctions%2F769193423" anchor-label="intNegative" id="1693107791%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/int-negative.html"><span>int</span><wbr></wbr><span><span>Negative</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1693107791%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/int-negative.html"><span class="token function">intNegative</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a>s ranging from <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/-companion/-m-i-n_-v-a-l-u-e.html">Int.MIN_VALUE</a> (inclusive) to 0 (exclusive).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1163274262%2FFunctions%2F769193423" anchor-label="intNegativeAndZero" id="1163274262%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/int-negative-and-zero.html"><span>int</span><wbr></wbr><span>Negative</span><wbr></wbr><span>And</span><wbr></wbr><span><span>Zero</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1163274262%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/int-negative-and-zero.html"><span class="token function">intNegativeAndZero</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a>s ranging from <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/-companion/-m-i-n_-v-a-l-u-e.html">Int.MIN_VALUE</a> (inclusive) to 0 (inclusive).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-279669493%2FFunctions%2F769193423" anchor-label="intPositive" id="-279669493%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/int-positive.html"><span>int</span><wbr></wbr><span><span>Positive</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-279669493%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/int-positive.html"><span class="token function">intPositive</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a>s ranging from 1 (inclusive) to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/-companion/-m-a-x_-v-a-l-u-e.html">Int.MAX_VALUE</a> (inclusive).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1581616602%2FFunctions%2F769193423" anchor-label="intPositiveAndZero" id="1581616602%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/int-positive-and-zero.html"><span>int</span><wbr></wbr><span>Positive</span><wbr></wbr><span>And</span><wbr></wbr><span><span>Zero</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1581616602%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/int-positive-and-zero.html"><span class="token function">intPositiveAndZero</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a>s ranging from 0 (inclusive) to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/-companion/-m-a-x_-v-a-l-u-e.html">Int.MAX_VALUE</a> (inclusive) -- i.e. positive numbers and 0.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1534062713%2FFunctions%2F769193423" anchor-label="intRange" id="-1534062713%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/int-range.html"><span>int</span><wbr></wbr><span><span>Range</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1534062713%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/int-range.html"><span class="token function">intRange</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">minInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>Int.MIN_VALUE<span class="token punctuation">, </span></span><span class="parameter ">maxInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>Int.MAX_VALUE<span class="token punctuation">, </span></span><span class="parameter ">minSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter ">maxSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.ranges/-int-range/index.html">IntRange</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.ranges/-int-range/index.html">IntRange</a>s ranging from a lower bound <a href="../../com.tegonal.variist.generators/int-range.html">minInclusive</a> to an upper bound <a href="../../com.tegonal.variist.generators/int-range.html">maxInclusive</a> respecting the given <a href="../../com.tegonal.variist.generators/int-range.html">minSize</a> as well as <a href="../../com.tegonal.variist.generators/int-range.html">maxSize</a> if defined.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="488624814%2FFunctions%2F769193423" anchor-label="localDateFromTo" id="488624814%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/local-date-from-to.html"><span>local</span><wbr></wbr><span>Date</span><wbr></wbr><span>From</span><wbr></wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="488624814%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/local-date-from-to.html"><span class="token function">localDateFromTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html">LocalDate</a><span class="token punctuation">, </span></span><span class="parameter ">toInclusive<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html">LocalDate</a><span class="token punctuation">, </span></span><span class="parameter ">temporalUnit<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html">TemporalUnit</a><span class="token operator"> = </span>ChronoUnit.DAYS</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html">LocalDate</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html">LocalDate</a>s ranging <a href="../../com.tegonal.variist.generators/local-date-from-to.html">from</a> (inclusive) to <a href="../../com.tegonal.variist.generators/local-date-from-to.html">toInclusive</a> where <a href="../../com.tegonal.variist.generators/local-date-from-to.html">temporalUnit</a> defines the steps.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="651687373%2FFunctions%2F769193423" anchor-label="localDateFromUntil" id="651687373%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/local-date-from-until.html"><span>local</span><wbr></wbr><span>Date</span><wbr></wbr><span>From</span><wbr></wbr><span><span>Until</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="651687373%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/local-date-from-until.html"><span class="token function">localDateFromUntil</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html">LocalDate</a><span class="token punctuation">, </span></span><span class="parameter ">toExclusive<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html">LocalDate</a><span class="token punctuation">, </span></span><span class="parameter ">temporalUnit<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html">TemporalUnit</a><span class="token operator"> = </span>ChronoUnit.DAYS</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html">LocalDate</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDate.html">LocalDate</a>s ranging <a href="../../com.tegonal.variist.generators/local-date-from-until.html">from</a> (inclusive) to <a href="../../com.tegonal.variist.generators/local-date-from-until.html">toExclusive</a> where <a href="../../com.tegonal.variist.generators/local-date-from-until.html">temporalUnit</a> defines the steps.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-289284799%2FFunctions%2F769193423" anchor-label="localDateTimeFromTo" id="-289284799%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/local-date-time-from-to.html"><span>local</span><wbr></wbr><span>Date</span><wbr></wbr><span>Time</span><wbr></wbr><span>From</span><wbr></wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-289284799%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/local-date-time-from-to.html"><span class="token function">localDateTimeFromTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDateTime.html">LocalDateTime</a><span class="token punctuation">, </span></span><span class="parameter ">toInclusive<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDateTime.html">LocalDateTime</a><span class="token punctuation">, </span></span><span class="parameter ">temporalUnit<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html">TemporalUnit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDateTime.html">LocalDateTime</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDateTime.html">LocalDateTime</a>s ranging <a href="../../com.tegonal.variist.generators/local-date-time-from-to.html">from</a> (inclusive) to <a href="../../com.tegonal.variist.generators/local-date-time-from-to.html">toInclusive</a> where <a href="../../com.tegonal.variist.generators/local-date-time-from-to.html">temporalUnit</a> defines the steps.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2001024538%2FFunctions%2F769193423" anchor-label="localDateTimeFromUntil" id="-2001024538%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/local-date-time-from-until.html"><span>local</span><wbr></wbr><span>Date</span><wbr></wbr><span>Time</span><wbr></wbr><span>From</span><wbr></wbr><span><span>Until</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2001024538%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/local-date-time-from-until.html"><span class="token function">localDateTimeFromUntil</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDateTime.html">LocalDateTime</a><span class="token punctuation">, </span></span><span class="parameter ">toExclusive<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDateTime.html">LocalDateTime</a><span class="token punctuation">, </span></span><span class="parameter ">temporalUnit<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html">TemporalUnit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDateTime.html">LocalDateTime</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/LocalDateTime.html">LocalDateTime</a>s ranging <a href="../../com.tegonal.variist.generators/local-date-time-from-until.html">from</a> (inclusive) to <a href="../../com.tegonal.variist.generators/local-date-time-from-until.html">toExclusive</a> where <a href="../../com.tegonal.variist.generators/local-date-time-from-until.html">temporalUnit</a> defines the steps.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1212733387%2FFunctions%2F769193423" anchor-label="long" id="-1212733387%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/long.html"><span><span>long</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1212733387%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/long.html"><span class="token function">long</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a>s ranging from <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/-companion/-m-i-n_-v-a-l-u-e.html">Long.MIN_VALUE</a> (inclusive) to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/-companion/-m-a-x_-v-a-l-u-e.html">Long.MAX_VALUE</a> (inclusive).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2002044228%2FFunctions%2F769193423" anchor-label="longBounds" id="-2002044228%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/long-bounds.html"><span>long</span><wbr></wbr><span><span>Bounds</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2002044228%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/long-bounds.html"><span class="token function">longBounds</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">minInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>Long.MIN_VALUE<span class="token punctuation">, </span></span><span class="parameter ">maxInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>Long.MAX_VALUE<span class="token punctuation">, </span></span><span class="parameter ">minSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span><span class="token constant">1</span><span class="token punctuation">, </span></span><span class="parameter ">maxSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><span data-unresolved-link="ch.tutteli.kbox/Tuple2///PointingToDeclaration/">Tuple2</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <span data-unresolved-link="ch.tutteli.kbox/Tuple2///PointingToDeclaration/">Tuple2</span> representing a lower and upper bound where the bounds range from <a href="../../com.tegonal.variist.generators/long-bounds.html">minInclusive</a> to <a href="../../com.tegonal.variist.generators/long-bounds.html">maxInclusive</a> respecting the given <a href="../../com.tegonal.variist.generators/long-bounds.html">minSize</a> as well as <a href="../../com.tegonal.variist.generators/long-bounds.html">maxSize</a> if defined.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2135663197%2FFunctions%2F769193423" anchor-label="longBoundsBased" id="-2135663197%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/long-bounds-based.html"><span>long</span><wbr></wbr><span>Bounds</span><wbr></wbr><span><span>Based</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2135663197%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/long-bounds-based.html">T</a><span class="token operator">&gt; </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/long-bounds-based.html"><span class="token function">longBoundsBased</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">minInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>Long.MIN_VALUE<span class="token punctuation">, </span></span><span class="parameter ">maxInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>Long.MAX_VALUE<span class="token punctuation">, </span></span><span class="parameter ">minSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">maxSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">factory<span class="token operator">: </span><span class="token punctuation">(</span>lowerBound<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span>upperBound<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../../com.tegonal.variist.generators/long-bounds-based.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/long-bounds-based.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates a <a href="../../com.tegonal.variist.generators/long-bounds-based.html">T</a> based on generated lower and upper bounds and the given <a href="../../com.tegonal.variist.generators/long-bounds-based.html">factory</a> where the bounds range from <a href="../../com.tegonal.variist.generators/long-bounds-based.html">minInclusive</a> to <a href="../../com.tegonal.variist.generators/long-bounds-based.html">maxInclusive</a> respecting the given <a href="../../com.tegonal.variist.generators/long-bounds-based.html">minSize</a> as well as <a href="../../com.tegonal.variist.generators/long-bounds-based.html">maxSize</a> if defined.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2127333219%2FFunctions%2F769193423" anchor-label="longFromTo" id="2127333219%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/long-from-to.html"><span>long</span><wbr></wbr><span>From</span><wbr></wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2127333219%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/long-from-to.html"><span class="token function">longFromTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">toInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a>s ranging <a href="../../com.tegonal.variist.generators/long-from-to.html">from</a> (inclusive) to <a href="../../com.tegonal.variist.generators/long-from-to.html">toInclusive</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1053044632%2FFunctions%2F769193423" anchor-label="longFromUntil" id="1053044632%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/long-from-until.html"><span>long</span><wbr></wbr><span>From</span><wbr></wbr><span><span>Until</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1053044632%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/long-from-until.html"><span class="token function">longFromUntil</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">toExclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a>s ranging <a href="../../com.tegonal.variist.generators/long-from-until.html">from</a> (inclusive) until <a href="../../com.tegonal.variist.generators/long-from-until.html">toExclusive</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1310006400%2FFunctions%2F769193423" anchor-label="longNegative" id="1310006400%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/long-negative.html"><span>long</span><wbr></wbr><span><span>Negative</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1310006400%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/long-negative.html"><span class="token function">longNegative</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a>s ranging from <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/-companion/-m-i-n_-v-a-l-u-e.html">Long.MIN_VALUE</a> (inclusive) to 0 (exclusive).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="538486981%2FFunctions%2F769193423" anchor-label="longNegativeAndZero" id="538486981%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/long-negative-and-zero.html"><span>long</span><wbr></wbr><span>Negative</span><wbr></wbr><span>And</span><wbr></wbr><span><span>Zero</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="538486981%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/long-negative-and-zero.html"><span class="token function">longNegativeAndZero</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a>s ranging from <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/-companion/-m-i-n_-v-a-l-u-e.html">Long.MIN_VALUE</a> (inclusive) to 0 (inclusive) -- i.e. negative numbers and 0.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-662770884%2FFunctions%2F769193423" anchor-label="longPositive" id="-662770884%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/long-positive.html"><span>long</span><wbr></wbr><span><span>Positive</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-662770884%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/long-positive.html"><span class="token function">longPositive</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a>s ranging from 1 (inclusive) to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/-companion/-m-a-x_-v-a-l-u-e.html">Long.MAX_VALUE</a> (inclusive).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="956829321%2FFunctions%2F769193423" anchor-label="longPositiveAndZero" id="956829321%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/long-positive-and-zero.html"><span>long</span><wbr></wbr><span>Positive</span><wbr></wbr><span>And</span><wbr></wbr><span><span>Zero</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="956829321%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/long-positive-and-zero.html"><span class="token function">longPositiveAndZero</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a>s ranging from 0 (inclusive) to <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/-companion/-m-a-x_-v-a-l-u-e.html">Long.MAX_VALUE</a> (inclusive) -- i.e. positive numbers and 0.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-94272434%2FFunctions%2F769193423" anchor-label="longRange" id="-94272434%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/long-range.html"><span>long</span><wbr></wbr><span><span>Range</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-94272434%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/long-range.html"><span class="token function">longRange</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">minInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>Long.MIN_VALUE<span class="token punctuation">, </span></span><span class="parameter ">maxInclusive<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span>Long.MAX_VALUE<span class="token punctuation">, </span></span><span class="parameter ">minSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter ">maxSize<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.ranges/-long-range/index.html">LongRange</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.ranges/-long-range/index.html">LongRange</a>s ranging from a lower bound <a href="../../com.tegonal.variist.generators/long-range.html">minInclusive</a> to an upper bound <a href="../../com.tegonal.variist.generators/long-range.html">maxInclusive</a> respecting the given <a href="../../com.tegonal.variist.generators/long-range.html">minSize</a> as well as <a href="../../com.tegonal.variist.generators/long-range.html">maxSize</a> if defined.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1682418533%2FFunctions%2F769193423" anchor-label="mergeWeighted" id="-1682418533%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/merge-weighted.html"><span>merge</span><wbr></wbr><span><span>Weighted</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1682418533%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/merge-weighted.html">T</a><span class="token operator">&gt; </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/merge-weighted.html"><span class="token function">mergeWeighted</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">first<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/merge-weighted.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">second<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/merge-weighted.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">vararg </span>others<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/merge-weighted.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/merge-weighted.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Merges <a href="../../com.tegonal.variist.generators/merge-weighted.html">first</a> with the given <a href="../../com.tegonal.variist.generators/merge-weighted.html">second</a> and optionally <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">others</a> resulting in a <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which picks the next generator to contribute a value according to the defined weights.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1198964000%2FFunctions%2F769193423" anchor-label="of" id="-1198964000%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/of.html"><span><span>of</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1198964000%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/of.html">T</a><span class="token operator">&gt; </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/of.html"><span class="token function">of</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>args<span class="token operator">: </span><a href="../../com.tegonal.variist.generators/of.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="../../com.tegonal.variist.generators/of.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> based on the given <a href="../../com.tegonal.variist.generators/of.html">args</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-527413977%2FFunctions%2F769193423" anchor-label="offsetDateTimeFromTo" id="-527413977%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/offset-date-time-from-to.html"><span>offset</span><wbr></wbr><span>Date</span><wbr></wbr><span>Time</span><wbr></wbr><span>From</span><wbr></wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-527413977%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/offset-date-time-from-to.html"><span class="token function">offsetDateTimeFromTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/OffsetDateTime.html">OffsetDateTime</a><span class="token punctuation">, </span></span><span class="parameter ">toInclusive<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/OffsetDateTime.html">OffsetDateTime</a><span class="token punctuation">, </span></span><span class="parameter ">temporalUnit<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html">TemporalUnit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/OffsetDateTime.html">OffsetDateTime</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/OffsetDateTime.html">OffsetDateTime</a>s ranging <a href="../../com.tegonal.variist.generators/offset-date-time-from-to.html">from</a> (inclusive) to <a href="../../com.tegonal.variist.generators/offset-date-time-from-to.html">toInclusive</a> where <a href="../../com.tegonal.variist.generators/offset-date-time-from-to.html">temporalUnit</a> defines the steps.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1794939720%2FFunctions%2F769193423" anchor-label="offsetDateTimeFromUntil" id="-1794939720%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/offset-date-time-from-until.html"><span>offset</span><wbr></wbr><span>Date</span><wbr></wbr><span>Time</span><wbr></wbr><span>From</span><wbr></wbr><span><span>Until</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1794939720%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/offset-date-time-from-until.html"><span class="token function">offsetDateTimeFromUntil</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/OffsetDateTime.html">OffsetDateTime</a><span class="token punctuation">, </span></span><span class="parameter ">toExclusive<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/OffsetDateTime.html">OffsetDateTime</a><span class="token punctuation">, </span></span><span class="parameter ">temporalUnit<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html">TemporalUnit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/OffsetDateTime.html">OffsetDateTime</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/OffsetDateTime.html">OffsetDateTime</a>s ranging <a href="../../com.tegonal.variist.generators/offset-date-time-from-until.html">from</a> (inclusive) to <a href="../../com.tegonal.variist.generators/offset-date-time-from-until.html">toExclusive</a> where <a href="../../com.tegonal.variist.generators/offset-date-time-from-until.html">temporalUnit</a> defines the steps.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1358808803%2FFunctions%2F769193423" anchor-label="string" id="1358808803%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/string.html"><span><span>string</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1358808803%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/string.html"><span class="token function">string</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">maxLength<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">minLength<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">0</span><span class="token punctuation">, </span></span><span class="parameter ">allowedRanges<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="../../com.tegonal.variist.generators/-unicode-range/index.html">UnicodeRange</a><span class="token operator">&gt;</span><span class="token operator"> = </span>UnicodeRanges.UTF_8_PRINTABLE.ranges</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-string/index.html">String</a>s with <a href="../../com.tegonal.variist.generators/string.html">minLength</a> and <a href="../../com.tegonal.variist.generators/string.html">maxLength</a> (inclusive) using the given allowed <a href="../../com.tegonal.variist.generators/-unicode-range/index.html">UnicodeRange</a>s.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-418773900%2FFunctions%2F769193423" anchor-label="zonedDateTimeFromTo" id="-418773900%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/zoned-date-time-from-to.html"><span>zoned</span><wbr></wbr><span>Date</span><wbr></wbr><span>Time</span><wbr></wbr><span>From</span><wbr></wbr><span><span>To</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-418773900%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/zoned-date-time-from-to.html"><span class="token function">zonedDateTimeFromTo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZonedDateTime.html">ZonedDateTime</a><span class="token punctuation">, </span></span><span class="parameter ">toInclusive<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZonedDateTime.html">ZonedDateTime</a><span class="token punctuation">, </span></span><span class="parameter ">temporalUnit<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html">TemporalUnit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZonedDateTime.html">ZonedDateTime</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZonedDateTime.html">ZonedDateTime</a>s ranging <a href="../../com.tegonal.variist.generators/zoned-date-time-from-to.html">from</a> (inclusive) to <a href="../../com.tegonal.variist.generators/zoned-date-time-from-to.html">toInclusive</a> where <a href="../../com.tegonal.variist.generators/zoned-date-time-from-to.html">temporalUnit</a> defines the steps.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1878587359%2FFunctions%2F769193423" anchor-label="zonedDateTimeFromUntil" id="1878587359%2FFunctions%2F769193423" data-filterable-set=":dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":dokkaHtml/main" data-filterable-set=":dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../com.tegonal.variist.generators/zoned-date-time-from-until.html"><span>zoned</span><wbr></wbr><span>Date</span><wbr></wbr><span>Time</span><wbr></wbr><span>From</span><wbr></wbr><span><span>Until</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1878587359%2FFunctions%2F769193423"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../../com.tegonal.variist.generators/-arb-extension-point/index.html">ArbExtensionPoint</a><span class="token punctuation">.</span><a href="../../com.tegonal.variist.generators/zoned-date-time-from-until.html"><span class="token function">zonedDateTimeFromUntil</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">from<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZonedDateTime.html">ZonedDateTime</a><span class="token punctuation">, </span></span><span class="parameter ">toExclusive<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZonedDateTime.html">ZonedDateTime</a><span class="token punctuation">, </span></span><span class="parameter ">temporalUnit<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html">TemporalUnit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZonedDateTime.html">ZonedDateTime</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns an <a href="../../com.tegonal.variist.generators/-arb-args-generator/index.html">ArbArgsGenerator</a> which generates <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/ZonedDateTime.html">ZonedDateTime</a>s ranging <a href="../../com.tegonal.variist.generators/zoned-date-time-from-until.html">from</a> (inclusive) to <a href="../../com.tegonal.variist.generators/zoned-date-time-from-until.html">toExclusive</a> where <a href="../../com.tegonal.variist.generators/zoned-date-time-from-until.html">temporalUnit</a> defines the steps.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>Variist &copy; Copyright <a href="https://tegonal.com">Tegonal Genossenschaft</a></span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>createVariistRandom</title>
+    <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+                    <a class="library-name--link" href="../../index.html">
+                            Variist
+                    </a>
+            </div>
+            <div class="library-version">
+2.0.0            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":dokkaHtml/main">jvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="member" id="content" pageIds="Variist::com.tegonal.variist.utils//createVariistRandom/#/PointingToDeclaration//769193423">
+  <div class="breadcrumbs"><a href="../../index.html">Variist</a><span class="delimiter">/</span><a href="index.html">com.tegonal.variist.utils</a><span class="delimiter">/</span><span class="current">createVariistRandom</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>create</span><wbr></wbr><span>Variist</span><wbr></wbr><span><span>Random</span></span></h1>
+  </div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="create-variist-random.html"><span class="token function">createVariistRandom</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.random/-random/index.html">Random</a><span class="clearfix"><span class="floating-right">(<a href="https://github.com/tegonal/variist/tree/v2.0.0/src/main/kotlin/com/tegonal/variist/utils/randomHelpers.kt#L124">source</a>)</span></span></div><p class="paragraph">Creates a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.random/-random/index.html">Random</a> based on the <a href="../com.tegonal.variist.config/-variist-config/index.html">VariistConfig</a> behind <a href="../com.tegonal.variist.config/ordered.html">ordered</a>.</p><p class="paragraph">Note, in case you define your own <a href="../com.tegonal.variist.config/ordered.html">ordered</a> with an own <a href="../com.tegonal.variist.config/-variist-config/index.html">VariistConfig</a> where you override/redefine <a href="../com.tegonal.variist.config/-variist-config/seed.html">VariistConfig.seed</a> then your seed will not be taken into account. Please open a feature request in such a case explaining your use case, thanks.</p><p class="paragraph">Since the resulting <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin.random/-random/index.html">Random</a> is based on a static seed, the resulting number sequence will always be the same, making it possible to re-test the same setup on failure. However, you should also be aware of that using <code class="lang-kotlin">createVariistRandom.next...</code> in a loop will produce always the same number. You should assign it to e.g. a variable named <code class="lang-kotlin">variistRandom</code> outside the loop.</p><span class="kdoc-tag"><h4 class="">Since</h4><p class="paragraph">2.0.0</p></span></div></div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>Variist &copy; Copyright <a href="https://tegonal.com">Tegonal Genossenschaft</a></span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
