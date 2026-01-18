@@ -64,33 +64,33 @@ fun ArbExtensionPoint.offsetDateTimeFromUntil(
 	OffsetDateTimeFromUntilArbArgsGenerator(_components, seedBaseOffset, from, toExclusive, temporalUnit)
 
 /**
- * Returns an [ArbArgsGenerator] which generates [LocalDate]s ranging [from] (inclusive) to [toExclusive]
+ * Returns an [ArbArgsGenerator] which generates [LocalDate]s ranging [from] (inclusive) to [toInclusive]
  * where [temporalUnit] defines the steps.
  *
  * @since 2.0.0
  */
 fun ArbExtensionPoint.localDateFromTo(
 	from: LocalDate,
-	toExclusive: LocalDate,
+	toInclusive: LocalDate,
 	temporalUnit: TemporalUnit = ChronoUnit.DAYS,
 ): ArbArgsGenerator<LocalDate> =
-	LocalDateFromToArbArgsGenerator(_components, seedBaseOffset, from, toExclusive, temporalUnit)
+	LocalDateFromToArbArgsGenerator(_components, seedBaseOffset, from, toInclusive, temporalUnit)
 
 /**
- * Returns an [ArbArgsGenerator] which generates [LocalDateTime]s ranging [from] (inclusive) to [toExclusive]
+ * Returns an [ArbArgsGenerator] which generates [LocalDateTime]s ranging [from] (inclusive) to [toInclusive]
  * where [temporalUnit] defines the steps.
  *
  * @since 2.0.0
  */
 fun ArbExtensionPoint.localDateTimeFromTo(
 	from: LocalDateTime,
-	toExclusive: LocalDateTime,
+	toInclusive: LocalDateTime,
 	temporalUnit: TemporalUnit
 ): ArbArgsGenerator<LocalDateTime> =
-	LocalDateTimeFromToArbArgsGenerator(_components, seedBaseOffset, from, toExclusive, temporalUnit)
+	LocalDateTimeFromToArbArgsGenerator(_components, seedBaseOffset, from, toInclusive, temporalUnit)
 
 /**
- * Returns an [ArbArgsGenerator] which generates [ZonedDateTime]s ranging [from] (inclusive) to [toExclusive]
+ * Returns an [ArbArgsGenerator] which generates [ZonedDateTime]s ranging [from] (inclusive) to [toInclusive]
  * where [temporalUnit] defines the steps.
  *
  * @since 2.0.0
@@ -98,14 +98,14 @@ fun ArbExtensionPoint.localDateTimeFromTo(
 //TODO 2.1.0 also define a parameter to steer timezone
 fun ArbExtensionPoint.zonedDateTimeFromTo(
 	from: ZonedDateTime,
-	toExclusive: ZonedDateTime,
+	toInclusive: ZonedDateTime,
 	temporalUnit: TemporalUnit
 ): ArbArgsGenerator<ZonedDateTime> =
-	ZonedDateTimeFromToArbArgsGenerator(_components, seedBaseOffset, from, toExclusive, temporalUnit)
+	ZonedDateTimeFromToArbArgsGenerator(_components, seedBaseOffset, from, toInclusive, temporalUnit)
 
 
 /**
- * Returns an [ArbArgsGenerator] which generates [OffsetDateTime]s ranging [from] (inclusive) to [toExclusive]
+ * Returns an [ArbArgsGenerator] which generates [OffsetDateTime]s ranging [from] (inclusive) to [toInclusive]
  * where [temporalUnit] defines the steps.
  *
  * @since 2.0.0
@@ -113,9 +113,9 @@ fun ArbExtensionPoint.zonedDateTimeFromTo(
 //TODO 2.1.0 also define a parameter to steer the offset
 fun ArbExtensionPoint.offsetDateTimeFromTo(
 	from: OffsetDateTime,
-	toExclusive: OffsetDateTime,
+	toInclusive: OffsetDateTime,
 	temporalUnit: TemporalUnit
 ): ArbArgsGenerator<OffsetDateTime> =
-	OffsetDateTimeFromToArbArgsGenerator(_components, seedBaseOffset, from, toExclusive, temporalUnit)
+	OffsetDateTimeFromToArbArgsGenerator(_components, seedBaseOffset, from, toInclusive, temporalUnit)
 
 //TODO 2.1.0 localDateBounds and co.

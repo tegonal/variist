@@ -156,9 +156,10 @@ class ArgsGeneratorToArgumentsConverterTest {
 
 	@Test
 	fun randomOnlyDependent() {
-		val now = LocalDate.now()
-		val lastDayOfYear = now.with(TemporalAdjusters.lastDayOfYear())
-		val startDates = arb.localDateFromUntil(now, lastDayOfYear)
+		val startDateMin = LocalDate.now()
+		val lastDayOfYear = startDateMin.with(TemporalAdjusters.lastDayOfYear())
+		val startDateUntil = if(startDateMin.isEqual(lastDayOfYear)) startDateMin.plusYears(1).minusDays(2) else lastDayOfYear
+		val startDates = arb.localDateFromUntil(startDateMin, startDateUntil)
 
 		val startAndEndDates = startDates.zipDependent { startDate ->
 			arb.localDateFromUntil(startDate, startDate.plusYears(1))
@@ -175,8 +176,8 @@ class ArgsGeneratorToArgumentsConverterTest {
 						if (l.size == 2) {
 							val (a1, a2) = l
 							feature("a1") { a1 }.toBeAnInstanceOf<LocalDate> {
-								toBeAfterOrTheSamePointInTimeAs(now)
-								toBeBefore(lastDayOfYear)
+								toBeAfterOrTheSamePointInTimeAs(startDateMin)
+								toBeBefore(startDateUntil)
 							}
 							val start = a1 as LocalDate
 							feature("a2") { a2 }.toBeAnInstanceOf<LocalDate> {
