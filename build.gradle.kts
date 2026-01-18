@@ -7,7 +7,7 @@ plugins {
 	id("me.champeau.jmh") version "0.7.3"
 }
 
-version = "2.0.0-RC-4-SNAPSHOT"
+version = "2.0.0"
 group = "com.tegonal.variist"
 description = "Library which helps to setup and prioritise parameterized tests"
 
@@ -95,8 +95,8 @@ Release & deploy a commit
 1. update main:
 
 
-export VARIIST_PREVIOUS_VERSION=2.0.0-RC-3
-export VARIIST_VERSION=2.0.0-RC-4
+export VARIIST_PREVIOUS_VERSION=2.0.0
+export VARIIST_VERSION=2.0.0
 find ./ -name "*.md" | xargs perl -0777 -i \
    -pe "s@$VARIIST_PREVIOUS_VERSION@$VARIIST_VERSION@g;" \
    -pe "s@tree/main@tree/v$VARIIST_VERSION@g;" \
@@ -132,8 +132,8 @@ Increment VARIIST_GH_PAGES_VERSIONS_JS_VERSION and VARIIST_GH_PAGES_VERSIONS_JS_
 
 export VARIIST_GH_PAGES_LOGO_CSS_VERSION="1.3"
 export VARIIST_GH_PAGES_ALERT_CSS_VERSION="1.1"
-export VARIIST_GH_PAGES_VERSIONS_JS_VERSION="1.3.0"
-export VARIIST_GH_PAGES_VERSIONS_JS_VERSION_NEXT="1.4.0"
+export VARIIST_GH_PAGES_VERSIONS_JS_VERSION="1.4.0"
+export VARIIST_GH_PAGES_VERSIONS_JS_VERSION_NEXT="1.5.0"
 
 gr dokkaHtml
 
@@ -210,7 +210,7 @@ Prepare next dev cycle
     1. update main:
 
 
-export VARIIST_VERSION=2.0.0-RC-3
+export VARIIST_VERSION=2.0.0
 export VARIIST_NEXT_VERSION=2.0.0-RC-4
 find ./ -name "*.md" | xargs perl -0777 -i \
    -pe "s@tree/v$VARIIST_VERSION@tree/main@g;" \
