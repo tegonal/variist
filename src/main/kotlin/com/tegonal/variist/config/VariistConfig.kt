@@ -6,9 +6,7 @@ import com.tegonal.variist.providers.ArgsRangeDecider
 import com.tegonal.variist.providers.SuffixArgsGeneratorDecider
 import com.tegonal.variist.providers.impl.ProfileBasedArgsRangeDecider
 import com.tegonal.variist.providers.impl.SuffixArgsGeneratorNeverDecider
-import com.tegonal.variist.utils.impl.checkIsNotBlank
-import com.tegonal.variist.utils.impl.checkIsPositive
-import com.tegonal.variist.utils.impl.checkRequestedMinArgsMaxArgs
+import com.tegonal.variist.utils.impl.*
 import kotlin.random.Random
 
 /**
@@ -202,7 +200,7 @@ fun VariistConfig.toBuilder(): VariistConfigBuilder = VariistConfigBuilder(
 	activeSuffixArgsGeneratorDecider = activeSuffixArgsGeneratorDecider,
 	activeEnv = activeEnv,
 	defaultProfile = defaultProfile,
-	testProfiles = testProfiles.toMutableList()
+	testProfiles = testProfiles.toMutableMap()
 )
 
 /**
@@ -236,7 +234,7 @@ class VariistConfigBuilder(
 	var defaultProfile: String,
 
 	/** @see VariistConfig.testProfiles */
-	var testProfiles: MutableList<Pair<String, MutableList<Pair<String, TestConfig>>>>,
+	var testProfiles: MutableMap<String, MutableMap<String, TestConfig>>,
 ) {
 
 	/**

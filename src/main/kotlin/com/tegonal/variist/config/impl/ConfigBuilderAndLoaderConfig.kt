@@ -1,5 +1,6 @@
 package com.tegonal.variist.config.impl
 
+import com.tegonal.variist.config.VariistConfig
 import com.tegonal.variist.config.VariistConfigBuilder
 import com.tegonal.variist.config.VariistPropertiesLoaderConfig
 
@@ -20,4 +21,4 @@ class ConfigBuilderAndLoaderConfig(
  *
  * @since 2.0.0
  */
-fun ConfigBuilderAndLoaderConfig.build() = builder.build()
+fun ConfigBuilderAndLoaderConfig.build(): VariistConfig = builder.build()

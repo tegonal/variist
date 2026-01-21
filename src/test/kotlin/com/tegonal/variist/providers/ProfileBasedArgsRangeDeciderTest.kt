@@ -130,7 +130,7 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 		val customConfig = VariistConfig().copy {
 			defaultProfile = testType.name
 			activeEnv = env.name
-			testProfiles = ownTestProfiles.toMutableList()
+			testProfiles = ownTestProfiles.toMutableMap()
 		}
 		val ordered = createOrderedWithCustomConfig(customConfig)
 
@@ -200,7 +200,7 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 	fun ordered_maxArgsInConfigDoesNotTakePrecedenceOverProfile() {
 		val orderedWithMaxArgs10Profile2 = createOrderedWithCustomConfig(
 			ordered._components.config.copy {
-				testProfiles = ownTestProfiles.toMutableList()
+				testProfiles = ownTestProfiles.toMutableMap()
 				activeEnv = Env.Local.name
 				maxArgs = 10
 			}
@@ -216,7 +216,7 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 	fun semiOrdered_maxArgsInConfigDoesNotTakePrecedenceOverProfile() {
 		val orderedWithMaxArgs10Profile2 = createOrderedWithCustomConfig(
 			ordered._components.config.copy {
-				testProfiles = ownTestProfiles.toMutableList()
+				testProfiles = ownTestProfiles.toMutableMap()
 				activeEnv = Env.Local.name
 				maxArgs = 10
 			}
@@ -235,7 +235,7 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 	fun arb_maxArgsInConfigDoesNotTakePrecedenceOverProfile() {
 		val arbWithMaxArgs10Profile2 = createArbWithCustomConfig(
 			arb._components.config.copy {
-				testProfiles = ownTestProfiles.toMutableList()
+				testProfiles = ownTestProfiles.toMutableMap()
 				activeEnv = Env.Local.name
 				maxArgs = 10
 			}

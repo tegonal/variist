@@ -118,7 +118,7 @@ class VariistPropertiesParserTest {
 		activeSuffixArgsGeneratorDecider = "activeSuffixArgsGeneratorDecider",
 		activeEnv = Env.Local.name,
 		defaultProfile = TestType.Integration.name,
-		testProfiles = VariistConfig.defaultTestProfiles.toMutableList(),
+		testProfiles = VariistConfig.defaultTestProfiles.toMutableMap(),
 	)
 
 	//TODO 2.1.0 tests for testProfiles
