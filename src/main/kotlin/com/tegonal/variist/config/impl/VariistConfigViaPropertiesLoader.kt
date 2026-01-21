@@ -235,8 +235,7 @@ class VariistConfigViaPropertiesLoader {
 
 	private fun VariistConfigBuilder.determineEnv(): String? =
 		System.getenv("VARIIST_ENV") ?: run {
-			val envs = testProfiles.firstOrNull { it.first == defaultProfile }?.second?.map { it.first }?.toSet()
-				?: error("profile $defaultProfile does not exist")
+			val envs = testProfiles[defaultProfile]?.keys ?: error("profile $defaultProfile does not exist")
 
 			// only determine envs if at least one standard env is defined (as others we don't know how to map)
 			takeIf(Env.entries.any { it.name in envs }) {

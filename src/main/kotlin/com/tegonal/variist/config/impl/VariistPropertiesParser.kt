@@ -100,39 +100,39 @@ class VariistPropertiesParser {
 		val profileName = remainingAfterPrefix.substringBefore(".")
 		if (remainingAfterPrefix == profileName) {
 			if (value == "clear") {
-				//TODO 2.1.0 replace with removeFirst {..} from kbox once 3.4.0 is out
-				testProfiles.indexOfFirst { it.first == profileName }.takeIf { it >= 0 }?.also { index ->
-					testProfiles.removeAt(index)
-				}
+				testProfiles[profileName]?.clear()
 			} else parseError("don't know how to interpret $value for $key")
 		} else {
-			val (_, testConfigsPerEnv) = testProfiles.firstOrNull { it.first == profileName }
-				?: (profileName to mutableListOf<Pair<String, TestConfig>>()).also {
-					testProfiles.add(it)
-				}
-
+			val testConfigsPerEnv = testProfiles.computeIfAbsent(profileName) { HashMap<String, TestConfig>() }
 			val remainingAfterProfile = remainingAfterPrefix.substringAfter("$profileName.")
-			val env = remainingAfterProfile.substringBefore(".")
-			if (remainingAfterProfile == env) {
+			val envName = remainingAfterProfile.substringBefore(".")
+			if (remainingAfterProfile == envName) {
 				if (value == "clear") {
-					//TODO 2.1.0 replace with removeFirst {..} from kbox once 3.4.0 is out
-					testConfigsPerEnv.indexOfFirst { it.first == env }.takeIf { it >= 0 }?.also { index ->
-						testConfigsPerEnv.removeAt(index)
-					}
+					testConfigsPerEnv.remove(envName)
 				} else parseError("don't know how to interpret $value for $key")
 			} else {
-				val testConfig = when (remainingAfterProfile.substringAfter("$env.")) {
-					"maxArgs" -> TestConfig(maxArgs = value.toPositiveIntOrErrorNotValid(key))
-					else -> throwUnknownProperty(
-						key,
-						value,
-						supportedKeys = listOf("maxArgs"),
-						within = "$PROFILES_PREFIX.$env."
-					)
-				}
-				testConfigsPerEnv.add(env to testConfig)
+				testConfigsPerEnv.mergeOrPutTestConfig(envName, remainingAfterProfile, value, key)
 			}
 		}
+	}
+
+	private fun MutableMap<String, TestConfig>.mergeOrPutTestConfig(
+		envName: String,
+		remainingAfterProfile: String,
+		value: String,
+		key: String
+	) {
+		val testConfig = when (remainingAfterProfile.substringAfter("$envName.")) {
+			"maxArgs" -> TestConfig(maxArgs = value.toPositiveIntOrErrorNotValid(key))
+			else -> throwUnknownProperty(
+				key,
+				value,
+				supportedKeys = listOf("maxArgs"),
+				within = "$PROFILES_PREFIX.$envName."
+			)
+		}
+		// currently we only have 1 property, so we can simply replace, not yet a need to merge
+		put(envName, testConfig)
 	}
 
 	private fun VariistPropertiesLoaderConfig.parseErrorDeadlines(key: String, value: String) {

@@ -44,12 +44,7 @@ class DefaultTestProfiles(profiles: Map<String, Map<String, TestConfig>>) : Test
 		profiles[profileName] ?: error("profile $profileName does not exist")
 	}.keys
 
-	override fun toMutableList(): MutableList<Pair<String, MutableList<Pair<String, TestConfig>>>> =
-		ArrayList<Pair<String, MutableList<Pair<String, TestConfig>>>>(profiles.size).also {
-			it.addAll(profiles.entries.map { (k, v) ->
-				k to ArrayList<Pair<String, TestConfig>>(v.size).also { envs ->
-					envs.addAll(v.entries.map { (k, v) -> k to v })
-				}
-			})
-		}
+	override fun toMutableMap(): MutableMap<String, MutableMap<String, TestConfig>> =
+		HashMap<String, MutableMap<String, TestConfig>>(profiles.size)
+			.also { it.putAll(profiles.entries.map { (k, v) -> k to HashMap(v) }) }
 }
