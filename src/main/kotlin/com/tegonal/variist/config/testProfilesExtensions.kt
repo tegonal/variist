@@ -2,6 +2,7 @@ package com.tegonal.variist.config
 
 import ch.tutteli.kbox.glue
 import ch.tutteli.kbox.mapFirst
+import com.tegonal.variist.utils.impl.requireNoDuplicates
 
 /**
  * Indicates if the given [testType] is used as profile name in this [TestProfiles] collection or not.
@@ -19,11 +20,18 @@ operator fun TestProfiles.contains(testType: TestType) = contains(testType.name)
 fun TestProfiles.Companion.create(
 	profile: Pair<TestType, List<Pair<Env, TestConfig>>>,
 	vararg otherProfiles: Pair<TestType, List<Pair<Env, TestConfig>>>
-): TestProfiles = create(
-	(profile glue otherProfiles).map { p ->
-		p.first.name to p.second.map { envs -> envs.mapFirst { it.name } }
+): TestProfiles {
+	val profiles = (profile glue otherProfiles)
+	requireNoDuplicates(profiles.map { it.first.name }) { duplicates ->
+		"Looks like you defined some profiles multiple times: ${duplicates.joinToString(", ")}"
 	}
-)
+	return create(profiles.associate { (profile, testConfigPerEnv) ->
+		requireNoDuplicates(testConfigPerEnv.map { it.first.name }) { duplicates ->
+			"Looks like you defined some envs in profile $profile multiple times: ${duplicates.joinToString(", ")}"
+		}
+		profile.name to testConfigPerEnv.associate { pair -> pair.mapFirst { it.name } }
+	})
+}
 
 /**
  * Predefined test type names (e.g. to use as profile names for [TestProfiles]).

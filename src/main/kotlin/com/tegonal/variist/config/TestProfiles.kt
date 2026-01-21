@@ -1,8 +1,6 @@
 package com.tegonal.variist.config
 
-import ch.tutteli.kbox.glue
 import com.tegonal.variist.config.impl.DefaultTestProfiles
-import com.tegonal.variist.utils.impl.requireNoDuplicates
 
 /**
  * A collection of [TestConfig]s grouped by environment and profile name.
@@ -30,28 +28,6 @@ interface TestProfiles {
 
 	companion object {
 		/**
-		 * Creates a [TestProfiles] collection based on the given [profile] and optionally the [otherProfiles].
-		 * @throws IllegalArgumentException in case a profile name is duplicated, in case an env name per profile name
-		 *         is duplicated.
-		 */
-		fun create(
-			profile: Pair<String, List<Pair<String, TestConfig>>>,
-			vararg otherProfiles: Pair<String, List<Pair<String, TestConfig>>>
-		): TestProfiles = create(profile glue otherProfiles)
-
-		fun create(profiles: List<Pair<String, List<Pair<String, TestConfig>>>>): TestProfiles {
-			requireNoDuplicates(profiles.map { it.first }) { duplicates ->
-				"Looks like you defined some profiles multiple times: ${duplicates.joinToString(", ")}"
-			}
-			return create(profiles.associate { (profile, testConfigPerEnv) ->
-				requireNoDuplicates(testConfigPerEnv.map { it.first }) { duplicates ->
-					"Looks like you defined some envs in profile $profile multiple times: ${duplicates.joinToString(", ")}"
-				}
-				profile to testConfigPerEnv.toMap()
-			})
-		}
-
-		/**
 		 * Creates a [TestProfiles] based on the given [profiles] which allows to
 		 * specify custom category names.
 		 *
@@ -76,9 +52,8 @@ interface TestProfiles {
 
 
 	/**
-	 * Returns a copy of this collection as a [MutableList] where the [Pair.first] are the profile names
-	 * and [Pair.second] is again a [MutableList] where [Pair.first] are the envs and
-	 * [Pair.second] the associated [TestConfig].
+	 * Returns a copy of this collection as a [MutableMap] where the keys are the profile names
+	 * and the values is again a [MutableMap] where the keys the envs and the values the associated [TestConfig].
 	 */
-	fun toMutableList(): MutableList<Pair<String, MutableList<Pair<String, TestConfig>>>>
+	fun toMutableMap(): MutableMap<String, MutableMap<String, TestConfig>>
 }
