@@ -50,6 +50,7 @@ version: [README of v2.0.1](https://github.com/tegonal/variist/tree/main/README.
 		- [chunked](#chunked)
 		- [ordered.concatenation](#ordered-concatenation)
 		- [arb.mergeWeighted](#arb-mergeWeighted)
+		- [arb.mergeRoundRobin](#arb-mergeRoundRobin)
 		- [ordered.toArbArgsGenerator](#ordered-toArbArgsGenerator)
 		- [semiOrdered.fromArbs](#semiOrdered-fromArbs)
 - [Use Variist in other contexts than JUnit](#use-variist-in-other-contexts-than-junit)
@@ -809,6 +810,31 @@ The weighting does not need to add up to 100. If they do, then the numbers corre
 case, out of 100 generated values, around 80 will be between 100 and 200 (exclusive), around 10 will be 201 and
 around 10 will be `null`. The defined weighting is uniformly distributed, which means that for a small number of values,
 it might be skewed; for example, 85 values could fall between 100 and 200, etc.
+
+This might be especially relevant if you define the same weights for all generators and expect them to contribute
+equally values. In theory this is true but only for large number of values.
+Use [mergeRoundRobin](#arb-mergeRoundRobin) if you want equal contributions regardless of the number of values.
+
+### arb mergeRoundRobin
+
+If you want to use two or more `ArbArgsGenerator`s as source of a test and want to be sure that each of them contribute
+the same number of values (neglecting that the number of values might not be a multiple of the number of generators),
+then `mergeRoundRobin` is the perfect fit. Following an example:
+
+<code-mergeRoundRobin>
+
+```kotlin
+arb.mergeRoundRobin(
+	arb.intFromUntil(100, 200),
+	arb.of(201),
+	arb.of(null)
+)
+```
+
+</code-mergeRoundRobin>
+
+If you want to adjust the weights or prefer uniform distribution over a long run, then
+use [mergeWeighted](#arb-mergeWeighted).
 
 ### semiOrdered fromArbs
 
