@@ -7,7 +7,7 @@ plugins {
 	id("me.champeau.jmh") version "0.7.3"
 }
 
-version = "2.1.0-SNAPSHOT"
+version = "2.0.1"
 group = "com.tegonal.variist"
 description = "Library which helps to setup and prioritise parameterized tests"
 
@@ -95,15 +95,15 @@ Release & deploy a commit
 1. update main:
 
 
-export VARIIST_PREVIOUS_VERSION=2.0.0
-export VARIIST_VERSION=2.1.0
+export VARIIST_PREVIOUS_VERSION=2.0.1
+export VARIIST_VERSION=2.0.1
 find ./ -name "*.md" | xargs perl -0777 -i \
    -pe "s@$VARIIST_PREVIOUS_VERSION@$VARIIST_VERSION@g;" \
    -pe "s@tree/main@tree/v$VARIIST_VERSION@g;" \
    -pe "s@latest#/kdoc@$VARIIST_VERSION/kdoc@g;"
 perl -0777 -i \
   -pe "s@$VARIIST_PREVIOUS_VERSION@$VARIIST_VERSION@g;" \
-  -pe "s/version = \"${VARIIST_VERSION}-SNAPSHOT\"/version = \"$VARIIST_VERSION\"/;" \
+  -pe "s/version = \"[^\"]+-SNAPSHOT\"/version = \"$VARIIST_VERSION\"/;" \
   ./build.gradle.kts
 perl -0777 -i \
   -pe 's/(<!-- for main -->\n)\n([\S\s]*?)(\n<!-- for main end -->\n<!-- for release -->\n)<!--\n([\S\s]*?)-->\n(<!-- for release end -->)/$1<!--\n$2-->$3\n$4\n$5/;' \
