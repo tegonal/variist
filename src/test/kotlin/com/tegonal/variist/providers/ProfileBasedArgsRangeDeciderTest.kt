@@ -371,7 +371,7 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 
 
 	@Test
-	fun ordered_requiredMinIgnoredIfOrderedSizeIsSmaller() {
+	fun ordered_requestedMinArgsIgnoredIfOrderedSizeIsSmaller() {
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			ordered.of(1, 2),
 			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
@@ -383,7 +383,7 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 	}
 
 	@Test
-	fun semiOrdered_requiredMinTakenIntoAccountEvenIfSizeOfSemiOrderedIsSmaller() {
+	fun semiOrdered_requestedMinArgsTakenIntoAccountEvenIfSizeOfSemiOrderedIsSmaller() {
 		val argsRange = ProfileBasedArgsRangeDecider().decide(
 			ordered.of(1, 2).zip(arb.of('A')),
 			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
