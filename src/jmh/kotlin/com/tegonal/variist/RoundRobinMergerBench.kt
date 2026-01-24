@@ -53,7 +53,7 @@ class ArbArgsGeneratorRoundRobinMerger<T>(
 ) : BaseArbArgsGenerator<T>(
 	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,
 	// should you run into weird behaviour (such as one generator uses seed X and the other seed Y) then most likely
-	// someone used to different initial factories
+	// someone used two different initial factories
 	a1Generator._core,
 ), ArbArgsGenerator<T> {
 
