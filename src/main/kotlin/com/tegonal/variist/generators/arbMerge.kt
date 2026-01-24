@@ -1,7 +1,7 @@
 package com.tegonal.variist.generators
 
-import com.tegonal.variist.generators.impl.ArbArgsGeneratorMerger
-import com.tegonal.variist.generators.impl.MultiArbArgsGeneratorIndexOfMerger
+import com.tegonal.variist.generators.impl.ArbArgsGeneratorWeightedMerger
+import com.tegonal.variist.generators.impl.MultiArbArgsGeneratorIndexOfWeightedMerger
 import com.tegonal.variist.generators.impl.MultiArbArgsGeneratorRoundRobinMerger
 
 /**
@@ -30,18 +30,17 @@ import com.tegonal.variist.generators.impl.MultiArbArgsGeneratorRoundRobinMerger
  *
  * @since 2.0.0
  */
-@Suppress("UnusedReceiverParameter")
 fun <T> ArbExtensionPoint.mergeWeighted(
 	first: Pair<Int, ArbArgsGenerator<T>>,
 	second: Pair<Int, ArbArgsGenerator<T>>,
 	vararg others: Pair<Int, ArbArgsGenerator<T>>,
 ): ArbArgsGenerator<T> {
 	return if (others.isEmpty()) {
-		ArbArgsGeneratorMerger(first, second)
+		ArbArgsGeneratorWeightedMerger(first, second, seedBaseOffset)
 	} else {
 		// TODO 2.1.0 we could use a binary search instead of indexOf starting from ~20 elements (would need to
 		//  be benchmarked). I think most of the time there are <= 10 weights and thus indexOf performs better
-		MultiArbArgsGeneratorIndexOfMerger(first, second, others)
+		MultiArbArgsGeneratorIndexOfWeightedMerger(first, second, others, seedBaseOffset)
 	}
 }
 

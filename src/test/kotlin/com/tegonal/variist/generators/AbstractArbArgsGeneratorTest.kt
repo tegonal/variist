@@ -7,6 +7,8 @@ import ch.tutteli.atrium.testfactories.TestFactory
 import ch.tutteli.kbox.a2
 import ch.tutteli.kbox.mapA3
 import com.tegonal.variist.config.arb
+import com.tegonal.variist.config.config
+import com.tegonal.variist.config.toOffset
 import com.tegonal.variist.generators.impl.DefaultArbExtensionPoint
 
 typealias ArbArgsTestFactoryResult<T> = ArgsTestFactoryResult<T, ArbArgsGenerator<T>>
@@ -20,13 +22,20 @@ abstract class AbstractArbArgsGeneratorWithoutAnnotationsTest : AbstractArgsGene
 			expect { generator._core }.notToThrow()
 		}
 
-	fun <T> seedOffsetInGeneratorIsTheSameAsUsingItInGenerate(factory: (ArbExtensionPoint) -> ArbArgsTestFactoryResult<T>) =
+	fun <T> usingBaseSeedOffsetIsTheSameAsSeedOffsetInGenerateTest(factory: (ArbExtensionPoint) -> ArbArgsTestFactoryResult<T>) =
 		arb.intPositive().generate().first().let { offset ->
 			testFactory({
 				factory(DefaultArbExtensionPoint(customComponentFactoryContainer, seedBaseOffset = 0))
 					.zip(
-						factory(DefaultArbExtensionPoint(customComponentFactoryContainer, seedBaseOffset = offset))
-					) { a, b -> a.mapA3 { listOf(b.a2) } }
+						factory(
+							DefaultArbExtensionPoint(
+								customComponentFactoryContainer,
+								seedBaseOffset = offset
+							)
+						)
+					) { a, b ->
+						a.mapA3 { listOf(b.a2) }
+					}
 			}) { generator, generatorSeedOffset1InList, _ ->
 				@Suppress("UNCHECKED_CAST")
 				val generatorSeedOffset1 = generatorSeedOffset1InList.first() as ArbArgsGenerator<T>
@@ -38,7 +47,7 @@ abstract class AbstractArbArgsGeneratorWithoutAnnotationsTest : AbstractArgsGene
 		}
 }
 
-abstract class AbstractArbArgsGeneratorTest<T>() : AbstractArbArgsGeneratorWithoutAnnotationsTest() {
+abstract class AbstractArbArgsGeneratorTest<T> : AbstractArbArgsGeneratorWithoutAnnotationsTest() {
 
 	//TODO 2.1.0 add a test case where we use a mocked Random so that we can be sure
 	// it yields all values in case of an ArbSizeAware or the like
@@ -48,8 +57,8 @@ abstract class AbstractArbArgsGeneratorTest<T>() : AbstractArbArgsGeneratorWitho
 	fun canBeCastToCoreArbArgsGenerator() = canBeCastToCoreArbArgsGeneratorTest(::createGenerators)
 
 	@TestFactory
-	fun checkSeedOffset() = seedOffsetInGeneratorIsTheSameAsUsingItInGenerate(::createGenerators)
-
+	fun usingBaseSeedOffsetIsTheSameAsSeedOffsetInGenerate() =
+		usingBaseSeedOffsetIsTheSameAsSeedOffsetInGenerateTest(::createGenerators)
 
 	@TestFactory
 	fun usesGivenComponentContainerFactory() =
@@ -60,10 +69,9 @@ abstract class AbstractArbArgsGeneratorTest<T>() : AbstractArbArgsGeneratorWitho
 		canAlwaysTakeTheDesiredAmountTest({ createGenerators(customComponentFactoryContainer.arb) }) { it.generate() }
 
 	@TestFactory
-	fun generateOneIsTheSameAsGenerateFirst() =
-		generateOneIsTheSameAsGenerateFirstTest(
-			factory = { createGenerators(customComponentFactoryContainer.arb) },
-			generateOne = { it.generateOne() },
-			generate = { it.generate() }
-		)
+	fun generateOneIsTheSameAsGenerateFirst() = generateOneIsTheSameAsGenerateFirstTest(
+		factory = { createGenerators(customComponentFactoryContainer.arb) },
+		generateOne = { it.generateOne(customComponentFactoryContainer.config.seed.toOffset()) },
+		generate = { it.generate(customComponentFactoryContainer.config.seed.toOffset()) }
+	)
 }

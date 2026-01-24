@@ -14,7 +14,7 @@ class ArbMergeWeightedThreeTest : AbstractArbMergeTwoTest() {
 			val l = listOf(888_888, 999_999)
 			Tuple(
 				"$name1, $name2, fromList",
-				arb.mergeWeighted(40 to g1, 50 to g2, 10 to modifiedArb.fromList(l)),
+				modifiedArb.mergeWeighted(40 to g1, 50 to g2, 10 to modifiedArb.fromList(l)),
 				anyToList(getTestValue(name1, 0)) + anyToList(getTestValue(name2, 1)) + l
 			)
 		}

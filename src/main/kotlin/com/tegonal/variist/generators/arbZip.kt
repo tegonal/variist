@@ -22,7 +22,10 @@ package com.tegonal.variist.generators
 fun <A1, A2, R> ArbArgsGenerator<A1>.zip(
 	other: ArbArgsGenerator<A2>,
 	transform: (A1, A2) -> R
-): ArbArgsGenerator<R> = transform { seq, seedOffset ->
-	seq.zip(other.generate(this._core.seedBaseOffset + 1 + seedOffset), transform)
+): ArbArgsGenerator<R> {
+	val offset = this._core.seedBaseOffset + 1
+	return transform { seq, seedOffset ->
+		seq.zip(other.generate(offset + seedOffset), transform)
+	}
 }
 

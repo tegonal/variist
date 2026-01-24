@@ -75,20 +75,3 @@ fun throwDontKnowHowToConvertToArgsGenerator(notAnArgsGenerator: Any?): Nothing 
 fun throwMaterialisingSemiOrderedArgsGeneratorNotSupported(): Nothing {
 	throw UnsupportedOperationException("Materialising SemiOrderedArgsGenerator is not supported out of the box to prevent bugs in the test setup")
 }
-
-/**
- * !! No backward compatibility guarantees !!
- * Reuse at your own risk
- *
- * @since 2.1.0
- */
-fun <T> arbGeneratorsToIterators(generators: Array<ArbArgsGenerator<T>>, seedOffset: Int): Array<Iterator<T>> =
-	Array(generators.size) { index ->
-		generators[index].generate(
-			// we use `+ index` in order that we use different seedOffsets. This way, even if one e.g. merges the
-			// same generator multiple times they will get different results. Without this, if one specified
-			// the same generator say 3 times, always get 3 times the same value, then 3 times again the next
-			// value etx. because each sequence would start with the same random seed.
-			seedOffset + index
-		).iterator()
-	}
