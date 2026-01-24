@@ -91,12 +91,11 @@ abstract class AbstractOrderedArgsGeneratorTest<T>() : AbstractOrderedArgsGenera
 	fun canAlwaysTakeTheDesiredAmount() = canAlwaysTakeTheDesiredAmountTest(::createGenerators)
 
 	@TestFactory
-	fun generateOneIsTheSameAsGenerateFirst() =
-		generateOneIsTheSameAsGenerateFirstTest(
-			factory = { createGenerators() },
-			generateOne = { it.generateOne(customComponentFactoryContainer.config.seed.toOffset()) },
-			generate = { it.generate(customComponentFactoryContainer.config.seed.toOffset()) }
-		)
+	fun generateOneIsTheSameAsGenerateFirst() = generateOneIsTheSameAsGenerateFirstTest(
+		factory = { createGenerators() },
+		generateOne = { it.generateOne(customComponentFactoryContainer.config.seed.toOffset()) },
+		generate = { it.generate(customComponentFactoryContainer.config.seed.toOffset()) }
+	)
 
 	@TestFactory
 	fun coversAllCases() = coversAllCasesTest(::createGenerators)

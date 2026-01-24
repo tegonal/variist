@@ -1,10 +1,10 @@
 package com.tegonal.variist.generators
 
-import ch.tutteli.atrium.api.fluent.en_GB.messageToContain
-import ch.tutteli.atrium.api.fluent.en_GB.toContainExactlyElementsOf
-import ch.tutteli.atrium.api.fluent.en_GB.toThrow
+import ch.tutteli.atrium.api.fluent.en_GB.*
 import ch.tutteli.atrium.api.verbs.expect
+import ch.tutteli.atrium.api.verbs.expectGrouped
 import ch.tutteli.kbox.append
+import ch.tutteli.kbox.toList
 import ch.tutteli.kbox.toVararg
 import com.tegonal.variist.config._components
 import com.tegonal.variist.providers.ArgsSource
@@ -12,6 +12,7 @@ import com.tegonal.variist.testutils.PseudoArbArgsGenerator
 import com.tegonal.variist.testutils.withMockedRandom
 import com.tegonal.variist.utils.createVariistRandom
 import com.tegonal.variist.utils.repeatForever
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 
 class ArbMergeWeightedTest {
@@ -25,7 +26,12 @@ class ArbMergeWeightedTest {
 			arb._components.withMockedRandom(ints = (1..100).toList())
 		)
 		val (secondWithWeights, othersWithWeights) = weights.drop(1).mapIndexed { index, weight ->
-			weight to PseudoArbArgsGenerator((0..9).asSequence().map { it + (index + 1) * 10 })
+			weight to PseudoArbArgsGenerator(
+				(0..9).asSequence().map { it + (index + 1) * 10 },
+				// we know that mergeWeighted uses an index based offset, we revert this to get exactly the above list
+				// of values
+				seedBaseOffset = -index - 1
+			)
 		}.toVararg()
 
 		val merged = arb.mergeWeighted(weights.first() to g1, secondWithWeights, *othersWithWeights)
@@ -43,6 +49,83 @@ class ArbMergeWeightedTest {
 		expect(l).toContainExactlyElementsOf(expected)
 	}
 
+	@Test
+	fun `check same generator merged twice generates different values`() {
+		val numOfValues = 10
+		// The following depends heavily on implementation details: we know that we use Random inside for a
+		// uniform distribution, so if we use equal weights and a mocked random which picks alternating the first or
+		// the second, we can check if mergeWeighted uses a seedOffset if we use a PseudoArbArgsGenerator with a
+		// known order
+		val alternate = (1..50).asSequence().zip((51..100).asSequence()) { a, b -> listOf(a, b) }
+			.flatten().take(numOfValues).toList()
+		val g = PseudoArbArgsGenerator(
+			(0..20).toList(),
+			componentFactoryContainer = arb._components.withMockedRandom(ints = alternate)
+		)
+
+		val merged = arb.mergeWeighted(50 to g, 50 to g)
+		val l = merged.generate().take(numOfValues).toList()
+		val (firstWithIndex, secondWithIndex) = l.withIndex().partition { it.index % 2 == 0 }
+		// if they are exactly the same then most likely no seedOffset was used
+		expect(firstWithIndex.map { it.value }).notToEqual(secondWithIndex.map { it.value })
+	}
+
+
+	@Test
+	fun `check same generator merged four times generates different values`() {
+		val numOfValues = 12
+		// The following depends heavily on implementation details: we know that we use Random inside for a
+		// uniform distribution, so if we use equal weights and a mocked random which picks alternating the first to
+		// fourth generator, we can check if mergeWeighted uses a seedOffset if we use a PseudoArbArgsGenerator with
+		// a known order
+		val alternate = (1..25).asSequence()
+			.zip((26..50).asSequence())
+			.zip((51..75).asSequence(), transform = { p, b -> p.append(b) })
+			.zip((76..100).asSequence(), transform = { t, b -> t.append(b).toList() })
+			.flatten().take(numOfValues).toList()
+
+		val g = PseudoArbArgsGenerator(
+			(0..20).toList(),
+			componentFactoryContainer = arb._components.withMockedRandom(ints = alternate)
+		)
+		val merged = arb.mergeWeighted(25 to g, 25 to g, 25 to g, 25 to g)
+		val l = merged.generate(0).take(numOfValues).toList()
+		val (firstAndThird, secondAndFourth) = l.withIndex().partition { it.index % 2 == 0 }
+		val (firstWithIndex, thirdWithIndex) = firstAndThird.map { it.value }.withIndex()
+			.partition { it.index % 2 == 0 }
+		val (secondWithIndex, fourthWithIndex) = secondAndFourth.map { it.value }.withIndex()
+			.partition { it.index % 2 == 0 }
+
+		val first = firstWithIndex.map { it.value }
+		val second = secondWithIndex.map { it.value }
+		val third = thirdWithIndex.map { it.value }
+		val fourth = fourthWithIndex.map { it.value }
+
+		// if they are exactly the same then most likely no seedOffset was used
+		expectGrouped {
+			group("first != second") {
+				expect(first).notToEqual(second)
+			}
+			group("first != third") {
+				expect(first).notToEqual(third)
+			}
+			group("first != fourth") {
+				expect(first).notToEqual(fourth)
+			}
+
+			group("second != third") {
+				expect(second).notToEqual(third)
+			}
+			group("second != fourth") {
+				expect(second).notToEqual(fourth)
+			}
+
+			group("third != fourth") {
+				expect(third).notToEqual(fourth)
+			}
+		}
+	}
+
 
 	@ParameterizedTest
 	@ArgsSource("arbInvalidWeight")
@@ -54,18 +137,24 @@ class ArbMergeWeightedTest {
 		expect {
 			arb.mergeWeighted(weight to g1, 50 to g2)
 		}.toThrow<IllegalStateException> {
-			messageToContain("$weight is not a valid (1.) weight, must be greater than 0")
+			messageToContain("$weight is not a valid 1st weight, must be greater than 0")
 		}
 		expect {
 			arb.mergeWeighted(50 to g1, weight to g2)
 		}.toThrow<IllegalStateException> {
-			messageToContain("$weight is not a valid (2.) weight, must be greater than 0")
+			messageToContain("$weight is not a valid 2nd weight, must be greater than 0")
 		}
 
 		expect {
 			arb.mergeWeighted(10 to g1, 50 to g2, weight to g3)
 		}.toThrow<IllegalStateException> {
-			messageToContain("$weight is not a valid (3.) weight, must be greater than 0")
+			messageToContain("$weight is not a valid 3rd weight, must be greater than 0")
+		}
+
+		expect {
+			arb.mergeWeighted(10 to g1, 50 to g2, 20 to g3, weight to g1)
+		}.toThrow<IllegalStateException> {
+			messageToContain("$weight is not a valid 4th weight, must be greater than 0")
 		}
 	}
 

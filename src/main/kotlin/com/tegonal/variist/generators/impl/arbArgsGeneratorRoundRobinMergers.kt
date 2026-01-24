@@ -1,6 +1,5 @@
 package com.tegonal.variist.generators.impl
 
-import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.ArbArgsGenerator
 
 /**
@@ -14,36 +13,17 @@ class MultiArbArgsGeneratorRoundRobinMerger<T>(
 	secondGenerator: ArbArgsGenerator<T>,
 	otherGenerators: Array<out ArbArgsGenerator<T>>,
 	seedBaseOffset: Int,
-) : BaseArbArgsGenerator<T>(
-	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,
-	// should you run into weird behaviour (such as one generator uses seed X and the other seed Y) then most likely
-	// someone used two different initial factories
-	firstGenerator._components,
-	seedBaseOffset
-), ArbArgsGenerator<T> {
-	private val totalGenerators = otherGenerators.size + 2
-	private val generators = Array(totalGenerators) { index ->
-		when (index) {
-			0 -> firstGenerator
-			1 -> secondGenerator
-			else -> otherGenerators[index - 2]
-		}
-	}
+) : BaseMultiArbArgsMerger<T>(firstGenerator, secondGenerator, otherGenerators, seedBaseOffset) {
 
-	override fun generateOne(seedOffset: Int): T {
-		val index = (seedBaseOffset + seedOffset) % totalGenerators
-		return generators[index].generateOne(seedOffset)
-	}
+	override fun getFirstIndex(seedOffset: Int) = (seedBaseOffset + seedOffset) % totalGenerators
 
-	override fun generate(seedOffset: Int): Sequence<T> = Sequence {
-		object : Iterator<T> {
-			private val iterators = arbGeneratorsToIterators(generators, seedOffset)
-			private var index = (seedBaseOffset + seedOffset) % totalGenerators
+	override fun iteratorFactory(seedOffset: Int): IteratorsWithOffset<T> =
+		object : IteratorsWithOffset<T>(generators, seedOffset) {
+			private var index = getFirstIndex(seedOffset)
 
-			override fun hasNext(): Boolean = true
-			override fun next(): T = iterators[index].next().also {
-				if (index + 1 < totalGenerators) ++index else index = 0
+			override fun nextIndex(): Int = index.also {
+				++index
+				if (index >= totalGenerators) index = 0
 			}
 		}
-	}
 }
