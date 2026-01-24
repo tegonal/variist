@@ -157,5 +157,14 @@ class CombinatorsExample : PredefinedArgsProviders {
 			10 to arb.of(null)
 		)
 	}
+
+	@Test
+	fun `code-mergeRoundRobin`() {
+		arb.mergeRoundRobin(
+			arb.intFromUntil(100, 200),
+			arb.of(201),
+			arb.of(null)
+		)
+	}
 }
 
