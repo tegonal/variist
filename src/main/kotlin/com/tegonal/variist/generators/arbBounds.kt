@@ -125,8 +125,10 @@ private fun <T> ArbExtensionPoint.intBoundsBasedInternal(
 	factory: (lowerBound: Int, upperBound: Int) -> T
 ): ArbArgsGenerator<T> {
 	val possibleMaxSize = maxInclusive.toLong() - minInclusive + 1
-	// it is beneficial if we can stay in the int domain (memory wise), hence this check here (tiny bit slower if not but we guess in
-	// most cases the requirements don't require large ranges)
+	// it is beneficial if we can stay in the int domain (memory wise), hence we have this check here.
+	// The check as such makes it a tiny bit slower if it does not stay in the Int domain but we guess in
+	// most cases the requirements don't require large ranges and we jump into the if branch (i.e. no need to convert
+	// to long)
 	return if (possibleMaxSize <= possibleMaxSizeSafeInIntDomain) {
 		createIntDomainBasedBoundsArbGenerator(
 			minInclusive = minInclusive,

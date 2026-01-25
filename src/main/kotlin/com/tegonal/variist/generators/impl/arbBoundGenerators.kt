@@ -19,7 +19,7 @@ fun <T> ArbExtensionPoint.createIntDomainBasedBoundsArbGenerator(
 	maxSize: Int?,
 	factory: (lowerBound: Int, upperBound: Int) -> T
 ): ArbArgsGenerator<T> {
-	val (effectiveMaxSize, possibleMaxSize) = validateNumbersAndReturnEffectiveAndPossibleMaxSize(
+	val (actualMaxSize, possibleMaxSize) = validateNumbersAndReturnActualAndPossibleMaxSize(
 		minInclusive = minInclusive.toLong(),
 		maxInclusive = maxInclusive.toLong(),
 		minSize = minSize.toLong(),
@@ -32,13 +32,14 @@ fun <T> ArbExtensionPoint.createIntDomainBasedBoundsArbGenerator(
 	return arbBoundsIntBased(
 		minInclusive = minInclusive,
 		minSize = minSize,
-		effectiveMaxSize = effectiveMaxSize.toInt(),
+		actualMaxSize = actualMaxSize.toInt(),
 		possibleMaxSize = possibleMaxSizeI,
 		factory = factory
 	)
 }
 
-// our implementation uses a prefixSum function which is implemented as arithmetic series formula:
+// our implementation uses a prefixSum function which is implemented as arithmetic series formula (which is possible
+// because our ranges are consecutive numbers):
 // Sₙ = n * (numOfRangesWithSize(minSize) + numOfRangesWithSize(rangeSize)) / 2
 // where n = rangeSize - minSize + 1 -> all the considered sizes up to rangeSize
 // We want to use Int arithmetic if it doesn't overflow, Long next and in the worst case BigInt.
@@ -51,7 +52,8 @@ fun <T> ArbExtensionPoint.createIntDomainBasedBoundsArbGenerator(
 // Int.MAX_SIZE ≥ possibleMaxSize * (possibleMaxSize + 1) / 2
 // 2 * Int.MAX_SIZE ≥ possibleMaxSize² + possibleMaxSize
 // using the quadratic formula yields approximately: 65535.5 so if possibleMaxSize is less or equal to 65535 we are
-// fine to use Int arithmetic, using the same approach for Long.MAX_SIZE yields: 4294967295.5
+// fine to use Int arithmetic (in theory, see possibleMaxSizeSafeInIntDomainWithoutDivideTrick why this is only half
+// the truth), using the same approach for Long.MAX_SIZE yields: 4294967295.5
 /**
  * !! No backward compatibility guarantees !!
  * Reuse at your own risk
@@ -69,9 +71,10 @@ const val possibleMaxSizeSafeInIntDomain = 65_535
 const val possibleMaxSizeSafeInLongDomain = 4_294_967_295L
 
 // since we first multiply and then divide, it is actually only safe for
-// Int.MAX_SIZE ≥ possibleMaxSize * (possibleMaxSize + 1) which yields 46340.5
-// as a trick we first divide possibleMaxSize or possibleMaxSize + 1 (depending on which one is even, we don't
-// want to truncate due to Int division) but for this we need one additional if
+// Int.MAX_SIZE ≥ possibleMaxSize * (possibleMaxSize + 1) which yields 46340.5 -- see prefixSumFast
+// In order that we can stay in the Int domain (see possibleMaxSizeSafeInIntDomain), we first divide
+// possibleMaxSize or possibleMaxSize + 1 (depending on which one is even, we don't want to truncate due to Int
+// division). This requires one additional if though -- see prefixSumSlower
 /**
  * !! No backward compatibility guarantees !!
  * Reuse at your own risk
@@ -101,7 +104,7 @@ fun <T> ArbExtensionPoint.createBoundsArbGenerator(
 	maxSize: Long?,
 	factory: (lowerBound: Long, upperBound: Long) -> T
 ): ArbArgsGenerator<T> {
-	val (effectiveMaxSize, possibleMaxSize) = validateNumbersAndReturnEffectiveAndPossibleMaxSize(
+	val (actualMaxSize, possibleMaxSize) = validateNumbersAndReturnActualAndPossibleMaxSize(
 		minInclusive = minInclusive,
 		maxInclusive = maxInclusive,
 		minSize = minSize,
@@ -110,22 +113,26 @@ fun <T> ArbExtensionPoint.createBoundsArbGenerator(
 	val bitLength = possibleMaxSize.bitLength()
 	return if (bitLength <= 31) {
 		val possibleMaxSizeI = possibleMaxSize.toInt()
-		val effectiveMaxSizeI = effectiveMaxSize.toInt()
+		val actualMaxSizeI = actualMaxSize.toInt()
 
 		if (
 		// see explanation above (jump to the possibleMaxSizeSafeInIntDomain definition)
 		// why we know we are safe in the Int domain in this case ...
-			possibleMaxSizeI <= possibleMaxSizeSafeInIntDomain || this.run {
-				// ... otherwise we check if the biggest prefixSum still fits into the Int domain in case
-				// effectiveMaxSizeI is less than the possibleMaxSize or minSize > 1
-				(effectiveMaxSizeI < possibleMaxSizeI || minSize > 1) && this@createBoundsArbGenerator.run {
-					val effectiveMaxSizeL = effectiveMaxSizeI.toLong()
+			possibleMaxSizeI <= possibleMaxSizeSafeInIntDomain || run {
+				// ... otherwise, in case actualMaxSizeI is less than the possibleMaxSizeI or minSize > 1 there is
+				// still the chance that calculating the actual greatest prefixSum doesn't overflow in the Int domain
+				(actualMaxSizeI < possibleMaxSizeI || minSize > 1) && run {
+					val actualMaxSizeL = actualMaxSizeI.toLong()
 					val possibleMaxSizeL = possibleMaxSizeI.toLong()
-					val maxPrefixSum = (effectiveMaxSizeL - minSize + 1) *
-						(((possibleMaxSizeL - minSize + 1) + (possibleMaxSizeL - effectiveMaxSizeL + 1)))
+					val n = actualMaxSizeL - minSize + 1
+					val firstTerm = possibleMaxSizeL - minSize + 1
+					val lastTerm = possibleMaxSizeL - actualMaxSizeL + 1
+					// note, this is not the entire prefix sum formula, we skip the division by 2
+					// as it would overflow beforehand
+					val maxPrefixSumWithoutDivideByTwo = n * (firstTerm + lastTerm)
 
 					// faster than checking prefixSum <= Int.MAX_VALUE.toLong()
-					maxPrefixSum == maxPrefixSum.toInt().toLong()
+					maxPrefixSumWithoutDivideByTwo == maxPrefixSumWithoutDivideByTwo.toInt().toLong()
 				}
 			}
 		) {
@@ -133,7 +140,7 @@ fun <T> ArbExtensionPoint.createBoundsArbGenerator(
 				arbBoundsIntBased(
 					minInclusive = minInclusive.toInt(),
 					minSize = minSize.toInt(),
-					effectiveMaxSize = effectiveMaxSizeI,
+					actualMaxSize = actualMaxSizeI,
 					possibleMaxSize = possibleMaxSizeI
 				) { start, end ->
 					factory(start.toLong(), end.toLong())
@@ -143,39 +150,45 @@ fun <T> ArbExtensionPoint.createBoundsArbGenerator(
 				arbBoundsIntBased(
 					minInclusive = 0,
 					minSize = minSize.toInt(),
-					effectiveMaxSize = effectiveMaxSizeI,
+					actualMaxSize = actualMaxSizeI,
 					possibleMaxSize = possibleMaxSizeI
 				) { start, end -> factory(start.toLong() + minInclusive, end.toLong() + minInclusive) }
 			}
 		} else {
-			val effectiveMaxSizeL = effectiveMaxSizeI.toLong()
+			val actualMaxSizeL = actualMaxSizeI.toLong()
 			val possibleMaxSizeL = possibleMaxSizeI.toLong()
 			arbBoundsLongBased(
 				minInclusive = minInclusive,
 				minSize = minSize,
-				effectiveMaxSize = effectiveMaxSizeL,
+				actualMaxSize = actualMaxSizeL,
 				possibleMaxSize = possibleMaxSizeL,
 				factory = factory
 			)
 		}
 	} else {
-		takeIf<ArbArgsGenerator<T>?>(bitLength <= 63) {
+		takeIf(bitLength <= 63) {
+			val actualMaxSizeL = actualMaxSize.toLong()
 			val possibleMaxSizeL = possibleMaxSize.toLong()
-			val effectiveMaxSizeL = effectiveMaxSize.toLong()
-			takeIf<ArbArgsGenerator<T>>(possibleMaxSizeL < possibleMaxSizeSafeInLongDomain || this.run {
-				(effectiveMaxSizeL < possibleMaxSizeL || minSize > 1) && this@createBoundsArbGenerator.run {
-					val maxPrefixSum =
-						(effectiveMaxSizeL - minSize + 1).toBigInt() * this@createBoundsArbGenerator.run {
-							(possibleMaxSizeL - minSize + 1).toBigInt() +
-								(possibleMaxSizeL - effectiveMaxSizeL + 1).toBigInt()
-						}
-					maxPrefixSum.bitLength() <= 63
+			// see explanation above (jump to the possibleMaxSizeSafeInIntDomain definition)
+			// why we know we are safe in the Long domain in this case ...
+			takeIf(possibleMaxSizeL < possibleMaxSizeSafeInLongDomain || run {
+				// ... otherwise, in case actualMaxSizeL is less than the possibleMaxSizeL or minSize > 1 there is
+				// still the chance that calculating the actual greatest prefixSum doesn't overflow in the Long domain
+				(actualMaxSizeL < possibleMaxSizeL || minSize > 1) && run {
+					val n = (actualMaxSizeL - minSize + 1).toBigInt()
+					val firstTerm = (possibleMaxSizeL - minSize + 1).toBigInt()
+					val lastTerm = (possibleMaxSizeL - actualMaxSizeL + 1).toBigInt()
+					// note, this is not the entire prefix sum formula, we skip the division by 2
+					// as it would overflow beforehand
+					val maxPrefixSumWithoutDivideByTwo = n * (firstTerm + lastTerm)
+
+					maxPrefixSumWithoutDivideByTwo.bitLength() <= 63
 				}
 			}) {
 				arbBoundsLongBased(
 					minInclusive = minInclusive,
 					minSize = minSize,
-					effectiveMaxSize = effectiveMaxSizeL,
+					actualMaxSize = actualMaxSizeL,
 					possibleMaxSize = possibleMaxSizeL,
 					factory = factory
 				)
@@ -184,12 +197,12 @@ fun <T> ArbExtensionPoint.createBoundsArbGenerator(
 			minInclusive = minInclusive.toBigInt(),
 			possibleMaxSize = possibleMaxSize,
 			minSize = minSize.toBigInt(),
-			maxSize = effectiveMaxSize
+			maxSize = actualMaxSize
 		) { a, b -> factory(a.toLong(), b.toLong()) }
 	}
 }
 
-private fun validateNumbersAndReturnEffectiveAndPossibleMaxSize(
+private fun validateNumbersAndReturnActualAndPossibleMaxSize(
 	minInclusive: Long,
 	maxInclusive: Long,
 	minSize: Long,
@@ -212,20 +225,20 @@ private fun validateNumbersAndReturnEffectiveAndPossibleMaxSize(
 
 	val possibleMaxSize = maxInclusiveBigIntPlusOne - minInclusiveBigInt
 	val maxSizeBigInt = maxSize?.toBigInt()
-	val effectiveMaxSize = maxSizeBigInt?.let { minOf(it, possibleMaxSize) } ?: possibleMaxSize
-	return Pair(effectiveMaxSize, possibleMaxSize)
+	val actualMaxSize = maxSizeBigInt?.let { minOf(it, possibleMaxSize) } ?: possibleMaxSize
+	return Pair(actualMaxSize, possibleMaxSize)
 }
 
 private fun <T> ArbExtensionPoint.arbBoundsIntBased(
 	minInclusive: Int,
 	minSize: Int,
-	effectiveMaxSize: Int,
+	actualMaxSize: Int,
 	possibleMaxSize: Int,
 	factory: (lowerBound: Int, upperBound: Int) -> T
 ): ArbArgsGenerator<T> = arbBoundsNumberBased(
 	minInclusive = minInclusive,
 	minSize = minSize,
-	effectiveMaxSize = effectiveMaxSize,
+	actualMaxSize = actualMaxSize,
 	possibleMaxSize = possibleMaxSize,
 	factory = factory,
 	numOfRangesWithSize = ::numOfRangesWithSize,
@@ -242,13 +255,13 @@ private fun <T> ArbExtensionPoint.arbBoundsIntBased(
 private fun <T> ArbExtensionPoint.arbBoundsLongBased(
 	minInclusive: Long,
 	minSize: Long,
-	effectiveMaxSize: Long,
+	actualMaxSize: Long,
 	possibleMaxSize: Long,
 	factory: (lowerBound: Long, upperBound: Long) -> T
 ): ArbArgsGenerator<T> = arbBoundsNumberBased(
 	minInclusive = minInclusive,
 	minSize = minSize,
-	effectiveMaxSize = effectiveMaxSize,
+	actualMaxSize = actualMaxSize,
 	possibleMaxSize = possibleMaxSize,
 	factory = factory,
 	numOfRangesWithSize = ::numOfRangesWithSize,
@@ -269,25 +282,25 @@ private fun <T> ArbExtensionPoint.arbBoundsBigIntBased(
 	maxSize: BigInt,
 	factory: (lowerBound: BigInt, upperBound: BigInt) -> T
 ): ArbArgsGenerator<T> = arbBoundsNumberBased(
-	minInclusive,
-	minSize,
-	maxSize,
-	possibleMaxSize,
-	factory,
-	::numOfRangesWithSize,
-	::prefixSum,
-	::findSizeMatchingPrefixSumIndex,
-	{ from, toExclusive -> arb.bigIntFromUntil(from, toExclusive) },
-	BigInt::plus,
-	BigInt::minus,
-	BigInt.ZERO,
-	BigInt.ONE
+	minInclusive = minInclusive,
+	minSize = minSize,
+	actualMaxSize = maxSize,
+	possibleMaxSize = possibleMaxSize,
+	factory = factory,
+	numOfRangesWithSize = ::numOfRangesWithSize,
+	prefixSum = ::prefixSum,
+	findSizeMatchingPrefixSumIndex = ::findSizeMatchingPrefixSumIndex,
+	arbNumberFromUntil = { from, toExclusive -> arb.bigIntFromUntil(from, toExclusive) },
+	plus = BigInt::plus,
+	minus = BigInt::minus,
+	zero = BigInt.ZERO,
+	one = BigInt.ONE
 )
 
 private inline fun <NumberT, T> ArbExtensionPoint.arbBoundsNumberBased(
 	minInclusive: NumberT,
 	minSize: NumberT,
-	effectiveMaxSize: NumberT,
+	actualMaxSize: NumberT,
 	possibleMaxSize: NumberT,
 	crossinline factory: (NumberT, NumberT) -> T,
 	numOfRangesWithSize: (NumberT, NumberT) -> NumberT,
@@ -314,7 +327,7 @@ private inline fun <NumberT, T> ArbExtensionPoint.arbBoundsNumberBased(
 	// desired prefixSum functionality.
 	// TODO 2.1.0 maybe worth to cache the prefix sum in case of small possibleMaxSize?
 	val numOfRangesWithMinSize = numOfRangesWithSize(minSize, possibleMaxSize)
-	val accumulatedSum = prefixSum(effectiveMaxSize, numOfRangesWithMinSize, minSize, possibleMaxSize)
+	val accumulatedSum = prefixSum(actualMaxSize, minSize, numOfRangesWithMinSize, possibleMaxSize)
 	// we use a zero-index based approach because fromUntil is cheaper than fromTo and we want to add the offset to
 	// minInclusive in the end and since it is inclusive, using zero is a good fit too. So the (virtual) indices become:
 	// 2 = index 0..2
@@ -325,14 +338,14 @@ private inline fun <NumberT, T> ArbExtensionPoint.arbBoundsNumberBased(
 			index,
 			numOfRangesWithMinSize,
 			minSize,
-			effectiveMaxSize,
+			actualMaxSize,
 			possibleMaxSize,
 		)
 		// say index = 2 which results in size = 2 we calculate the offset within that block using: index - prefixSum of
 		// previous block. For index = 2 there isn't any smaller size block, prefixSum for minSize - 1 will yield 0.
 		// I.e. in this case the index is already the offset.
 		// Say index = 4, size = 3, 4 - previous => 4 - 3 = 1, offset 1 in sizeBlock 3
-		val prefixSumOfPreviousSizeBlock = prefixSum(minus(size, one), numOfRangesWithMinSize, minSize, possibleMaxSize)
+		val prefixSumOfPreviousSizeBlock = prefixSum(minus(size, one), minSize, numOfRangesWithMinSize, possibleMaxSize)
 		val offsetInSizeBlock = minus(index, prefixSumOfPreviousSizeBlock)
 		// each sizeBlock starts with a range `from = minInclusive`. So to get the
 		// desired range with offset = 2 we calculate:
@@ -354,11 +367,11 @@ private fun numOfRangesWithSize(size: Int, possibleMaxSize: Int) =
 		one = 1
 	)
 
-private fun prefixSumFast(size: Int, numOfRangesWithMinSize: Int, minSize: Int, possibleMaxSize: Int) =
+private fun prefixSumFast(size: Int, minSize: Int, numOfRangesWithMinSize: Int, possibleMaxSize: Int) =
 	prefixSumFast(
 		size = size,
-		numOfRangesWithMinSize = numOfRangesWithMinSize,
 		minSize = minSize,
+		numOfRangesWithMinSize = numOfRangesWithMinSize,
 		possibleMaxSize = possibleMaxSize,
 		plus = Int::plus,
 		minus = Int::minus,
@@ -368,11 +381,11 @@ private fun prefixSumFast(size: Int, numOfRangesWithMinSize: Int, minSize: Int, 
 		two = 2
 	)
 
-private fun prefixSumSlower(size: Int, numOfRangesWithMinSize: Int, minSize: Int, possibleMaxSize: Int): Int =
+private fun prefixSumSlower(size: Int, minSize: Int, numOfRangesWithMinSize: Int, possibleMaxSize: Int): Int =
 	prefixSumSlower(
 		size = size,
-		numOfRangesWithMinSize = numOfRangesWithMinSize,
 		minSize = minSize,
+		numOfRangesWithMinSize = numOfRangesWithMinSize,
 		possibleMaxSize = possibleMaxSize,
 		plus = Int::plus,
 		minus = Int::minus,
@@ -388,15 +401,16 @@ private fun findSizeMatchingPrefixSumIndex(
 	index: Int,
 	numOfRangesWithMinSize: Int,
 	minSize: Int,
-	effectiveMaxSize: Int,
+	actualMaxSize: Int,
 	possibleMaxSize: Int,
 ) = findSizeMatchingPrefixSumIndex(
 	index = index,
 	numOfRangesWithMinSize = numOfRangesWithMinSize,
 	minSize = minSize,
-	effectiveMaxSize = effectiveMaxSize,
+	actualMaxSize = actualMaxSize,
 	possibleMaxSize = possibleMaxSize,
 	plus = Int::plus,
+	minus = Int::minus,
 	divide = Int::div,
 	one = 1,
 	two = 2,
@@ -412,11 +426,11 @@ private fun numOfRangesWithSize(size: Long, possibleMaxSize: Long) =
 		one = 1L
 	)
 
-private fun prefixSumFast(size: Long, numOfRangesWithMinSize: Long, minSize: Long, possibleMaxSize: Long) =
+private fun prefixSumFast(size: Long, minSize: Long, numOfRangesWithMinSize: Long, possibleMaxSize: Long) =
 	prefixSumFast(
 		size = size,
-		numOfRangesWithMinSize = numOfRangesWithMinSize,
 		minSize = minSize,
+		numOfRangesWithMinSize = numOfRangesWithMinSize,
 		possibleMaxSize = possibleMaxSize,
 		plus = Long::plus,
 		minus = Long::minus,
@@ -426,11 +440,11 @@ private fun prefixSumFast(size: Long, numOfRangesWithMinSize: Long, minSize: Lon
 		two = 2L
 	)
 
-private fun prefixSumSlower(size: Long, numOfRangesWithMinSize: Long, minSize: Long, possibleMaxSize: Long) =
+private fun prefixSumSlower(size: Long, minSize: Long, numOfRangesWithMinSize: Long, possibleMaxSize: Long) =
 	prefixSumSlower(
 		size = size,
-		numOfRangesWithMinSize = numOfRangesWithMinSize,
 		minSize = minSize,
+		numOfRangesWithMinSize = numOfRangesWithMinSize,
 		possibleMaxSize = possibleMaxSize,
 		plus = Long::plus,
 		minus = Long::minus,
@@ -446,15 +460,16 @@ private fun findSizeMatchingPrefixSumIndex(
 	index: Long,
 	numOfRangesWithMinSize: Long,
 	minSize: Long,
-	effectiveMaxSize: Long,
+	actualMaxSize: Long,
 	possibleMaxSize: Long,
 ) = findSizeMatchingPrefixSumIndex(
 	index = index,
 	numOfRangesWithMinSize = numOfRangesWithMinSize,
 	minSize = minSize,
-	effectiveMaxSize = effectiveMaxSize,
+	actualMaxSize = actualMaxSize,
 	possibleMaxSize = possibleMaxSize,
 	plus = Long::plus,
+	minus = Long::minus,
 	divide = Long::div,
 	one = 1L,
 	two = 2L,
@@ -470,11 +485,11 @@ private fun numOfRangesWithSize(size: BigInt, possibleMaxSize: BigInt) =
 		one = BigInt.ONE
 	)
 
-private fun prefixSum(size: BigInt, numOfRangesWithMinSize: BigInt, minSize: BigInt, possibleMaxSize: BigInt) =
+private fun prefixSum(size: BigInt, minSize: BigInt, numOfRangesWithMinSize: BigInt, possibleMaxSize: BigInt) =
 	prefixSumFast(
 		size = size,
-		numOfRangesWithMinSize = numOfRangesWithMinSize,
 		minSize = minSize,
+		numOfRangesWithMinSize = numOfRangesWithMinSize,
 		possibleMaxSize = possibleMaxSize,
 		plus = BigInt::plus,
 		minus = BigInt::minus,
@@ -488,15 +503,16 @@ private fun findSizeMatchingPrefixSumIndex(
 	index: BigInt,
 	numOfRangesWithMinSize: BigInt,
 	minSize: BigInt,
-	effectiveMaxSize: BigInt,
+	actualMaxSize: BigInt,
 	possibleMaxSize: BigInt
 ) = findSizeMatchingPrefixSumIndex(
 	index = index,
 	numOfRangesWithMinSize = numOfRangesWithMinSize,
 	minSize = minSize,
-	effectiveMaxSize = effectiveMaxSize,
+	actualMaxSize = actualMaxSize,
 	possibleMaxSize = possibleMaxSize,
 	plus = BigInt::plus,
+	minus = BigInt::minus,
 	divide = BigInt::div,
 	one = BigInt.ONE,
 	two = BigInt.TWO,
@@ -515,8 +531,8 @@ private inline fun <NumberT> numOfRangesWithSize(
 
 private inline fun <NumberT> prefixSumFast(
 	size: NumberT,
-	numOfRangesWithMinSize: NumberT,
 	minSize: NumberT,
+	numOfRangesWithMinSize: NumberT,
 	possibleMaxSize: NumberT,
 	crossinline plus: (NumberT, NumberT) -> NumberT,
 	crossinline minus: (NumberT, NumberT) -> NumberT,
@@ -535,8 +551,8 @@ private inline fun <NumberT> prefixSumFast(
 
 private inline fun <NumberT> prefixSumSlower(
 	size: NumberT,
-	numOfRangesWithMinSize: NumberT,
 	minSize: NumberT,
+	numOfRangesWithMinSize: NumberT,
 	possibleMaxSize: NumberT,
 	crossinline plus: (NumberT, NumberT) -> NumberT,
 	crossinline minus: (NumberT, NumberT) -> NumberT,
@@ -563,19 +579,20 @@ private inline fun <NumberT> findSizeMatchingPrefixSumIndex(
 	index: NumberT,
 	numOfRangesWithMinSize: NumberT,
 	minSize: NumberT,
-	effectiveMaxSize: NumberT,
+	actualMaxSize: NumberT,
 	possibleMaxSize: NumberT,
 	crossinline plus: (NumberT, NumberT) -> NumberT,
+	crossinline minus: (NumberT, NumberT) -> NumberT,
 	crossinline divide: (NumberT, NumberT) -> NumberT,
 	one: NumberT,
 	two: NumberT,
 	prefixSum: (NumberT, NumberT, NumberT, NumberT) -> NumberT
 ): NumberT where NumberT : Number, NumberT : Comparable<NumberT> {
 	var low = minSize
-	var high = effectiveMaxSize
+	var high = actualMaxSize
 	while (low < high) {
-		val mid = divide(plus(low, high), two)
-		if (prefixSum(mid, numOfRangesWithMinSize, minSize, possibleMaxSize) > index) {
+		val mid = plus(low, divide(minus(high, low), two))
+		if (prefixSum(mid, minSize, numOfRangesWithMinSize, possibleMaxSize) > index) {
 			high = mid
 		} else {
 			low = plus(mid, one)

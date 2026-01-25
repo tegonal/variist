@@ -109,6 +109,7 @@ private inline fun <NumberT> prefixSumFast(
 	return divide(times(n, plus(numOfRangesWithMinSize, numOfRangesWithGivenSize)), two)
 }
 
+@Suppress("DuplicatedCode")
 private inline fun <NumberT> prefixSumSlower(
 	size: NumberT,
 	numOfRangesWithMinSize: NumberT,
