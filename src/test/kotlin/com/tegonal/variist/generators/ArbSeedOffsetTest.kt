@@ -16,18 +16,6 @@ import kotlin.collections.map
 
 class ArbSeedOffsetTest {
 
-	@ParameterizedTest
-	@ArgsSource("arb1Until10")
-	fun mapIndexedTakesConfigDeterminedOffsetIntoAccount(offset: Int) {
-		val modifiedArb = createArbWithCustomConfig(
-			arb._components.config.copy { skip = offset }
-		)._components.arb
-
-		val indices = modifiedArb.int().mapIndexedInternal { index, _, _ -> index }.generate().take(10).toList()
-
-		expect(indices).toEqual((0..9).map { it + offset })
-	}
-
 	@Test
 	fun combineIncrementsSeedOffset() {
 		val arb =

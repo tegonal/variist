@@ -9,12 +9,11 @@ import com.tegonal.variist.providers.ArgsRange
 import com.tegonal.variist.providers.ArgsSource
 import com.tegonal.variist.providers.ArgsSourceOptions
 import com.tegonal.variist.utils.repeatForever
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 
 class OrderedFromProgressionTest : AbstractOrderedArgsGeneratorTest<Any>() {
 
-	override fun createGenerators() = sequenceOf(
+	override fun createGenerators(modifiedOrdered: OrderedExtensionPoint) = sequenceOf(
 		Tuple("fromCharProgression", modifiedOrdered.fromProgression('a'..'d' step 2), listOf('a', 'c')),
 		Tuple("fromIntProgression", modifiedOrdered.fromProgression(1..5 step 2), listOf(1, 3, 5)),
 		Tuple("fromLongProgression", modifiedOrdered.fromProgression(1L..3L step 1), listOf(1L, 2L, 3L)),

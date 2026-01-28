@@ -1,12 +1,19 @@
 package com.tegonal.variist.config
 
+import com.tegonal.variist.generators.ArbArgsGenerator
 import com.tegonal.variist.generators.ArgsGenerator
+import com.tegonal.variist.generators.SemiOrderedArgsGenerator
+import com.tegonal.variist.generators.generateAndTake
+import com.tegonal.variist.generators.generateAndTakeBasedOnDecider
+import com.tegonal.variist.providers.ArgsGeneratorToArgumentsConverter
 import com.tegonal.variist.providers.ArgsRange
 import com.tegonal.variist.providers.ArgsRangeDecider
 import com.tegonal.variist.providers.SuffixArgsGeneratorDecider
 import com.tegonal.variist.providers.impl.ProfileBasedArgsRangeDecider
 import com.tegonal.variist.providers.impl.SuffixArgsGeneratorNeverDecider
-import com.tegonal.variist.utils.impl.*
+import com.tegonal.variist.utils.impl.checkIsNotBlank
+import com.tegonal.variist.utils.impl.checkIsPositive
+import com.tegonal.variist.utils.impl.checkRequestedMinArgsMaxArgs
 import kotlin.random.Random
 
 /**
@@ -28,20 +35,24 @@ class VariistConfig(
 	val seed: Seed = Seed(Random.nextInt()),
 
 	/**
-	 * Influences an [ArgsRangeDecider]'s choice of [ArgsRange.offset], i.e. allows to skip certain test cases.
+	 * Influences an [ArgsGeneratorToArgumentsConverter]'s choice of how many values should be skipped (dropped),
+	 * i.e. allows to skip certain test cases.
+	 *
+	 * It also affects the helper methods [SemiOrderedArgsGenerator.generateAndTakeBasedOnDecider],
+	 * [ArbArgsGenerator.generateAndTake] and co.
 	 *
 	 * Must be greater than 0 if set.
 	 *
 	 * 🔍 Typically used with a fixed [seed] (i.e. during debugging). In such cases you might want to set [maxArgs]
-	 * as well to restrict [ArgsRange.take].
+	 * as well to restrict how many test cases shall be generated (after skipping).
 	 *
-	 * Note, you are not allowed to set [skip] via variist.properties (which is usually committed), use
-	 * variist.local.properties instead (which is usually on the git ignore list).
+	 * Note, you are not allowed to set [skip] via `variist.properties` (which is usually committed), use
+	 * `variist.local.properties` instead (which is usually on the git ignore list).
 	 */
 	val skip: Int? = null,
 
 	/**
-	 * Influences an [ArgsRangeDecider]'s choice of [ArgsRange.take], signaling that it should be at least
+	 * Influences an [ArgsRangeDecider]'s choice of [ArgsRange.take], signalling that it should be at least
 	 * the specified amount, unless the [ArgsGenerator] repeats values beforehand.
 	 *
 	 * Must be greater than 0 if set.
@@ -54,7 +65,7 @@ class VariistConfig(
 	val requestedMinArgs: Int? = null,
 
 	/**
-	 * Should influence an [ArgsRangeDecider]'s choice of [ArgsRange.take], signaling that it should not be greater
+	 * Should influence an [ArgsRangeDecider]'s choice of [ArgsRange.take], signalling that it should not be greater
 	 * than the specified amount.
 	 *
 	 * Must be greater than 0 if set.

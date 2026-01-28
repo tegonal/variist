@@ -27,12 +27,7 @@ abstract class AbstractArbArgsGeneratorWithoutAnnotationsTest : AbstractArgsGene
 			testFactory({
 				factory(DefaultArbExtensionPoint(customComponentFactoryContainer, seedBaseOffset = 0))
 					.zip(
-						factory(
-							DefaultArbExtensionPoint(
-								customComponentFactoryContainer,
-								seedBaseOffset = offset
-							)
-						)
+						factory(DefaultArbExtensionPoint(customComponentFactoryContainer, seedBaseOffset = offset))
 					) { a, b ->
 						a.mapA3 { listOf(b.a2) }
 					}
@@ -73,5 +68,12 @@ abstract class AbstractArbArgsGeneratorTest<T> : AbstractArbArgsGeneratorWithout
 		factory = { createGenerators(customComponentFactoryContainer.arb) },
 		generateOne = { it.generateOne(customComponentFactoryContainer.config.seed.toOffset()) },
 		generate = { it.generate(customComponentFactoryContainer.config.seed.toOffset()) }
+	)
+
+	@TestFactory
+	fun skipOneIsTheSameAsGenerateDrop1() = skipOneIsTheSameAsGenerateDropOneTest(
+		factory = { componentFactoryContainer -> createGenerators(componentFactoryContainer.arb) },
+		generateAndTake = { generator, num -> generator.generateAndTake(num) },
+		generate = { generator -> generator.generate() }
 	)
 }

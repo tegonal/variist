@@ -20,13 +20,13 @@ import org.junit.jupiter.params.provider.ValueSource
 class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 
 	@Test
-	fun seed_0_and_skip_max__offset_max() {
+	fun seed_0_and_skip_max__offset_0() {
 		val ordered = createOrderedWithCustomConfig(
 			ordered._components.config.copy { seed = 0; skip = Int.MAX_VALUE }
 		).ordered
 		val argsRange = ProfileBasedArgsRangeDecider().decide(ordered.of(1, 2, 3, 4))
 		expect(argsRange) {
-			offset.toEqual(Int.MAX_VALUE)
+			offset.toEqual(0)
 		}
 	}
 
@@ -43,29 +43,27 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 
 	@ParameterizedTest
 	@ValueSource(ints = [1, 2, 3, 4, 5])
-	fun seed_plus_skip_max_overflows__offset_in_range_of_ordered_plus_skip(seed: Int) {
+	fun seed_plus_skip_max_overflows__offset_is_seed(seed: Int) {
 		val ordered = createOrderedWithCustomConfig(
 			ordered._components.config.copy { this.seed = seed; this.skip = Int.MAX_VALUE }
 		)
 		val argsRange = ProfileBasedArgsRangeDecider().decide(ordered.of(1, 2, 3, 4))
 
 		expect(argsRange) {
-			// Int.MAX_VALUE + 1 % 4 == 0
-			offset.toEqual((seed - 1) % 4)
+			offset.toEqual(seed)
 		}
 	}
 
 	@ParameterizedTest
 	@ValueSource(ints = [1, 2, 3, 4, 5])
-	fun seed_max_plus_skip_overflows__offset_in_range_of_ordered_plus_skip(skip: Int) {
+	fun seed_max_plus_skip_overflows__offset_is_max(skip: Int) {
 		val ordered = createOrderedWithCustomConfig(
 			ordered._components.config.copy { this.seed = Int.MAX_VALUE; this.skip = skip }
 		)
 		val argsRange = ProfileBasedArgsRangeDecider().decide(ordered.of(1, 2, 3, 4))
 
 		expect(argsRange) {
-			// Int.MAX_VALUE + 1 % 4 == 0
-			offset.toEqual((skip - 1) % 4)
+			offset.toEqual(Int.MAX_VALUE)
 		}
 	}
 

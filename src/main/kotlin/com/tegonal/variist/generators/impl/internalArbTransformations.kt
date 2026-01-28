@@ -1,8 +1,5 @@
 package com.tegonal.variist.generators.impl
 
-import com.tegonal.variist.config.VariistConfig
-import com.tegonal.variist.config._components
-import com.tegonal.variist.config.config
 import com.tegonal.variist.generators.ArbArgsGenerator
 import com.tegonal.variist.generators.transform
 
@@ -12,8 +9,6 @@ import com.tegonal.variist.generators.transform
  *
  * !! No backward compatibility guarantees !!
  * Reuse at your own risk
- *
- * In case [VariistConfig.skip] is `null` then the index starts at `0` otherwise at [VariistConfig.skip].
  *
  * @param transform The transformation function which takes a [T], an index and a seed offset and produces an [R].
  *   The `seedOffset` is passed along the call chain and should be taken into account when using
@@ -29,19 +24,7 @@ import com.tegonal.variist.generators.transform
 fun <T, R> ArbArgsGenerator<T>.mapIndexedInternal(
 	transform: (index: Int, T, seedOffset: Int) -> R
 ): ArbArgsGenerator<R> = transform { seq, seedOffset ->
-	val offset = _components.config.skip
-	if (offset == null) {
-		seq.mapIndexed { index, it -> transform(index, it, seedOffset) }
-	} else {
-		seq.mapIndexed { index, it ->
-			transform(
-				// expected that this overflows in the worst case
-				index + offset,
-				it,
-				seedOffset
-			)
-		}
-	}
+	seq.mapIndexed { index, it -> transform(index, it, seedOffset) }
 }
 
 /**
@@ -51,8 +34,6 @@ fun <T, R> ArbArgsGenerator<T>.mapIndexedInternal(
  *
  * !! No backward compatibility guarantees !!
  * Reuse at your own risk
- *
- * In case [VariistConfig.skip] is `null` then the index starts at `0` otherwise at [VariistConfig.skip].
  *
  * @param transform The transformation function which takes a [T], an index and a seed offset and produces a
  *   finite [Sequence] of elements of type [R].
@@ -69,18 +50,6 @@ fun <T, R> ArbArgsGenerator<T>.mapIndexedInternal(
 fun <T, R> ArbArgsGenerator<T>.flatMapIndexedInternal(
 	transform: (index: Int, T, seedOffset: Int) -> Sequence<R>
 ): ArbArgsGenerator<R> = transform { seq, seedOffset ->
-	val offset = _components.config.skip
-	if (offset == null) {
-		seq.flatMapIndexed { index, it -> transform(index, it, seedOffset) }
-	} else {
-		seq.flatMapIndexed { index, it ->
-			transform(
-				// expected that this overflows in the worst case
-				index + offset,
-				it,
-				seedOffset
-			)
-		}
-	}
+	seq.flatMapIndexed { index, it -> transform(index, it, seedOffset) }
 }
 

@@ -1,8 +1,5 @@
 package com.tegonal.variist.generators.impl
 
-import com.tegonal.variist.config.VariistConfig
-import com.tegonal.variist.config._components
-import com.tegonal.variist.config.config
 import com.tegonal.variist.generators.ArbArgsGenerator
 import com.tegonal.variist.generators.SemiOrderedArgsGenerator
 
@@ -13,9 +10,6 @@ import com.tegonal.variist.generators.SemiOrderedArgsGenerator
  *
  * !! No backward compatibility guarantees !!
  * Reuse at your own risk
- *
- * In case [VariistConfig.skip] is `null` then the index starts at `0` otherwise at [VariistConfig.skip]
- * and this regardless what `offset` is used in the end for [SemiOrderedArgsGenerator.generate].
  *
  * @param transform The transformation function which takes a [T] and produces an [R].
  *
@@ -28,21 +22,7 @@ import com.tegonal.variist.generators.SemiOrderedArgsGenerator
  */
 @InternalDangerousApi
 fun <T, R> SemiOrderedArgsGenerator<T>.mapIndexedInternal(transform: (index: Int, T) -> R): SemiOrderedArgsGenerator<R> =
-	transformInternal { seq ->
-		val offset = _components.config.skip
-		if (offset == null) {
-			seq.mapIndexed(transform)
-		} else {
-			seq.mapIndexed { index, it ->
-				transform(
-					// expected that this overflows in the worst case
-					index + offset,
-					it,
-				)
-			}
-		}
-	}
-
+	transformInternal { seq -> seq.mapIndexed(transform) }
 
 /**
  * Maps the values `this` [ArbArgsGenerator] generates together with an index to a finite
@@ -51,12 +31,6 @@ fun <T, R> SemiOrderedArgsGenerator<T>.mapIndexedInternal(transform: (index: Int
  *
  * !! No backward compatibility guarantees !!
  * Reuse at your own risk
- *
- * In case [VariistConfig.skip] is `null` then the index starts at `0` otherwise at [VariistConfig.skip]
- * and this regardless what `offset` is used in the end for [SemiOrderedArgsGenerator.generate].
- *
- * Use the overload which provides the `seedOffset` in case you use [ArbArgsGenerator.generate] inside the [transform]
- * function, this way you can pass on the `seedOffset` to [ArbArgsGenerator.generate].
  *
  * @param transform The transformation function which takes a [T] and an index and produces a
  *   finite [Sequence] of elements of type [R].
@@ -70,20 +44,7 @@ fun <T, R> SemiOrderedArgsGenerator<T>.mapIndexedInternal(transform: (index: Int
  */
 @InternalDangerousApi
 fun <T, R> SemiOrderedArgsGenerator<T>.flatMapIndexedInternal(transform: (index: Int, T) -> Sequence<R>): SemiOrderedArgsGenerator<R> =
-	transformInternal { seq ->
-		val skip = _components.config.skip
-		if (skip == null) {
-			seq.flatMapIndexed(transform)
-		} else {
-			seq.flatMapIndexed { index, it ->
-				transform(
-					// expected that this overflows in the worst case
-					index + skip,
-					it,
-				)
-			}
-		}
-	}
+	transformInternal { seq -> seq.flatMapIndexed(transform) }
 
 /**
  * !! No backward compatibility guarantees !!
