@@ -6,7 +6,7 @@ import com.tegonal.variist.utils.toBigInt
 
 class OrderedNumberTest : AbstractOrderedArgsGeneratorTest<Any>() {
 
-	override fun createGenerators() = sequenceOf(
+	override fun createGenerators(modifiedOrdered: OrderedExtensionPoint) = sequenceOf(
 		Tuple("intFromUntil", modifiedOrdered.intFromUntil(1, 4), listOf(1, 2, 3)),
 		Tuple("longFromUntil", modifiedOrdered.longFromUntil(1L, 5L), listOf(1L, 2L, 3L, 4L)),
 		Tuple(

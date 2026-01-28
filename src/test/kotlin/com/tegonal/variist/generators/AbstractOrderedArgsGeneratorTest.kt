@@ -5,16 +5,16 @@ import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.atrium.api.verbs.expectGrouped
 import ch.tutteli.atrium.creating.Expect
 import ch.tutteli.atrium.testfactories.TestFactory
+import com.tegonal.variist.config._components
 import com.tegonal.variist.config.config
+import com.tegonal.variist.config.ordered
 import com.tegonal.variist.config.toOffset
-import com.tegonal.variist.generators.impl.DefaultOrderedExtensionPoint
+import com.tegonal.variist.providers.ArgsRange
 import com.tegonal.variist.utils.createVariistRandom
 
 typealias OrderedArgsTestFactoryResult<T> = ArgsTestFactoryResult<T, SemiOrderedArgsGenerator<T>>
 
 abstract class AbstractOrderedArgsGeneratorWithoutAnnotationsTest : AbstractArgsGeneratorTest() {
-
-	val modifiedOrdered: OrderedExtensionPoint = DefaultOrderedExtensionPoint(customComponentFactoryContainer)
 
 	protected fun <T> canAlwaysTakeTheDesiredAmountTest(factory: () -> OrderedArgsTestFactoryResult<T>) =
 		super.canAlwaysTakeTheDesiredAmountTest(factory) { it.generate(offset = 0) }
@@ -80,34 +80,45 @@ abstract class AbstractOrderedArgsGeneratorWithoutAnnotationsTest : AbstractArgs
 
 }
 
-abstract class AbstractOrderedArgsGeneratorTest<T>() : AbstractOrderedArgsGeneratorWithoutAnnotationsTest() {
+abstract class AbstractOrderedArgsGeneratorTest<T> : AbstractOrderedArgsGeneratorWithoutAnnotationsTest() {
 
-	abstract fun createGenerators(): OrderedArgsTestFactoryResult<T>
-
-	@TestFactory
-	fun usesGivenComponentContainerFactory() = usesGivenComponentContainerFactoryTest(::createGenerators)
+	abstract fun createGenerators(modifiedOrdered: OrderedExtensionPoint): OrderedArgsTestFactoryResult<T>
 
 	@TestFactory
-	fun canAlwaysTakeTheDesiredAmount() = canAlwaysTakeTheDesiredAmountTest(::createGenerators)
+	fun usesGivenComponentContainerFactory() =
+		usesGivenComponentContainerFactoryTest { createGenerators(customComponentFactoryContainer.ordered) }
+
+	@TestFactory
+	fun canAlwaysTakeTheDesiredAmount() =
+		canAlwaysTakeTheDesiredAmountTest { createGenerators(customComponentFactoryContainer.ordered) }
 
 	@TestFactory
 	fun generateOneIsTheSameAsGenerateFirst() = generateOneIsTheSameAsGenerateFirstTest(
-		factory = { createGenerators() },
+		factory = { createGenerators(customComponentFactoryContainer.ordered) },
 		generateOne = { it.generateOne(customComponentFactoryContainer.config.seed.toOffset()) },
 		generate = { it.generate(customComponentFactoryContainer.config.seed.toOffset()) }
 	)
 
 	@TestFactory
-	fun coversAllCases() = coversAllCasesTest(::createGenerators)
+	fun coversAllCases() = coversAllCasesTest { createGenerators(customComponentFactoryContainer.ordered) }
 
 	@TestFactory
-	fun minusOffsetThrows() = minusOffsetThrowsTest(::createGenerators)
+	fun minusOffsetThrows() = minusOffsetThrowsTest { createGenerators(customComponentFactoryContainer.ordered) }
 
 	@TestFactory
 	fun returnsDifferentValuesUntilReachingSizeAndThenRepeats() =
-		returnsDifferentValuesUntilReachingSizeAndThenRepeatsTest(::createGenerators)
+		returnsDifferentValuesUntilReachingSizeAndThenRepeatsTest { createGenerators(customComponentFactoryContainer.ordered) }
 
 	@TestFactory
 	open fun offsetPlusXReturnsTheSameAsOffsetXMinus1JustShifted() =
-		offsetPlusXReturnsTheSameAsOffsetXMinus1JustShiftedTest(::createGenerators)
+		offsetPlusXReturnsTheSameAsOffsetXMinus1JustShiftedTest { createGenerators(customComponentFactoryContainer.ordered) }
+
+	@TestFactory
+	fun skipOneIsTheSameAsGenerateDropOne() = skipOneIsTheSameAsGenerateDropOneTest(
+		factory = { createGenerators(it.ordered) },
+		generateAndTake = { generator, num ->
+			generator.generateAndTake(ArgsRange(generator._components.config.seed.toOffset(), num))
+		},
+		generate = { generator -> generator.generate(generator._components.config.seed.toOffset()) }
+	)
 }

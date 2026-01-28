@@ -7,13 +7,14 @@ import ch.tutteli.atrium.api.fluent.en_GB.values
 import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
 import com.tegonal.variist.config._components
+import com.tegonal.variist.config.ordered
 import com.tegonal.variist.testutils.PseudoArbArgsGenerator
 import org.junit.jupiter.api.TestFactory
 import kotlin.test.Test
 
 class OrderedFlatZipDependentTest : AbstractOrderedArgsGeneratorTest<Int>() {
 
-	override fun createGenerators() = listOf(1, 2, 3).let { l ->
+	override fun createGenerators(modifiedOrdered: OrderedExtensionPoint) = listOf(1, 2, 3).let { l ->
 		val generator = modifiedOrdered.fromList(l)
 		sequenceOf(
 			Tuple(
@@ -58,7 +59,7 @@ class OrderedFlatZipDependentTest : AbstractOrderedArgsGeneratorTest<Int>() {
 	override fun offsetPlusXReturnsTheSameAsOffsetXMinus1JustShifted() =
 		offsetPlusXReturnsTheSameAsOffsetXMinus1JustShiftedTest {
 			// this "law" does not hold for flatZipDependent as soon as amount > 1
-			createGenerators().filter { it.first != "flatZipDependent - amount 2" }
+			createGenerators(customComponentFactoryContainer.ordered).filter { it.first != "flatZipDependent - amount 2" }
 		}
 
 	@Test

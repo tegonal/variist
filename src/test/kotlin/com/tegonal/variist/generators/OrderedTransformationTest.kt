@@ -2,6 +2,7 @@ package com.tegonal.variist.generators
 
 import ch.tutteli.atrium.testfactories.TestFactory
 import ch.tutteli.kbox.Tuple
+import com.tegonal.variist.config.ordered
 import com.tegonal.variist.generators.impl.InternalDangerousApi
 import com.tegonal.variist.generators.impl.mapIndexedInternal
 import com.tegonal.variist.generators.impl.transformInternal
@@ -11,7 +12,7 @@ class OrderedTransformationTest : AbstractOrderedArgsGeneratorTest<Int>() {
 	// see OrderedCombineTest for tests about combine
 
 	@OptIn(InternalDangerousApi::class)
-	override fun createGenerators() = listOf(1, 2, 3, 4).let { l ->
+	override fun createGenerators(modifiedOrdered: OrderedExtensionPoint) = listOf(1, 2, 3, 4).let { l ->
 		val mapFun: (Int) -> Int = { it + 1 }
 		val generator = modifiedOrdered.fromList(l)
 		sequenceOf(
@@ -51,6 +52,6 @@ class OrderedTransformationTest : AbstractOrderedArgsGeneratorTest<Int>() {
 	override fun offsetPlusXReturnsTheSameAsOffsetXMinus1JustShifted() =
 		offsetPlusXReturnsTheSameAsOffsetXMinus1JustShiftedTest {
 			// this "law" does not hold for mapIndexed
-			createGenerators().filter { it.first != "mapIndexedInternal" }
+			createGenerators(customComponentFactoryContainer.ordered).filter { it.first != "mapIndexedInternal" }
 		}
 }
