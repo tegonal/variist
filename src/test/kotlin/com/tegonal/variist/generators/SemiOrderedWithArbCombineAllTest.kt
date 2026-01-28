@@ -2,15 +2,16 @@ package com.tegonal.variist.generators
 
 import ch.tutteli.kbox.Tuple
 import ch.tutteli.kbox.mapSecond
+import com.tegonal.variist.config.ordered
 import com.tegonal.variist.testutils.PseudoArbArgsGenerator
 import org.junit.jupiter.api.TestFactory
-import kotlin.collections.map
 
 class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnnotationsTest() {
 	val a1s = listOf(1, 2)
 	val a2s = listOf('a', 'b', 'c')
-	val generator: SemiOrderedArgsGenerator<Int> = modifiedOrdered.fromList(a1s)
+	val generator: SemiOrderedArgsGenerator<Int> = customComponentFactoryContainer.ordered.fromList(a1s)
 	val randomGenerator = PseudoArbArgsGenerator(a2s)
+
 	fun createGenerators(): OrderedArgsTestFactoryResult<Pair<Int, Any>> = sequenceOf(
 		Tuple(
 			"combine with 1 random",

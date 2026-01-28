@@ -8,7 +8,7 @@ import com.tegonal.variist.utils.BigInt
 abstract class AbstractOrderedConcatenateTest : AbstractOrderedArgsGeneratorTest<Any>() {
 
 	@Suppress("UNCHECKED_CAST")
-	fun variants(index: Int) =
+	fun variants(modifiedOrdered: OrderedExtensionPoint, index: Int) =
 		modifiedOrdered.of(
 			"of".let { it to modifiedOrdered.of(*getTestValue(it, index) as Array<Int>) },
 			"fromList".let { it to modifiedOrdered.fromList(getTestValue(it, index) as List<Any>) },

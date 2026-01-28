@@ -4,7 +4,7 @@ import ch.tutteli.kbox.Tuple
 
 class OrderedFromArrayTest : AbstractOrderedArgsGeneratorTest<Any>() {
 
-	override fun createGenerators() = sequenceOf(
+	override fun createGenerators(modifiedOrdered: OrderedExtensionPoint) = sequenceOf(
 		byteArrayOf(1, 2, 3).let { Tuple("fromByteArray", modifiedOrdered.fromArray(it), it.toList()) },
 		charArrayOf('a', 'b', 'c').let { Tuple("fromCharArray", modifiedOrdered.fromArray(it), it.toList()) },
 		shortArrayOf(1, 2, 3).let { Tuple("fromShortArray", modifiedOrdered.fromArray(it), it.toList()) },

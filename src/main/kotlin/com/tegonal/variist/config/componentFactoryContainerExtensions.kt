@@ -74,9 +74,7 @@ val ComponentFactoryContainer.config: VariistConfig get() = build<VariistConfig>
  * @since 2.0.0
  */
 fun ComponentFactoryContainer.createVariistRandom(seedOffset: Int): Random =
-	build<RandomFactory>().create(config.seed.value + seedOffset).also { random ->
-		config.skip?.also { repeat(it) { random.nextInt() } }
-	}
+	build<RandomFactory>().create(config.seed.value + seedOffset)
 
 /**
  * Creates an [OrderedExtensionPoint] based on this [ComponentFactoryContainer].

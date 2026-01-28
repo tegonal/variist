@@ -1,18 +1,15 @@
 package com.tegonal.variist.generators
 
-import ch.tutteli.atrium.api.fluent.en_GB.toContainExactlyElementsOf
-import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
 import ch.tutteli.kbox.mapSecond
+import com.tegonal.variist.config.ordered
 import com.tegonal.variist.testutils.PseudoArbArgsGenerator
-import com.tegonal.variist.testutils.generateToList
 import org.junit.jupiter.api.TestFactory
-import kotlin.test.Test
 
 class SemiOrderedZipArbTest : AbstractOrderedArgsGeneratorWithoutAnnotationsTest() {
 	val a1s = listOf(1, 2)
 	val a2s = listOf('a', 'b', 'c')
-	val generator = modifiedOrdered.fromList(a1s)
+	val generator = customComponentFactoryContainer.ordered.fromList(a1s)
 	val randomGenerator = PseudoArbArgsGenerator(a2s)
 
 	fun createGenerators(): OrderedArgsTestFactoryResult<Pair<Int, Any>> = sequenceOf(

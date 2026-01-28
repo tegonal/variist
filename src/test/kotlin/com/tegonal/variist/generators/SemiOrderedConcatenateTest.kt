@@ -1,15 +1,17 @@
 package com.tegonal.variist.generators
 
 import ch.tutteli.kbox.Tuple
+import com.tegonal.variist.config.build
+import com.tegonal.variist.providers.ArgsRangeDecider
 import com.tegonal.variist.testutils.anyToList
 import com.tegonal.variist.testutils.getTestValue
 
 @Suppress("UNCHECKED_CAST")
 class SemiOrderedConcatenateTest : AbstractOrderedConcatenateTest() {
 
-    override fun createGenerators(): OrderedArgsTestFactoryResult<Any> {
-        val g1Variants = variants(0)
-        val g2Variants = variants(1)
+    override fun createGenerators(modifiedOrdered: OrderedExtensionPoint): OrderedArgsTestFactoryResult<Any> {
+        val g1Variants = variants(modifiedOrdered, 0)
+        val g2Variants = variants(modifiedOrdered, 1)
 
         val concatenated = g1Variants.cartesian(g2Variants) { (name1, g1), (name2, g2) ->
             val semiG1: SemiOrderedArgsGenerator<Any> = g1
@@ -21,6 +23,8 @@ class SemiOrderedConcatenateTest : AbstractOrderedConcatenateTest() {
                 anyToList(getTestValue(name1, 0)) + anyToList(getTestValue(name2, 1))
             )
         }
-        return concatenated.generateAndTakeBasedOnDecider()
+		val argsRange = customComponentFactoryContainer.build<ArgsRangeDecider>().decide(concatenated)
+		// not using generateAndTake here is it would be based on modifiedOrdered skip
+		return concatenated.generate(argsRange.offset).take(argsRange.take)
     }
 }
