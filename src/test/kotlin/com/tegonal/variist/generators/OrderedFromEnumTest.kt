@@ -5,7 +5,7 @@ import com.tegonal.variist.testutils.AbcdEnum
 
 class OrderedFromEnumTest : AbstractOrderedArgsGeneratorTest<AbcdEnum>() {
 
-	override fun createGenerators() = sequenceOf(
+	override fun createGenerators(modifiedOrdered: OrderedExtensionPoint) = sequenceOf(
 		Tuple("fromEnum", modifiedOrdered.fromEnum<AbcdEnum>(), AbcdEnum.entries)
 	)
 }

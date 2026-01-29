@@ -2,9 +2,15 @@ package com.tegonal.variist.generators
 
 import ch.tutteli.atrium.api.fluent.en_GB.*
 import ch.tutteli.atrium.api.verbs.expect
+import ch.tutteli.atrium.testfactories.TestFactoryBuilder
 import ch.tutteli.kbox.Tuple
 import ch.tutteli.kbox.Tuple2
 import ch.tutteli.kbox.mapFirst
+import ch.tutteli.kbox.toVararg
+import com.tegonal.variist.config.ComponentFactoryContainer
+import com.tegonal.variist.config.arb
+import com.tegonal.variist.config.config
+import com.tegonal.variist.config.createBasedOnConfig
 import com.tegonal.variist.generators.impl.createBoundsArbGenerator
 import com.tegonal.variist.generators.impl.createIntDomainBasedBoundsArbGenerator
 import com.tegonal.variist.generators.impl.possibleMaxSizeSafeInIntDomain
@@ -16,7 +22,9 @@ import com.tegonal.variist.testutils.minInclusiveMustBeLessThanMaxInclusive
 import com.tegonal.variist.testutils.minMaxInclusiveCase
 import com.tegonal.variist.utils.BigInt
 import com.tegonal.variist.utils.toBigInt
+import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.Named
+import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.params.ParameterizedTest
 
 class ArbBoundsTest : AbstractArbArgsGeneratorTest<Any>() {

@@ -13,7 +13,6 @@ import com.tegonal.variist.generators.impl.throwUnsupportedArgsGenerator
 import com.tegonal.variist.providers.AnnotationData
 import com.tegonal.variist.providers.ArgsRange
 import com.tegonal.variist.providers.ArgsRangeDecider
-import com.tegonal.variist.utils.seedToOffset
 
 /**
  * Not really a good name, but hard to come up with a good one.
@@ -34,8 +33,7 @@ abstract class BaseArgsRangeOptionsBasedArgsRangeDecider : ArgsRangeDecider {
 		val profile = annotationData?.argsRangeOptions?.profile ?: config.defaultProfile
 
 		return decideArgsRange(profile, config.activeEnv, argsGenerator)
-			.restrictBasedOnConfigAndArgsRangeOptions(config, annotationData?.argsRangeOptions, argsGenerator)
-
+			.adjustTakeIfNecessary(config, annotationData?.argsRangeOptions, argsGenerator)
 	}
 
 	/**
@@ -49,33 +47,6 @@ abstract class BaseArgsRangeOptionsBasedArgsRangeDecider : ArgsRangeDecider {
 		env: String,
 		argsGenerator: ArgsGenerator<*>
 	): ArgsRange
-
-	private fun ArgsRange.restrictBasedOnConfigAndArgsRangeOptions(
-		config: VariistConfig,
-		argsRangeOptions: ArgsRangeOptions?,
-		argsGenerator: ArgsGenerator<*>
-	): ArgsRange = this
-		.adjustOffsetDueToConfigSkipIfDefined(config, argsGenerator)
-		.adjustTakeIfNecessary(config, argsRangeOptions, argsGenerator)
-
-	private fun ArgsRange.adjustOffsetDueToConfigSkipIfDefined(
-		config: VariistConfig,
-		argsGenerator: ArgsGenerator<*>
-	): ArgsRange = letIf(config.skip != null) {
-		val offsetPlusSkip = this.offset + config.skip!!.toLong()
-		val overflowed = offsetPlusSkip.toInt().toLong() != offsetPlusSkip
-		val newOffset = if (overflowed && argsGenerator is SemiOrderedArgsGenerator) {
-			// If the offset overflowed, then we need to adjust the offset but since a (Semi)OrderedArgsGenerator
-			// most likely has a size where `size % INT.MAX != 0` (MAX_VALUE is a prime number) we cannot just use
-			// `seedToOffset(offset + skip)` and instead convert to an offset in range of size so that it fits into
-			// an Int again. Only this way the skip semantic is as intended
-			offsetPlusSkip % argsGenerator.size
-		} else {
-			seedToOffset(offsetPlusSkip.toInt())
-		}
-		ArgsRange(offset = newOffset.toInt(), take = this.take)
-	}
-
 
 	private fun ArgsRange.adjustTakeIfNecessary(
 		config: VariistConfig,
