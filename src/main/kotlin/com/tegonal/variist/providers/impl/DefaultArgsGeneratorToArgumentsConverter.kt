@@ -4,6 +4,7 @@ import com.tegonal.variist.config._components
 import com.tegonal.variist.config.build
 import com.tegonal.variist.generators.ArbArgsGenerator
 import com.tegonal.variist.generators.ArgsGenerator
+import com.tegonal.variist.generators.OrderedArgsGenerator
 import com.tegonal.variist.generators.SemiOrderedArgsGenerator
 import com.tegonal.variist.generators.generateAndTake
 import com.tegonal.variist.generators.impl.throwUnsupportedArgsGenerator
@@ -29,6 +30,7 @@ class DefaultArgsGeneratorToArgumentsConverter : ArgsGeneratorToArgumentsConvert
 		val argsRange = decideArgsRange(annotationData, argsGenerator)
 		val sequenceOfList = when (argsGenerator) {
 			is ArbArgsGenerator<List<*>> -> argsGenerator.generateAndTake(argsRange.take)
+			is OrderedArgsGenerator<List<*>> -> argsGenerator.generateAndTake(argsRange)
 			is SemiOrderedArgsGenerator<List<*>> -> argsGenerator.generateAndTake(argsRange)
 			else -> throwUnsupportedArgsGenerator(argsGenerator)
 		}
