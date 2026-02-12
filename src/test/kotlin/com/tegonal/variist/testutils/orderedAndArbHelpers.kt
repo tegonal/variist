@@ -11,7 +11,7 @@ fun createOrderedWithCustomConfig(customConfig: VariistConfig): OrderedExtension
 fun createArbWithCustomConfig(customConfig: VariistConfig): ArbExtensionPoint =
 	ComponentFactoryContainer.createBasedOnConfig(customConfig).arb
 
-val orderedWithSeed0 = createOrderedWithCustomConfig(VariistConfig().copy { seed = 0 })
+val orderedWithSeed0 = createOrderedWithCustomConfig(VariistConfig(seed = Seed(0)))
 
 fun <T> SemiOrderedArgsGenerator<T>.generateToList(amount: Int): List<T> =
 	generate(offset = 0).take(amount).toList()
