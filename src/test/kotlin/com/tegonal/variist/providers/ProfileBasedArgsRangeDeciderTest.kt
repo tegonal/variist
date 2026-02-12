@@ -1,8 +1,10 @@
 package com.tegonal.variist.providers
 
+import ch.tutteli.atrium.api.fluent.en_GB.group
 import ch.tutteli.atrium.api.fluent.en_GB.notToThrow
 import ch.tutteli.atrium.api.fluent.en_GB.toEqual
 import ch.tutteli.atrium.api.verbs.expect
+import ch.tutteli.atrium.api.verbs.expectGrouped
 import ch.tutteli.kbox.Tuple
 import com.tegonal.variist.config.*
 import com.tegonal.variist.generators.*
@@ -11,7 +13,6 @@ import com.tegonal.variist.providers.impl.ProfileBasedArgsRangeDecider
 import com.tegonal.variist.testutils.BaseTest
 import com.tegonal.variist.testutils.atrium.offset
 import com.tegonal.variist.testutils.atrium.take
-import com.tegonal.variist.testutils.createArbWithCustomConfig
 import com.tegonal.variist.testutils.createOrderedWithCustomConfig
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -111,12 +112,18 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 						Env.NightlyInt -> 10
 						Env.HotfixPR -> 4
 						Env.Hotfix -> 6
-						Env.Release -> 6
+						Env.Release -> 500
 					}
 				)
 			}
 		}
 	)
+	val configWithProfile500 = ordered._components.config.copy {
+		maxArgs = null
+		requestedMinArgs = null
+		testProfiles = ownTestProfiles.toMutableMap()
+		activeEnv = Env.Release.name
+	}
 
 	@ParameterizedTest
 	@ArgsSource("testTypeEnvAndGeneratorSize")
@@ -149,246 +156,52 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 		}
 	}
 
-	@Test
-	fun ordered_maxArgsInConfigTakesPrecedenceOverRequestedMinArgsInAnnotation() {
-		val orderedMaxArgs5 = createOrderedWithCustomConfig(
-			ordered._components.config.copy { maxArgs = 5 }
+	@ParameterizedTest
+	@ArgsSource("requestedMinArgsMaxArgsTestsForProfile500")
+	fun requestedMinArgsMaxArgsTests(sample: Sample) {
+		val customOrdered = createOrderedWithCustomConfig(configWithProfile500.copy {
+			requestedMinArgs = sample.configRequestedMinArgs
+			maxArgs = sample.configMaxArgs
+		})
+		val annotationData = AnnotationData(
+			ArgsRangeOptions(
+				requestedMinArgs = sample.annotationRequestedMinArgs,
+				maxArgs = sample.annotationMaxArgs,
+				minArgsOverridesSizeLimit = sample.minArgsOverridesSizeLimit
+			)
 		)
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			orderedMaxArgs5.intFromUntil(1, 100),
-			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
-		)
-		expect(argsRange) {
-			take.toEqual(5)
-			offset.toEqual(orderedMaxArgs5._components.config.seed.toOffset())
-		}
-	}
 
-	@Test
-	fun semiOrdered_maxArgsInConfigTakesPrecedenceOverRequestedMinArgsInAnnotation() {
-		val orderedMaxArgs5 = createOrderedWithCustomConfig(
-			ordered._components.config.copy { maxArgs = 5 }
-		).ordered
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			orderedMaxArgs5.intFromUntil(1, 100).zip(arb.intPositive()),
-			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
-		)
-		expect(argsRange) {
-			take.toEqual(5)
-			offset.toEqual(orderedMaxArgs5._components.config.seed.toOffset())
-		}
-	}
-
-	@Test
-	fun arb_maxArgsInConfigTakesPrecedenceOverRequestedMinArgsInAnnotation() {
-		val arbWithMaxArgs5 = createArbWithCustomConfig(
-			arb._components.config.copy { maxArgs = 5 }
-		).arb
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			arbWithMaxArgs5.intFromUntil(1, 100),
-			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
-		)
-		expect(argsRange) {
-			take.toEqual(5)
-			offset.toEqual(arbWithMaxArgs5._components.config.seed.toOffset())
-		}
-	}
-
-	@Test
-	fun ordered_maxArgsInConfigDoesNotTakePrecedenceOverProfile() {
-		val orderedWithMaxArgs10Profile2 = createOrderedWithCustomConfig(
-			ordered._components.config.copy {
-				testProfiles = ownTestProfiles.toMutableMap()
-				activeEnv = Env.Local.name
-				maxArgs = 10
+		expectGrouped {
+			group("ordered") {
+				val range = ProfileBasedArgsRangeDecider().decide(
+					customOrdered.intFromUntil(0, sample.generatorSize),
+					annotationData
+				)
+				expect(range) {
+					take.toEqual(sample.expectedOrderedTake)
+					offset.toEqual(customOrdered._components.config.seed.toOffset())
+				}
 			}
-		).ordered
-		val argsRange = ProfileBasedArgsRangeDecider().decide(orderedWithMaxArgs10Profile2.intFromUntil(1, 20))
-		expect(argsRange) {
-			take.toEqual(2)
-			offset.toEqual(orderedWithMaxArgs10Profile2._components.config.seed.toOffset())
-		}
-	}
-
-	@Test
-	fun semiOrdered_maxArgsInConfigDoesNotTakePrecedenceOverProfile() {
-		val orderedWithMaxArgs10Profile2 = createOrderedWithCustomConfig(
-			ordered._components.config.copy {
-				testProfiles = ownTestProfiles.toMutableMap()
-				activeEnv = Env.Local.name
-				maxArgs = 10
+			group("semiOrdered") {
+				val range = ProfileBasedArgsRangeDecider().decide(
+					customOrdered.intFromUntil(0, sample.generatorSize).zip(arb.of('a')),
+					annotationData
+				)
+				expect(range) {
+					take.toEqual(sample.expectedSemiOrderedTake)
+					offset.toEqual(customOrdered._components.config.seed.toOffset())
+				}
 			}
-		).ordered
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			orderedWithMaxArgs10Profile2.intFromUntil(1, 10).zip(arb.intPositive())
-		)
-		expect(argsRange) {
-			take.toEqual(2)
-			offset.toEqual(orderedWithMaxArgs10Profile2._components.config.seed.toOffset())
-		}
-	}
-
-
-	@Test
-	fun arb_maxArgsInConfigDoesNotTakePrecedenceOverProfile() {
-		val arbWithMaxArgs10Profile2 = createArbWithCustomConfig(
-			arb._components.config.copy {
-				testProfiles = ownTestProfiles.toMutableMap()
-				activeEnv = Env.Local.name
-				maxArgs = 10
+			group("arb") {
+				val range = ProfileBasedArgsRangeDecider().decide(
+					customOrdered.arb.intFromUntil(0, sample.generatorSize),
+					annotationData
+				)
+				expect(range) {
+					take.toEqual(sample.expectedArbTake)
+					offset.toEqual(customOrdered._components.config.seed.toOffset())
+				}
 			}
-		).arb
-		val argsRange = ProfileBasedArgsRangeDecider().decide(arbWithMaxArgs10Profile2.intFromUntil(1, 10))
-		expect(argsRange) {
-			take.toEqual(2)
-			offset.toEqual(arbWithMaxArgs10Profile2._components.config.seed.toOffset())
-		}
-	}
-
-
-	@Test
-	fun ordered_sizeTakesPrecedenceOverMaxArgsInConfigAndAnnotation() {
-		val orderedMaxArgs5 = createOrderedWithCustomConfig(
-			ordered._components.config.copy { maxArgs = 50 }
-		).ordered
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			orderedMaxArgs5.intFromUntil(1, 10),
-			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
-		)
-		expect(argsRange) {
-			take.toEqual(9)
-			offset.toEqual(orderedMaxArgs5._components.config.seed.toOffset())
-		}
-	}
-
-	@Test
-	fun semiOrdered_sizeTakesPrecedenceOverMaxArgsInConfigAndAnnotation() {
-		val orderedMaxArgs5 = createOrderedWithCustomConfig(
-			ordered._components.config.copy { maxArgs = 50 }
-		).ordered
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			orderedMaxArgs5.intFromUntil(1, 10).zip(arb.intPositive()),
-			AnnotationData(ArgsRangeOptions(maxArgs = 20))
-		)
-		expect(argsRange) {
-			take.toEqual(9)
-			offset.toEqual(orderedMaxArgs5._components.config.seed.toOffset())
-		}
-	}
-
-
-	@Test
-	fun ordered_requestedMinArgsInConfigTakesPrecedenceOverAnnotation() {
-		val orderedRequestedMinArgs1000 = createOrderedWithCustomConfig(
-			ordered._components.config.copy { requestedMinArgs = 1000 }
-		).ordered
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			orderedRequestedMinArgs1000.intFromUntil(1, 10000),
-			AnnotationData(ArgsRangeOptions(requestedMinArgs = 2000))
-		)
-		expect(argsRange) {
-			take.toEqual(1000)
-			offset.toEqual(orderedRequestedMinArgs1000._components.config.seed.toOffset())
-		}
-	}
-
-	@Test
-	fun semiOrdered_requestedMinArgsInConfigTakesPrecedenceOverAnnotation() {
-		val orderedRequestedMinArgs1000 = createOrderedWithCustomConfig(
-			ordered._components.config.copy { requestedMinArgs = 1000 }
-		).ordered
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			orderedRequestedMinArgs1000.intFromUntil(1, 10000).zip(arb.intPositive()),
-			AnnotationData(ArgsRangeOptions(requestedMinArgs = 2000))
-		)
-		expect(argsRange) {
-			take.toEqual(1000)
-			offset.toEqual(orderedRequestedMinArgs1000._components.config.seed.toOffset())
-		}
-	}
-
-	@Test
-	fun arb_requestedMinArgsInConfigTakesPrecedenceOverAnnotation() {
-		val arbWithRequestedMinArgs1000 = createArbWithCustomConfig(
-			arb._components.config.copy { requestedMinArgs = 1000 }
-		).arb
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			arbWithRequestedMinArgs1000.intFromUntil(1, 10000),
-			AnnotationData(ArgsRangeOptions(requestedMinArgs = 2000))
-		)
-		expect(argsRange) {
-			take.toEqual(1000)
-			offset.toEqual(arbWithRequestedMinArgs1000._components.config.seed.toOffset())
-		}
-	}
-
-	@Test
-	fun ordered_requestedMinArgsInConfigTakesPrecedenceOverMaxArgsInAnnotation() {
-		val orderedWithRequestedMinArgs1000 = createOrderedWithCustomConfig(
-			ordered._components.config.copy { requestedMinArgs = 1000 }
-		).ordered
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			orderedWithRequestedMinArgs1000.intFromUntil(1, 10000),
-			AnnotationData(ArgsRangeOptions(maxArgs = 999))
-		)
-		expect(argsRange) {
-			take.toEqual(1000)
-			offset.toEqual(orderedWithRequestedMinArgs1000._components.config.seed.toOffset())
-		}
-	}
-
-	@Test
-	fun semiOrdered_requestedMinArgsInConfigTakesPrecedenceOverMaxArgsInAnnotation() {
-		val orderedWithRequestedMinArgs1000 = createOrderedWithCustomConfig(
-			ordered._components.config.copy { requestedMinArgs = 1000 }
-		).ordered
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			orderedWithRequestedMinArgs1000.intFromUntil(1, 10000).zip(arb.intPositive()),
-			AnnotationData(ArgsRangeOptions(maxArgs = 999))
-		)
-		expect(argsRange) {
-			take.toEqual(1000)
-			offset.toEqual(orderedWithRequestedMinArgs1000._components.config.seed.toOffset())
-		}
-	}
-
-	@Test
-	fun arb_requestedMinArgsInConfigTakesPrecedenceOverMaxArgsInAnnotation() {
-		val arbWithRequestedMinArgs1000 = createArbWithCustomConfig(
-			arb._components.config.copy { requestedMinArgs = 1000 }
-		).arb
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			arbWithRequestedMinArgs1000.intFromUntil(1, 100),
-			AnnotationData(ArgsRangeOptions(maxArgs = 999))
-		)
-		expect(argsRange) {
-			take.toEqual(1000)
-			offset.toEqual(arbWithRequestedMinArgs1000._components.config.seed.toOffset())
-		}
-	}
-
-
-	@Test
-	fun ordered_requestedMinArgsIgnoredIfOrderedSizeIsSmaller() {
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			ordered.of(1, 2),
-			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
-		)
-		expect(argsRange) {
-			take.toEqual(2)
-			offset.toEqual(ordered._components.config.seed.toOffset())
-		}
-	}
-
-	@Test
-	fun semiOrdered_requestedMinArgsTakenIntoAccountEvenIfSizeOfSemiOrderedIsSmaller() {
-		val argsRange = ProfileBasedArgsRangeDecider().decide(
-			ordered.of(1, 2).zip(arb.of('A')),
-			AnnotationData(ArgsRangeOptions(requestedMinArgs = 10))
-		)
-		expect(argsRange) {
-			take.toEqual(10)
-			offset.toEqual(ordered._components.config.seed.toOffset())
 		}
 	}
 
@@ -401,5 +214,282 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 			ordered.fromRange(1..11),
 		)
 
+		@JvmStatic
+		fun requestedMinArgsMaxArgsTestsForProfile500() = run {
+			val intBounds1To20 = arb.intBounds(minInclusive = 1, maxInclusive = 20, minSize = 2)
+			val intBounds501To520 = arb.intBounds(minInclusive = 501, maxInclusive = 520, minSize = 2)
+			semiOrdered.fromArbs(
+				arb.intFromUntil(501, 550).map { maxArgs ->
+					Sample(
+						"profile < config.maxArgs < size => profile",
+						configRequestedMinArgs = null,
+						configMaxArgs = maxArgs,
+						annotationRequestedMinArgs = null,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = true,
+						generatorSize = 1000,
+						expectedOrderedTake = 500,
+						expectedSemiOrderedTake = 500,
+						expectedArbTake = 500,
+					)
+				},
+				arb.intFromUntil(501, 550).map { maxArgs ->
+					Sample(
+						"profile < annotation.maxArgs  < size => profile",
+						configRequestedMinArgs = null,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = null,
+						annotationMaxArgs = maxArgs,
+						minArgsOverridesSizeLimit = true,
+						generatorSize = 1000,
+						expectedOrderedTake = 500,
+						expectedSemiOrderedTake = 500,
+						expectedArbTake = 500,
+					)
+				},
+				intBounds1To20.map { (lower, upper) ->
+					Sample(
+						"config.maxArgs < annotation.maxArgs < profile < size => config",
+						configRequestedMinArgs = null,
+						configMaxArgs = lower,
+						annotationRequestedMinArgs = null,
+						annotationMaxArgs = upper,
+						minArgsOverridesSizeLimit = true,
+						generatorSize = 1000,
+						expectedOrderedTake = lower,
+						expectedSemiOrderedTake = lower,
+						expectedArbTake = lower,
+					)
+				},
+				intBounds1To20.map { (lower, upper) ->
+					Sample(
+						"config.maxArgs < annotation.requestedMinArgs < profile < size => config",
+						configRequestedMinArgs = null,
+						configMaxArgs = lower,
+						annotationRequestedMinArgs = upper,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = true,
+						generatorSize = 1000,
+						expectedOrderedTake = lower,
+						expectedSemiOrderedTake = lower,
+						expectedArbTake = lower,
+					)
+				},
+
+				intBounds1To20.map { (lower, upper) ->
+					Sample(
+						"size < config.maxArgs < profile => size for (semi)ordered, maxArgs for arb",
+						configRequestedMinArgs = null,
+						configMaxArgs = upper,
+						annotationRequestedMinArgs = null,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = true,
+						generatorSize = lower,
+						expectedOrderedTake = lower,
+						expectedSemiOrderedTake = lower,
+						expectedArbTake = upper,
+					)
+				},
+				intBounds1To20.map { (lower, upper) ->
+					Sample(
+						"size < annotation.maxArgs < profile => size for (semi)ordered, maxArgs for arb",
+						configRequestedMinArgs = null,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = null,
+						annotationMaxArgs = upper,
+						minArgsOverridesSizeLimit = true,
+						generatorSize = lower,
+						expectedOrderedTake = lower,
+						expectedSemiOrderedTake = lower,
+						expectedArbTake = upper,
+					)
+				},
+
+				intBounds501To520.map { (lower, upper) ->
+					Sample(
+						"profile < config.requestedMinArgs < annotation.requestedMinArgs < size => config takes precedence",
+						configRequestedMinArgs = lower,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = upper,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = true,
+						generatorSize = upper + 100,
+						expectedOrderedTake = lower,
+						expectedSemiOrderedTake = lower,
+						expectedArbTake = lower,
+					)
+				},
+				intBounds501To520.map { (lower, upper) ->
+					Sample(
+						"profile < annotation.maxArgs < config.requestedMinArgs < size => config takes precedence",
+						configRequestedMinArgs = upper,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = null,
+						annotationMaxArgs = lower,
+						minArgsOverridesSizeLimit = true,
+						generatorSize = upper + 100,
+						expectedOrderedTake = upper,
+						expectedSemiOrderedTake = upper,
+						expectedArbTake = upper,
+					)
+				},
+				intBounds1To20.map { (lower, upper) ->
+					Sample(
+						"size < config.requestedMinArgs < profile, minArgsOverrides=false => size for (semi)ordered, profile for arb",
+						configRequestedMinArgs = upper,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = null,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = false,
+						generatorSize = lower,
+						expectedOrderedTake = lower,
+						expectedSemiOrderedTake = lower,
+						expectedArbTake = 500,
+					)
+				},
+				intBounds1To20.map { (lower, upper) ->
+					Sample(
+						"size < annotation.requestedMinArgs < profile, minArgsOverrides=false => size for (semi)ordered, profile for arb",
+						configRequestedMinArgs = null,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = upper,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = false,
+						generatorSize = lower,
+						expectedOrderedTake = lower,
+						expectedSemiOrderedTake = lower,
+						expectedArbTake = 500,
+					)
+				},
+				intBounds1To20.map { (lower, upper) ->
+					Sample(
+						"size < config.requestedMinArgs < profile, minArgsOverrides=true => requestedMinArgs for (semi)ordered, profile for arb",
+						configRequestedMinArgs = upper,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = null,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = true,
+						generatorSize = lower,
+						expectedOrderedTake = upper,
+						expectedSemiOrderedTake = upper,
+						expectedArbTake = 500,
+					)
+				},
+				intBounds1To20.map { (lower, upper) ->
+					Sample(
+						"size < annotation.requestedMinArgs < profile, minArgsOverrides=true => size for (semi)ordered, profile for arb",
+						configRequestedMinArgs = null,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = upper,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = true,
+						generatorSize = lower,
+						expectedOrderedTake = upper,
+						expectedSemiOrderedTake = upper,
+						expectedArbTake = 500,
+					)
+				},
+				intBounds501To520.map { (lower, upper) ->
+					Sample(
+						"profile < size < config.requestedMinArgs, minArgsOverrides=false => size for (semi)ordered, requestedMinArgs for arb",
+						configRequestedMinArgs = upper,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = null,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = false,
+						generatorSize = lower,
+						expectedOrderedTake = lower,
+						expectedSemiOrderedTake = lower,
+						expectedArbTake = upper,
+					)
+				},
+				intBounds501To520.map { (lower, upper) ->
+					Sample(
+						"profile < size < annotation.requestedMinArgs, minArgsOverrides=false => size for (semi)ordered, requestedMinArgs for arb",
+						configRequestedMinArgs = null,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = upper,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = false,
+						generatorSize = lower,
+						expectedOrderedTake = lower,
+						expectedSemiOrderedTake = lower,
+						expectedArbTake = upper,
+					)
+				},
+				intBounds501To520.map { (lower, upper) ->
+					Sample(
+						"profile < size < config.requestedMinArgs, minArgsOverrides=true => requestedMinArgs",
+						configRequestedMinArgs = upper,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = null,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = true,
+						generatorSize = lower,
+						expectedOrderedTake = upper,
+						expectedSemiOrderedTake = upper,
+						expectedArbTake = upper,
+					)
+				},
+				intBounds501To520.map { (lower, upper) ->
+					Sample(
+						"profile < size < annotation.requestedMinArgs, minArgsOverrides=true => requestedMinArgs",
+						configRequestedMinArgs = null,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = upper,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = true,
+						generatorSize = lower,
+						expectedOrderedTake = upper,
+						expectedSemiOrderedTake = upper,
+						expectedArbTake = upper,
+					)
+				},
+				arb.intBounds(minInclusive = 600, maxInclusive = 700, minSize = 10).zipDependent({ arb.intFromUntil(it.first, it.first + 9) }, {(lower, upper), middle ->
+					Sample(
+						"profile < config.requestedMinArgs < size < annotation.requestedMinArgs, minArgsOverrides=false => config.requestedMinArgs",
+						configRequestedMinArgs = lower,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = upper,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = false,
+						generatorSize = middle,
+						expectedOrderedTake = lower,
+						expectedSemiOrderedTake = lower,
+						expectedArbTake = lower,
+					)
+				}),
+				arb.intBounds(minInclusive = 600, maxInclusive = 700, minSize = 10).zipDependent({ arb.intFromUntil(it.first+1, it.first + 9) }, {(lower, upper), middle ->
+					Sample(
+						"profile < annotation.requestedMinArgs < size < config.requestedMinArgs, minArgsOverrides=false => size for semi(ordered), config.requestedMinArgs for arb",
+						configRequestedMinArgs = upper,
+						configMaxArgs = null,
+						annotationRequestedMinArgs = lower,
+						annotationMaxArgs = null,
+						minArgsOverridesSizeLimit = false,
+						generatorSize = middle,
+						expectedOrderedTake = middle,
+						expectedSemiOrderedTake = middle,
+						expectedArbTake = upper,
+					)
+				}),
+			)
+		}
+	}
+
+	data class Sample(
+		val description: String,
+		val configRequestedMinArgs: Int?,
+		val configMaxArgs: Int?,
+		val annotationRequestedMinArgs: Int?,
+		val annotationMaxArgs: Int?,
+		val minArgsOverridesSizeLimit: Boolean,
+		val generatorSize: Int,
+		val expectedOrderedTake: Int,
+		val expectedSemiOrderedTake: Int,
+		val expectedArbTake: Int,
+	) {
+		override fun toString(): String =
+			"$description: c.min=$configRequestedMinArgs, c.max=$configMaxArgs, a.min=$annotationRequestedMinArgs, a.max=$annotationMaxArgs, allow=$minArgsOverridesSizeLimit,s=$generatorSize,o=$expectedOrderedTake,so=$expectedSemiOrderedTake,a=$expectedArbTake"
 	}
 }

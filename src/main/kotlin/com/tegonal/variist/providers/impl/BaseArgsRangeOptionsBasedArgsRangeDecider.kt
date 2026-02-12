@@ -7,7 +7,6 @@ import com.tegonal.variist.config._components
 import com.tegonal.variist.config.config
 import com.tegonal.variist.generators.ArbArgsGenerator
 import com.tegonal.variist.generators.ArgsGenerator
-import com.tegonal.variist.generators.OrderedArgsGenerator
 import com.tegonal.variist.generators.SemiOrderedArgsGenerator
 import com.tegonal.variist.generators.impl.throwUnsupportedArgsGenerator
 import com.tegonal.variist.providers.AnnotationData
@@ -61,46 +60,24 @@ abstract class BaseArgsRangeOptionsBasedArgsRangeDecider : ArgsRangeDecider {
 				minOf(maxArgs!!, take)
 			}.let { take ->
 				when (argsGenerator) {
-					is OrderedArgsGenerator -> {
-						take.letIf(
-							// requestedMinArgs < maxArgs if defined at the same place but
-							// requestedMinArgs > maxArgs if requestedMinArgs was defined
-							// in config and maxArgs in argsRangeOptions. Config takes precedence
-							requestedMinArgs != null && config.maxArgs == null
-						) { newTake ->
-							maxOf(requestedMinArgs!!, newTake)
-						}.let { newTake ->
-							//
-							// no need to take more as we would start to repeat values
-							// we can ignore requestedMinArgs for OrderedArgsGenerator
-							minOf(argsGenerator.size, newTake)
-						}
-
-						// Note, we don't use offset=0 in case generatorSize is less than `take` (i.e. which means we can
-						// run all combinations), because, who knows, maybe the tests are dependent somehow
-						// and we want to be sure we cover this via different offsets
-					}
-
-					is SemiOrderedArgsGenerator ->
+					is SemiOrderedArgsGenerator -> {
+						// don't take more than the generator size (otherwise we repeat values) unless we allow it
+						// yet, take could also be smaller than the size...
 						minOf(argsGenerator.size, take)
-							.letIf(
-								// requestedMinArgs < maxArgs if defined at the same place but
-								// requestedMinArgs > maxArgs if requestedMinArgs was defined
-								// in config and maxArgs in argsRangeOptions. Config takes precedence
-								requestedMinArgs != null && config.maxArgs == null
-							) { newTake ->
-								// in contract to OrderedArgsGenerator we start to repeat the fixed part of a
-								// SemiOrderedArgsGenerator if one requested more than SemiOrderedArgsGenerator.size
-								maxOf(requestedMinArgs!!, newTake)
+							// ... hence if requestedMinArgs is greater we increase ...
+							.increaseToRequestedMinArgsIfConfigMaxArgsNotDefined(requestedMinArgs, config)
+							// ... but only if we allow to go beyond size
+							.letIf(argsRangeOptions?.minArgsOverridesSizeLimit != true) { newTake ->
+								minOf(argsGenerator.size, newTake)
 							}
 
+						// Note, we don't use offset=0 in case generatorSize is less than `take` (i.e. which means we
+						// can run all combinations), because, who knows, maybe the tests are dependent somehow
+						// and we want to be sure we uncover this via different offsets
+					}
+
 					is ArbArgsGenerator ->
-						take.letIf(requestedMinArgs != null && config.maxArgs == null) {
-							// it could be that requestedMinArgs > maxArgs in case requestedMinArgs was defined in
-							// config and maxArgs in argsRangeOptions.
-							// This is because config has precedence over argsRangeOptions.
-							maxOf(requestedMinArgs!!, take)
-						}
+						take.increaseToRequestedMinArgsIfConfigMaxArgsNotDefined(requestedMinArgs, config)
 
 					else -> throwUnsupportedArgsGenerator(argsGenerator)
 				}
@@ -109,5 +86,18 @@ abstract class BaseArgsRangeOptionsBasedArgsRangeDecider : ArgsRangeDecider {
 		argsRange.letIf(newTake != argsRange.take) {
 			ArgsRange(offset = argsRange.offset, take = newTake)
 		}
+	}
+
+	private fun Int.increaseToRequestedMinArgsIfConfigMaxArgsNotDefined(
+		requestedMinArgs: Int?,
+		config: VariistConfig
+	): Int = letIf(
+		// the following condition might seem strange at first but we only need to consider requestedMinArgs if
+		// config.maxArgs is null because if maxArgs is not null, then requestedMinArgs < maxArgs due to invariants
+		// requestedMinArgs > maxArgs happens if requestedMinArgs was defined in config and maxArgs in argsRangeOptions.
+		// config.maxArgs takes precedence in such a case which is done via maxOf below
+		requestedMinArgs != null && config.maxArgs == null
+	) { take ->
+		maxOf(requestedMinArgs!!, take)
 	}
 }

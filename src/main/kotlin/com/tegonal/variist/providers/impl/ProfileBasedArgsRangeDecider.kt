@@ -12,7 +12,7 @@ import com.tegonal.variist.providers.ArgsRange
  *
  * @since 2.0.0
  */
-class ProfileBasedArgsRangeDecider() : BaseArgsRangeOptionsBasedArgsRangeDecider() {
+class ProfileBasedArgsRangeDecider : BaseArgsRangeOptionsBasedArgsRangeDecider() {
 
 	override fun decideArgsRange(
 		profileName: String,
