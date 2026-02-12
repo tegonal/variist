@@ -59,6 +59,7 @@ version: [README of v2.0.1](https://github.com/tegonal/variist/tree/main/README.
 	- [Adjust the number of runs](#adjust-the-number-of-args)
 		- [maxArgs](#maxArgs)
 		- [requestedMinArgs](#requestedMinArgs)
+		- [minArgsOverridesSizeLimit](#minArgsOverridesSizeLimit)
 	- [Fixing the seed](#fixing-the-seed)
 	- [Change the ArgsRangeDecider](#change-the-ArgsRangeDecider)
 	- [Use an own AnnotationDataDeducer](#use-an-own-AnnotationDataDeducer)
@@ -1136,9 +1137,16 @@ and correspondingly the configuration for `Unit` applies for `bar`.
 
 The configured [ArgsRangeDecider](#change-the-ArgsRangeDecider) decides what range of args an `ArgsGenerator` generates,
 and consequently how many runs result. Per contract, an `ArgsRangeDecider` should take defined [`maxArgs`](#maxArgs),
-[`(Semi)OrderedArgsGenerator.size`](#ordered-and-arbitrary-arguments-generators) as well as [
-`requestedMinArgs`](#requestedMinArgs) into account during its decision (next to
-other data which an [own AnnotationDataDeducer](#use-an-own-AnnotationDataDeducer) might deduce).
+[`(Semi)OrderedArgsGenerator.size`](#ordered-and-arbitrary-arguments-generators) as well as
+[ `requestedMinArgs`](#requestedMinArgs) and [`minArgsOverridesSizeLimit`](#minArgsOverridesSizeLimit) into account during its 
+decision (next to other data which an [own AnnotationDataDeducer](#use-an-own-AnnotationDataDeducer) might deduce).
+
+The default implementation is solely based on the configured [profiles and envs](#profiles-and-envs),
+[`SemiOrderedArgsGenerator.size`](#ordered-and-arbitrary-arguments-generators) and additional defined
+[`maxArgs`](#maxArgs), [`requestedMinArgs`](#requestedMinArgs) and
+[`minArgsOverridesSizeLimit`](#minArgsOverridesSizeLimit).
+
+More implementations will follow in an upcoming version of Variist.
 
 ### maxArgs
 
@@ -1177,24 +1185,20 @@ the number of runs, then use `requestedMinArgs`, see next section.
 ### requestedMinArgs
 
 In the same vain as `maxArgs` you can define a `requestedMinArgs`. In contrast to `maxArgs` it is not a hard
-requirement, it is only requested. For instance, if you use an `OrderedArgsGenerator` as `ArgsSource` and define
-`requestedMinArgs=50` but `OrderedArgsGenerator.size=10` then only 10 runs will result, which can still be more than
+requirement, it is only requested. For instance, if you use a `(Semi)OrderedArgsGenerator` as `ArgsSource` and define
+`requestedMinArgs=50` but `SemiOrderedArgsGenerator.size=10` then only 10 runs will result, which can still be more than
 what the active [profile/env combination](#profiles-and-envs) defines via `maxArgs`. I.e. the `requestedMinArgs` defined
-in an annotation can overrule what was defined in `VariistConfig.testProfiles`. `SemiOrderedArgsGenerators.size` does
-not limit a `requestedMinArgs` as it has an arbitrary part which does not repeat. In other words,
-if `requestedMinArgs=50` but `SemiOrderedArgsGenerators.size=10` then nevertheless, 50 runs will be the result.
+in an annotation can overrule what was defined in `VariistConfig.testProfiles`.
 
 `requestedMinArgs` is especially useful if you write a new test and want to execute a greater number of test runs
-than what you would usually want in the `Local` env.
+than what you usually would want in the `Local` env. For this you set `requestedMinArgs` temporarily to a higher
+number in `variist.local.properties` -- don't specify it in `ArgsSourceOptions`. You would typically define it in
+`ArgsSourceOptions` if you want to increate the minimum runs in all envs (and for all users).
 
 As with `maxArgs`, you can define `requestedMinArgs` in `ArgsSourceOptions` and `variist.local.properties` where
 `variist.local.properties` takes precedence again.
 We omit an example here, we guess the usage of `ArgsSourceOptions` should be clear by now, otherwise take a look
-at [maxArgs](#maxargs) and [profile](#profiles-and-envs).
-The default implementation is solely based on the configured [profiles and envs](#profiles-and-envs), [
-`OrderedArgsGenerator.size`](#ordered-and-arbitrary-arguments-generators) and additional defined [`maxArgs`](#maxArgs) [
-`requestedMinArgs`](#requestedMinArgs).
-More implementations will follow in an upcoming version of Variist.
+at [maxArgs](#maxArgs) and [profile](#profiles-and-envs).
 
 If you want to provide an own implementation, then you need to make it available to be loaded via `ServiceLoader`.
 Create the file `src/resource/META-INF/services/com.tegonal.variist.providers.ArgsRangeDecider` and put the fully
@@ -1204,11 +1208,20 @@ qualified name in it. Moreover, you need to set `activeArgRangeDecider` in the V
 Take a look at the next section in case your `ArgsRangeDecider` should take into account other static data defined via
 an annotation.
 
+### minArgsOverridesSizeLimit
+
+Using [`requestedMinArgs`](#requestedMinArgs) allows to increase the number of test runs defined in profiles but is
+limited by `(Semi)OrderedArgsGenerator.size` if a `(Semi)OrderedArgsGenerator` is used. This property allows to remove
+the limit so that the number of test runs = `requestedMinArgs`. This can be useful if you use a 
+`SemiOrderedArgsGenerator` as it contains an arbitrary part which changes even if the `ordered` part repeats.
+Or in case you have an `OrderedArgsGenerator` but the test logic has some arbitrariness inside (like time or 
+concurrency) and you want to execute it multiple times.
+
 ## Use an own AnnotationDataDeducer
 
-You can define an own `AnnotationDataDeducer` which deduces more data next to [`profile`](#profiles-and-envs),  [
-`maxArgs`](#maxArgs) and [`requestedMinArgs`](#requestedMinArgs) which one can define in the annotation
-`ArgsSourceOptions`.
+You can define an own `AnnotationDataDeducer` which deduces more data next to [`profile`](#profiles-and-envs),  
+[`maxArgs`](#maxArgs), [`requestedMinArgs`](#requestedMinArgs) and [`minArgsOverridesSizeLimit`](#minArgsOverridesSizeLimit) 
+which one can define in the annotation `ArgsSourceOptions`.
 
 You need to make it available to be loaded via `ServiceLoader`.
 Create the file `src/resource/META-INF/services/com.tegonal.variist.providers.AnnotationDataDeducer` and put the
