@@ -47,6 +47,7 @@ fun AnnotationData.Companion.fromOptions(
 	argsRangeOptions = ArgsRangeOptions(
 		profile = argsSourceOptions.profile.takeIf { it.isNotEmpty() },
 		requestedMinArgs = argsSourceOptions.requestedMinArgs.takeIf { it > 0 },
+		minArgsOverridesSizeLimit = argsSourceOptions.minArgsOverridesSizeLimit,
 		maxArgs = argsSourceOptions.maxArgs.takeIf { it > 0 },
 	),
 )

@@ -3,6 +3,7 @@ package com.tegonal.variist.providers
 import com.tegonal.variist.config.TestType
 import com.tegonal.variist.config.VariistConfig
 import com.tegonal.variist.generators.ArgsGenerator
+import com.tegonal.variist.generators.SemiOrderedArgsGenerator
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -65,4 +66,10 @@ annotation class ArgsSourceOptions(
 	 * Taken into account if > 0 and should influence an [ArgsRangeDecider]'s choice of [ArgsRange.take].
 	 */
 	val requestedMinArgs: Int = -1,
+
+	/**
+	 * If `true` then [SemiOrderedArgsGenerator.size] does not limit the range size
+	 * in case [requestedMinArgs] is greater.
+	 */
+	val minArgsOverridesSizeLimit: Boolean = false,
 )
