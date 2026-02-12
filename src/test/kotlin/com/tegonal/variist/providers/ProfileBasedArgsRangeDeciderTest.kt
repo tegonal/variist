@@ -23,7 +23,7 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 	@Test
 	fun seed_0_and_skip_max__offset_0() {
 		val ordered = createOrderedWithCustomConfig(
-			ordered._components.config.copy { seed = 0; skip = Int.MAX_VALUE }
+			VariistConfig().copy { seed = 0; skip = Int.MAX_VALUE }
 		).ordered
 		val argsRange = ProfileBasedArgsRangeDecider().decide(ordered.of(1, 2, 3, 4))
 		expect(argsRange) {
@@ -34,7 +34,7 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 	@Test
 	fun seed_max_skip_not_defined__offset_max() {
 		val ordered = createOrderedWithCustomConfig(
-			ordered._components.config.copy { seed = Int.MAX_VALUE; skip = null }
+			VariistConfig().copy { seed = Int.MAX_VALUE; skip = null }
 		).ordered
 		val argsRange = ProfileBasedArgsRangeDecider().decide(ordered.of(1, 2, 3, 4))
 		expect(argsRange) {
@@ -46,7 +46,7 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 	@ValueSource(ints = [1, 2, 3, 4, 5])
 	fun seed_plus_skip_max_overflows__offset_is_seed(seed: Int) {
 		val ordered = createOrderedWithCustomConfig(
-			ordered._components.config.copy { this.seed = seed; this.skip = Int.MAX_VALUE }
+			VariistConfig().copy { this.seed = seed; this.skip = Int.MAX_VALUE }
 		)
 		val argsRange = ProfileBasedArgsRangeDecider().decide(ordered.of(1, 2, 3, 4))
 
@@ -59,7 +59,7 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 	@ValueSource(ints = [1, 2, 3, 4, 5])
 	fun seed_max_plus_skip_overflows__offset_is_max(skip: Int) {
 		val ordered = createOrderedWithCustomConfig(
-			ordered._components.config.copy { this.seed = Int.MAX_VALUE; this.skip = skip }
+			VariistConfig().copy { this.seed = Int.MAX_VALUE; this.skip = skip }
 		)
 		val argsRange = ProfileBasedArgsRangeDecider().decide(ordered.of(1, 2, 3, 4))
 
@@ -80,7 +80,7 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 	fun canCopeWithALargeSkip() {
 		expect {
 			val ordered = createOrderedWithCustomConfig(
-				ordered._components.config.copy { skip = Int.MAX_VALUE }
+				VariistConfig().copy { skip = Int.MAX_VALUE }
 			)
 			ordered.of(1, 2, 3, 4).generateAndTakeBasedOnDecider().count()
 		}.notToThrow()
@@ -91,7 +91,7 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 	fun canCopeWithALargeSeed(offset: Int) {
 		expect {
 			val ordered = createOrderedWithCustomConfig(
-				ordered._components.config.copy { seed = offset }
+				VariistConfig().copy { seed = offset }
 			)
 			ordered.of(1, 2, 3, 4).generateAndTakeBasedOnDecider().count()
 		}.notToThrow()

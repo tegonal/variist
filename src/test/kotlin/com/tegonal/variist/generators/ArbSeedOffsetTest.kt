@@ -5,23 +5,17 @@ import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
 import com.tegonal.variist.config._components
 import com.tegonal.variist.config.arb
-import com.tegonal.variist.config.config
-import com.tegonal.variist.generators.impl.mapIndexedInternal
-import com.tegonal.variist.providers.ArgsSource
-import com.tegonal.variist.testutils.createArbWithCustomConfig
+import com.tegonal.variist.testutils.orderedWithSeed0
 import com.tegonal.variist.testutils.withMockedRandom
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import kotlin.collections.map
 
 class ArbSeedOffsetTest {
 
 	@Test
 	fun combineIncrementsSeedOffset() {
-		val arb =
-			createArbWithCustomConfig(arb._components.config.copy { seed = 0 })._components.withMockedRandom { seed ->
-				Tuple((0..9).map { it + seed * 10 }, emptyList(), emptyList())
-			}.arb
+		val arb = orderedWithSeed0._components.withMockedRandom { seed ->
+			Tuple((0..9).map { it + seed * 10 }, emptyList(), emptyList())
+		}.arb
 
 		val listOfPairs = arb.int().zip(arb.int()).generateAndTake(10).toList()
 		val a1s = listOfPairs.map { it.first }
@@ -32,10 +26,9 @@ class ArbSeedOffsetTest {
 
 	@Test
 	fun combineTakesGivenSeedOffsetIntoAccount() {
-		val arb =
-			createArbWithCustomConfig(arb._components.config.copy { seed = 0 })._components.withMockedRandom { seed ->
-				Tuple((0..9).map { it + seed * 10 }, emptyList(), emptyList())
-			}.arb
+		val arb = orderedWithSeed0._components.withMockedRandom { seed ->
+			Tuple((0..9).map { it + seed * 10 }, emptyList(), emptyList())
+		}.arb
 
 		val listOfPairs = arb.int().zip(arb.int()).generate(seedOffset = 2).take(10).toList()
 		val a1s = listOfPairs.map { it.first }
@@ -46,10 +39,9 @@ class ArbSeedOffsetTest {
 
 	@Test
 	fun zipDependentUsingArbInsideIncrementsBaseSeedOffset() {
-		val arb1 =
-			createArbWithCustomConfig(arb._components.config.copy { seed = 0 })._components.withMockedRandom { seed ->
-				Tuple((0..9).map { it + seed * 10 }, emptyList(), emptyList())
-			}.arb
+		val arb1 = orderedWithSeed0._components.withMockedRandom { seed ->
+			Tuple((0..9).map { it + seed * 10 }, emptyList(), emptyList())
+		}.arb
 
 		val listOfPairs = arb1.int().zipDependent { arb.int() }.generateAndTake(10).toList()
 		val a1s = listOfPairs.map { it.first }
@@ -60,10 +52,9 @@ class ArbSeedOffsetTest {
 
 	@Test
 	fun zipDependentTakesGivenSeedOffsetIntoAccount() {
-		val arb1 =
-			createArbWithCustomConfig(arb._components.config.copy { seed = 0 })._components.withMockedRandom { seed ->
-				Tuple((0..9).map { it + seed * 10 }, emptyList(), emptyList())
-			}.arb
+		val arb1 = orderedWithSeed0._components.withMockedRandom { seed ->
+			Tuple((0..9).map { it + seed * 10 }, emptyList(), emptyList())
+		}.arb
 
 		val listOfPairs = arb1.int().zipDependent { arb.int() }.generate(seedOffset = 3).take(10).toList()
 		val a1s = listOfPairs.map { it.first }
@@ -74,10 +65,9 @@ class ArbSeedOffsetTest {
 
 	@Test
 	fun usingArbInAnArbExtensionReceiverIncrementsBaseSeedOffset() {
-		val arb1 =
-			createArbWithCustomConfig(arb._components.config.copy { seed = 0 })._components.withMockedRandom { seed ->
-				Tuple((0..9).map { it + seed * 10 }, emptyList(), emptyList())
-			}.arb
+		val arb1 = orderedWithSeed0._components.withMockedRandom { seed ->
+			Tuple((0..9).map { it + seed * 10 }, emptyList(), emptyList())
+		}.arb
 		with(arb1) {
 			val arb2 = arb
 			val a1s = arb1.int().generateAndTake(10).toList()
@@ -85,10 +75,5 @@ class ArbSeedOffsetTest {
 			expect(a1s).toEqual((0..9).toList())
 			expect(a2s).toEqual((10..19).toList())
 		}
-	}
-
-	companion object {
-		@JvmStatic
-		fun arb1Until10() = arb.intFromUntil(1, 10)
 	}
 }

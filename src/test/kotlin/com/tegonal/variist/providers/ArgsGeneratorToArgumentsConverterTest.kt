@@ -8,6 +8,7 @@ import com.tegonal.variist.config.*
 import com.tegonal.variist.generators.*
 import com.tegonal.variist.providers.impl.DefaultArgsGeneratorToArgumentsConverter
 import com.tegonal.variist.testutils.Tuple4LikeStructure
+import com.tegonal.variist.testutils.createArbWithCustomConfig
 import com.tegonal.variist.testutils.orderedWithSeed0
 import com.tegonal.variist.testutils.withMockedArgsRange
 import org.junit.jupiter.params.ParameterizedTest
@@ -119,7 +120,7 @@ class ArgsGeneratorToArgumentsConverterTest {
 	@ParameterizedTest
 	@ValueSource(ints = [1, 2, 4, 9, 15])
 	fun randomOnly(numOfGenerators: Int) {
-		val firstList = arb.fromRange(0 until 10).map { mutableListOf(it) }
+		val firstList = createArbWithCustomConfig(VariistConfig()).fromRange(0 until 10).map { mutableListOf(it) }
 
 		val combinations = testee.toArguments(
 			"id", requestedAtLeastArgs1000,
@@ -156,6 +157,7 @@ class ArgsGeneratorToArgumentsConverterTest {
 
 	@Test
 	fun randomOnlyDependent() {
+		val arb = createArbWithCustomConfig(VariistConfig())
 		val startDateMin = LocalDate.now()
 		val lastDayOfYear = startDateMin.with(TemporalAdjusters.lastDayOfYear())
 		val startDateUntil = if(startDateMin.isEqual(lastDayOfYear)) startDateMin.plusYears(1).minusDays(2) else lastDayOfYear
