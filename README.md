@@ -155,7 +155,7 @@ The [configuration](#configuration) section explains how we can adjust the defau
 For now, we continue without going too much into configuration details.
 
 > [!Note]
-> Unfortunately, due to a [bug in intellij](https://youtrack.jetbrains.com/issue/KTIJ-35010), you won't be able to
+> Unfortunately, due to a [bug in IntelliJ](https://youtrack.jetbrains.com/issue/KTIJ-35010), you won't be able to
 > click on `myProvider` and jump to the function definition. As workaround, you can define your own ArgsSource as
 > follows:
 > ```kotlin
@@ -234,7 +234,7 @@ raw values (which are turned into a `List` and then passed to `ordered.fromList`
 covers integers from `1..50000` and not only `1..20` (and in [predefined args providers](#predefined-args-providers) you
 will see how we
 define that it shall work for all positive integers). But why did we use `arb` and not `ordered`? The short answer: too
-many values -- say your test takes ~2s and you cannot parallelise, running all would already take ~24h -- and most
+many values -- say your test takes ~2s, and you cannot parallelise, running all would already take ~24h -- and most
 likely this is not your single test. In this case we do not expect that we cover all cases in a reasonable amount of
 time, hence we use `arb`. An `ArbArgsGenerator` has a different runtime behaviour regarding:
 
@@ -416,7 +416,7 @@ class CombineTupleTest : PredefinedArgsProviders {
 </code-combine-tuple>
 
 Combining two `OrderedArgsGenerator`s A and B (or `SemiOrderedArgsGenerator`s) results in an `OrderedArgsGenerator`
-representing their cartesian product and the size correspondingly `A.size * B.size`. I.e. such combinations can
+representing their Cartesian product and the size correspondingly `A.size * B.size`. I.e. such combinations can
 grow quickly, but Variist has you covered in therms that this is just a definition (nothing generated yet) and
 you still execute only a window of those values in a fast and efficient way.
 Combining two `ArbArgsGenerator` means zipping them and results in another `ArbArgsGenerator` (again, nothing generated,
@@ -488,7 +488,7 @@ pairwise into something else than `Tuple2`.
 ### ordered cartesian
 
 As mentioned in [generic combine](#generic-combine), combining multiple `OrderArgsGenerator`s by using a `Tuple` uses
-`cartesian` behind the scenes and results in a new `OrderArgsGenerator` which represents the cartesian product of them,
+`cartesian` behind the scenes and results in a new `OrderArgsGenerator` which represents the Cartesian product of them,
 i.e. all possible combinations.
 
 <code-cartesian-1>
@@ -1261,7 +1261,7 @@ Note, that you can still define
 a [ParameterResolver](https://docs.junit.org/current/user-guide/#writing-tests-dependency-injection),
 instead (or in addition). Variist is only an addition to JUnit, you can use all other constructs as well.
 There is a difference though, if you define that your `SuffixArgsGeneratorDecider` returns an `OrderedArgsGenerator`
-then the cartesian product results as explained in [generic combine](#generic-combine).
+then the Cartesian product results as explained in [generic combine](#generic-combine).
 
 ## Properties Loader Configuration
 
@@ -1384,7 +1384,7 @@ repeatForever().flatMap { _ ->
 ## BigInt helpers
 
 We think `BigInteger` is too cumbersome to write and hence use `BigInt` instead (also aligns better with Kotlin's choice
-to use `Int` instead of `Integer`. For instance, we use `ordered.bigIntFromUntil` instead of
+to use `Int` instead of `Integer`). For instance, we use `ordered.bigIntFromUntil` instead of
 `ordered.bigIntegerFromUntil`. And since it would look odd if this function takes `BigInteger`, we introduced
 a corresponding `typealias` and an extension method `toBigInt` for `Int` and `Long`.
 
