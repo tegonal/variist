@@ -17,7 +17,7 @@ import com.tegonal.variist.utils.seedToOffset
  * @since 2.0.0
  */
 fun <T> SemiOrderedArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData: AnnotationData? = null): Sequence<T> =
-	decide(annotationData).let(::generateAndTake)
+	decideArgsRange(annotationData).let(::generateAndTake)
 
 /**
  * Returns a finite [Sequence] of values based on [VariistConfig.skip] and the [ArgsRange] that the configured
@@ -26,8 +26,7 @@ fun <T> SemiOrderedArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData
  * @since 2.0.0
  */
 fun <T> OrderedArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData: AnnotationData? = null): Sequence<T> =
-	decide(annotationData).let(::generateAndTake)
-
+	decideArgsRange(annotationData).let(::generateAndTake)
 
 /**
  * Returns one value based on the [ArgsRange.offset] that the configured [ArgsRangeDecider] will chose.
@@ -35,7 +34,7 @@ fun <T> OrderedArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData: An
  * @since 2.0.0
  */
 fun <T> SemiOrderedArgsGenerator<T>.generateOneBasedOnDecider(annotationData: AnnotationData? = null): T =
-	decide(annotationData).offset.let(::generateOne)
+	decideArgsRange(annotationData).offset.let(::generateOne)
 
 /**
  * Returns a finite [Sequence] of values based [VariistConfig.skip] and thee [ArgsRange] that the configured
@@ -44,9 +43,13 @@ fun <T> SemiOrderedArgsGenerator<T>.generateOneBasedOnDecider(annotationData: An
  * @since 2.0.0
  */
 fun <T> ArbArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData: AnnotationData? = null): Sequence<T> =
-	decide(annotationData).take.let(this::generateAndTake)
+	decideArgsRange(annotationData).take.let(this::generateAndTake)
 
-private fun <T> ArgsGenerator<T>.decide(annotationData: AnnotationData?): ArgsRange =
+/**
+ * Returns the [ArgsRange] the configured [ArgsRangeDecider] decides for this [ArgsGenerator] and the given [annotationData].
+ * @since 2.1.0
+ */
+fun <T> ArgsGenerator<T>.decideArgsRange(annotationData: AnnotationData? = null): ArgsRange =
 	_components.build<ArgsRangeDecider>().decide(this, annotationData)
 
 /**
