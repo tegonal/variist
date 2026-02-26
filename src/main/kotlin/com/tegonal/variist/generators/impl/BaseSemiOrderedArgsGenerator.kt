@@ -14,8 +14,8 @@ import com.tegonal.variist.utils.impl.checkIsPositive
  * @since 2.0.0
  */
 abstract class BaseSemiOrderedArgsGenerator<T>(
-	override val componentFactoryContainer: ComponentFactoryContainer,
-	override val size: Int
+	final override val componentFactoryContainer: ComponentFactoryContainer,
+	final override val size: Int
 ) : SemiOrderedArgsGenerator<T>, ComponentFactoryContainerProvider {
 
 	constructor(componentFactoryContainer: ComponentFactoryContainer, size: Long) : this(
@@ -57,10 +57,11 @@ abstract class BaseSemiOrderedArgsGenerator<T>(
 		}
 	}
 
-	open fun generateOneAfterChecks(offset: Int): T =
-		// we don't use first as it checks hasNext in addition and we know that it has to have one as the
+	open fun generateOneAfterChecks(offset: Int): T = run {
+		// we don't use first() as it checks hasNext() in addition and we know that it has to have one as the
 		// Sequence needs to be infinite according to the ArgsGenerator contract
 		generateAfterChecks(offset).iterator().next()
+	}
 
 	abstract fun generateAfterChecks(offset: Int): Sequence<T>
 }

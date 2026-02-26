@@ -1,8 +1,8 @@
 package com.tegonal.variist.generators.impl
 
+import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.OrderedArgsGenerator
 import com.tegonal.variist.generators.SemiOrderedArgsGenerator
-import com.tegonal.variist.config._components
 
 /**
  * !! No backward compatibility guarantees !!
@@ -11,22 +11,10 @@ import com.tegonal.variist.config._components
  * @since 2.0.0
  */
 class OrderedCartesianProductArgsGenerator<A1, A2, R>(
-	private val a1Generator: OrderedArgsGenerator<A1>,
-	private val a2Generator: OrderedArgsGenerator<A2>,
-	private val transform: (A1, A2) -> R
-) : BaseSemiOrderedArgsGenerator<R>(
-	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,
-	// should you run into weird behaviour (such as one generator uses seed X and the other seed Y) then most likely
-	// someone used two different initial factories
-	a1Generator._components,
-	a1Generator.size.toLong() * a2Generator.size.toLong()
-), OrderedArgsGenerator<R> {
-
-	//TODO 2.1.0 override generateOneAfterChecks?
-
-	override fun generateAfterChecks(offset: Int): Sequence<R> =
-		combine(a1Generator, a2Generator, transform, offset)
-}
+	a1Generator: OrderedArgsGenerator<A1>,
+	a2Generator: OrderedArgsGenerator<A2>,
+	transform: (A1, A2) -> R
+) : CartesianProductArgsGenerator<A1, A2, R>(a1Generator, a2Generator, transform), OrderedArgsGenerator<R>
 
 /**
  * !! No backward compatibility guarantees !!
@@ -35,6 +23,18 @@ class OrderedCartesianProductArgsGenerator<A1, A2, R>(
  * @since 2.0.0
  */
 class SemiOrderedCartesianProductArgsGenerator<A1, A2, R>(
+	a1Generator: SemiOrderedArgsGenerator<A1>,
+	a2Generator: SemiOrderedArgsGenerator<A2>,
+	transform: (A1, A2) -> R
+) : CartesianProductArgsGenerator<A1, A2, R>(a1Generator, a2Generator, transform)
+
+/**
+ * !! No backward compatibility guarantees !!
+ * Reuse at your own risk
+ *
+ * @since 2.1.0
+ */
+abstract class CartesianProductArgsGenerator<A1, A2, R>(
 	private val a1Generator: SemiOrderedArgsGenerator<A1>,
 	private val a2Generator: SemiOrderedArgsGenerator<A2>,
 	private val transform: (A1, A2) -> R
@@ -45,82 +45,106 @@ class SemiOrderedCartesianProductArgsGenerator<A1, A2, R>(
 	a1Generator._components,
 	a1Generator.size.toLong() * a2Generator.size.toLong()
 ) {
+	// Note calculating the lcm doesn't bring much in speed: up to -10% if less than 3 values, up to 13% for > 12 values
+	// comparing max time for lcm / min for previous approach: overall an improvement around 4%.
+	// But is uses about 10% less memory in case of Int/Char values (less Iterators are created).
+	private val leastCommonMultiple: Int
+	private val repeatsAfterNumOfChunks: Int
+	private val noShiftsNeeded: Boolean
 
-	override fun generateAfterChecks(offset: Int): Sequence<R> =
-		combine(a1Generator, a2Generator, transform, offset)
-}
+	init {
+		val size = this.size
+		leastCommonMultiple = size / greatestCommonDivisor(a1Generator.size, a2Generator.size)
+		repeatsAfterNumOfChunks = size / leastCommonMultiple
 
-/**
- * Combines two [SemiOrderedArgsGenerator] by letting the bigger
- * (in terms of [SemiOrderedArgsGenerator.size] = maxSize) generate repeatedly values starting from the defined offset and by letting the smaller generate chunks of maxSize
- * whereas the offset progresses from the given [offset] until its [SemiOrderedArgsGenerator.size].
- *
- * This approach allows to generate lazily combined values without the need to generate more data than needed.
- */
-private fun <A1, A2, R> combine(
-	a1Generator: SemiOrderedArgsGenerator<A1>,
-	a2Generator: SemiOrderedArgsGenerator<A2>,
-	transform: (A1, A2) -> R,
-	offset: Int
-): Sequence<R> {
-	// Some notes about performance (verified via jmh), we think performance matters here because it will be used heavily:
-	// - using a custom tailored Iterator with a chunked based approach is:
-	//   - 1.5 - 2 times faster than generateSequence + specialised zip function and uses only half of the memory
-	//   - 2 - x times faster than generateSequence + flatMap on the underlying list/array where speed and memory
-	//     in this case depends on the offset and how expensive the discarded values are to allocate/build
-	// - multiple if(a1IsSmaller) rather than:
-	//   - var and a single if because SSA (static single assignment) can usually be better optimised
-	//     by an AOT compiler/JIT
-	//   - we don't use tuple + destructuring because we would allocate memory unnecessarily (~50 bytes more per
-	//     call) and this change was significant in the tests
+		// if the least common multiple is equal to size, then we don't need to shift the offset of a1 in each chunk,
+		// a1 will naturally shift and be in sync again when reaching `size` where it shall repeat.
+		noShiftsNeeded = leastCommonMultiple == size
+	}
 
-	val a1Size = a1Generator.size
-	val a2Size = a2Generator.size
-	val a1IsSmaller = a1Size < a2Size
-	val sizeOfSmaller = if (a1IsSmaller) a1Size else a2Size
-	val maxSize = if (a1IsSmaller) a2Size else a1Size
+	private fun greatestCommonDivisor(a1Size: Int, a2Size: Int): Int {
+		var a = a1Size
+		var b = a2Size
+		while (a != 0) {
+			val temp = a
+			a = b % a
+			b = temp
+		}
+		return b
+	}
 
-	// we generate in chunks of maxSize thus we can already fast-forward to the correct chunk ...
-	val chunkOffset = (offset / maxSize) % sizeOfSmaller
+	override fun generateOneAfterChecks(offset: Int): R {
+		val offsetInFirstChunk = calculateOffsetInFirstChunk(offset)
 
-	// ... within that chunk we might need to fast-forward elements to reach the desired offset
-	val firstChunkOffset = offset % maxSize
+		val a1Offset = if (noShiftsNeeded) {
+			offsetInFirstChunk
+		} else {
+			val numOfChunksSkipped = calculateNumberOfSkippedChunks(offset)
+			calculateA1Offset(offsetInFirstChunk, numOfChunksSkipped)
+		}
+		return transform(a1Generator.generateOne(a1Offset), a2Generator.generateOne(offsetInFirstChunk))
+	}
 
-	return Sequence {
-		object : Iterator<R> {
-			private var chunkIndex = chunkOffset
+	override fun generateAfterChecks(offset: Int): Sequence<R> {
+		val offsetInFirstChunk = calculateOffsetInFirstChunk(offset)
 
-			private var a1Iterator =
-				a1Generator.generate(firstChunkOffset + if (a1IsSmaller) chunkOffset else 0).iterator()
-
-			private var a2Iterator =
-				a2Generator.generate(firstChunkOffset + if (a1IsSmaller) 0 else chunkOffset).iterator()
-
-			// in the first chunk we might have an offset and if so will produce fewer values
-			private var count = firstChunkOffset
-
-			override fun hasNext(): Boolean = true
-			override fun next(): R =
-				transform(a1Iterator.next(), a2Iterator.next()).also {
-					++count
-					if (count >= maxSize) {
-
-						count = 0
-						++chunkIndex
-						if (chunkIndex >= sizeOfSmaller) {
-							chunkIndex = 0
-						}
-
-						// we only change the offset of the smaller iterator, the iterator of the bigger just repeats
-						// we could also reset it but that would mean creating a new Iterator (and we prefer to avoid
-						// this cost)
-						if (a1IsSmaller) {
-							a1Iterator = a1Generator.generate(chunkIndex).iterator()
-						} else {
-							a2Iterator = a2Generator.generate(chunkIndex).iterator()
-						}
-					}
+		return if (noShiftsNeeded) {
+			Sequence {
+				object : Iterator<R> {
+					private var a1Iterator = a1Generator.generate(offsetInFirstChunk).iterator()
+					private var a2Iterator = a2Generator.generate(offsetInFirstChunk).iterator()
+					override fun hasNext(): Boolean = true
+					override fun next(): R = transform(a1Iterator.next(), a2Iterator.next())
 				}
+			}
+		} else {
+			val numOfChunksSkipped = calculateNumberOfSkippedChunks(offset)
+			// we shift the starting offset of a1Generator each chunk by one
+			val a1Offset = calculateA1Offset(offsetInFirstChunk, numOfChunksSkipped)
+
+			Sequence {
+				// not thread-safe
+				object : Iterator<R> {
+					private var inChunkNumber = numOfChunksSkipped
+					private var a1Iterator = a1Generator.generate(a1Offset).iterator()
+					private val a2Iterator = a2Generator.generate(offsetInFirstChunk).iterator()
+
+					// in the first chunk we might have an offset and if so will produce fewer values
+					private var countInChunk = offsetInFirstChunk
+
+					override fun hasNext(): Boolean = true
+					override fun next(): R =
+						transform(a1Iterator.next(), a2Iterator.next()).also {
+							++countInChunk
+
+							// we generate in chunks of leastCommonMultiple...
+							if (countInChunk >= leastCommonMultiple) {
+								countInChunk = 0
+								++inChunkNumber
+
+								if (inChunkNumber >= repeatsAfterNumOfChunks) {
+									inChunkNumber = 0
+								}
+								// We could also drop 1 --i.e. a1Iterator.next() -- instead of creating a new Iterator
+								// if inChunkNumber != 0. But since we don't know how costly it is to create a value,
+								// we use an iterator to be on the safer side.
+								// For small values it would be beneficial (e.g. for Int we would use around 10% less
+								// memory)
+								a1Iterator = a1Generator.generate(inChunkNumber).iterator()
+							}
+						}
+				}
+			}
 		}
 	}
+
+	private fun calculateOffsetInFirstChunk(offset: Int): Int =
+		offset % leastCommonMultiple
+
+	private fun calculateNumberOfSkippedChunks(offset: Int): Int =
+		(offset / leastCommonMultiple) % repeatsAfterNumOfChunks
+
+	private fun calculateA1Offset(offsetInFirstChunk: Int, numOfChunksSkipped: Int): Int =
+		offsetInFirstChunk + numOfChunksSkipped
 }
+
