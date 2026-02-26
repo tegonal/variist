@@ -32,7 +32,7 @@ class OrderedCartesianTest : AbstractOrderedCombinerTest() {
 
 	@ParameterizedTest
 	@ArgsSource("arbNumOfIntCharsAndStrings")
-	fun cartesian3(numOfInts: Int, numOfChars: Int, numOfStrings: Int) {
+	fun cartesian_twice(numOfInts: Int, numOfChars: Int, numOfStrings: Int) {
 		val a1s = (1..numOfInts).toList()
 		val a2s = (1..numOfChars).map { 'A' - 1 + it }
 		val a3s = (1..numOfStrings).map { ('a' - 1 + it).toString() }
@@ -44,7 +44,6 @@ class OrderedCartesianTest : AbstractOrderedCombinerTest() {
 
 		validateGeneration(generator.map { triple -> triple.toList() }, listOf(a1s, a2s, a3s))
 	}
-
 
 	@ParameterizedTest
 	@ArgsSource("arbNumOfIntCharsAndStrings")
@@ -60,7 +59,6 @@ class OrderedCartesianTest : AbstractOrderedCombinerTest() {
 
 		validateGeneration(generator.map { triple -> triple.toList() }, listOf(a1s, a2s, a3s))
 	}
-
 
 	@ParameterizedTest
 	@ArgsSource("arbNumOfGeneratorsAndValues")
