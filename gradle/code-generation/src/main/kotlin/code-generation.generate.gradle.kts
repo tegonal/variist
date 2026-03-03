@@ -119,9 +119,10 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 							if (className == "SemiOrderedArgsGenerator") "ArgsGenerator" else className
 						val argsGenerators = (2..upperNumber).joinToString(",\n\t") { "$otherClassName<A$it>" }
 
-						//TODO 2.1.0 come up with a solution which combines in one go so that we don't have to
-						// create intermediate Pair, Triple .. until reaching the final TupleN
-						// Moreover, such an implementation would also allow to provide a custom transform function
+						// we verified (see Cartesian3Bench) if it would be beneficial to come up with a versionn which
+						// does not need intermediate Pairs (we used a version which used an array instead and unsafe
+						// casts). This was way slower and also used more memory. Maybe using a specialised version for 3 args, 4 args
+						// etc. would help but seems like overkill for now
 						sb.append(
 							"""
 							|/**
