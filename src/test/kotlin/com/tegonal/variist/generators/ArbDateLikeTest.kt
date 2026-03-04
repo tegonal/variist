@@ -9,9 +9,15 @@ class ArbDateLikeTest : AbstractArbArgsGeneratorTest<Any>() {
 	override fun createGenerators(modifiedArb: ArbExtensionPoint) =
 		ZonedDateTime.now().truncatedTo(ChronoUnit.HOURS).let { nowZonedDateTime ->
 			val nowLocalDateTime = nowZonedDateTime.toLocalDateTime()
+			val nowLocalTime = nowZonedDateTime.toLocalTime()
 			val nowLocalDate = nowZonedDateTime.toLocalDate()
 			val nowOffsetDateTime = nowZonedDateTime.toOffsetDateTime()
 			sequenceOf(
+				Tuple(
+					"localTimeFromUntil",
+					modifiedArb.localTimeFromUntil(nowLocalTime, nowLocalTime.plusHours(2), ChronoUnit.HOURS),
+					listOf(nowLocalTime, nowLocalTime.plusHours(1))
+				),
 				Tuple(
 					"localDateFromUntil",
 					modifiedArb.localDateFromUntil(nowLocalDate, nowLocalDate.plusDays(2), ChronoUnit.DAYS),
@@ -45,6 +51,11 @@ class ArbDateLikeTest : AbstractArbArgsGeneratorTest<Any>() {
 					(0L until 2 * 60).map { nowOffsetDateTime.plusSeconds(it) }
 				),
 				Tuple(
+					"localTimeFromTo",
+					modifiedArb.localTimeFromTo(nowLocalTime, nowLocalTime.plusMinutes(2), ChronoUnit.MINUTES),
+					listOf(nowLocalTime, nowLocalTime.plusMinutes(1), nowLocalTime.plusMinutes(2))
+				),
+				Tuple(
 					"localDateFromTo",
 					modifiedArb.localDateFromTo(nowLocalDate, nowLocalDate.plusDays(2), ChronoUnit.DAYS),
 					listOf(nowLocalDate, nowLocalDate.plusDays(1), nowLocalDate.plusDays(2))
@@ -65,7 +76,7 @@ class ArbDateLikeTest : AbstractArbArgsGeneratorTest<Any>() {
 						nowZonedDateTime.plus(11, ChronoUnit.MICROS),
 						ChronoUnit.MICROS
 					),
-					(0L .. 11).map { nowZonedDateTime.plus(it, ChronoUnit.MICROS) }
+					(0L..11).map { nowZonedDateTime.plus(it, ChronoUnit.MICROS) }
 				),
 				Tuple(
 					"offsetDateTimeFromTo",
@@ -74,7 +85,7 @@ class ArbDateLikeTest : AbstractArbArgsGeneratorTest<Any>() {
 						nowOffsetDateTime.plusMinutes(1),
 						ChronoUnit.SECONDS
 					),
-					(0L .. 1 * 60).map { nowOffsetDateTime.plusSeconds(it) }
+					(0L..1 * 60).map { nowOffsetDateTime.plusSeconds(it) }
 				),
 			)
 		}
