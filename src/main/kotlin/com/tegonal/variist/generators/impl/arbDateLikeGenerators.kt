@@ -47,6 +47,54 @@ class LocalDateFromUntilArbArgsGenerator(
  * !! No backward compatibility guarantees !!
  * Reuse at your own risk
  *
+ * @since 2.0.0
+ */
+class LocalDateTimeFromUntilArbArgsGenerator(
+	componentFactoryContainer: ComponentFactoryContainer,
+	seedBaseOffset: Int,
+	from: LocalDateTime,
+	toExclusive: LocalDateTime,
+	temporalUnit: TemporalUnit = ChronoUnit.DAYS,
+) : TemporalFromUntilArbArgsGenerator<LocalDateTime>(
+	componentFactoryContainer, seedBaseOffset, from, toExclusive, temporalUnit, LocalDateTime::plus
+)
+
+/**
+ * !! No backward compatibility guarantees !!
+ * Reuse at your own risk
+ *
+ * @since 2.0.0
+ */
+class ZonedDateTimeFromUntilArbArgsGenerator(
+	componentFactoryContainer: ComponentFactoryContainer,
+	seedBaseOffset: Int,
+	from: ZonedDateTime,
+	toExclusive: ZonedDateTime,
+	temporalUnit: TemporalUnit = ChronoUnit.DAYS,
+) : TemporalFromUntilArbArgsGenerator<ZonedDateTime>(
+	componentFactoryContainer, seedBaseOffset, from, toExclusive, temporalUnit, ZonedDateTime::plus
+)
+
+/**
+ * !! No backward compatibility guarantees !!
+ * Reuse at your own risk
+ *
+ * @since 2.0.0
+ */
+class OffsetDateTimeFromUntilArbArgsGenerator(
+	componentFactoryContainer: ComponentFactoryContainer,
+	seedBaseOffset: Int,
+	from: OffsetDateTime,
+	toExclusive: OffsetDateTime,
+	temporalUnit: TemporalUnit = ChronoUnit.DAYS,
+) : TemporalFromUntilArbArgsGenerator<OffsetDateTime>(
+	componentFactoryContainer, seedBaseOffset, from, toExclusive, temporalUnit, OffsetDateTime::plus
+)
+
+/**
+ * !! No backward compatibility guarantees !!
+ * Reuse at your own risk
+ *
  * @since 2.1.0
  */
 @Suppress("FunctionName")
@@ -119,23 +167,6 @@ private class InternalLocalDateFromToArbArgsGenerator(
  *
  * @since 2.0.0
  */
-class LocalDateTimeFromUntilArbArgsGenerator(
-	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
-	from: LocalDateTime,
-	toExclusive: LocalDateTime,
-	temporalUnit: TemporalUnit = ChronoUnit.DAYS,
-) : TemporalFromUntilArbArgsGenerator<LocalDateTime>(
-	componentFactoryContainer, seedBaseOffset, from, toExclusive, temporalUnit, LocalDateTime::plus
-)
-
-
-/**
- * !! No backward compatibility guarantees !!
- * Reuse at your own risk
- *
- * @since 2.0.0
- */
 @Suppress("FunctionName")
 fun LocalDateTimeFromToArbArgsGenerator(
 	componentFactoryContainer: ComponentFactoryContainer,
@@ -163,22 +194,6 @@ private class InternalLocalDateTimeFromToArbArgsGenerator(
 	temporalUnit: TemporalUnit
 ) : TemporalFromToArbArgsGenerator<LocalDateTime>(
 	componentFactoryContainer, seedBaseOffset, from, toInclusive, temporalUnit, LocalDateTime::plus
-)
-
-/**
- * !! No backward compatibility guarantees !!
- * Reuse at your own risk
- *
- * @since 2.0.0
- */
-class ZonedDateTimeFromUntilArbArgsGenerator(
-	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
-	from: ZonedDateTime,
-	toExclusive: ZonedDateTime,
-	temporalUnit: TemporalUnit = ChronoUnit.DAYS,
-) : TemporalFromUntilArbArgsGenerator<ZonedDateTime>(
-	componentFactoryContainer, seedBaseOffset, from, toExclusive, temporalUnit, ZonedDateTime::plus
 )
 
 /**
@@ -215,23 +230,6 @@ private class InternalZonedDateTimeFromToArbArgsGenerator(
 ) : TemporalFromToArbArgsGenerator<ZonedDateTime>(
 	componentFactoryContainer, seedBaseOffset, from, toInclusive, temporalUnit, ZonedDateTime::plus
 )
-
-/**
- * !! No backward compatibility guarantees !!
- * Reuse at your own risk
- *
- * @since 2.0.0
- */
-class OffsetDateTimeFromUntilArbArgsGenerator(
-	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
-	from: OffsetDateTime,
-	toExclusive: OffsetDateTime,
-	temporalUnit: TemporalUnit = ChronoUnit.DAYS,
-) : TemporalFromUntilArbArgsGenerator<OffsetDateTime>(
-	componentFactoryContainer, seedBaseOffset, from, toExclusive, temporalUnit, OffsetDateTime::plus
-)
-
 
 /**
  * !! No backward compatibility guarantees !!
