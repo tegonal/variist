@@ -2,15 +2,9 @@ package com.tegonal.variist.generators
 
 import ch.tutteli.atrium.api.fluent.en_GB.*
 import ch.tutteli.atrium.api.verbs.expect
-import ch.tutteli.atrium.testfactories.TestFactoryBuilder
 import ch.tutteli.kbox.Tuple
 import ch.tutteli.kbox.Tuple2
 import ch.tutteli.kbox.mapFirst
-import ch.tutteli.kbox.toVararg
-import com.tegonal.variist.config.ComponentFactoryContainer
-import com.tegonal.variist.config.arb
-import com.tegonal.variist.config.config
-import com.tegonal.variist.config.createBasedOnConfig
 import com.tegonal.variist.generators.impl.createBoundsArbGenerator
 import com.tegonal.variist.generators.impl.createIntDomainBasedBoundsArbGenerator
 import com.tegonal.variist.generators.impl.possibleMaxSizeSafeInIntDomain
@@ -22,10 +16,10 @@ import com.tegonal.variist.testutils.minInclusiveMustBeLessThanMaxInclusive
 import com.tegonal.variist.testutils.minMaxInclusiveCase
 import com.tegonal.variist.utils.BigInt
 import com.tegonal.variist.utils.toBigInt
-import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.Named
-import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.params.ParameterizedTest
+import java.time.LocalDate
+import java.time.LocalTime
 
 class ArbBoundsTest : AbstractArbArgsGeneratorTest<Any>() {
 
@@ -47,6 +41,36 @@ class ArbBoundsTest : AbstractArbArgsGeneratorTest<Any>() {
 				"longBounds minSize=1, maxSize=2",
 				modifiedArb.longBounds(1, 4, minSize = 1, maxSize = 2),
 				minSize1MaxSize2.map { (it.first.code - 'a'.code + 1).toLong() to it.second.code - 'a'.code + 1.toLong() }
+			),
+			Tuple(
+				"localDateBounds minSize=1, maxSize=2",
+				modifiedArb.localDateBounds(
+					LocalDate.of(2021, 1, 1),
+					LocalDate.of(2021, 1, 4),
+					minSize = 1,
+					maxSize = 2
+				),
+				minSize1MaxSize2.map {
+					Pair(
+						LocalDate.of(2021, 1, it.first.code - 'a'.code + 1),
+						LocalDate.of(2021, 1, it.second.code - 'a'.code + 1)
+					)
+				}
+			),
+			Tuple(
+				"localTimeBounds minSize=1, maxSize=2",
+				modifiedArb.localTimeBounds(
+					LocalTime.of(12, 0, 10, 1),
+					LocalTime.of(12, 0, 10, 4),
+					minSize = 1,
+					maxSize = 2
+				),
+				minSize1MaxSize2.map {
+					Pair(
+						LocalTime.of(12, 0, 10, it.first.code - 'a'.code + 1),
+						LocalTime.of(12, 0, 10, it.second.code - 'a'.code + 1)
+					)
+				}
 			),
 		)
 	}

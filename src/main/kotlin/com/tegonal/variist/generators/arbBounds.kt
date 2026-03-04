@@ -4,6 +4,8 @@ import ch.tutteli.kbox.Tuple2
 import com.tegonal.variist.generators.impl.createBoundsArbGenerator
 import com.tegonal.variist.generators.impl.createIntDomainBasedBoundsArbGenerator
 import com.tegonal.variist.generators.impl.possibleMaxSizeSafeInIntDomain
+import java.time.LocalDate
+import java.time.LocalTime
 
 /**
  * Returns an [ArbArgsGenerator] which generates [Tuple2] representing a lower and upper bound where the bounds
@@ -238,3 +240,57 @@ private fun <T, E, NumberT> ArbExtensionPoint.includeEmptyRangeIfMinSizeIs0(
 		95 to arbRange
 	)
 } else arbRange
+
+
+/**
+ * Returns an [ArbArgsGenerator] which generates [Tuple2] representing a lower and upper bound where the bounds
+ * range from [minInclusive] to [maxInclusive] respecting the given [minSize] as well as
+ * [maxSize] if defined.
+ *
+ * @param minSize must be greater than or equal to 1
+ * @param maxSize must be greater than or equal to [minSize] and less than the possible max size given
+ *   by [minInclusive], [maxInclusive]
+ *
+ * @since 2.0.0
+ */
+fun ArbExtensionPoint.localDateBounds(
+	minInclusive: LocalDate = LocalDate.MIN,
+	maxInclusive: LocalDate = LocalDate.MAX,
+	minSize: Long = 1,
+	maxSize: Long? = null,
+): ArbArgsGenerator<Tuple2<LocalDate, LocalDate>> =
+	longBoundsBasedInternal(
+		minInclusive.toEpochDay(),
+		maxInclusive.toEpochDay(),
+		minSize,
+		maxSize
+	) { lowerBound, upperBound ->
+		LocalDate.ofEpochDay(lowerBound) to LocalDate.ofEpochDay(upperBound)
+	}
+
+
+/**
+ * Returns an [ArbArgsGenerator] which generates [Tuple2] representing a lower and upper bound where the bounds
+ * range from [minInclusive] to [maxInclusive] respecting the given [minSize] as well as
+ * [maxSize] if defined and the precision is nanoseconds.
+ *
+ * @param minSize must be greater than or equal to 1
+ * @param maxSize must be greater than or equal to [minSize] and less than the possible max size given
+ *   by [minInclusive], [maxInclusive]
+ *
+ * @since 2.0.0
+ */
+fun ArbExtensionPoint.localTimeBounds(
+	minInclusive: LocalTime = LocalTime.MIN,
+	maxInclusive: LocalTime = LocalTime.MAX,
+	minSize: Long = 1,
+	maxSize: Long? = null,
+): ArbArgsGenerator<Tuple2<LocalTime, LocalTime>> =
+	longBoundsBasedInternal(
+		minInclusive.toNanoOfDay(),
+		maxInclusive.toNanoOfDay(),
+		minSize,
+		maxSize
+	) { lowerBound, upperBound ->
+		LocalTime.ofNanoOfDay(lowerBound) to LocalTime.ofNanoOfDay(upperBound)
+	}
