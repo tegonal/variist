@@ -3,12 +3,29 @@ package com.tegonal.variist.generators.impl
 import com.tegonal.variist.config.ComponentFactoryContainer
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.OffsetDateTime
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import java.time.temporal.Temporal
 import java.time.temporal.TemporalUnit
 import kotlin.random.Random
+
+/**
+ * !! No backward compatibility guarantees !!
+ * Reuse at your own risk
+ *
+ * @since 2.1.0
+ */
+class LocalTimeFromUntilArbArgsGenerator(
+	componentFactoryContainer: ComponentFactoryContainer,
+	seedBaseOffset: Int,
+	from: LocalTime,
+	toExclusive: LocalTime,
+	temporalUnit: TemporalUnit,
+) : TemporalFromUntilArbArgsGenerator<LocalTime>(
+	componentFactoryContainer, seedBaseOffset, from, toExclusive, temporalUnit, LocalTime::plus
+)
 
 /**
  * !! No backward compatibility guarantees !!
@@ -24,6 +41,41 @@ class LocalDateFromUntilArbArgsGenerator(
 	temporalUnit: TemporalUnit,
 ) : TemporalFromUntilArbArgsGenerator<LocalDate>(
 	componentFactoryContainer, seedBaseOffset, from, toExclusive, temporalUnit, LocalDate::plus
+)
+
+/**
+ * !! No backward compatibility guarantees !!
+ * Reuse at your own risk
+ *
+ * @since 2.1.0
+ */
+@Suppress("FunctionName")
+fun LocalTimeFromToArbArgsGenerator(
+	componentFactoryContainer: ComponentFactoryContainer,
+	seedBaseOffset: Int,
+	from: LocalTime,
+	toInclusive: LocalTime,
+	temporalUnit: TemporalUnit
+) = if (from == toInclusive) {
+	ConstantArbArgsGenerator(componentFactoryContainer, seedBaseOffset, from)
+} else {
+	InternalLocalTimeFromToArbArgsGenerator(componentFactoryContainer, seedBaseOffset, from, toInclusive, temporalUnit)
+}
+
+/**
+ * !! No backward compatibility guarantees !!
+ * Reuse at your own risk
+ *
+ * @since 2.1.0
+ */
+private class InternalLocalTimeFromToArbArgsGenerator(
+	componentFactoryContainer: ComponentFactoryContainer,
+	seedBaseOffset: Int,
+	from: LocalTime,
+	toInclusive: LocalTime,
+	temporalUnit: TemporalUnit
+) : TemporalFromToArbArgsGenerator<LocalTime>(
+	componentFactoryContainer, seedBaseOffset, from, toInclusive, temporalUnit, LocalTime::plus
 )
 
 /**
