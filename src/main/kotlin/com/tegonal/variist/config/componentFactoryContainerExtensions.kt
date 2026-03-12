@@ -45,7 +45,6 @@ fun ComponentFactoryContainer.Companion.createBasedOnConfig(config: VariistConfi
 			}
 		),
 		mapOf(
-			//TODO 2.1.0 allow to sort them?
 			createChainFromServiceLoaders<AnnotationDataDeducer>(),
 		)
 	)
