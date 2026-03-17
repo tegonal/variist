@@ -7,7 +7,7 @@ plugins {
 	id("me.champeau.jmh") version "0.7.3"
 }
 
-version = "2.1.0"
+version = "2.2.0-SNAPSHOT"
 group = "com.tegonal.variist"
 description = "Library which helps to setup and prioritise parameterized tests"
 
@@ -95,8 +95,8 @@ Release & deploy a commit
 1. update main:
 
 
-export VARIIST_PREVIOUS_VERSION=2.1.0
-export VARIIST_VERSION=2.1.0
+export VARIIST_PREVIOUS_VERSION=2.0.0
+export VARIIST_VERSION=2.2.0
 find ./ -name "*.md" | xargs perl -0777 -i \
    -pe "s@$VARIIST_PREVIOUS_VERSION@$VARIIST_VERSION@g;" \
    -pe "s@tree/main@tree/v$VARIIST_VERSION@g;" \
@@ -132,8 +132,8 @@ Increment VARIIST_GH_PAGES_VERSIONS_JS_VERSION and VARIIST_GH_PAGES_VERSIONS_JS_
 
 export VARIIST_GH_PAGES_LOGO_CSS_VERSION="1.3"
 export VARIIST_GH_PAGES_ALERT_CSS_VERSION="1.1"
-export VARIIST_GH_PAGES_VERSIONS_JS_VERSION="1.4.0"
-export VARIIST_GH_PAGES_VERSIONS_JS_VERSION_NEXT="1.5.0"
+export VARIIST_GH_PAGES_VERSIONS_JS_VERSION="1.5.0"
+export VARIIST_GH_PAGES_VERSIONS_JS_VERSION_NEXT="1.6.0"
 
 gr dokkaHtml
 
@@ -179,7 +179,7 @@ cd ../variist
 
 3. deploy to sonatype central portal:
 (assumes you have an alias named gr pointing to ./gradlew)
-    a) java -version 2>&1 | grep "version \"11" && PUB=true CI=true gr clean pubToMaLo &&
+    a) java -version 2>&1 | grep "version \"11" || { echo "please switch the jdk version, is currently not 11"; return 1; } && PUB=true CI=true gr clean pubToMaLo &&
        tmpDir=$(mktemp -d -t "variist-release-$VARIIST_VERSION-XXXXXXXXXX") &&
        find "$HOME/.m2/repository/com/tegonal/variist" -type d -name "*$VARIIST_VERSION" -print0 |
          while read -r -d $'\0' versionDir; do
@@ -211,7 +211,7 @@ Prepare next dev cycle
 
 
 export VARIIST_VERSION=2.1.0
-export VARIIST_NEXT_VERSION=2.1.0
+export VARIIST_NEXT_VERSION=2.2.0
 find ./ -name "*.md" | xargs perl -0777 -i \
    -pe "s@tree/v$VARIIST_VERSION@tree/main@g;" \
    -pe "s@$VARIIST_VERSION/kdoc@latest#/kdoc@g;" \
