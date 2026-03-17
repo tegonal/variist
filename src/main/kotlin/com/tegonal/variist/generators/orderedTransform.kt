@@ -19,7 +19,7 @@ import com.tegonal.variist.generators.impl.transformInternal
  */
 @OptIn(InternalDangerousApi::class)
 fun <T, R> OrderedArgsGenerator<T>.map(transform: (T) -> R): OrderedArgsGenerator<R> =
-// TODO 2.1.0 bench if it would be worth it to introduce an OrderedArgsGeneratorMapper which takes T -> R and
+// TODO 2.5.0 bench if it would be worth it to introduce an OrderedArgsGeneratorMapper which takes T -> R and
 	//  provides an optimised generateOne method
 	transformInternal { seq -> seq.map(transform) }
 

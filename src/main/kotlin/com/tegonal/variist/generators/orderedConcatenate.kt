@@ -33,7 +33,7 @@ private fun <T> concatAll(iterator: Iterator<OrderedArgsGenerator<T>>): OrderedA
 	val first = iterator.next()
 	var result = first
 	while (iterator.hasNext()) {
-		//TODO 2.1.0 would it be worth to introduce a Concatenator which takes n OrderedArgsGenerator instead of just 2?
+		//TODO 2.5.0 would it be worth to introduce a Concatenator which takes n OrderedArgsGenerator instead of just 2?
 		result += iterator.next()
 	}
 	return result
@@ -56,6 +56,6 @@ private fun <T> concatAll(iterator: Iterator<OrderedArgsGenerator<T>>): OrderedA
 operator fun <T> OrderedArgsGenerator<T>.plus(
 	other: OrderedArgsGenerator<T>,
 ): OrderedArgsGenerator<T> =
-	//TODO 2.1.0 bench when it makes sense to materialise instead of concatenation, for small sizes it could be faster
+	//TODO 2.5.0 bench when it makes sense to materialise instead of concatenation, for small sizes it could be faster
 	OrderedArgsGeneratorConcatenator(this, other)
 

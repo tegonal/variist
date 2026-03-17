@@ -62,7 +62,7 @@ private fun <T> concatenate(
 	newSize: Int,
 	offset: Int
 ): Sequence<T> {
-	// TODO 2.1.0 no micro-benchmarking done yet, maybe we find a more efficient solution?
+	// TODO 2.5.0 no micro-benchmarking done yet, maybe we find a more efficient solution?
 
 	val offsetInRange = offset % newSize
 	val a1Size = a1Generator.size

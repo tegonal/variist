@@ -38,7 +38,7 @@ fun <T> ArbExtensionPoint.mergeWeighted(
 	return if (others.isEmpty()) {
 		ArbArgsGeneratorWeightedMerger(first, second, seedBaseOffset)
 	} else {
-		// TODO 2.1.0 we could use a binary search instead of indexOf starting from ~20 elements (would need to
+		// TODO 2.5.0 we could use a binary search instead of indexOf starting from ~20 elements (would need to
 		//  be benchmarked). I think most of the time there are <= 10 weights and thus indexOf performs better
 		MultiArbArgsGeneratorIndexOfWeightedMerger(first, second, others, seedBaseOffset)
 	}

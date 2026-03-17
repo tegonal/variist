@@ -232,7 +232,7 @@ private fun <T, E, NumberT> ArbExtensionPoint.includeEmptyRangeIfMinSizeIs0(
 	zero: NumberT
 ): ArbArgsGenerator<E> = if (minSize == zero) {
 	mergeWeighted(
-		//TODO 2.1.0 make this configurable once we introduce the concept of edge cases, for now we generate an
+		//TODO 2.2.0 make this configurable once we introduce the concept of edge cases, for now we generate an
 		// empty range in 5% of the cases --
 		//
 		// I don't think that we gain something if we vary the bounds of an empty range

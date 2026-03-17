@@ -24,4 +24,4 @@ fun ArbExtensionPoint.fromRange(range: IntRange): ArbArgsGenerator<Int> =
 fun ArbExtensionPoint.fromRange(range: LongRange): ArbArgsGenerator<Long> =
 	longFromTo(range.first, range.last)
 
-//TODO 2.1.0 introduce BigIntRange?
+//TODO 2.2.0 introduce BigIntRange?

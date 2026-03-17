@@ -325,7 +325,7 @@ private inline fun <NumberT, T> ArbExtensionPoint.arbBoundsNumberBased(
 	// arithmetic progression (with delta = -1), hence we can use the arithmetic series formula:
 	// Sn = n * (first + last) / 2 where n = how many range sizes do we summon over, which also corresponds the
 	// desired prefixSum functionality.
-	// TODO 2.1.0 maybe worth to cache the prefix sum in case of small possibleMaxSize?
+	// TODO 2.5.0 maybe worth to cache the prefix sum in case of small possibleMaxSize?
 	val numOfRangesWithMinSize = numOfRangesWithSize(minSize, possibleMaxSize)
 	val accumulatedSum = prefixSum(actualMaxSize, minSize, numOfRangesWithMinSize, possibleMaxSize)
 	// we use a zero-index based approach because fromUntil is cheaper than fromTo and we want to add the offset to

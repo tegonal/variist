@@ -16,7 +16,7 @@ import com.tegonal.variist.utils.createVariistRandom
  *
  * @since 2.0.0
  */
-// TODO 2.1.0 introduce something like ArbArgsSizeAwareGenerator which has a size and
+// TODO 2.2.0 introduce something like ArbArgsSizeAwareGenerator which has a size and
 //  provides a way to turn itself into an OrderedArgsGenerator. This would be useful for small spaces as we could just
 //  return all values in case an ArgsRangeDecider decides to take more then the available size
 interface ArbArgsGenerator<out T> : ArgsGenerator<T> {

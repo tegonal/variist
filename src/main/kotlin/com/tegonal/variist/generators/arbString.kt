@@ -127,7 +127,7 @@ private fun createNextRandomCodePointFun(
 }
 
 private fun Random.nextCodepoint(ranges: Array<out UnicodeRange>, cumulativeSizes: List<Int>, totalSize: Int): Int {
-	//TODO 2.1.0 bench if it would be faster to use linear search in case there are not many allowedRanges
+	//TODO 2.5.0 bench if it would be faster to use linear search in case there are not many allowedRanges
 	val index = nextInt(totalSize)
 	return cumulativeSizes.binarySearch(index).let {
 		if (it >= 0) {
@@ -160,6 +160,6 @@ private fun checkCanGenerateRequiredLength(
 	}
 }
 
-//TODO 2.1.0 combinations on case
+//TODO 2.2.0 combinations on case
 //arb.stringRandomCase(s: String)
 

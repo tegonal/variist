@@ -32,7 +32,7 @@ fun <T> Collection<T>.pickOneRandomly(): T =
 		}
 	}
 
-//TODO 2.1.0 we could provide overloads for specialised array types such as IntArray
+//TODO 2.3.0 we could provide overloads for specialised array types such as IntArray
 /**
  * Picks randomly one element from `this` [Collection] based on the configured [VariistConfig.seed].
  *
@@ -76,8 +76,8 @@ fun <T> SemiOrderedArgsGenerator<T>.takeRandomly(amount: Int, seedOffset: Int = 
  * @since 2.0.0
  */
 fun <T> Iterable<T>.takeRandomly(amount: Int): List<T> {
-	// TODO 2.1.0 we could implement an optimisation for big take in case of List -> use BitSet, see code in jmh dir
-	// TODO 2.1.0 introduce `shuffled` as supplement to `arb`?
+	// TODO 2.5.0 we could implement an optimisation for big take in case of List -> use BitSet, see code in jmh dir
+	// TODO 2.2.0 introduce `shuffled` as supplement to `arb`?
 	return asSequence().takeRandomly(amount).toList()
 }
 
@@ -88,7 +88,7 @@ fun <T> Iterable<T>.takeRandomly(amount: Int): List<T> {
  * @since 2.0.0
  */
 fun <T> Array<T>.takeRandomly(amount: Int): List<T> {
-	// TODO 2.1.0 we could implement an optimisation for big take -> use BitSet, see code in jmh dir
+	// TODO 2.5.0 we could implement an optimisation for big take -> use BitSet, see code in jmh dir
 	return asSequence().takeRandomly(amount).toList()
 }
 
@@ -103,7 +103,7 @@ fun <T> Array<T>.takeRandomly(amount: Int): List<T> {
  * @since 2.0.0
  */
 fun <T> Sequence<T>.takeRandomly(amount: Int): Sequence<T> {
-	// TODO 2.1.0 we could implement an optimisation for big take -> use BitSet, see code in jmh dir
+	// TODO 2.5.0 we could implement an optimisation for big take -> use BitSet, see code in jmh dir
 	return this.shuffled(createVariistRandom()).take(amount)
 }
 

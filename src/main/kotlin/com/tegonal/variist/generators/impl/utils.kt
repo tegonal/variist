@@ -18,7 +18,7 @@ inline fun <A, B, R> zipForever(
 	seqB: Sequence<B>,
 	crossinline transform: (A, B) -> R
 ): Sequence<R> {
-	//TODO 2.1.0 benchmark if it would make sense to have an own Sequence + Iterator for this
+	//TODO 2.5.0 benchmark if it would make sense to have an own Sequence + Iterator for this
 	val iterA = seqA.iterator()
 	val iterB = seqB.iterator()
 

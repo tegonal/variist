@@ -8,5 +8,5 @@ class VariistConfigTest : RequestedMinAndMaxArgsTest {
 		VariistConfig(requestedMinArgs = requestedMinArgs, maxArgs = maxArgs)
 	}
 
-	//TODO 2.1.0 add good first issues for the tests of the remaining invariants?
+	//TODO 2.2.0 add good first issues for the tests of the remaining invariants?
 }

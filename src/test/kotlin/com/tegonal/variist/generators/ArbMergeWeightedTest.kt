@@ -203,7 +203,7 @@ class ArbMergeWeightedTest {
 
 		@JvmStatic
 		fun arbInvalidWeight() =
-			//TODO 2.1.0 introduce the concept of edge cases, here we would like to be sure that 0 is invalid as well
+			//TODO 2.2.0 introduce the concept of edge cases, here we would like to be sure that 0 is invalid as well
 			arb.intFromTo(Int.MIN_VALUE, 0)
 
 		@JvmStatic

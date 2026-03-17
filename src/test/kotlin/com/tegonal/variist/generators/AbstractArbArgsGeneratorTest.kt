@@ -44,7 +44,7 @@ abstract class AbstractArbArgsGeneratorWithoutAnnotationsTest : AbstractArgsGene
 
 abstract class AbstractArbArgsGeneratorTest<T> : AbstractArbArgsGeneratorWithoutAnnotationsTest() {
 
-	//TODO 2.1.0 add a test case where we use a mocked Random so that we can be sure
+	//TODO 2.2.0 add a test case where we use a mocked Random so that we can be sure
 	// it yields all values in case of an ArbSizeAware or the like
 	abstract fun createGenerators(modifiedArb: ArbExtensionPoint): ArbArgsTestFactoryResult<T>
 

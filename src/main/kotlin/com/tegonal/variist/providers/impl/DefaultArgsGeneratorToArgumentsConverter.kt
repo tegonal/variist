@@ -57,7 +57,7 @@ class DefaultArgsGeneratorToArgumentsConverter : ArgsGeneratorToArgumentsConvert
 		return Arguments.of(*flattenedArgs.toTypedArray())
 	}
 
-	//TODO 2.1.0 benchmark if we should use a mutable structure instead of flatMap, I guess in most cases we don't have
+	//TODO 2.5.0 benchmark if we should use a mutable structure instead of flatMap, I guess in most cases we don't have
 	// nesting at all, and sometimes we might have 1 or 2 levels
 	private fun flattenTuples(generatorResults: List<*>): List<*> =
 		generatorResults.flatMap { result ->

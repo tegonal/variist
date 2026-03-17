@@ -36,7 +36,7 @@ fun ArbExtensionPoint.fromProgression(progression: IntProgression): ArbArgsGener
 			val numberOfSteps = (endInclusive.toLong() - start) / stepAbs + 1
 			val numberOfStepsI = numberOfSteps.toInt()
 
-			//TODO 2.1.0 bench at what point it makes sense to calculate it, I just guess that for small progressions
+			//TODO 2.5.0 bench at what point it makes sense to calculate it, I just guess that for small progressions
 			// storing it in a list is more efficient and memory is neglectable. But maybe this can be increased to x
 			// or should be decreased to y
 			if (numberOfSteps < 50L) fromList(progression.toList())
@@ -72,7 +72,7 @@ fun ArbExtensionPoint.fromProgression(progression: LongProgression): ArbArgsGene
 			val diff = endInclusive.toBigInt() - start.toBigInt()
 			val numberOfSteps = diff / stepAbs.toBigInt() + BigInt.ONE
 
-			//TODO 2.1.0 bench at what point it makes sense to calculate it, I just guess that for small progressions,
+			//TODO 2.5.0 bench at what point it makes sense to calculate it, I just guess that for small progressions,
 			// storing it in a list is more efficient and memory is neglectable. But maybe this can be increased to x
 			// or should be decreased to y
 			if (numberOfSteps < 50.toBigInt()) fromList(progression.toList())
@@ -90,4 +90,4 @@ fun ArbExtensionPoint.fromProgression(progression: LongProgression): ArbArgsGene
 		}
 	}
 
-//TODO 2.1.0 introduce BigIntProgression?
+//TODO 2.2.0 introduce BigIntProgression?
