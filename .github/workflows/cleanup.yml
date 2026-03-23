@@ -41,7 +41,7 @@ jobs:
           distribution: 'temurin'
           java-version: 17
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
       #gt-placeholder-install-dependencies-end
 
       - name: Cleanup Sources
