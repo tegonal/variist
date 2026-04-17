@@ -82,7 +82,7 @@ class VariistPropertiesParser {
 			// VariistPropertiesLoaderConfig -------------------------------------------------------------------------
 			// ---------------------------------------------------------------------------------------------
 
-			isKey("variistPropertiesDir") -> loaderConfig.localPropertiesDir = Paths.get(value)
+			isKey("localPropertiesDir") -> loaderConfig.localPropertiesDir = Paths.get(value)
 			isKey("remindAboutFixedPropertiesAfterMinutes") ->
 				loaderConfig.remindAboutFixedPropertiesAfterMinutes = value.toIntOrErrorNotValid(key)
 
