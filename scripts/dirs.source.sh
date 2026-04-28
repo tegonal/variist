@@ -23,3 +23,8 @@ if ! [[ -v dir_of_tegonal_scripts ]]; then
 	dir_of_tegonal_scripts="$scriptsDir/../lib/tegonal-scripts/src"
 	source "$dir_of_tegonal_scripts/setup_tegonal_scripts.sh" "$dir_of_tegonal_scripts"
 fi
+
+if ! [[ -v dir_of_github_commons ]]; then
+	dir_of_github_commons="$scriptsDir/../lib/tegonal-gh-commons/src"
+	readonly dir_of_github_commons
+fi
