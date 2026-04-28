@@ -166,5 +166,30 @@ class CombinatorsExample : PredefinedArgsProviders {
 			arb.of(null)
 		)
 	}
+
+	@Test
+	fun `code-fromListWeighted`() {
+		arb.fromListWeighted(
+			listOf(
+				10 to 'a',
+				20 to 'b',
+				10 to 'c',
+				60 to 'r'
+			)
+		)
+	}
+
+	@Test
+	fun `code-fromEnumWeighted`() {
+		//snippet-enum-color-insert
+
+		arb.fromEnumWeighted<Color> {
+			when (it) {
+				Color.Red -> 10
+				Color.Blue -> 50
+				Color.Green -> 20
+			}
+		}
+	}
 }
 

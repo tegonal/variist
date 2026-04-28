@@ -50,6 +50,7 @@ version: [README of v2.1.0](https://github.com/tegonal/variist/tree/main/README.
 		- [chunked](#chunked)
 		- [ordered.concatenation](#ordered-concatenation)
 		- [arb.mergeWeighted](#arb-mergeWeighted)
+          - [arb.fromList/EnumWeighted](#arb-fromListWeighted--fromEnumWeighted)
 		- [arb.mergeRoundRobin](#arb-mergeRoundRobin)
 		- [ordered.toArbArgsGenerator](#ordered-toArbArgsGenerator)
 		- [semiOrdered.fromArbs](#semiOrdered-fromArbs)
@@ -814,7 +815,59 @@ it might be skewed; for example, 85 values could fall between 100 and 200, etc.
 
 This might be especially relevant if you define the same weights for all generators and expect them to contribute
 equally values. In theory this is true but only for large number of values.
-Use [mergeRoundRobin](#arb-mergeRoundRobin) if you want equal contributions regardless of the number of values.
+Use [mergeRoundRobin](#arb-mergeRoundRobin) if you want equal contributions regardless of the number of values generated.
+
+#### arb fromListWeighted / fromEnumWeighted
+
+Variist provides two helper methods which are related to [mergeWeighted](#arb-mergeWeighted).
+The first allows you to define a list of values with associated weights as follows:
+
+<code-fromListWeighted>
+
+```kotlin
+arb.fromListWeighted(
+	listOf(
+		10 to 'a',
+		20 to 'b',
+		10 to 'c',
+		60 to 'r'
+	)
+)
+```
+
+</code-fromListWeighted>
+
+Here out of 100 generated values `'a'` is picked in average 10 times (i.e. 10% of the time), `'b'` 20 times,
+`'c'` 10 times and `'r'` 60 times. The same applies here as for [mergeWeighted](#arb-mergeWeighted). If you generate
+only a few values, then the distribution might be skewed for that run. If you need equal probability for each element,
+then you can simply use `arb.fromList(...)`.
+
+The second helper method is similar but specific to enums:
+
+<code-fromEnumWeighted>
+
+```kotlin
+enum class Color {
+	Red, Blue, Green
+}
+
+arb.fromEnumWeighted<Color> {
+	when (it) {
+		Color.Red -> 10
+		Color.Blue -> 50
+		Color.Green -> 20
+	}
+}
+```
+
+</code-fromEnumWeighted>
+
+It expects a lambda which defines the weight for each entry. In the above example, out of 80 generated values, 
+around 10 will be `Red`, around 50 will be `Blue` and around 20 will be `Green`. 
+The same applies here as for [mergeWeighted](#arb-mergeWeighted). 
+If you generate only a few values, then the distribution might be skewed for that run.
+
+Again, if you need equal probability, then just use `arb.fromEnum<T>()`.
 
 ### arb mergeRoundRobin
 

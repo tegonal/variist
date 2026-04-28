@@ -64,6 +64,8 @@ fun <T> SemiOrderedArgsGenerator<T>.pickOneRandomly(seedOffset: Int = 0): T =
  * @since 2.0.0
  */
 fun <T> SemiOrderedArgsGenerator<T>.takeRandomly(amount: Int, seedOffset: Int = 0): List<T> =
+	//TODO 2.5.0 this does not guarantee that we pick the same index only once before repeating in contrast
+	// to Iterable.takeRandomly. This creates a semantical inconsistency, better use shuffled once implemented
 	toArbArgsGenerator().generate(seedOffset).take(amount).toList()
 
 
