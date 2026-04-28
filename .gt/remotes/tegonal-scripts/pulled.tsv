@@ -1,6 +1,5 @@
 #@ Version: 1.2.0
 tag	file	relativeTarget	tagFilter	hasPlaceholder	sha512
-v4.11.0	src/setup.sh	../lib/tegonal-scripts/src/setup.sh	.*	false	259c46ea62afe5284a6e39fbd77343b32f98579584506d519c47fedee471adcaf91addaab10cc2804de2a4bfe119a6682a0d7952a456e4a617b2727ba541e8b0
 v4.11.0	src/utility/io.sh	../lib/tegonal-scripts/src/utility/io.sh	.*	false	feb7b71939f4278d999fd0367489724644e89291f13a4d66e75350e19b18cafafcd2d64027ee46b125ea34e9deae1a0d1261899bca37d1134c7c1028417c4196
 v4.11.0	src/utility/array-utils.sh	../lib/tegonal-scripts/src/utility/array-utils.sh	.*	false	638528571b35f2a5d545a5b722a09be65ebd79dd8195adf30e31279167c19e4d8f8cbdda3d4fb388a3df3f00e2e5143b01146d5b43d64b9dc351807946317470
 v4.11.0	src/utility/parse-utils.sh	../lib/tegonal-scripts/src/utility/parse-utils.sh	.*	false	1bca82bd4e26b115f6fc97e3875829fa7dacb2e9600ac1454cab89a8c54dc0a0f7d4cfc9cf8ad73c61a758a41830f125c79341b9b4cca454be62102ba8092945
@@ -21,3 +20,4 @@ v4.11.0	src/ci/install-shellcheck.sh	../lib/tegonal-scripts/src/ci/install-shell
 v4.11.0	src/qa/run-shellcheck.sh	../lib/tegonal-scripts/src/qa/run-shellcheck.sh	.*	false	05a51cf6a9b9b51b8d99c234cbfa6525549d8dceaca8f6a1ac24b8ad14d0eea0552a3d91637b3011bb1008ee4f3499994b36dd080416b0d5c2333ddc647565e0
 v4.11.0	src/ci/install-shfmt.sh	../lib/tegonal-scripts/src/ci/install-shfmt.sh	.*	false	43dc9cbefc9eb0ae965e022cd413675bdad95d1b4ba36c82d444aaca2212f85a800b8f52140acde0968e70b0a609b4ff01498400273b639832bbb32225463831
 v4.11.0	src/qa/run-shfmt.sh	../lib/tegonal-scripts/src/qa/run-shfmt.sh	.*	false	0c34f42975fc9459a6f8014bc4c72a1c1dff5c6eca36761dcadc46b1690d84e5aafed74dd48a16533eff89dfa5141c26640429a6b2c9fb0ce2b47f45a68e392c
+v4.11.0	src/setup_tegonal_scripts.sh	../lib/tegonal-scripts/src/setup_tegonal_scripts.sh	.*	false	4802417b353cad2de4c2ff52cae73bab06ab294d6af4e3d85ae08e2d6bf63a7ead5eb68c2404238ef667064e8ea2fe319b437c693f7cceb3ba29ab9f1718ab7a
