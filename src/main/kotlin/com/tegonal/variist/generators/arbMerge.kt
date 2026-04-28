@@ -23,7 +23,7 @@ import com.tegonal.variist.generators.impl.MultiArbArgsGeneratorRoundRobinMerger
  * @param second The second [ArbArgsGenerator] with an associated weight
  * @param others optionally more [ArbArgsGenerator] with associated weights
  *
- * @throws IllegalArgumentException in case the weights are wrong (are less than 1)
+ * @throws IllegalArgumentException in case a weight is wrong (is less than 1)
  * @throws ArithmeticException in case the weights sum up to [Int.MAX_VALUE] or more.
  *
  * @return The resulting [ArbArgsGenerator].
@@ -66,4 +66,3 @@ fun <T> ArbExtensionPoint.mergeRoundRobin(
 	second: ArbArgsGenerator<T>,
 	vararg others: ArbArgsGenerator<T>,
 ): ArbArgsGenerator<T> = MultiArbArgsGeneratorRoundRobinMerger(first, second, others, seedBaseOffset)
-
