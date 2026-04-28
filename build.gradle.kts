@@ -7,7 +7,7 @@ plugins {
 	id("me.champeau.jmh") version "0.7.3"
 }
 
-version = "2.2.0"
+version = "2.3.0-SNAPSHOT"
 group = "com.tegonal.variist"
 description = "Library which helps to setup and prioritise parameterized tests"
 
@@ -96,7 +96,7 @@ Release & deploy a commit
 
 
 export VARIIST_PREVIOUS_VERSION=2.2.0
-export VARIIST_VERSION=2.2.0
+export VARIIST_VERSION=2.3.0
 find ./ -name "*.md" | xargs perl -0777 -i \
    -pe "s@$VARIIST_PREVIOUS_VERSION@$VARIIST_VERSION@g;" \
    -pe "s@tree/main@tree/v$VARIIST_VERSION@g;" \
@@ -132,8 +132,8 @@ Increment VARIIST_GH_PAGES_VERSIONS_JS_VERSION and VARIIST_GH_PAGES_VERSIONS_JS_
 
 export VARIIST_GH_PAGES_LOGO_CSS_VERSION="1.3"
 export VARIIST_GH_PAGES_ALERT_CSS_VERSION="1.1"
-export VARIIST_GH_PAGES_VERSIONS_JS_VERSION="1.5.0"
-export VARIIST_GH_PAGES_VERSIONS_JS_VERSION_NEXT="1.6.0"
+export VARIIST_GH_PAGES_VERSIONS_JS_VERSION="1.6.0"
+export VARIIST_GH_PAGES_VERSIONS_JS_VERSION_NEXT="1.7.0"
 
 gr dokkaHtml
 
@@ -210,8 +210,8 @@ Prepare next dev cycle
     1. update main:
 
 
-export VARIIST_VERSION=2.2.0
-export VARIIST_NEXT_VERSION=2.2.0
+export VARIIST_VERSION=2.3.0
+export VARIIST_NEXT_VERSION=2.3.0
 find ./ -name "*.md" | xargs perl -0777 -i \
    -pe "s@tree/v$VARIIST_VERSION@tree/main@g;" \
    -pe "s@$VARIIST_VERSION/kdoc@latest#/kdoc@g;" \
@@ -221,7 +221,8 @@ perl -0777 -i \
   -pe "s/VARIIST_VERSION=$VARIIST_VERSION/VARIIST_VERSION=$VARIIST_NEXT_VERSION/;" \
   ./build.gradle.kts
 perl -0777 -i \
-  -pe 's/(<!-- for main -->\n)<!--\n([\S\s]*?)-->(\n<!-- for release -->)\n([\S\s]*?)\n(\n# <img)/$1\n$2$3\n<!--$4-->\n$5/;' \
+  -pe 's/(<!-- for release -->\n)\n([\S\s]*?)(\n<!-- for release end -->\n)/$1<!--\n$2-->$3/g;' \
+  -pe 's/(<!-- for main -->\n)<!--\n([\S\s]*?)-->(\n<!-- for main end -->)/$1\n$2$3/g;' \
   -pe 's/<!(---\n❗ You are taking[^-]*?---)>/$1/;' \
   -pe "s@(latest version: \[README of v$VARIIST_VERSION\].*tree/)main/@\$1v$VARIIST_VERSION/@;" \
   ./README.md
