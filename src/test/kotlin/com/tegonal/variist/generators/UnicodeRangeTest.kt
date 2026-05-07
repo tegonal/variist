@@ -11,6 +11,7 @@ import com.tegonal.variist.testutils.atrium.endInclusive
 import com.tegonal.variist.testutils.atrium.start
 import com.tegonal.variist.testutils.atrium.toBeIn
 import com.tegonal.variist.testutils.atrium.toBeInIf
+import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.Test
 
 class UnicodeRangeTest {
@@ -45,18 +46,25 @@ class UnicodeRangeTest {
 	@Test
 	fun rangesAreSortedAndNoOverlap() {
 		UnicodeRanges.entries.forEach {
-			it.ranges.asSequence().zipWithNext { a, b ->
-				expect(a) {
-					start.toBeLessThan(b.start)
-					endInclusive.toBeLessThan(b.start)
+			if (it.ranges.size > 1) {
+				expect(it) {
+					it.ranges.asSequence().zipWithNext { a, b ->
+						feature("range", { a }) {
+							start.toBeLessThan(b.start)
+							endInclusive.toBeLessThan(b.start)
+						}
+					}.count()
 				}
 			}
 		}
 	}
 
-	// deactivated as the unicode-list is rather static, activate if you change something
+
 //	@Test
+	@Suppress("KotlinUnreachableCode")
 	fun charsCorrectlyAssigned() {
+		// deactivated as the unicode-list is rather static and this test takes about 20s, activate if you change something
+		return
 		val tabToCr = 0x0009..0x000D
 		val fileToUnitSeparator = 0x001C..0x001F
 
@@ -69,11 +77,15 @@ class UnicodeRangeTest {
 			(0..UnicodeRange.MAX_CODE_POINT).forEach { codePoint ->
 				try {
 					val charType = Character.getType(codePoint)
+					// using the top-level verb on purpose as adding everything to expectGrouped results in an
+					// out-of-memory error, we only catch failures and append them (so report all failures)
 					ch.tutteli.atrium.api.verbs.expect(codePoint) {
 						feature(
 							"${"0x%04X".format(codePoint)} (${String(Character.toChars(codePoint))}) with character type $charType",
 							{ this }
 						) {
+							val isAsciiLower = codePoint >= 'a'.code && codePoint <= 'z'.code
+							val isAsciiUpper = codePoint >= 'A'.code && codePoint <= 'Z'.code
 							val isInAsciiRange = codePoint <= UnicodeRange.ASCII_END
 							val isInIso88591Range = codePoint <= UnicodeRange.ISO_8859_1_END
 							when {
@@ -88,12 +100,14 @@ class UnicodeRangeTest {
 								charType == Character.UNASSIGNED.toInt() -> {
 									val shouldBePrintable = codePoint >= currentRange.start &&
 										(codePoint <= currentRange.endInclusive ||
-											inUnassignedButShouldnt.ifWithinBound(++counter, thenBlock = {
-												currentRange = inUnassignedButShouldnt[counter]
-												codePoint in currentRange
-											}, elseBlock = {
-												false
-											})
+											inUnassignedButShouldnt.ifWithinBound(
+												++counter,
+												thenBlock = {
+													currentRange = inUnassignedButShouldnt[counter]
+													codePoint in currentRange
+												}, elseBlock = {
+													false
+												})
 											)
 
 									toBeInIf {
@@ -139,12 +153,22 @@ class UnicodeRangeTest {
 
 								else -> {
 									toBeInIf {
-										isInAsciiRange && (
+										isInAsciiRange && run {
 											it == UnicodeRanges.ASCII || it == UnicodeRanges.ASCII_PRINTABLE ||
-												it == UnicodeRanges.ASCII_ALPHA && (codePoint in 'A'.code ..'Z'.code || codePoint in 'a'.code .. 'z'.code) ||
-												it == UnicodeRanges.ASCII_DIGIT && codePoint in '0'.code ..'9'.code
-											) ||
-											isInIso88591Range && (it == UnicodeRanges.ISO_8859_1 || it == UnicodeRanges.ISO_8859_1_PRINTABLE) ||
+												it == UnicodeRanges.ASCII_ALPHA_UPPER && isAsciiUpper ||
+												it == UnicodeRanges.ASCII_ALPHA_LOWER && isAsciiLower ||
+												it == UnicodeRanges.ASCII_ALPHA && (isAsciiLower || isAsciiUpper) ||
+												it == UnicodeRanges.ASCII_DIGIT && codePoint in '0'.code..'9'.code
+										} ||
+											isInIso88591Range && run {
+											it == UnicodeRanges.ISO_8859_1 || it == UnicodeRanges.ISO_8859_1_PRINTABLE ||
+												it == UnicodeRanges.ISO_8859_1_ALPHA && (
+												isAsciiLower || isAsciiUpper ||
+													codePoint in 'À'.code..'Ö'.code ||
+													codePoint in 'Ø'.code..'ö'.code ||
+													codePoint in 'ø'.code..'ÿ'.code
+												)
+										} ||
 											it == UnicodeRanges.UTF_8 ||
 											it == UnicodeRanges.UTF_8_PRINTABLE ||
 											it == UnicodeRanges.ALL
@@ -290,7 +314,7 @@ class UnicodeRangeTest {
 		var counter = 0
 		val ranges = UnicodeRanges.UNASSIGNED.ranges
 		var currentRange = ranges[counter]
-		(0..UnicodeRange.Companion.MAX_CODE_POINT).forEach { codePoint ->
+		(0..UnicodeRange.MAX_CODE_POINT).forEach { codePoint ->
 			if (Character.getType(codePoint) == Character.UNASSIGNED.toInt()) {
 				val notDefined = codePoint < currentRange.start ||
 					codePoint !in currentRange &&
