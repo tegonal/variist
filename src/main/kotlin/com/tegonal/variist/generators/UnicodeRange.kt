@@ -1,19 +1,18 @@
 package com.tegonal.variist.generators
 
 import com.tegonal.variist.generators.UnicodeRange.Companion.AFTER_SURROGATES_END
-import com.tegonal.variist.generators.UnicodeRange.Companion.BEFORE_SURROGATES_START
 import com.tegonal.variist.generators.UnicodeRange.Companion.ASCII_END
 import com.tegonal.variist.generators.UnicodeRange.Companion.ASCII_PRINTABLE_END
 import com.tegonal.variist.generators.UnicodeRange.Companion.ASCII_PRINTABLE_START
-import com.tegonal.variist.generators.UnicodeRange.Companion.MAX_CODE_POINT
+import com.tegonal.variist.generators.UnicodeRange.Companion.BEFORE_SURROGATES_START
+import com.tegonal.variist.generators.UnicodeRange.Companion.BMP_END
 import com.tegonal.variist.generators.UnicodeRange.Companion.ISO_8859_1_END
 import com.tegonal.variist.generators.UnicodeRange.Companion.ISO_8859_1_PRINTABLE_START
-import com.tegonal.variist.generators.UnicodeRange.Companion.BMP_END
+import com.tegonal.variist.generators.UnicodeRange.Companion.MAX_CODE_POINT
 import com.tegonal.variist.generators.UnicodeRange.Companion.NON_BMP_START
 import com.tegonal.variist.generators.UnicodeRange.Companion.SURROGATES_END
 import com.tegonal.variist.generators.UnicodeRange.Companion.SURROGATES_START
 import com.tegonal.variist.utils.impl.failIfNegative
-import kotlin.collections.binarySearch
 
 /**
  * A range defined via a [start] code point and an [endInclusive] code point, either staying in the
@@ -75,15 +74,19 @@ class UnicodeRange(override val start: Int, override val endInclusive: Int) : Cl
  */
 enum class UnicodeRanges(open vararg val ranges: UnicodeRange) {
 	ASCII(UnicodeRange(0x00, ASCII_END)),
-	ASCII_ALPHA_LOWER(UnicodeRange('a', 'z')),
 	ASCII_ALPHA_UPPER(UnicodeRange('A', 'Z')),
-	ASCII_ALPHA(UnicodeRange('A', 'Z'), UnicodeRange('a', 'z')),
+	ASCII_ALPHA_LOWER(UnicodeRange('a', 'z')),
+	ASCII_ALPHA(ASCII_ALPHA_UPPER.ranges.first(), ASCII_ALPHA_LOWER.ranges.first()),
 	ASCII_DIGIT(UnicodeRange('0', '9')),
 	ASCII_PRINTABLE(UnicodeRange(ASCII_PRINTABLE_START, ASCII_PRINTABLE_END)),
 	ISO_8859_1(UnicodeRange(0x00, ISO_8859_1_END)),
-	ISO_8859_1_PRINTABLE(
-		ranges = arrayOf(UnicodeRange(ISO_8859_1_PRINTABLE_START, ISO_8859_1_END)) + ASCII_PRINTABLE.ranges
+	ISO_8859_1_ALPHA(
+		ASCII_ALPHA_UPPER.ranges.first(), ASCII_ALPHA_LOWER.ranges.first(),
+		UnicodeRange('À', 'Ö'),
+		UnicodeRange('Ø', 'ö'),
+		UnicodeRange('ø', 'ÿ'),
 	),
+	ISO_8859_1_PRINTABLE(ASCII_PRINTABLE.ranges.first(), UnicodeRange(ISO_8859_1_PRINTABLE_START, ISO_8859_1_END)),
 	UTF_8(
 		// we only exclude surrogates as they are not valid code points in UTF-8 everything else are valid points
 		// but maybe not suited (like unassigned code points, private use, noncharacters etc.).
@@ -95,30 +98,22 @@ enum class UnicodeRanges(open vararg val ranges: UnicodeRange) {
 	// UTF_8_PRINTABLE see further below as it is quite long it comes last
 	SURROGATES(UnicodeRange(SURROGATES_START, SURROGATES_END)),
 	ALL(UnicodeRange(0x0000, BMP_END), UnicodeRange(NON_BMP_START, MAX_CODE_POINT)),
-	CONTROL() {
-		override val ranges: Array<out UnicodeRange> by lazy {
-			arrayOf(
-				UnicodeRange(0x0000, ASCII_PRINTABLE_START - 1),
-				UnicodeRange(ASCII_PRINTABLE_END + 1, ISO_8859_1_PRINTABLE_START - 1)
-			)
-		}
-	},
-	PRIVATE_USE() {
-		override val ranges: Array<out UnicodeRange> by lazy {
-			arrayOf(
-				UnicodeRange(0xE000, 0xF8FF),
-				// plane 15 + 16: private use A and B
-				UnicodeRange(0xF0000, 0xFFFFD),
-				UnicodeRange(0x100000, 0x10FFFD)
-			)
-		}
-	},
+	CONTROL(
+		UnicodeRange(0x0000, ASCII_PRINTABLE_START - 1),
+		UnicodeRange(ASCII_PRINTABLE_END + 1, ISO_8859_1_PRINTABLE_START - 1)
+	),
+	PRIVATE_USE(
+		UnicodeRange(0xE000, 0xF8FF),
+		// plane 15 + 16: private use A and B
+		UnicodeRange(0xF0000, 0xFFFFD),
+		UnicodeRange(0x100000, 0x10FFFD)
+	),
 
 	/**
 	 * Kotlins [kotlin.text.isWhitespace] combines Java's [Character.isWhitespace] and [Character.isSpaceChar]
 	 * This list includes all as of JDK 11
 	 */
-	WHITESPACES_KOTLIN() {
+	WHITESPACES_KOTLIN {
 		override val ranges: Array<out UnicodeRange> by lazy {
 			arrayOf(
 				UnicodeRange(0x0009, 0x000D), // TAB, LF, VT, FF, CR
@@ -135,7 +130,7 @@ enum class UnicodeRanges(open vararg val ranges: UnicodeRange) {
 			)
 		}
 	},
-	UNASSIGNED() {
+	UNASSIGNED {
 		override val ranges: Array<out UnicodeRange> by lazy {
 			// a lot of small objects, consider to turn UnicodeRange into a value object backed by a Long
 			arrayOf(
