@@ -1,11 +1,11 @@
 package com.tegonal.variist.config
 
 import com.tegonal.variist.generators.ArgsGenerator
+import com.tegonal.variist.generators.SemiOrderedArgsGenerator
 import com.tegonal.variist.providers.ArgsRange
 import com.tegonal.variist.providers.ArgsRangeDecider
 import com.tegonal.variist.utils.impl.checkIsNotBlank
 import com.tegonal.variist.utils.impl.checkRequestedMinArgsMaxArgs
-import com.tegonal.variist.generators.SemiOrderedArgsGenerator
 
 /**
  * Represents options which influences an [ArgsRangeDecider] on what [ArgsRange] to choose.
@@ -52,6 +52,7 @@ fun ArgsRangeOptions.merge(other: ArgsRangeOptions): ArgsRangeOptions {
 	return ArgsRangeOptions(
 		profile = other.profile ?: this.profile,
 		requestedMinArgs = other.requestedMinArgs ?: this.requestedMinArgs,
+		minArgsOverridesSizeLimit = other.minArgsOverridesSizeLimit,
 		maxArgs = other.maxArgs ?: this.maxArgs,
 	)
 }
