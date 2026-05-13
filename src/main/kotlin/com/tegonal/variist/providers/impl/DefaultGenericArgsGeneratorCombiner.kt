@@ -1,13 +1,8 @@
 package com.tegonal.variist.providers.impl
 
-import com.tegonal.variist.generators.ArgsGenerator
-import com.tegonal.variist.generators.ArbArgsGenerator
-import com.tegonal.variist.generators.SemiOrderedArgsGenerator
-import com.tegonal.variist.generators.combine
-import com.tegonal.variist.generators.zip
+import com.tegonal.variist.generators.*
 import com.tegonal.variist.generators.impl.throwDontKnowHowToConvertToArgsGenerator
 import com.tegonal.variist.generators.impl.throwUnsupportedArgsGenerator
-import com.tegonal.variist.generators.map
 import com.tegonal.variist.providers.GenericArgsGeneratorCombiner
 
 /**
@@ -24,13 +19,17 @@ class DefaultGenericArgsGeneratorCombiner : GenericArgsGeneratorCombiner {
 	): ArgsGenerator<List<*>> = when (firstArgsGenerator) {
 		is ArbArgsGenerator<*> -> {
 			val initial = firstArgsGenerator.map { mutableListOf(it) }
-			restMaybeArgGenerators.fold(initial) { generator, next ->
+			restMaybeArgGenerators.foldIndexed(initial) { index, generator, next ->
 				when (next) {
 					is ArbArgsGenerator<*> -> generator.zip(next) { list, aNext ->
 						list.also { it.add(aNext) }
 					}
 
-					is SemiOrderedArgsGenerator<*> -> error("Wrong ordering of ArgsGenerators, first ArgsGenerators was an ArbArgsGenerator which means only ArbArgsGenerator are allowed but found ${next}. Make sure it comes first (or any other (Semi)OrderedArgsGenerators.")
+					is SemiOrderedArgsGenerator<*> -> {
+						val argsGenerator = ArgsGenerator::class.simpleName
+						val arbArgsGenerator = ArbArgsGenerator::class.simpleName
+						error("Wrong ordering of ${argsGenerator}s, first $argsGenerator was an $arbArgsGenerator which means only $arbArgsGenerator are allowed but found $next at position ${index + 1}. Make sure it comes first (or any other (Semi)OrderedArgsGenerators.")
+					}
 					is ArgsGenerator<*> -> throwUnsupportedArgsGenerator(next)
 					else -> throwDontKnowHowToConvertToArgsGenerator(next)
 				}

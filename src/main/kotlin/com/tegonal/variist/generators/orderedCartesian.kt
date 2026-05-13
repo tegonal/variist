@@ -6,7 +6,7 @@ import com.tegonal.variist.generators.impl.OrderedCartesianProductArgsGenerator
 
 /**
  * Combines `this` [OrderedArgsGenerator] with the given [other]&nbsp;[OrderedArgsGenerator] resulting in their
- * cartesian product where the values are [transform]ed into values of type [R].
+ * Cartesian product where the values are [transform]ed into values of type [R].
  *
  * The resulting [OrderedArgsGenerator] generates
  * [this.size][OrderedArgsGenerator.size] * [other.size][OrderedArgsGenerator.size] values before repeating.

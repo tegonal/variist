@@ -25,10 +25,11 @@ interface ArbArgsGenerator<out T> : ArgsGenerator<T> {
 	 *
 	 * @since 2.0.0
 	 */
-	fun generateOne(seedOffset: Int = 0): T =
+	fun generateOne(seedOffset: Int = 0): T {
 		// we don't use first as it checks hasNext in addition and we know that it has to have one as the
 		// Sequence needs to be infinite according to the ArgsGenerator contract
-		generate(seedOffset).iterator().next()
+		return generate(seedOffset).iterator().next()
+	}
 
 	/**
 	 * Generates an infinite stream of random values of type [T].
@@ -70,5 +71,5 @@ val <T> CoreArbArgsGenerator<T>.arb: ArbExtensionPoint
 val <T> ArbArgsGenerator<T>._core: CoreArbArgsGenerator<T>
 	get() = when (this) {
 		is CoreArbArgsGenerator<T> -> this
-		else -> error("The ArbArgsGenerator ${this::class.qualifiedName} does not implement ${CoreArbArgsGenerator::class.qualifiedName}, please inform the author.")
+		else -> error("The ${ArbArgsGenerator::class.simpleName} ${this::class.qualifiedName} does not implement ${CoreArbArgsGenerator::class.qualifiedName}, please inform the author.")
 	}
