@@ -1,3 +1,4 @@
+@file:Suppress("unused")
 package com.tegonal.variist
 
 import ch.tutteli.kbox.identity
@@ -27,8 +28,8 @@ open class IntFromUntilBench {
 	// argsProvider. withIdentity is about 0.4 - 0.5 faster than withoutPlusMap (memory about the same).
 	// That's not enough to keep the complexity, for now we use only an approach which does not require argsProvider
 	@Benchmark
-	fun withIdentity() = IntFromUntilWithIdentityArgsProvider(ordered._components, 0, 1000, 1,::identity)
-			.generateAndTake(argsRange).count()
+	fun withIdentity() = IntFromUntilWithIdentityArgsProvider(ordered._components, 0, 1000, 1, ::identity)
+		.generateAndTake(argsRange).count()
 
 	@Benchmark
 	fun without(): Int = IntFromUntilWithoutArgsProvider(ordered._components, 0, 1000, 1)
@@ -54,6 +55,7 @@ class IntFromUntilWithIdentityArgsProvider<T>(
 	private val argsProvider: (Int) -> T
 ) : BaseSemiOrderedArgsGenerator<T>(
 	componentFactoryContainer,
+	seedBaseOffset = 0,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
 		// if the invariants are not given
@@ -77,6 +79,7 @@ class IntFromUntilWithoutArgsProvider(
 	private val step: Int,
 ) : BaseSemiOrderedArgsGenerator<Int>(
 	componentFactoryContainer,
+	seedBaseOffset = 0,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
 		// if the invariants are not given
@@ -120,6 +123,7 @@ class IntFromUntilWithoutArgsProviderWithIntFromUntilIterator(
 	private val step: Int,
 ) : BaseSemiOrderedArgsGenerator<Int>(
 	componentFactoryContainer,
+	seedBaseOffset = 0,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
 		// if the invariants are not given

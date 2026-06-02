@@ -4,11 +4,7 @@ import com.tegonal.variist.config.ComponentFactoryContainer
 import com.tegonal.variist.generators.OrderedArgsGenerator
 import com.tegonal.variist.generators.map
 import com.tegonal.variist.utils.BigInt
-import com.tegonal.variist.utils.impl.BigIntFromUntilRepeatingIterator
-import com.tegonal.variist.utils.impl.IntFromUntilRepeatingIterator
-import com.tegonal.variist.utils.impl.LongFromUntilRepeatingIterator
-import com.tegonal.variist.utils.impl.checkRangeNumbers
-import com.tegonal.variist.utils.impl.determineStartingIndex
+import com.tegonal.variist.utils.impl.*
 import com.tegonal.variist.utils.toBigInt
 
 /**
@@ -19,11 +15,13 @@ import com.tegonal.variist.utils.toBigInt
  */
 class IntFromUntilOrderedArgsGenerator(
 	componentFactoryContainer: ComponentFactoryContainer,
+	seedBaseOffset: Int,
 	private val from: Int,
 	private val toExclusive: Int,
 	private val step: Int,
 ) : BaseSemiOrderedArgsGenerator<Int>(
 	componentFactoryContainer,
+	seedBaseOffset,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
 		// if the invariants are not given
@@ -54,11 +52,13 @@ class IntFromUntilOrderedArgsGenerator(
  */
 class LongFromUntilOrderedArgsGenerator(
 	componentFactoryContainer: ComponentFactoryContainer,
+	seedBaseOffset: Int,
 	private val from: Long,
 	private val toExclusive: Long,
 	private val step: Long,
 ) : BaseSemiOrderedArgsGenerator<Long>(
 	componentFactoryContainer,
+	seedBaseOffset,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
 		// if the invariants are not given
@@ -89,11 +89,13 @@ class LongFromUntilOrderedArgsGenerator(
  */
 class BigIntFromUntilOrderedArgsGenerator(
 	componentFactoryContainer: ComponentFactoryContainer,
+	seedBaseOffset: Int,
 	private val from: BigInt,
 	private val toExclusive: BigInt,
 	private val step: BigInt,
 ) : BaseSemiOrderedArgsGenerator<BigInt>(
 	componentFactoryContainer,
+	seedBaseOffset,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
 		// if the invariants are not given
@@ -158,6 +160,7 @@ private inline fun <NumberT> calculatedRangeSizeToArgsGeneratorSize(
 @Suppress("FunctionName")
 fun IntFromToOrderedArgsGenerator(
 	componentFactoryContainer: ComponentFactoryContainer,
+	seedBaseOffset: Int,
 	from: Int,
 	toInclusive: Int,
 	step: Int,
@@ -166,11 +169,12 @@ fun IntFromToOrderedArgsGenerator(
 		//TODO 2.5.0 bench what is better (speed vs. memory), this approach or if we would shift the range if possible?
 		LongFromUntilOrderedArgsGenerator(
 			componentFactoryContainer,
+			seedBaseOffset,
 			from.toLong(),
 			toInclusive.toLong() + 1,
 			step.toLong()
 		).map { it.toInt() }
-	} else IntFromUntilOrderedArgsGenerator(componentFactoryContainer, from, toInclusive + 1, step)
+	} else IntFromUntilOrderedArgsGenerator(componentFactoryContainer, seedBaseOffset, from, toInclusive + 1, step)
 
 /**
  * !! No backward compatibility guarantees !!
@@ -181,6 +185,7 @@ fun IntFromToOrderedArgsGenerator(
 @Suppress("FunctionName")
 fun LongFromToOrderedArgsGenerator(
 	componentFactoryContainer: ComponentFactoryContainer,
+	seedBaseOffset: Int,
 	from: Long,
 	toInclusive: Long,
 	step: Long,
@@ -189,8 +194,9 @@ fun LongFromToOrderedArgsGenerator(
 		//TODO 2.5.0 bench what is better (speed vs. memory), this approach or if we would shift the range
 		BigIntFromUntilOrderedArgsGenerator(
 			componentFactoryContainer,
+			seedBaseOffset,
 			from.toBigInt(),
 			toInclusive.toBigInt() + BigInt.ONE,
 			step.toBigInt()
 		).map { it.toLong() }
-	} else LongFromUntilOrderedArgsGenerator(componentFactoryContainer, from, toInclusive + 1, step)
+	} else LongFromUntilOrderedArgsGenerator(componentFactoryContainer, seedBaseOffset, from, toInclusive + 1, step)

@@ -12,6 +12,16 @@ interface GeneratorExtensionPoint : IsComponentFactoryContainerProvider {
 	val arb: ArbExtensionPoint
 	val ordered: OrderedExtensionPoint
 	val semiOrdered: SemiOrderedExtensionPoint
+
+	/**
+	 * Shall be used as seedBaseOffset.
+	 *
+	 * By [ArbArgsGenerator] as [CoreArbArgsGenerator.seedBaseOffset].
+	 * By [SemiOrderedArgsGenerator] as [CoreSemiOrderedArgsGenerator.seedBaseOffset]
+	 *
+	 * @since 2.3.0 (moved up, was only in [ArbExtensionPoint] since 2.0.0)
+	 */
+	val seedBaseOffset: Int
 }
 
 /**
@@ -34,12 +44,7 @@ interface SemiOrderedExtensionPoint : GeneratorExtensionPoint
  *
  * @since 2.0.0
  */
-interface ArbExtensionPoint : GeneratorExtensionPoint {
-	/**
-	 * Shall be used by [ArbArgsGenerator] as [CoreArbArgsGenerator.seedBaseOffset].
-	 */
-	val seedBaseOffset: Int
-}
+interface ArbExtensionPoint : GeneratorExtensionPoint
 
 private val propertiesBasedComponentFactoryContainer: ComponentFactoryContainer = run {
 	val config = VariistConfigViaPropertiesLoader().config

@@ -15,8 +15,9 @@ import com.tegonal.variist.utils.repeatForever
  */
 class ArrayOrderedArgsGenerator<T>(
 	componentFactoryContainer: ComponentFactoryContainer,
-	private val values: Array<T>
-) : BaseSemiOrderedArgsGenerator<T>(componentFactoryContainer, values.size), OrderedArgsGenerator<T> {
+	seedBaseOffset: Int,
+	private val values: Array<T>,
+) : BaseSemiOrderedArgsGenerator<T>(componentFactoryContainer, seedBaseOffset, values.size), OrderedArgsGenerator<T> {
 
 	override fun generateOneAfterChecks(offset: Int): T {
 		val index = determineStartingIndex(0, size, offset, 1)

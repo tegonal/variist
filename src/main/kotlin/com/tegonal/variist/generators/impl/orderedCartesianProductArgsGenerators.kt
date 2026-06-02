@@ -3,6 +3,7 @@ package com.tegonal.variist.generators.impl
 import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.OrderedArgsGenerator
 import com.tegonal.variist.generators.SemiOrderedArgsGenerator
+import com.tegonal.variist.generators._core
 
 /**
  * !! No backward compatibility guarantees !!
@@ -43,6 +44,7 @@ abstract class CartesianProductArgsGenerator<A1, A2, R>(
 	// should you run into weird behaviour (such as one generator uses seed X and the other seed Y) then most likely
 	// someone used two different initial factories
 	a1Generator._components,
+	a1Generator._core.seedBaseOffset + a2Generator._core.seedBaseOffset + 1,
 	a1Generator.size.toLong() * a2Generator.size.toLong()
 ) {
 	// Note calculating the lcm doesn't bring much in speed: up to -10% if less than 3 values, up to 13% for > 12 values

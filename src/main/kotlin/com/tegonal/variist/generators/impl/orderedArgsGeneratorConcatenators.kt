@@ -1,8 +1,8 @@
 package com.tegonal.variist.generators.impl
 
-import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.OrderedArgsGenerator
 import com.tegonal.variist.generators.SemiOrderedArgsGenerator
+import com.tegonal.variist.generators._core
 
 /**
  * !! No backward compatibility guarantees !!
@@ -17,7 +17,7 @@ class OrderedArgsGeneratorConcatenator<T>(
 	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,
 	// should you run into weird behaviour (such as one generator uses seed X and the other seed Y) then most likely
 	// someone used two different initial factories
-	a1Generator._components,
+	a1Generator._core,
 	a1Generator.size.toLong() + a2Generator.size.toLong()
 ), OrderedArgsGenerator<T> {
 
@@ -48,7 +48,7 @@ class SemiOrderedArgsGeneratorConcatenator<T>(
 	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,
 	// should you run into weird behaviour (such as one generator uses seed X and the other seed Y) then most likely
 	// someone used two different initial factories
-	a1Generator._components,
+	a1Generator._core,
 	a1Generator.size.toLong() + a2Generator.size.toLong()
 ) {
 

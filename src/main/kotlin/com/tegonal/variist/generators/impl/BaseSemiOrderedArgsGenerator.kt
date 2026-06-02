@@ -2,8 +2,8 @@ package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.config.ComponentFactoryContainer
 import com.tegonal.variist.config.ComponentFactoryContainerProvider
+import com.tegonal.variist.generators.CoreSemiOrderedArgsGenerator
 import com.tegonal.variist.generators.OrderedArgsGenerator
-import com.tegonal.variist.generators.SemiOrderedArgsGenerator
 import com.tegonal.variist.utils.BigInt
 import com.tegonal.variist.utils.impl.checkIsPositive
 
@@ -15,21 +15,40 @@ import com.tegonal.variist.utils.impl.checkIsPositive
  */
 abstract class BaseSemiOrderedArgsGenerator<T>(
 	final override val componentFactoryContainer: ComponentFactoryContainer,
-	final override val size: Int
-) : SemiOrderedArgsGenerator<T>, ComponentFactoryContainerProvider {
+	final override val seedBaseOffset: Int,
+	final override val size: Int,
+) : CoreSemiOrderedArgsGenerator<T>, ComponentFactoryContainerProvider {
 
-	constructor(componentFactoryContainer: ComponentFactoryContainer, size: Long) : this(
+	constructor(arbGenerator: CoreSemiOrderedArgsGenerator<*>, size: Int) : this(
+		arbGenerator.componentFactoryContainer,
+		arbGenerator.seedBaseOffset + 1,
+		size
+	)
+
+	constructor(arbGenerator: CoreSemiOrderedArgsGenerator<*>, size: Long) : this(
+		arbGenerator.componentFactoryContainer,
+		arbGenerator.seedBaseOffset + 1,
+		size
+	)
+
+	constructor(
+		componentFactoryContainer: ComponentFactoryContainer,
+		seedBaseOffset: Int,
+		size: Long
+	) : this(
 		componentFactoryContainer,
+		seedBaseOffset,
 		size.toInt().also {
 			check(it.toLong() == size) {
 				// toInt() overflowed
 				"${OrderedArgsGenerator::class.simpleName}.${OrderedArgsGenerator<*>::size.name} only supports Int, the given size ($size) is bigger"
 			}
-		}
+		},
 	)
 
-	constructor(componentFactoryContainer: ComponentFactoryContainer, size: BigInt) : this(
+	constructor(componentFactoryContainer: ComponentFactoryContainer, seedBaseOffset: Int, size: BigInt) : this(
 		componentFactoryContainer,
+		seedBaseOffset,
 		size.toInt().also {
 			check(size.bitLength() <= 31) {
 				"${OrderedArgsGenerator::class.simpleName}.${OrderedArgsGenerator<*>::size.name} only supports Int, the given size ($size) is bigger"

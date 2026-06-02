@@ -9,6 +9,11 @@ import org.junit.jupiter.api.TestFactory
 class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnnotationsTest() {
 	val a1s = listOf(1, 2)
 	val a2s = listOf('a', 'b', 'c')
+
+	// implementation detail, since we do seedBaseOffset+1 in BaseSemiOrderedArgsGenerator the a2s are shifted
+	val a2sZipped = listOf(Tuple('a', 'b'), Tuple('b', 'c'), Tuple('c', 'a'))
+	val a2sZipped2 = listOf(Tuple('a', 'b', 'c'), Tuple('b', 'c', 'a'), Tuple('c', 'a', 'b'))
+
 	val generator: SemiOrderedArgsGenerator<Int> = customComponentFactoryContainer.ordered.fromList(a1s)
 	val randomGenerator = PseudoArbArgsGenerator(a2s)
 
@@ -22,7 +27,7 @@ class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnno
 			"combine with 2 random",
 			Tuple(generator, randomGenerator, randomGenerator).combineAll()
 				.map { (a1, a2, a3) -> a1 to (a2 to a3) },
-			a1s.zip(a2s.map { it to it })
+			a1s.zip(a2sZipped)
 		),
 		Tuple(
 			"combine with 3 random",
@@ -30,7 +35,7 @@ class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnno
 				.map { (a1, a2, a3, a4) ->
 					a1 to Triple(a2, a3, a4)
 				},
-			a1s.zip(a2s.map { Triple(it, it, it) })
+			a1s.zip(a2sZipped2)
 		)
 	)
 
@@ -45,7 +50,7 @@ class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnno
 				"combine with 2 random",
 				Tuple(generator, randomGenerator, randomGenerator).combineAll()
 					.map { (a1, a2, a3) -> a1 to (a2 to a3) },
-				a1s.flatMap { a1 -> a2s.map { a2 -> a1 to (a2 to a2) } }
+				a1s.flatMap { a1 -> a2sZipped.map { a1 to it } }
 			),
 			Tuple(
 				"combine with 3 random",
@@ -53,7 +58,7 @@ class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnno
 					.map { (a1, a2, a3, a4) ->
 						a1 to Triple(a2, a3, a4)
 					},
-				a1s.flatMap { a1 -> a2s.map { a2 -> a1 to Triple(a2, a2, a2) } }
+				a1s.flatMap { a1 -> a2sZipped2.map { a1 to it } }
 			)
 		)
 

@@ -12,7 +12,9 @@ import com.tegonal.variist.utils.BigInt
 fun OrderedExtensionPoint.intFromUntil(
 	from: Int,
 	toExclusive: Int,
-): OrderedArgsGenerator<Int> = IntFromUntilOrderedArgsGenerator(_components, from, toExclusive, step = 1)
+): OrderedArgsGenerator<Int> = IntFromUntilOrderedArgsGenerator(
+	_components, seedBaseOffset, from, toExclusive, step = 1
+)
 
 /**
  * Returns an [OrderedArgsGenerator]which generates [Long]s ranging [from] (inclusive) until [toExclusive].
@@ -22,7 +24,9 @@ fun OrderedExtensionPoint.intFromUntil(
 fun OrderedExtensionPoint.longFromUntil(
 	from: Long,
 	toExclusive: Long,
-): OrderedArgsGenerator<Long> = LongFromUntilOrderedArgsGenerator(_components, from, toExclusive, step = 1)
+): OrderedArgsGenerator<Long> = LongFromUntilOrderedArgsGenerator(
+	_components, seedBaseOffset, from, toExclusive, step = 1
+)
 
 /**
  * Returns an [OrderedArgsGenerator] which generates [BigInt]s ranging [from] (inclusive) until [toExclusive].
@@ -32,7 +36,9 @@ fun OrderedExtensionPoint.longFromUntil(
 fun OrderedExtensionPoint.bigIntFromUntil(
 	from: BigInt,
 	toExclusive: BigInt,
-): OrderedArgsGenerator<BigInt> = BigIntFromUntilOrderedArgsGenerator(_components, from, toExclusive, step = BigInt.ONE)
+): OrderedArgsGenerator<BigInt> = BigIntFromUntilOrderedArgsGenerator(
+	_components, seedBaseOffset, from, toExclusive, step = BigInt.ONE
+)
 
 
 /**
@@ -43,7 +49,9 @@ fun OrderedExtensionPoint.bigIntFromUntil(
 fun OrderedExtensionPoint.intFromTo(
 	from: Int,
 	toInclusive: Int,
-): OrderedArgsGenerator<Int> = IntFromToOrderedArgsGenerator(_components, from, toInclusive, step = 1)
+): OrderedArgsGenerator<Int> = IntFromToOrderedArgsGenerator(
+	_components, seedBaseOffset, from, toInclusive, step = 1
+)
 
 /**
  * Returns an [OrderedArgsGenerator] which generates [Long]s ranging [from] (inclusive) to [toInclusive].
@@ -53,7 +61,9 @@ fun OrderedExtensionPoint.intFromTo(
 fun OrderedExtensionPoint.longFromTo(
 	from: Long,
 	toInclusive: Long,
-): OrderedArgsGenerator<Long> = LongFromToOrderedArgsGenerator(_components, from, toInclusive, step = 1L)
+): OrderedArgsGenerator<Long> = LongFromToOrderedArgsGenerator(
+	_components, seedBaseOffset, from, toInclusive, step = 1L
+)
 
 /**
  * Returns an [OrderedArgsGenerator] which generates [BigInt]s ranging [from] (inclusive) to [toInclusive].
@@ -63,5 +73,6 @@ fun OrderedExtensionPoint.longFromTo(
 fun OrderedExtensionPoint.bigIntFromTo(
 	from: BigInt,
 	toInclusive: BigInt,
-): OrderedArgsGenerator<BigInt> =
-	BigIntFromUntilOrderedArgsGenerator(_components, from, toInclusive + BigInt.ONE, step = BigInt.ONE)
+): OrderedArgsGenerator<BigInt> = BigIntFromUntilOrderedArgsGenerator(
+	_components, seedBaseOffset, from, toInclusive + BigInt.ONE, step = BigInt.ONE
+)

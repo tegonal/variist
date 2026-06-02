@@ -9,6 +9,11 @@ import org.junit.jupiter.api.TestFactory
 class SemiOrderedZipArbTest : AbstractOrderedArgsGeneratorWithoutAnnotationsTest() {
 	val a1s = listOf(1, 2)
 	val a2s = listOf('a', 'b', 'c')
+
+	// implementation detail, since we do seedBaseOffset+1 in BaseSemiOrderedArgsGenerator the a2s are shifted
+	val a2sZipped = listOf(Tuple('a', 'b'), Tuple('b', 'c'), Tuple('c', 'a'))
+	val a2sZipped2 = listOf(Tuple('a', 'b', 'c'), Tuple('b', 'c', 'a'), Tuple('c', 'a', 'b'))
+
 	val generator = customComponentFactoryContainer.ordered.fromList(a1s)
 	val randomGenerator = PseudoArbArgsGenerator(a2s)
 
@@ -26,15 +31,15 @@ class SemiOrderedZipArbTest : AbstractOrderedArgsGeneratorWithoutAnnotationsTest
 				.zip(randomGenerator) { pair, a3 ->
 					pair.mapSecond { it to a3 }
 				},
-			a1s.zip(a2s.map { it to it })
+			a1s.zip(a2sZipped)
 		),
 		Tuple(
-			"combine with 3 random",
+			"zip with 3 random",
 			generator.zip(randomGenerator).zip(randomGenerator)
 				.zip(randomGenerator) { (a1, a2, a3), a4 ->
 					a1 to Triple(a2, a3, a4)
 				},
-			a1s.zip(a2s.map { Triple(it, it, it) })
+			a1s.zip(a2sZipped2)
 		),
 		Tuple(
 			"zipDependent",
@@ -42,7 +47,7 @@ class SemiOrderedZipArbTest : AbstractOrderedArgsGeneratorWithoutAnnotationsTest
 			// zip is only correct because for most tests we don't take more than generator.size
 			// see createGeneratorsAllPossibleCombinations where we need to use flatMap
 			// also note that we can zip since we know that zipDependent increases the seedOffset and only because
-			// we use PseudoArbArgsGenerator this corresponds to a regular offset in the sequence.
+			// we use PseudoArbArgsGenerator this corresponds to a regular offset in the Sequence.
 			a1s.zip(a2s)
 		),
 	)
@@ -60,7 +65,7 @@ class SemiOrderedZipArbTest : AbstractOrderedArgsGeneratorWithoutAnnotationsTest
 					.zip(randomGenerator) { pair, a3 ->
 						pair.mapSecond { it to a3 }
 					},
-				a1s.flatMap { a1 -> a2s.map { a2 -> a1 to (a2 to a2) } }
+				a1s.flatMap { a1 -> a2sZipped.map { a1 to it } }
 			),
 			Tuple(
 				"zip with 3 random",
@@ -68,7 +73,7 @@ class SemiOrderedZipArbTest : AbstractOrderedArgsGeneratorWithoutAnnotationsTest
 					.zip(randomGenerator) { (a1, a2, a3), a4 ->
 						a1 to Triple(a2, a3, a4)
 					},
-				a1s.flatMap { a1 -> a2s.map { a2 -> a1 to Triple(a2, a2, a2) } }
+				a1s.flatMap { a1 -> a2sZipped2.map { a1 to it } }
 			),
 			Tuple(
 				"zipDependent",
