@@ -1,6 +1,7 @@
 package com.tegonal.variist.generators
 
 import ch.tutteli.kbox.Tuple
+import java.time.LocalTime
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
@@ -9,7 +10,9 @@ class ArbDateLikeTest : AbstractArbArgsGeneratorTest<Any>() {
 	override fun createGenerators(modifiedArb: ArbExtensionPoint) =
 		ZonedDateTime.now().truncatedTo(ChronoUnit.HOURS).let { nowZonedDateTime ->
 			val nowLocalDateTime = nowZonedDateTime.toLocalDateTime()
-			val nowLocalTime = nowZonedDateTime.toLocalTime()
+			val nowLocalTime = nowZonedDateTime.toLocalTime().let {
+				if (it.plusHours(2) > LocalTime.of(0, 0)) LocalTime.of(21, 0) else it
+			}
 			val nowLocalDate = nowZonedDateTime.toLocalDate()
 			val nowOffsetDateTime = nowZonedDateTime.toOffsetDateTime()
 			sequenceOf(

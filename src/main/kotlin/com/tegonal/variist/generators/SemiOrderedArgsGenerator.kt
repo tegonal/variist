@@ -1,5 +1,10 @@
 package com.tegonal.variist.generators
 
+import com.tegonal.variist.config.ComponentFactoryContainerProvider
+import com.tegonal.variist.generators.impl.DefaultArbExtensionPoint
+import com.tegonal.variist.generators.impl.DefaultOrderedExtensionPoint
+import com.tegonal.variist.generators.impl.DefaultSemiOrderedExtensionPoint
+
 /**
  * Represents an [ArgsGenerator] which provides the method [generate] where some part of [T] is always in the
  * same order and a finite number before repeating and another part of [T] is undefined (could be ordered and finite,
@@ -30,3 +35,53 @@ interface SemiOrderedArgsGenerator<out T> : ArgsGenerator<T> {
 	 */
 	fun generate(offset: Int): Sequence<T>
 }
+
+/**
+ * Represents an interface each [SemiOrderedArgsGenerator] must implement which provides additional core functionality
+ * which is relevant for users which create own [SemiOrderedArgsGenerator]s or combiner functions.
+ *
+ * The separation between [SemiOrderedArgsGenerator] and [CoreSemiOrderedArgsGenerator] makes sure the API stays clean
+ * for regular users which just use [ordered]/[semiOrdered] but don't define own
+ * [SemiOrderedArgsGenerator] implementations.
+ *
+ * @since 2.3.0
+ */
+interface CoreSemiOrderedArgsGenerator<out T> : SemiOrderedArgsGenerator<T>, ComponentFactoryContainerProvider {
+	val seedBaseOffset: Int
+}
+
+/**
+ * Creates an [ArbExtensionPoint] based on `this` [CoreSemiOrderedArgsGenerator].
+ *
+ * @since 2.3.0
+ */
+val <T> CoreSemiOrderedArgsGenerator<T>.arb: ArbExtensionPoint
+	get() = DefaultArbExtensionPoint(componentFactoryContainer, seedBaseOffset)
+
+/**
+ * Creates an [SemiOrderedExtensionPoint] based on `this` [CoreSemiOrderedArgsGenerator].
+ *
+ * @since 2.3.0
+ */
+val <T> CoreSemiOrderedArgsGenerator<T>.semiOrdered: SemiOrderedExtensionPoint
+	get() = DefaultSemiOrderedExtensionPoint(componentFactoryContainer, seedBaseOffset)
+
+/**
+ * Creates an [OrderedExtensionPoint] based on `this` [CoreSemiOrderedArgsGenerator].
+ *
+ * @since 2.3.0
+ */
+val <T> CoreSemiOrderedArgsGenerator<T>.ordered: OrderedExtensionPoint
+	get() = DefaultOrderedExtensionPoint(componentFactoryContainer, seedBaseOffset)
+
+/**
+ * Casts `this` to a [CoreArbArgsGenerator].
+ *
+ * @since 2.0.0
+ */
+@Suppress("ObjectPropertyName")
+val <T> SemiOrderedArgsGenerator<T>._core: CoreSemiOrderedArgsGenerator<T>
+	get() = when (this) {
+		is CoreSemiOrderedArgsGenerator<T> -> this
+		else -> error("The ${SemiOrderedArgsGenerator::class.simpleName} ${this::class.qualifiedName} does not implement ${CoreSemiOrderedArgsGenerator::class.qualifiedName}, please inform the author.")
+	}

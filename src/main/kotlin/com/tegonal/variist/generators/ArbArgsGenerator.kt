@@ -3,6 +3,8 @@ package com.tegonal.variist.generators
 import com.tegonal.variist.config.ComponentFactoryContainerProvider
 import com.tegonal.variist.config.VariistConfig
 import com.tegonal.variist.generators.impl.DefaultArbExtensionPoint
+import com.tegonal.variist.generators.impl.DefaultOrderedExtensionPoint
+import com.tegonal.variist.generators.impl.DefaultSemiOrderedExtensionPoint
 import com.tegonal.variist.utils.createVariistRandom
 
 /**
@@ -42,7 +44,7 @@ interface ArbArgsGenerator<out T> : ArgsGenerator<T> {
 }
 
 /**
- * Represents an interface each [ArbArgsGenerator] should implement and providing additional core functionality which
+ * Represents an interface each [ArbArgsGenerator] must implement which provides additional core functionality which
  * is relevant for users which create own [ArbArgsGenerator]s or combiner functions.
  *
  * The separation between [ArbArgsGenerator] and [CoreArbArgsGenerator] makes sure the API stays clean for
@@ -61,6 +63,22 @@ interface CoreArbArgsGenerator<out T> : ArbArgsGenerator<T>, ComponentFactoryCon
  */
 val <T> CoreArbArgsGenerator<T>.arb: ArbExtensionPoint
 	get() = DefaultArbExtensionPoint(componentFactoryContainer, seedBaseOffset)
+
+/**
+ * Creates an [SemiOrderedExtensionPoint] based on `this` [CoreArbArgsGenerator].
+ *
+ * @since 2.3.0
+ */
+val <T> CoreArbArgsGenerator<T>.semiOrdered: SemiOrderedExtensionPoint
+	get() = DefaultSemiOrderedExtensionPoint(componentFactoryContainer, seedBaseOffset)
+
+/**
+ * Creates an [OrderedExtensionPoint] based on `this` [CoreArbArgsGenerator].
+ *
+ * @since 2.3.0
+ */
+val <T> CoreArbArgsGenerator<T>.ordered: OrderedExtensionPoint
+	get() = DefaultOrderedExtensionPoint(componentFactoryContainer, seedBaseOffset)
 
 /**
  * Casts `this` to a [CoreArbArgsGenerator].

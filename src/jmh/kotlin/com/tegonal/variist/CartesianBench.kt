@@ -1,7 +1,7 @@
+@file:Suppress("unused")
 package com.tegonal.variist
 
 import ch.tutteli.kbox.Tuple2
-import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.*
 import com.tegonal.variist.generators.impl.BaseSemiOrderedArgsGenerator
 import com.tegonal.variist.generators.impl.OrderedCartesianProductArgsGenerator
@@ -142,7 +142,7 @@ class Radix<A, B, R>(
 	a: OrderedArgsGenerator<A>,
 	private val b: OrderedArgsGenerator<B>,
 	private val transform: (A, B) -> R
-) : BaseSemiOrderedArgsGenerator<R>(a._components, a.size.toLong() * b.size.toLong()) {
+) : BaseSemiOrderedArgsGenerator<R>(a._core, a.size.toLong() * b.size.toLong()) {
 	val aL = a.toList()
 	val aSize = a.size
 	val bSize = b.size
@@ -168,7 +168,7 @@ class SmallerBiggerArgsGenerator<A1, A2, R>(
 	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,
 	// should you run into weird behaviour (such as one generator uses seed X and the other seed Y) then most likely
 	// someone used two different initial factories
-	a1Generator._components,
+	a1Generator._core,
 	a1Generator.size.toLong() * a2Generator.size.toLong()
 ) {
 	private val a2Size: Int = a2Generator.size

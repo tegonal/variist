@@ -50,7 +50,7 @@ class ArgsProviderTest {
 
 	@ParameterizedTest
 	@ArgsSource("rawArgs")
-	fun rawArgsIsSplit(index: Int, value: Long) {
+	fun rawArgs_isSplit(index: Int, value: Long) {
 		val (expectedIndex, expectValue) = rawArgs()[index].get()
 		expect(value).toEqual(expectValue as Long)
 		expect(index).toEqual(expectedIndex as Int)
@@ -58,7 +58,7 @@ class ArgsProviderTest {
 
 	@ParameterizedTest
 	@ArgsSource("orderedArgs")
-	fun orderedArgsIsSplit(index: Int, value: Long) {
+	fun orderedArgs_isSplit(index: Int, value: Long) {
 		val (expectedIndex, expectValue) = rawArgs()[index].get()
 		expect(value).toEqual(expectValue as Long)
 		expect(index).toEqual(expectedIndex as Int)
@@ -66,7 +66,7 @@ class ArgsProviderTest {
 
 	@ParameterizedTest
 	@ArgsSource("arbArgs")
-	fun arbArgsIsSplit(index: Int, value: Long) {
+	fun arbArgs_isSplit(index: Int, value: Long) {
 		val (expectedIndex, expectValue) = rawArgs()[index].get()
 		expect(value).toEqual(expectValue as Long)
 		expect(index).toEqual(expectedIndex as Int)
@@ -74,7 +74,7 @@ class ArgsProviderTest {
 
 	@ParameterizedTest
 	@ArgsSource("rawPairs")
-	fun rawPairIsSplit(index: Int, value: Long) {
+	fun rawPair_isSplit(index: Int, value: Long) {
 		val (expectedIndex, expectValue) = rawPairs()[index]
 		expect(value).toEqual(expectValue)
 		expect(index).toEqual(expectedIndex)
@@ -82,7 +82,7 @@ class ArgsProviderTest {
 
 	@ParameterizedTest
 	@ArgsSource("orderedPairs")
-	fun orderedPairIsSplit(index: Int, value: Long) {
+	fun orderedPair_isSplit(index: Int, value: Long) {
 		val (expectedIndex, expectValue) = rawPairs()[index]
 		expect(value).toEqual(expectValue)
 		expect(index).toEqual(expectedIndex)
@@ -90,7 +90,7 @@ class ArgsProviderTest {
 
 	@ParameterizedTest
 	@ArgsSource("arbPairs")
-	fun arbPairIsSplit(index: Int, value: Long) {
+	fun arbPair_isSplit(index: Int, value: Long) {
 		val (expectedIndex, expectValue) = rawPairs()[index]
 		expect(value).toEqual(expectValue)
 		expect(index).toEqual(expectedIndex)
@@ -98,7 +98,7 @@ class ArgsProviderTest {
 
 	@ParameterizedTest
 	@ArgsSource("rawPairsInList")
-	fun rawPairInListIsNotSplit(p: List<Pair<Int, Long>>) {
+	fun rawPairInList_isNotSplit(p: List<Pair<Int, Long>>) {
 		expect(p).toHaveSize(1)
 		val (index, value) = p.first()
 		val (expectedIndex, expectValue) = rawPairs()[index]
@@ -109,7 +109,7 @@ class ArgsProviderTest {
 
 	@ParameterizedTest
 	@ArgsSource("rawTupleLike")
-	fun rawTupleLikeIsNotSplit(tupleLike: Tuple4LikeStructure<Int, Long, Double, Float>) {
+	fun rawTupleLike_isNotSplit(tupleLike: Tuple4LikeStructure<Int, Long, Double, Float>) {
 		// TODO would be nicer if we take the index from ParameterizedTest, could be possible with junit 5.4/6
 		val expectedTupleLike = rawTupleLike()[tupleLike.a1]
 		expect(tupleLike).toEqual(expectedTupleLike)
@@ -117,7 +117,7 @@ class ArgsProviderTest {
 
 	@ParameterizedTest
 	@ArgsSource("orderedTupleLike")
-	fun orderedTupleLikeIsNotSplit(tupleLike: Tuple4LikeStructure<Int, Long, Double, Float>) {
+	fun orderedTupleLike_isNotSplit(tupleLike: Tuple4LikeStructure<Int, Long, Double, Float>) {
 		// TODO would be nicer if we take the index from ParameterizedTest, could be possible with junit 5.4/6
 		val expectedTupleLike = rawTupleLike()[tupleLike.a1]
 		expect(tupleLike).toEqual(expectedTupleLike)
@@ -125,7 +125,7 @@ class ArgsProviderTest {
 
 	@ParameterizedTest
 	@ArgsSource("arbTupleLike")
-	fun arbTupleLikeIsNotSplit(tupleLike: Tuple4LikeStructure<Int, Long, Double, Float>) {
+	fun arbTupleLike_isNotSplit(tupleLike: Tuple4LikeStructure<Int, Long, Double, Float>) {
 		// TODO would be nicer if we take the index from ParameterizedTest, could be possible with junit 5.4/6
 		val expectedTupleLike = rawTupleLike()[tupleLike.a1]
 		expect(tupleLike).toEqual(expectedTupleLike)
@@ -134,21 +134,65 @@ class ArgsProviderTest {
 
 	@ParameterizedTest
 	@ArgsSource("rawNestedTuples")
-	fun rawNestedTuplesAreFlattenedAndSplit(i: Int, l: Long, d: Double) {
+	fun rawNestedTuples_areFlattenedAndSplit(i: Int, l: Long, d: Double) {
 		expect(i.toDouble() + l.toDouble()).toEqual(d)
 	}
 
 	@ParameterizedTest
 	@ArgsSource("orderedNestedTuples")
-	fun orderedNestedTuplesAreFlattenedAndSplit(i: Int, l: Long, d: Double) {
+	fun orderedNestedTuples_areFlattenedAndSplit(i: Int, l: Long, d: Double) {
 		expect(i.toDouble() + l.toDouble()).toEqual(d)
 	}
 
 	@ParameterizedTest
 	@ArgsSource("arbNestedTuples")
-	fun arbNestedTuplesAreFlattenedAndSplit(i: Int, l: Long, d: Double) {
+	fun arbNestedTuples_areFlattenedAndSplit(i: Int, l: Long, d: Double) {
 		expect(i.toDouble() + l.toDouble()).toEqual(d)
 	}
+
+	@ParameterizedTest
+	@ArgsSource("tupleOfOrdered")
+	fun tupleOfOrdered_areSplit(i: Int, c: Char, l: Long) {
+		expect(i.toLong() + c.code).toEqual(l)
+	}
+
+	@ParameterizedTest
+	@ArgsSource("tupleOfArb")
+	fun tupleOfArb_areSplit(i: Int, c: Char, l: Long) {
+		expect(i.toLong() + c.code).toEqual(l)
+	}
+
+	@ParameterizedTest
+	@ArgsSource("tupleOfOrderedReturningTuples")
+	fun tupleOfOrderedReturningTuples_areFlattenedAndSplit(i1: Int, i2: Int, c1: Char, c2: Char, l: Long) {
+		expect(i1.toLong() + i2 + c1.code + c2.code).toEqual(l)
+	}
+
+	@ParameterizedTest
+	@ArgsSource("tupleOfArbReturningTuples")
+	fun tupleOfArbReturningTuples_areFlattenedAndSplit(i1: Int, i2: Int, c1: Char, c2: Char, l: Long) {
+		expect(i1.toLong() + i2 + c1.code + c2.code).toEqual(l)
+	}
+
+	@ParameterizedTest
+	@ArgsSource("tupleOfOrderedAndArbReturningTuples")
+	fun tupleOfOrderedAndArbReturningTuples_areFlattenedAndSplit(i1: Int, i2: Int, c1: Char, c2: Char, l: Long) {
+		expect(i1.toLong() + i2 + c1.code + c2.code).toEqual(l)
+	}
+
+	@ParameterizedTest
+	@ArgsSource("pairOfSemiOrdered")
+	fun pairOfSemiOrderedNotTheSameValues(a: String, b: String) {
+		expect(a).notToEqual(b)
+	}
+
+	@ParameterizedTest
+	@ArgsSource("tupleOfOrderedWithTwoArb")
+	@ArgsSourceOptions(minArgsOverridesSizeLimit = true, requestedMinArgs = 10)
+	fun tupleOfOrderedWithTwoArbNottheSamevalues(@Suppress("unused") i: Int, a: String, b: String) {
+		expect(a).notToEqual(b)
+	}
+
 
 	@ParameterizedTest
 	@ArgsSource("orderedWithSuffixArgsGenerator")
@@ -237,5 +281,35 @@ class ArgsProviderTest {
 					}
 				))
 		)
+
+		@JvmStatic
+		fun tupleOfOrdered() = Tuple(ordered.of(1), ordered.of('a'), ordered.of(1 + 'a'.code.toLong()))
+
+		@JvmStatic
+		fun tupleOfOrderedReturningTuples() =
+			Tuple(ordered.of(1 to 2), ordered.of('a' to 'b'), ordered.of(1 + 2 + 'a'.code.toLong() + 'b'.code))
+
+		@JvmStatic
+		fun tupleOfArbReturningTuples() =
+			Tuple(arb.of(1 to 2), arb.of('a' to 'b'), arb.of(1 + 2 + 'a'.code.toLong() + 'b'.code))
+
+		@JvmStatic
+		fun tupleOfOrderedAndArbReturningTuples() =
+			Tuple(ordered.of(1 to 2), arb.of('a' to 'b'), arb.of(1 + 2 + 'a'.code.toLong() + 'b'.code))
+
+		@JvmStatic
+		fun tupleOfArb() = Tuple(arb.of(1), arb.of('a'), arb.of(1 + 'a'.code.toLong()))
+
+		@JvmStatic
+		fun pairOfSemiOrdered() = run {
+			val g = ordered.intFromUntil(1, 10).zip(arb.string(minLength = 1, maxLength = 5)) { _, s -> s }
+			Tuple(g, g)
+		}
+
+		@JvmStatic
+		fun tupleOfOrderedWithTwoArb() = run {
+			val g = { arb.string(minLength = 10, maxLength = 20) }
+			Tuple(ordered.of(1, 2), g(), g())
+		}
 	}
 }

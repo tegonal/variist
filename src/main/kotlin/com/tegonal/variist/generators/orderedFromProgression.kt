@@ -11,8 +11,13 @@ import com.tegonal.variist.generators.impl.LongFromToOrderedArgsGenerator
  */
 fun OrderedExtensionPoint.fromProgression(progression: CharProgression): OrderedArgsGenerator<Char> =
 	if (progression.step > 0) {
-		IntFromToOrderedArgsGenerator(_components, progression.first.code, progression.last.code, progression.step)
-			.map { it.toChar() }
+		IntFromToOrderedArgsGenerator(
+			_components,
+			seedBaseOffset,
+			progression.first.code,
+			progression.last.code,
+			progression.step
+		).map { it.toChar() }
 	}
 	//TODO 2.2.0 no longer needed once we support minus steps in the iterator
 	else fromList(progression.toList())
@@ -24,7 +29,13 @@ fun OrderedExtensionPoint.fromProgression(progression: CharProgression): Ordered
  */
 fun OrderedExtensionPoint.fromProgression(progression: IntProgression): OrderedArgsGenerator<Int> =
 	if (progression.step > 0) {
-		IntFromToOrderedArgsGenerator(_components, progression.first, progression.last, progression.step)
+		IntFromToOrderedArgsGenerator(
+			_components,
+			seedBaseOffset,
+			progression.first,
+			progression.last,
+			progression.step
+		)
 	}
 	//TODO 2.2.0 no longer needed once we support minus steps in the iterator
 	else fromList(progression.toList())
@@ -36,7 +47,13 @@ fun OrderedExtensionPoint.fromProgression(progression: IntProgression): OrderedA
  */
 fun OrderedExtensionPoint.fromProgression(progression: LongProgression): OrderedArgsGenerator<Long> =
 	if (progression.step > 0) {
-		LongFromToOrderedArgsGenerator(_components, progression.first, progression.last, progression.step)
+		LongFromToOrderedArgsGenerator(
+			_components,
+			seedBaseOffset,
+			progression.first,
+			progression.last,
+			progression.step
+		)
 	}
 	//TODO 2.2.0 no longer needed once we support minus steps in the iterator
 	else fromList(progression.toList())

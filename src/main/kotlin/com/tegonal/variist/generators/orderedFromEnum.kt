@@ -11,4 +11,4 @@ import com.tegonal.variist.generators.impl.ArrayOrderedArgsGenerator
  * @since 2.0.0
  */
 inline fun <reified E : Enum<E>> OrderedExtensionPoint.fromEnum(): OrderedArgsGenerator<E> =
-	ArrayOrderedArgsGenerator(_components, enumValues<E>())
+	ArrayOrderedArgsGenerator(_components, seedBaseOffset, enumValues<E>())
