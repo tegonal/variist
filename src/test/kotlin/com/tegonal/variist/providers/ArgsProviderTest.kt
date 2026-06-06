@@ -189,7 +189,7 @@ class ArgsProviderTest {
 	@ParameterizedTest
 	@ArgsSource("tupleOfOrderedWithTwoArb")
 	@ArgsSourceOptions(minArgsOverridesSizeLimit = true, requestedMinArgs = 10)
-	fun tupleOfOrderedWithTwoArbNottheSamevalues(@Suppress("unused") i: Int, a: String, b: String) {
+	fun tupleOfOrderedWithTwoArbNotTheSameValues(@Suppress("unused", "UNUSED_PARAMETER") i: Int, a: String, b: String) {
 		expect(a).notToEqual(b)
 	}
 
@@ -302,7 +302,7 @@ class ArgsProviderTest {
 
 		@JvmStatic
 		fun pairOfSemiOrdered() = run {
-			val g = ordered.intFromUntil(1, 10).zip(arb.string(minLength = 1, maxLength = 5)) { _, s -> s }
+			val g = ordered.intFromUntil(1, 11).zip(arb.string(minLength = 10, maxLength = 20)) { _, s -> s }
 			Tuple(g, g)
 		}
 

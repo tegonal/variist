@@ -55,7 +55,7 @@ class ArbRangeTest : AbstractArbArgsGeneratorTest<Any>() {
 
 	@ParameterizedTest
 	@ArgsSource("validationErrors")
-	fun check_invariants(@Suppress("unused") what: String, errorMsg: String, factory: () -> ArbArgsGenerator<*>) {
+	fun check_invariants(@Suppress("unused", "UNUSED_PARAMETER") what: String, errorMsg: String, factory: () -> ArbArgsGenerator<*>) {
 		expect(factory).toThrow<IllegalStateException> {
 			messageToContain(errorMsg)
 		}

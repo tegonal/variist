@@ -10,9 +10,11 @@ class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnno
 	val a1s = listOf(1, 2)
 	val a2s = listOf('a', 'b', 'c')
 
-	// implementation detail, since we do seedBaseOffset+1 in BaseSemiOrderedArgsGenerator the a2s are shifted
-	val a2sZipped = listOf(Tuple('a', 'b'), Tuple('b', 'c'), Tuple('c', 'a'))
-	val a2sZipped2 = listOf(Tuple('a', 'b', 'c'), Tuple('b', 'c', 'a'), Tuple('c', 'a', 'b'))
+	// implementation detail, since we do seedBaseOffset + SEED_OFFSET_STEP in BaseSemiOrderedArgsGenerator
+	// the a2s are shifted by SEED_OFFSET_STEP
+	val a2sZipped1 = listOf('c','a','b')
+	val a2sZipped2 = listOf(Tuple('c', 'b'), Tuple('a', 'c'), Tuple('b', 'a'))
+	val a2sZipped3 = listOf(Tuple('c', 'b', 'a'), Tuple('a', 'c', 'b'), Tuple('b', 'a', 'c'))
 
 	val generator: SemiOrderedArgsGenerator<Int> = customComponentFactoryContainer.ordered.fromList(a1s)
 	val randomGenerator = PseudoArbArgsGenerator(a2s)
@@ -21,13 +23,13 @@ class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnno
 		Tuple(
 			"combine with 1 random",
 			Tuple(generator, randomGenerator).combineAll(),
-			a1s.zip(a2s)
+			a1s.zip(a2sZipped1)
 		),
 		Tuple(
 			"combine with 2 random",
 			Tuple(generator, randomGenerator, randomGenerator).combineAll()
 				.map { (a1, a2, a3) -> a1 to (a2 to a3) },
-			a1s.zip(a2sZipped)
+			a1s.zip(a2sZipped2)
 		),
 		Tuple(
 			"combine with 3 random",
@@ -35,7 +37,7 @@ class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnno
 				.map { (a1, a2, a3, a4) ->
 					a1 to Triple(a2, a3, a4)
 				},
-			a1s.zip(a2sZipped2)
+			a1s.zip(a2sZipped3)
 		)
 	)
 
@@ -50,7 +52,7 @@ class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnno
 				"combine with 2 random",
 				Tuple(generator, randomGenerator, randomGenerator).combineAll()
 					.map { (a1, a2, a3) -> a1 to (a2 to a3) },
-				a1s.flatMap { a1 -> a2sZipped.map { a1 to it } }
+				a1s.flatMap { a1 -> a2sZipped2.map { a1 to it } }
 			),
 			Tuple(
 				"combine with 3 random",
@@ -58,7 +60,7 @@ class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnno
 					.map { (a1, a2, a3, a4) ->
 						a1 to Triple(a2, a3, a4)
 					},
-				a1s.flatMap { a1 -> a2sZipped2.map { a1 to it } }
+				a1s.flatMap { a1 -> a2sZipped3.map { a1 to it } }
 			)
 		)
 

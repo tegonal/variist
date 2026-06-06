@@ -11,7 +11,7 @@ class ArbDateLikeTest : AbstractArbArgsGeneratorTest<Any>() {
 		ZonedDateTime.now().truncatedTo(ChronoUnit.HOURS).let { nowZonedDateTime ->
 			val nowLocalDateTime = nowZonedDateTime.toLocalDateTime()
 			val nowLocalTime = nowZonedDateTime.toLocalTime().let {
-				if (it.plusHours(2) > LocalTime.of(0, 0)) LocalTime.of(21, 0) else it
+				if (it.plusHours(2) >= LocalTime.of(0, 0)) LocalTime.of(21, 0) else it
 			}
 			val nowLocalDate = nowZonedDateTime.toLocalDate()
 			val nowOffsetDateTime = nowZonedDateTime.toOffsetDateTime()

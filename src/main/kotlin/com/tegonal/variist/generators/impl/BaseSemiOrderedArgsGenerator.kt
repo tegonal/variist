@@ -21,13 +21,15 @@ abstract class BaseSemiOrderedArgsGenerator<T>(
 
 	constructor(arbGenerator: CoreSemiOrderedArgsGenerator<*>, size: Int) : this(
 		arbGenerator.componentFactoryContainer,
-		arbGenerator.seedBaseOffset + 1,
+		// expected that this can overflow in the worst case
+		arbGenerator.seedBaseOffset + SEED_OFFSET_STEP,
 		size
 	)
 
 	constructor(arbGenerator: CoreSemiOrderedArgsGenerator<*>, size: Long) : this(
 		arbGenerator.componentFactoryContainer,
-		arbGenerator.seedBaseOffset + 1,
+		// expected that this can overflow in the worst case
+		arbGenerator.seedBaseOffset + SEED_OFFSET_STEP,
 		size
 	)
 

@@ -16,6 +16,7 @@ class ArbExample : ReadmeTest {
 		//snippet-arb-provider-insert
 	}
 
+	@Suppress("UNUSED_ANONYMOUS_PARAMETER")
 	@Test
 	fun `code-arb-1`() {
 		//snippet-ordered-1-insert

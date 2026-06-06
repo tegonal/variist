@@ -20,19 +20,19 @@ abstract class BaseGeneratorExtensionPoint(
 		get() = DefaultArbExtensionPoint(
 			componentFactoryContainer,
 			// expected that this can overflow in the worst case
-			seedBaseOffset + 1
+			seedBaseOffset + SEED_OFFSET_STEP
 		)
 	override val ordered: OrderedExtensionPoint
 		get() = DefaultOrderedExtensionPoint(
 			componentFactoryContainer,
 			// expected that this can overflow in the worst case
-			seedBaseOffset + 1
+			seedBaseOffset + SEED_OFFSET_STEP
 		)
 	override val semiOrdered: SemiOrderedExtensionPoint
 		get() = DefaultSemiOrderedExtensionPoint(
 			componentFactoryContainer,
 			// expected that this can overflow in the worst case
-			seedBaseOffset + 1
+			seedBaseOffset + SEED_OFFSET_STEP
 		)
 }
 

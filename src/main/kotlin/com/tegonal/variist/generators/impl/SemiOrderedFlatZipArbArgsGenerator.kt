@@ -19,9 +19,9 @@ class SemiOrderedFlatZipArbArgsGenerator<A1, A2, R>(
 		val orderedOffset = offset / amount
 		val transformationOffset = offset % amount
 		val a1 = semiOrderedArgsGenerator.generateOne(orderedOffset)
-		// note, no need to do generate(offset + seedBaseOffset) here because _core.arb already passes the
-		// seedBaseOffset to the generated ArbArgsGenerator
-		val a2 = _core.arb.otherFactory(a1).generate(seedOffset = 0)
+		// Note, no need to do generate(offset + seedBaseOffset) here because _core.arb already passes the
+		// seedBaseOffset during the creation of ArbArgsGenerator
+		val a2 = _core.arb.otherFactory(a1).generate(seedOffset = offset)
 			.drop(transformationOffset).first()
 		return transform(a1, a2)
 	}
@@ -31,7 +31,7 @@ class SemiOrderedFlatZipArbArgsGenerator<A1, A2, R>(
 		val orderedOffset = offset / amount
 		val transformationOffset = offset % amount
 		return semiOrderedArgsGenerator.flatMapIndexedInternal { index, a1: A1 ->
-			_core.arb.otherFactory(a1).generate(seedOffset = index)
+			_core.arb.otherFactory(a1).generate(seedOffset = offset + index)
 				.take(amount).drop(transformationOffset).map { a2 ->
 					transform(a1, a2)
 				}

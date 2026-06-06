@@ -5,6 +5,7 @@ import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.arb
 import com.tegonal.variist.generators.impl.BaseArbArgsGenerator
 import com.tegonal.variist.utils.repeatForever
+import kotlin.math.absoluteValue
 
 class PseudoArbArgsGenerator<T>(
 	private val list: List<T>,
@@ -19,5 +20,5 @@ class PseudoArbArgsGenerator<T>(
 	) : this(finiteSequence.toList(), seedBaseOffset, componentFactoryContainer)
 
 	override fun generate(seedOffset: Int): Sequence<T> =
-		repeatForever().flatMap { list }.drop((seedBaseOffset + seedOffset) % list.size)
+		repeatForever().flatMap { list }.drop((seedBaseOffset + seedOffset).absoluteValue % list.size)
 }
