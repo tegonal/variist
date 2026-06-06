@@ -17,38 +17,48 @@ class DefaultGenericArgsGeneratorCombiner : GenericArgsGeneratorCombiner {
 		firstArgsGenerator: ArgsGenerator<*>,
 		restMaybeArgGenerators: List<*>
 	): ArgsGenerator<List<*>> = when (firstArgsGenerator) {
-		is ArbArgsGenerator<*> -> {
-			val initial = firstArgsGenerator.map { mutableListOf(it) }
-			restMaybeArgGenerators.foldIndexed(initial) { index, generator, next ->
-				when (next) {
-					is ArbArgsGenerator<*> -> generator.zip(next) { list, aNext ->
-						list.also { it.add(aNext) }
-					}
+		is ArbArgsGenerator<*> ->
+			combineWithArbArgGenerator(firstArgsGenerator, restMaybeArgGenerators)
 
-					is SemiOrderedArgsGenerator<*> -> {
-						val argsGenerator = ArgsGenerator::class.simpleName
-						val arbArgsGenerator = ArbArgsGenerator::class.simpleName
-						error("Wrong ordering of ${argsGenerator}s, first $argsGenerator was an $arbArgsGenerator which means only $arbArgsGenerator are allowed but found $next at position ${index + 1}. Make sure it comes first (or any other (Semi)OrderedArgsGenerators.")
-					}
-					is ArgsGenerator<*> -> throwUnsupportedArgsGenerator(next)
-					else -> throwDontKnowHowToConvertToArgsGenerator(next)
-				}
-			}
-		}
-
-		is SemiOrderedArgsGenerator<*> -> {
-			val first = firstArgsGenerator.map { mutableListOf(it) }
-			restMaybeArgGenerators.fold(first) { generator, next ->
-				when (next) {
-					is ArgsGenerator<*> -> generator.combine(next) { list, aNext ->
-						list.also { it.add(aNext) }
-					}
-
-					else -> throwDontKnowHowToConvertToArgsGenerator(next)
-				}
-			}
-		}
+		is SemiOrderedArgsGenerator<*> ->
+			combineWithSemiOrderedGenerator(firstArgsGenerator.map { mutableListOf(it) }, restMaybeArgGenerators)
 
 		else -> throwUnsupportedArgsGenerator(firstArgsGenerator)
+	}
+
+	private fun combineWithArbArgGenerator(
+		firstArgsGenerator: ArbArgsGenerator<*>,
+		restMaybeArgGenerators: List<*>
+	): ArgsGenerator<List<*>> {
+		var acc = firstArgsGenerator.map { mutableListOf(it) }
+		for (i in restMaybeArgGenerators.indices) {
+			val next = restMaybeArgGenerators[i]
+			acc = when (next) {
+				is ArbArgsGenerator<*> -> acc.zip(next) { list, aNext ->
+					list.also { it.add(aNext) }
+				}
+
+				is SemiOrderedArgsGenerator<*> -> {
+					// return early, i.e. exit the for loop and return the result of combineWithSemiOrderedGenerator
+					return combineWithSemiOrderedGenerator(acc.toSemiOrdered(), restMaybeArgGenerators.drop(i))
+				}
+
+				else -> throwDontKnowHowToConvertToArgsGenerator(next)
+			}
+		}
+		return acc
+	}
+
+	private fun combineWithSemiOrderedGenerator(
+		first: SemiOrderedArgsGenerator<MutableList<Any?>>,
+		restMaybeArgGenerators: List<*>
+	): SemiOrderedArgsGenerator<List<Any?>> = restMaybeArgGenerators.fold(first) { generator, next ->
+		when (next) {
+			is ArgsGenerator<*> -> generator.combine(next) { list, aNext ->
+				list.also { it.add(aNext) }
+			}
+
+			else -> throwDontKnowHowToConvertToArgsGenerator(next)
+		}
 	}
 }
