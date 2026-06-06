@@ -61,7 +61,7 @@ class UnicodeRangeTest {
 
 
 //	@Test
-	@Suppress("KotlinUnreachableCode")
+	@Suppress("UNREACHABLE_CODE")
 	fun charsCorrectlyAssigned() {
 		// deactivated as the unicode-list is rather static and this test takes about 20s, activate if you change something
 		return

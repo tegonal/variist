@@ -5,6 +5,7 @@ import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
 import com.tegonal.variist.config._components
 import com.tegonal.variist.config.arb
+import com.tegonal.variist.generators.impl.SEED_OFFSET_STEP
 import com.tegonal.variist.testutils.orderedWithSeed0
 import com.tegonal.variist.testutils.withMockedRandom
 import org.junit.jupiter.api.Test
@@ -21,7 +22,9 @@ class ArbSeedOffsetTest {
 		val a1s = listOfPairs.map { it.first }
 		val a2s = listOfPairs.map { it.second }
 		expect(a1s).toEqual((0..9).toList())
-		expect(a2s).toEqual((10..19).toList())
+		@Suppress("INTEGER_OVERFLOW")
+		val offsetA2s = SEED_OFFSET_STEP * 10
+		expect(a2s).toEqual((offsetA2s..offsetA2s + 9).toList())
 	}
 
 	@Test
@@ -34,7 +37,9 @@ class ArbSeedOffsetTest {
 		val a1s = listOfPairs.map { it.first }
 		val a2s = listOfPairs.map { it.second }
 		expect(a1s).toEqual((20..29).toList())
-		expect(a2s).toEqual((30..39).toList())
+		@Suppress("INTEGER_OVERFLOW")
+		val offsetA2s = (SEED_OFFSET_STEP + 2) * 10
+		expect(a2s).toEqual((offsetA2s..offsetA2s + 9).toList())
 	}
 
 	@Test
@@ -47,7 +52,9 @@ class ArbSeedOffsetTest {
 		val a1s = listOfPairs.map { it.first }
 		val a2s = listOfPairs.map { it.second }
 		expect(a1s).toEqual((0..9).toList())
-		expect(a2s).toEqual((10..100 step 10).toList())
+		@Suppress("INTEGER_OVERFLOW")
+		val offsetA2s = SEED_OFFSET_STEP * 10
+		expect(a2s).toEqual((offsetA2s..offsetA2s + 90 step 10).toList())
 	}
 
 	@Test
@@ -60,7 +67,9 @@ class ArbSeedOffsetTest {
 		val a1s = listOfPairs.map { it.first }
 		val a2s = listOfPairs.map { it.second }
 		expect(a1s).toEqual((30..39).toList())
-		expect(a2s).toEqual((40..130 step 10).toList())
+		@Suppress("INTEGER_OVERFLOW")
+		val offsetA2s = (SEED_OFFSET_STEP + 3) * 10
+		expect(a2s).toEqual((offsetA2s..offsetA2s + 90 step 10).toList())
 	}
 
 	@Test
@@ -73,7 +82,9 @@ class ArbSeedOffsetTest {
 			val a1s = arb1.int().generateAndTake(10).toList()
 			val a2s = arb2.int().generateAndTake(10).toList()
 			expect(a1s).toEqual((0..9).toList())
-			expect(a2s).toEqual((10..19).toList())
+			@Suppress("INTEGER_OVERFLOW")
+			val offsetA2s = SEED_OFFSET_STEP * 10
+			expect(a2s).toEqual((offsetA2s..offsetA2s + 9).toList())
 		}
 	}
 }

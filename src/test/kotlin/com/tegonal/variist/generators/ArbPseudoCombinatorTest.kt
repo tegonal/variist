@@ -17,13 +17,14 @@ class ArbPseudoCombinatorTest {
 
 	val a1s = sequenceOf(1, 2, 3, 4)
 	val a2s = sequenceOf('a', 'b', 'c', 'd')
-	val a2sAfterCombine = a2s.drop(1) + sequenceOf('a')
+	// zip shifts by SEED_OFFSET_STEP which results in an offset of 3 in the end
+	val a2sAfterZip = sequenceOf('d', 'a', 'b', 'c')
 
 	@Test
 	fun zip() {
 		val a1generator = PseudoArbArgsGenerator(a1s)
 		val generator = a1generator.zip(PseudoArbArgsGenerator(a2s))
-		val expected = a1s.zip(a2sAfterCombine)
+		val expected = a1s.zip(a2sAfterZip)
 		val oneCombined = expected.take(1).toList()
 		val fourCombined = expected.take(4).toList()
 
@@ -42,7 +43,7 @@ class ArbPseudoCombinatorTest {
 		val f: (Int, Char) -> Tuple2<Int, Char> = { a1, a2 -> a1 to a2 }
 		val a1generator = PseudoArbArgsGenerator(a1s)
 		val generator = a1generator.zip(PseudoArbArgsGenerator(a2s), f)
-		val expected = a1s.zip(a2sAfterCombine, f)
+		val expected = a1s.zip(a2sAfterZip, f)
 		val oneCombined = expected.take(1).toList()
 		val fourCombined = expected.take(4).toList()
 
@@ -60,7 +61,7 @@ class ArbPseudoCombinatorTest {
 	fun combineAll() {
 		val a1generator = PseudoArbArgsGenerator(a1s)
 		val generator = Tuple(a1generator, PseudoArbArgsGenerator(a2s)).combineAll()
-		val expected = a1s.zip(a2sAfterCombine)
+		val expected = a1s.zip(a2sAfterZip)
 		val oneCombined = expected.take(1).toList()
 		val fourCombined = expected.take(4).toList()
 
