@@ -1,7 +1,6 @@
 package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.config.ComponentFactoryContainer
-import com.tegonal.variist.config.ComponentFactoryContainerProvider
 import com.tegonal.variist.generators.CoreSemiOrderedArgsGenerator
 import com.tegonal.variist.generators.OrderedArgsGenerator
 import com.tegonal.variist.utils.BigInt
@@ -17,7 +16,7 @@ abstract class BaseSemiOrderedArgsGenerator<T>(
 	final override val componentFactoryContainer: ComponentFactoryContainer,
 	final override val seedBaseOffset: Int,
 	final override val size: Int,
-) : CoreSemiOrderedArgsGenerator<T>, ComponentFactoryContainerProvider {
+) : CoreSemiOrderedArgsGenerator<T> {
 
 	constructor(arbGenerator: CoreSemiOrderedArgsGenerator<*>, size: Int) : this(
 		arbGenerator.componentFactoryContainer,

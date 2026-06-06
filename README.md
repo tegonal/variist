@@ -386,7 +386,7 @@ Variist provides different combinators to produce new `ArgsGenerator`.
 
 The most frequently used combinator is probably to combine multiple `ArgsGenerator`s in some way. A reason why
 we added a bit of magic to Variist. The idiomatic way to define that we want to combine multiple generators is
-to use `Tuple` (from ch.tutteli.kbox) which exists up to `Tuple9`:
+to use `Tuple` (from [ch.tutteli.kbox](https://robstoll.github.io/kbox) which exists up to `Tuple9`:
 
 <code-combine-tuple>
 
@@ -416,7 +416,8 @@ class CombineTupleTest : PredefinedArgsProviders {
 
 </code-combine-tuple>
 
-Combining two `OrderedArgsGenerator`s A and B (or `SemiOrderedArgsGenerator`s) results in an `OrderedArgsGenerator`
+Combining two `OrderedArgsGenerator`s A and B (or `SemiOrderedArgsGenerator`s) results in an `OrderedArgsGenerator` 
+(`SemiOrderedArgsGenerator` respectively) which has all possible combinations of the values of A and B, hence
 representing their Cartesian product and the size correspondingly `A.size * B.size`. I.e. such combinations can
 grow quickly, but Variist has you covered in therms that this is just a definition (nothing generated yet) and
 you still execute only a window of those values in a fast and efficient way.
@@ -425,10 +426,7 @@ only a definition).
 
 Combining an `OrderedArgsGenerators` and an `ArbArgsGenerator` works as well (as shown in the example) and uses
 again zip behaviour, where the result is no longer an `OrderedArgsGenerators` but a `SemiOrderedArgsGenerators` (which
-still has a `size` property). You only need to make sure that your first `ArgsGenerator` in the tuple is a
-`SemiOrderedArgsGenerator` (`OrderedArgsGenerator` is a subtype of `SemiOrderedArgsGenerator`).
-If your first `ArgsGenerator` in the tuple is an `ArbArgsGenerator` then all generators which follow need to be an
-`ArbArgsGenerator` as well (otherwise it will fail at runtime).
+still has a `size` property).
 
 Maybe you are asking yourself how many runs result out of the above definition. As long as no `maxArgs` definition
 restricts it, it will result in `SemiOrderedArgsGenerator.size` runs.
@@ -464,7 +462,7 @@ class CombineManuallyTest : PredefinedArgsProviders {
 			Tuple(
 				numbers, // can again be used in a tuple to define that it shall be combined
 				arb.char()
-			) // the ArgsProvider will flatten all tuples, resulting in 5 arguments (see bar above)
+			) // the ArgsProvider will flatten all tuples (also nested), resulting in 5 arguments (see bar above)
 		}
 	}
 }

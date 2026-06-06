@@ -195,17 +195,41 @@ class ArgsProviderTest {
 
 
 	@ParameterizedTest
-	@ArgsSource("orderedWithSuffixArgsGenerator")
-	fun argsGeneratorSuffixDeciderAddsLongToOrdered(i: Int, l: Long) {
+	@ArgsSource("orderedWithArbSuffixArgsGenerator")
+	fun argsGeneratorSuffixDeciderAddsArbLongToOrdered(i: Int, l: Long) {
 		expect(i.toLong()).toBeLessThan(l)
 	}
 
 	@ParameterizedTest
-	@ArgsSource("arbWithSuffixArgsGenerator")
-	fun argsGeneratorSuffixDeciderAddsLongToArb(i: Int, l: Long) {
+	@ArgsSource("arbWithArbSuffixArgsGenerator")
+	fun argsGeneratorSuffixDeciderAddsArbLongToArb(i: Int, l: Long) {
 		expect(i.toLong()).toBeLessThan(l)
 	}
 
+
+	@ParameterizedTest
+	@ArgsSource("orderedWithOrderedSuffixArgsGenerator")
+	fun argsGeneratorSuffixDeciderAddsOrderedLongToOrdered(i: Int, l: Long) {
+		expect(i.toLong()).toBeLessThan(l)
+	}
+
+	@ParameterizedTest
+	@ArgsSource("arbWithOrderedSuffixArgsGenerator")
+	fun argsGeneratorSuffixDeciderAddsOrderedLongToArb(i: Int, l: Long) {
+		expect(i.toLong()).toBeLessThan(l)
+	}
+
+	@ParameterizedTest
+	@ArgsSource("tupleOfArbOrderedAndSemiOrdered")
+	fun canCombineArbOrderedAndSemiOrdered(a: Int, b: Char, c: Int) {
+		expect(a + b.code).toEqual(c)
+	}
+
+	@ParameterizedTest
+	@ArgsSource("tupleOfArbAndOrdered")
+	fun canCombineArbAndOrdered(i: Int, l: Long) {
+		expect(i.toLong()).toEqual(l)
+	}
 
 	companion object {
 		@JvmStatic
@@ -265,12 +289,30 @@ class ArgsProviderTest {
 		fun arbNestedTuples() = arb.fromList(rawNestedTuples())
 
 		@JvmStatic
-		fun orderedWithSuffixArgsGenerator() = componentWithCustomSuffixArgsGeneratorDecider.ordered.of(1, 2, 3)
+		fun orderedWithArbSuffixArgsGenerator() = withArbSuffixGenerator.ordered.of(1, 2, 3)
 
 		@JvmStatic
-		fun arbWithSuffixArgsGenerator() = componentWithCustomSuffixArgsGeneratorDecider.arb.of(1, 2, 3)
+		fun arbWithArbSuffixArgsGenerator() = withArbSuffixGenerator.arb.of(1, 2, 3)
 
-		private val componentWithCustomSuffixArgsGeneratorDecider = ordered._components.merge(
+		private val withArbSuffixGenerator = ordered._components.merge(
+			ComponentFactoryContainer.create(
+				mapOf(
+					SuffixArgsGeneratorDecider::class createVia { _ ->
+						object : SuffixArgsGeneratorDecider {
+							override fun computeSuffixArgsGenerator(annotationData: AnnotationData): ArgsGenerator<*> =
+								arb.of(4L, 5L, 6L)
+						}
+					}
+				))
+		)
+
+		@JvmStatic
+		fun orderedWithOrderedSuffixArgsGenerator() = withOrderedSuffixGenerator.ordered.of(1, 2, 3)
+
+		@JvmStatic
+		fun arbWithOrderedSuffixArgsGenerator() = withOrderedSuffixGenerator.arb.of(1, 2, 3)
+
+		private val withOrderedSuffixGenerator = ordered._components.merge(
 			ComponentFactoryContainer.create(
 				mapOf(
 					SuffixArgsGeneratorDecider::class createVia { _ ->
@@ -311,5 +353,13 @@ class ArgsProviderTest {
 			val g = { arb.string(minLength = 10, maxLength = 20) }
 			Tuple(ordered.of(1, 2), g(), g())
 		}
+
+		@JvmStatic
+		fun tupleOfArbOrderedAndSemiOrdered() =
+			Tuple(arb.of(1), ordered.of('a'), semiOrdered.fromArbs(arb.of(1 + 'a'.code)))
+
+		@JvmStatic
+		fun tupleOfArbAndOrdered() =
+			Tuple(arb.of(1), ordered.of(1L))
 	}
 }
