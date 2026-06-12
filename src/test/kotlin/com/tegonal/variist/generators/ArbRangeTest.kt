@@ -18,6 +18,8 @@ class ArbRangeTest : AbstractArbArgsGeneratorTest<Any>() {
 	override fun createGenerators(modifiedArb: ArbExtensionPoint): ArbArgsTestFactoryResult<Any> {
 		val minSize2MaxSize2 = listOf('a'..'b', 'b'..'c', 'c'..'d')
 		val minSize1MaxSize2 = listOf('a'..'a', 'b'..'b', 'c'..'c', 'd'..'d') + minSize2MaxSize2
+
+		@Suppress("EmptyRange" /* that's on purpose */)
 		val minSize0MaxSize2 = listOf('d'..'a') + minSize1MaxSize2
 		return sequenceOf(
 			Tuple(
@@ -55,7 +57,11 @@ class ArbRangeTest : AbstractArbArgsGeneratorTest<Any>() {
 
 	@ParameterizedTest
 	@ArgsSource("validationErrors")
-	fun check_invariants(@Suppress("unused", "UNUSED_PARAMETER") what: String, errorMsg: String, factory: () -> ArbArgsGenerator<*>) {
+	fun check_invariants(
+		@Suppress("unused", "UNUSED_PARAMETER") what: String,
+		errorMsg: String,
+		factory: () -> ArbArgsGenerator<*>
+	) {
 		expect(factory).toThrow<IllegalStateException> {
 			messageToContain(errorMsg)
 		}

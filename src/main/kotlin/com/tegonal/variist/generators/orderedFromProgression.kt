@@ -13,7 +13,6 @@ fun OrderedExtensionPoint.fromProgression(progression: CharProgression): Ordered
 	if (progression.step > 0) {
 		IntFromToOrderedArgsGenerator(
 			_components,
-			seedBaseOffset,
 			progression.first.code,
 			progression.last.code,
 			progression.step
@@ -31,7 +30,6 @@ fun OrderedExtensionPoint.fromProgression(progression: IntProgression): OrderedA
 	if (progression.step > 0) {
 		IntFromToOrderedArgsGenerator(
 			_components,
-			seedBaseOffset,
 			progression.first,
 			progression.last,
 			progression.step
@@ -49,7 +47,6 @@ fun OrderedExtensionPoint.fromProgression(progression: LongProgression): Ordered
 	if (progression.step > 0) {
 		LongFromToOrderedArgsGenerator(
 			_components,
-			seedBaseOffset,
 			progression.first,
 			progression.last,
 			progression.step

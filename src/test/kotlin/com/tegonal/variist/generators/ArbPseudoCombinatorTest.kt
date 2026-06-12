@@ -1,11 +1,13 @@
 package com.tegonal.variist.generators
 
+import ch.tutteli.atrium.api.fluent.en_GB.elementsOf
+import ch.tutteli.atrium.api.fluent.en_GB.notToContain
 import ch.tutteli.atrium.api.fluent.en_GB.toContainExactlyElementsOf
-import ch.tutteli.atrium.api.fluent.en_GB.toEqual
+import ch.tutteli.atrium.api.fluent.en_GB.toHaveSize
 import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
 import ch.tutteli.kbox.Tuple2
-import com.tegonal.variist.testutils.PseudoArbArgsGenerator
+import com.tegonal.variist.testutils.RepeatGivenListArbArgsGenerator
 import com.tegonal.variist.utils.repeatForever
 import kotlin.test.Test
 
@@ -17,21 +19,19 @@ class ArbPseudoCombinatorTest {
 
 	val a1s = sequenceOf(1, 2, 3, 4)
 	val a2s = sequenceOf('a', 'b', 'c', 'd')
-	// zip shifts by SEED_OFFSET_STEP which results in an offset of 3 in the end
-	val a2sAfterZip = sequenceOf('d', 'a', 'b', 'c')
 
 	@Test
 	fun zip() {
-		val a1generator = PseudoArbArgsGenerator(a1s)
-		val generator = a1generator.zip(PseudoArbArgsGenerator(a2s))
-		val expected = a1s.zip(a2sAfterZip)
+		val a1Generator = RepeatGivenListArbArgsGenerator(a1s)
+		val a2Generator = RepeatGivenListArbArgsGenerator(a2s)
+		val generator = a1Generator.zip(a2Generator)
+		val expected = a1s.zip(a2s)
 		val oneCombined = expected.take(1).toList()
 		val fourCombined = expected.take(4).toList()
 
-		// zip shouldn't change the seedBaseOffset
-		expect(generator._core.seedBaseOffset).toEqual(a1generator.seedBaseOffset)
-
 		expect(generator.generateToList(1)).toContainExactlyElementsOf(oneCombined)
+		expectOneSeedOffsetEachWhichIsNotTheSame(a1Generator, a2Generator)
+
 		expect(generator.generateToList(2)).toContainExactlyElementsOf(expected.take(2).toList())
 		expect(generator.generateToList(3)).toContainExactlyElementsOf(expected.take(3).toList())
 		expect(generator.generateToList(4)).toContainExactlyElementsOf(fourCombined)
@@ -41,16 +41,16 @@ class ArbPseudoCombinatorTest {
 	@Test
 	fun zipTransformed() {
 		val f: (Int, Char) -> Tuple2<Int, Char> = { a1, a2 -> a1 to a2 }
-		val a1generator = PseudoArbArgsGenerator(a1s)
-		val generator = a1generator.zip(PseudoArbArgsGenerator(a2s), f)
-		val expected = a1s.zip(a2sAfterZip, f)
+		val a1Generator = RepeatGivenListArbArgsGenerator(a1s)
+		val a2Generator = RepeatGivenListArbArgsGenerator(a2s)
+		val generator = a1Generator.zip(a2Generator, f)
+		val expected = a1s.zip(a2s, f)
 		val oneCombined = expected.take(1).toList()
 		val fourCombined = expected.take(4).toList()
 
-		// zip shouldn't change the seedBaseOffset
-		expect(generator._core.seedBaseOffset).toEqual(a1generator.seedBaseOffset)
-
 		expect(generator.generateToList(1)).toContainExactlyElementsOf(oneCombined)
+		expectOneSeedOffsetEachWhichIsNotTheSame(a1Generator, a2Generator)
+
 		expect(generator.generateToList(2)).toContainExactlyElementsOf(expected.take(2).toList())
 		expect(generator.generateToList(3)).toContainExactlyElementsOf(expected.take(3).toList())
 		expect(generator.generateToList(4)).toContainExactlyElementsOf(fourCombined)
@@ -59,16 +59,15 @@ class ArbPseudoCombinatorTest {
 
 	@Test
 	fun combineAll() {
-		val a1generator = PseudoArbArgsGenerator(a1s)
-		val generator = Tuple(a1generator, PseudoArbArgsGenerator(a2s)).combineAll()
-		val expected = a1s.zip(a2sAfterZip)
+		val a1Generator = RepeatGivenListArbArgsGenerator(a1s)
+		val a2Generator = RepeatGivenListArbArgsGenerator(a2s)
+		val generator = Tuple(a1Generator, a2Generator).combineAll()
+		val expected = a1s.zip(a2s)
 		val oneCombined = expected.take(1).toList()
 		val fourCombined = expected.take(4).toList()
 
-		// combineAll shouldn't change the seedBaseOffset
-		expect(generator._core.seedBaseOffset).toEqual(a1generator.seedBaseOffset)
-
 		expect(generator.generateToList(1)).toContainExactlyElementsOf(oneCombined)
+		expectOneSeedOffsetEachWhichIsNotTheSame(a1Generator, a2Generator)
 		expect(generator.generateToList(2)).toContainExactlyElementsOf(expected.take(2).toList())
 		expect(generator.generateToList(3)).toContainExactlyElementsOf(expected.take(3).toList())
 		expect(generator.generateToList(4)).toContainExactlyElementsOf(fourCombined)
@@ -77,19 +76,15 @@ class ArbPseudoCombinatorTest {
 
 	@Test
 	fun zipDependent() {
-		val a1generator = PseudoArbArgsGenerator(a1s)
-		val generator = a1generator.zipDependent { int ->
-			PseudoArbArgsGenerator(a2s.map { char -> char + int })
+		val a1Generator = RepeatGivenListArbArgsGenerator(a1s)
+		val generator = a1Generator.zipDependent { int ->
+			RepeatGivenListArbArgsGenerator(a2s.map { char -> char + int })
 		}
 
-		// zipDependent shouldn't change the seedBaseOffset
-		expect(generator._core.seedBaseOffset).toEqual(a1generator.seedBaseOffset)
-
 		// note, our expectation is based on an implementation detail, we know that zipDependent just
-		// picks the first generated value of the resulting ArbArgsGenerator and that PseudoArbArgsGenerator drops
-		// according to seedOffset
-		val a2sexpected = sequenceOf('b', 'd', 'f', 'h')
-		val expected = a1s.zip(a2sexpected)
+		// picks the first generated value of the resulting ArbArgsGenerator and that RepeatGivenListArbArgsGenerator
+		// just repeats the list regardless what seedOffset is passed, i.e. a2 is always 'a' + a1
+		val expected = a1s.map { a1 -> a1 to 'a' + a1 }
 		val oneCombined = expected.take(1).toList()
 		val fourCombined = expected.take(4).toList()
 
@@ -101,20 +96,25 @@ class ArbPseudoCombinatorTest {
 	}
 
 	@Test
+	fun zipDependent_doesUseDifferentSeedOffsets() {
+		val g1 = RepeatGivenListArbArgsGenerator(listOf(1, 2))
+		val g2 = g1 // just to make the comment below more understandable
+		g1.zipDependent { g2 }.generateToList(2).count()
+		// one for g1 and two for g2 because zipDependent just picks one value
+		expect(g1.seedOffsets.toSet()).toHaveSize(3)
+	}
+
+	@Test
 	fun flatZipDependent_amount1() {
-		val a1generator = PseudoArbArgsGenerator(a1s)
-		val generator = a1generator.flatZipDependent(amount = 1) { int ->
-			PseudoArbArgsGenerator(a2s.map { char -> char + int })
+		val a1Generator = RepeatGivenListArbArgsGenerator(a1s)
+		val generator = a1Generator.flatZipDependent(amount = 1) { int ->
+			RepeatGivenListArbArgsGenerator(a2s.map { char -> char + int })
 		}
 
-		// flatZipDependent shouldn't change the seedBaseOffset
-		expect(generator._core.seedBaseOffset).toEqual(a1generator.seedBaseOffset)
-
 		// note, our expectation is based on an implementation detail, we know that flatZipDependent amount=1 just
-		// picks the first generated value of the resulting ArbArgsGenerator and that PseudoArbArgsGenerator drops
-		// according to seedOffset
-		val a2sexpected = sequenceOf('b', 'd', 'f', 'h')
-		val expected = a1s.zip(a2sexpected)
+		// picks the first generated value of the resulting ArbArgsGenerator and that RepeatGivenListArbArgsGenerator
+		// just repeats the list regardless what seedOffset is passed
+		val expected = a1s.flatMap { int -> a2s.take(1).map { char -> int to char + int } }
 		val oneCombined = expected.take(1).toList()
 		val fourCombined = expected.take(4).toList()
 
@@ -127,26 +127,15 @@ class ArbPseudoCombinatorTest {
 
 	@Test
 	fun flatZipDependent_amount2() {
-		val a1generator = PseudoArbArgsGenerator(a1s)
-		val generator = a1generator.flatZipDependent(amount = 2) { int ->
-			PseudoArbArgsGenerator(a2s.map { char -> char + int })
+		val a1Generator = RepeatGivenListArbArgsGenerator(a1s)
+		val generator = a1Generator.flatZipDependent(amount = 2) { int ->
+			RepeatGivenListArbArgsGenerator(a2s.map { char -> char + int })
 		}
 
-		// flatZipDependent shouldn't change the seedBaseOffset
-		expect(generator._core.seedBaseOffset).toEqual(a1generator.seedBaseOffset)
-
-		val expected = listOf(
-			// seedOffset=0, so does not influence drop
-			1 to 'b', // a1=1, index = 0 => 'a' + 1, drop 0 = 'b'
-			1 to 'c',
-			2 to 'd', // a2=2, index = 1 => 'a' + 2, drop 1 = 'd'
-			2 to 'e',
-			3 to 'f', // a2=3, index = 2 => 'a' + 3, drop 2 = 'f', 'g
-			3 to 'g',
-			4 to 'h', // a2=4, index = 3 => 'a' + 4, drop 3 = 'h'
-			4 to 'e', // start over at 'a'+4 i.e. 'e'
-		)
-
+		// note, our expectation is based on an implementation detail, we know that flatZipDependent amount=1 just
+		// picks the first generated value of the resulting ArbArgsGenerator and that RepeatGivenListArbArgsGenerator
+		// just repeats the list regardless what seedOffset is passed
+		val expected = a1s.flatMap { int -> a2s.take(2).map { char -> int to char + int } }
 		val oneCombined = expected.take(1).toList()
 		val eightCombined = expected.take(8).toList()
 
@@ -163,28 +152,15 @@ class ArbPseudoCombinatorTest {
 
 	@Test
 	fun flatZipDependent_amount3_transform() {
-		val a1generator = PseudoArbArgsGenerator(a1s)
-		val generator = a1generator.flatZipDependent(amount = 3) { int ->
-			PseudoArbArgsGenerator(a2s.map { char -> char + int })
+		val a1Generator = RepeatGivenListArbArgsGenerator(a1s)
+		val generator = a1Generator.flatZipDependent(amount = 3) { int ->
+			RepeatGivenListArbArgsGenerator(a2s.map { char -> char + int })
 		}
 
-		// flatZipDependent shouldn't change the seedBaseOffset
-		expect(generator._core.seedBaseOffset).toEqual(a1generator.seedBaseOffset)
-
-		val expected = listOf(
-			1 to 'b', // a1=1, index = 0 => 'a' + 1, drop 0 = 'b'
-			1 to 'c',
-			1 to 'd',
-			2 to 'd', // a2=2, index = 1 => 'a' + 2, drop 1 = 'd'
-			2 to 'e',
-			2 to 'f',
-			3 to 'f', // a2=3, index = 2 => 'a' + 3, drop 2 = 'f', 'g
-			3 to 'g',
-			3 to 'd', // start over at 'a' + 3 i.e. 'd'
-			4 to 'h', // a2=4, index = 3 => 'a' + 4, drop 3 = 'h'
-			4 to 'e', // start over at 'a' + 4 i.e. 'e'
-			4 to 'f',
-		)
+		// note, our expectation is based on an implementation detail, we know that flatZipDependent amount=1 just
+		// picks the first generated value of the resulting ArbArgsGenerator and that RepeatGivenListArbArgsGenerator
+		// just repeats the list regardless what seedOffset is passed
+		val expected = a1s.flatMap { int -> a2s.take(3).map { char -> int to char + int } }
 
 		val oneCombined = expected.take(1).toList()
 		val twelveCombined = expected.take(12).toList()
@@ -205,14 +181,20 @@ class ArbPseudoCombinatorTest {
 	}
 
 	@Test
+	fun flatZipDependent_doesUseDifferentSeedOffsets() {
+		val g1 = RepeatGivenListArbArgsGenerator(listOf(1, 2))
+		val g2 = g1 // just to make the comment below more understandable
+		g1.flatZipDependent(1) { g2 }.generateToList(2).count()
+		// one for g1 and two for g2
+		expect(g1.seedOffsets.toSet()).toHaveSize(3)
+	}
+
+	@Test
 	fun map() {
 		val f: (Int) -> Int = { it + 1 }
 		val a1s = sequenceOf(1, 2, 3, 4)
-		val a1generator = PseudoArbArgsGenerator(a1s)
-		val generator = a1generator.map(f)
-
-		// map shouldn't change the seedBaseOffset
-		expect(generator._core.seedBaseOffset).toEqual(a1generator.seedBaseOffset)
+		val a1Generator = RepeatGivenListArbArgsGenerator(a1s)
+		val generator = a1Generator.map(f)
 
 		val expected = a1s.map(f)
 		val take1 = expected.take(1).toList()
@@ -227,11 +209,8 @@ class ArbPseudoCombinatorTest {
 
 	@Test
 	fun filter() {
-		val a1generator = PseudoArbArgsGenerator(a1s)
-		val generator = a1generator.filter { it % 2 == 0 }
-
-		// filter shouldn't change the seedBaseOffset
-		expect(generator._core.seedBaseOffset).toEqual(a1generator.seedBaseOffset)
+		val a1Generator = RepeatGivenListArbArgsGenerator(a1s)
+		val generator = a1Generator.filter { it % 2 == 0 }
 
 		val expected = repeatForever((2 until 5 step 2).toList(), 0)
 		expect(generator.generateToList(1)).toContainExactlyElementsOf(expected.take(1).toList())
@@ -243,11 +222,8 @@ class ArbPseudoCombinatorTest {
 
 	@Test
 	fun filterNot() {
-		val a1generator = PseudoArbArgsGenerator(a1s)
-		val generator = a1generator.filterNot { it % 2 == 0 }
-
-		// filterNot shouldn't change the seedBaseOffset
-		expect(generator._core.seedBaseOffset).toEqual(a1generator.seedBaseOffset)
+		val a1Generator = RepeatGivenListArbArgsGenerator(a1s)
+		val generator = a1Generator.filterNot { it % 2 == 0 }
 
 		val expected = repeatForever((1 until 5 step 2).toList(), 0)
 		expect(generator.generateToList(1)).toContainExactlyElementsOf(expected.take(1).toList())
@@ -260,13 +236,10 @@ class ArbPseudoCombinatorTest {
 	@Test
 	fun transform() {
 		val a1s = sequenceOf(1, 2)
-		val a1generator = PseudoArbArgsGenerator(a1s)
-		val generator = a1generator.transform { seq ->
+		val a1Generator = RepeatGivenListArbArgsGenerator(a1s)
+		val generator = a1Generator.transform { seq ->
 			seq.flatMap { sequenceOf('a' + it, 'A' + it) }
 		}
-
-		// transform shouldn't change the seedBaseOffset
-		expect(generator._core.seedBaseOffset).toEqual(a1generator.seedBaseOffset)
 
 		val expected = repeatForever().flatMap { sequenceOf('b', 'B', 'c', 'C') }
 		expect(generator.generateToList(1)).toContainExactlyElementsOf(expected.take(1).toList())
@@ -276,5 +249,16 @@ class ArbPseudoCombinatorTest {
 		expect(generator.generateToList(5)).toContainExactlyElementsOf(expected.take(5).toList())
 	}
 
-	fun <T> ArbArgsGenerator<T>.generateToList(amount: Int): List<T> = generate().take(amount).toList()
+	private fun <T> ArbArgsGenerator<T>.generateToList(amount: Int): List<T> = generate().take(amount).toList()
+
+	private fun expectOneSeedOffsetEachWhichIsNotTheSame(
+		a1Generator: RepeatGivenListArbArgsGenerator<Int>,
+		a2Generator: RepeatGivenListArbArgsGenerator<Char>
+	) {
+		expect(a1Generator.seedOffsets) {
+			toHaveSize(1)
+			notToContain.elementsOf(a2Generator.seedOffsets)
+		}
+		expect(a2Generator.seedOffsets).toHaveSize(1)
+	}
 }

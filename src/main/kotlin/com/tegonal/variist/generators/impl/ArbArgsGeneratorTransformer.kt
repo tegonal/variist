@@ -2,6 +2,7 @@ package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.generators.ArbArgsGenerator
 import com.tegonal.variist.generators._core
+import com.tegonal.variist.utils.deriveTwoChildSeedOffsets
 
 /**
  * !! No backward compatibility guarantees !!
@@ -14,8 +15,11 @@ class ArbArgsGeneratorTransformer<T, R>(
 	private val transform: (Sequence<T>, seedOffset: Int) -> Sequence<R>
 ) : BaseArbArgsGenerator<R>(baseGenerator._core) {
 
+	//TODO 2.3.0 implement generateOne
+
 	override fun generate(seedOffset: Int): Sequence<R> {
-		val seq = baseGenerator.generate(seedOffset)
-		return transform(seq, seedOffset)
+		val (seedOffset1, seedOffset2) = deriveTwoChildSeedOffsets(seedOffset)
+		val seq = baseGenerator.generate(seedOffset1)
+		return transform(seq, seedOffset2)
 	}
 }

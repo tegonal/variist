@@ -13,9 +13,5 @@ import com.tegonal.variist.generators.impl.IntFromUntilArbArgsGenerator
  * @since 2.0.0
  */
 fun <T> SemiOrderedArgsGenerator<T>.toArbArgsGenerator(): ArbArgsGenerator<T> =
-	IntFromUntilArbArgsGenerator(
-		_components,
-		seedBaseOffset = 0,
-		from = 0,
-		toExclusive = size
-	).map { offset -> this.generateOne(offset) }
+	IntFromUntilArbArgsGenerator(_components, from = 0, toExclusive = size)
+		.map { offset -> this.generateOne(offset) }

@@ -13,7 +13,7 @@ fun OrderedExtensionPoint.intFromUntil(
 	from: Int,
 	toExclusive: Int,
 ): OrderedArgsGenerator<Int> = IntFromUntilOrderedArgsGenerator(
-	_components, seedBaseOffset, from, toExclusive, step = 1
+	_components, from, toExclusive, step = 1
 )
 
 /**
@@ -25,7 +25,7 @@ fun OrderedExtensionPoint.longFromUntil(
 	from: Long,
 	toExclusive: Long,
 ): OrderedArgsGenerator<Long> = LongFromUntilOrderedArgsGenerator(
-	_components, seedBaseOffset, from, toExclusive, step = 1
+	_components, from, toExclusive, step = 1
 )
 
 /**
@@ -37,7 +37,7 @@ fun OrderedExtensionPoint.bigIntFromUntil(
 	from: BigInt,
 	toExclusive: BigInt,
 ): OrderedArgsGenerator<BigInt> = BigIntFromUntilOrderedArgsGenerator(
-	_components, seedBaseOffset, from, toExclusive, step = BigInt.ONE
+	_components, from, toExclusive, step = BigInt.ONE
 )
 
 
@@ -50,7 +50,7 @@ fun OrderedExtensionPoint.intFromTo(
 	from: Int,
 	toInclusive: Int,
 ): OrderedArgsGenerator<Int> = IntFromToOrderedArgsGenerator(
-	_components, seedBaseOffset, from, toInclusive, step = 1
+	_components, from, toInclusive, step = 1
 )
 
 /**
@@ -62,7 +62,7 @@ fun OrderedExtensionPoint.longFromTo(
 	from: Long,
 	toInclusive: Long,
 ): OrderedArgsGenerator<Long> = LongFromToOrderedArgsGenerator(
-	_components, seedBaseOffset, from, toInclusive, step = 1L
+	_components, from, toInclusive, step = 1L
 )
 
 /**
@@ -74,5 +74,5 @@ fun OrderedExtensionPoint.bigIntFromTo(
 	from: BigInt,
 	toInclusive: BigInt,
 ): OrderedArgsGenerator<BigInt> = BigIntFromUntilOrderedArgsGenerator(
-	_components, seedBaseOffset, from, toInclusive + BigInt.ONE, step = BigInt.ONE
+	_components, from, toInclusive + BigInt.ONE, step = BigInt.ONE
 )

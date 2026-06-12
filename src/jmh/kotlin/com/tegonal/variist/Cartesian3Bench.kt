@@ -3,6 +3,7 @@
 package com.tegonal.variist
 
 import ch.tutteli.kbox.Tuple3
+import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.*
 import com.tegonal.variist.generators.impl.BaseSemiOrderedArgsGenerator
 import org.openjdk.jmh.annotations.*
@@ -92,7 +93,7 @@ abstract class CartesianProductMultiArgsGenerator<R>(
 	private val sizeOfBiggest: Int = sizes[order.last()]
 
 
-	override fun generateAfterChecks(offset: Int): Sequence<R> {
+	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<R> {
 		// we generate in chunks of sizeOfBiggest
 		val offsetInFirstChunk = offset % sizeOfBiggest
 		val offsetsInChunk = Array(numOfGenerators - 1) {
@@ -104,7 +105,8 @@ abstract class CartesianProductMultiArgsGenerator<R>(
 
 			object : Iterator<R> {
 				private val iterators = Array(numOfGenerators) {
-					generators[it].generate(offsetInFirstChunk).iterator()
+					generators[it]._core.generate(offsetInFirstChunk, deriveChildSeedOffset(seedOffset, it + 1))
+						.iterator()
 				}
 
 				// in the first chunk we might have an offset and if so will produce fewer values

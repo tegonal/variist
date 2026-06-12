@@ -1,8 +1,6 @@
 package com.tegonal.variist.generators
 
-import ch.tutteli.atrium.testfactories.TestFactory
 import ch.tutteli.kbox.Tuple
-import com.tegonal.variist.config.ordered
 
 class OrderedAsSemiOrderedTransformationTest : AbstractOrderedArgsGeneratorTest<Int>() {
 
@@ -16,12 +14,5 @@ class OrderedAsSemiOrderedTransformationTest : AbstractOrderedArgsGeneratorTest<
 			sequenceOf(
 				Tuple("map", generator.map(mapFun), l.map(mapFun)),
 			)
-		}
-
-	@TestFactory
-	override fun offsetPlusXReturnsTheSameAsOffsetXMinus1JustShifted() =
-		offsetPlusXReturnsTheSameAsOffsetXMinus1JustShiftedTest {
-			// this "law" does not hold for mapIndexed
-			createGenerators(customComponentFactoryContainer.ordered).filter { it.first != "mapIndexed" }
 		}
 }

@@ -11,7 +11,7 @@ import com.tegonal.variist.generators.impl.checkNotEmptyReturnNullIfOneElementAn
  */
 fun ArbExtensionPoint.fromArray(args: ByteArray): ArbArgsGenerator<Byte> =
 	checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize(args.size)?.map(args::get)
-		?: ConstantArbArgsGenerator(_components, seedBaseOffset, args.first())
+		?: ConstantArbArgsGenerator(_components, args.first())
 
 /**
  * Returns an [ArbArgsGenerator] based on the given [args].
@@ -20,7 +20,7 @@ fun ArbExtensionPoint.fromArray(args: ByteArray): ArbArgsGenerator<Byte> =
  */
 fun ArbExtensionPoint.fromArray(args: CharArray): ArbArgsGenerator<Char> =
 	checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize(args.size)?.map(args::get)
-		?: ConstantArbArgsGenerator(_components, seedBaseOffset, args.first())
+		?: ConstantArbArgsGenerator(_components, args.first())
 
 
 /**
@@ -30,7 +30,7 @@ fun ArbExtensionPoint.fromArray(args: CharArray): ArbArgsGenerator<Char> =
  */
 fun ArbExtensionPoint.fromArray(args: ShortArray): ArbArgsGenerator<Short> =
 	checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize(args.size)?.map(args::get)
-		?: ConstantArbArgsGenerator(_components, seedBaseOffset, args.first())
+		?: ConstantArbArgsGenerator(_components, args.first())
 
 /**
  * Returns an [ArbArgsGenerator] based on the given [args].
@@ -39,7 +39,7 @@ fun ArbExtensionPoint.fromArray(args: ShortArray): ArbArgsGenerator<Short> =
  */
 fun ArbExtensionPoint.fromArray(args: IntArray): ArbArgsGenerator<Int> =
 	checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize(args.size)?.map(args::get)
-		?: ConstantArbArgsGenerator(_components, seedBaseOffset, args.first())
+		?: ConstantArbArgsGenerator(_components, args.first())
 
 /**
  * Returns an [ArbArgsGenerator] based on the given [args].
@@ -48,7 +48,7 @@ fun ArbExtensionPoint.fromArray(args: IntArray): ArbArgsGenerator<Int> =
  */
 fun ArbExtensionPoint.fromArray(args: LongArray): ArbArgsGenerator<Long> =
 	checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize(args.size)?.map(args::get)
-		?: ConstantArbArgsGenerator(_components, seedBaseOffset, args.first())
+		?: ConstantArbArgsGenerator(_components, args.first())
 
 /**
  * Returns an [ArbArgsGenerator] based on the given [args].
@@ -57,7 +57,7 @@ fun ArbExtensionPoint.fromArray(args: LongArray): ArbArgsGenerator<Long> =
  */
 fun ArbExtensionPoint.fromArray(args: FloatArray): ArbArgsGenerator<Float> =
 	checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize(args.size)?.map(args::get)
-		?: ConstantArbArgsGenerator(_components, seedBaseOffset, args.first())
+		?: ConstantArbArgsGenerator(_components, args.first())
 
 /**
  * Returns an [ArbArgsGenerator] based on the given [args].
@@ -66,7 +66,7 @@ fun ArbExtensionPoint.fromArray(args: FloatArray): ArbArgsGenerator<Float> =
  */
 fun ArbExtensionPoint.fromArray(args: DoubleArray): ArbArgsGenerator<Double> =
 	checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize(args.size)?.map(args::get)
-		?: ConstantArbArgsGenerator(_components, seedBaseOffset, args.first())
+		?: ConstantArbArgsGenerator(_components, args.first())
 
 /**
  * Returns an [ArbArgsGenerator] based on the given [args].
@@ -75,7 +75,7 @@ fun ArbExtensionPoint.fromArray(args: DoubleArray): ArbArgsGenerator<Double> =
  */
 fun ArbExtensionPoint.fromArray(args: BooleanArray): ArbArgsGenerator<Boolean> =
 	checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize(args.size)?.map(args::get)
-		?: ConstantArbArgsGenerator(_components, seedBaseOffset, args.first())
+		?: ConstantArbArgsGenerator(_components, args.first())
 
 /**
  * Returns an [ArbArgsGenerator] based on the given [args].
@@ -84,4 +84,4 @@ fun ArbExtensionPoint.fromArray(args: BooleanArray): ArbArgsGenerator<Boolean> =
  */
 fun <T> ArbExtensionPoint.fromArray(args: Array<out T>): ArbArgsGenerator<T> =
 	checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize(args.size)?.map(args::get)
-		?: ConstantArbArgsGenerator(_components, seedBaseOffset, args.first())
+		?: ConstantArbArgsGenerator(_components, args.first())

@@ -9,4 +9,4 @@ import com.tegonal.variist.generators.impl.ListOrderedArgsGenerator
  * @since 2.0.0
  */
 fun <T> OrderedExtensionPoint.fromList(args: List<T>): OrderedArgsGenerator<T> =
-	ListOrderedArgsGenerator(_components, seedBaseOffset, args)
+	ListOrderedArgsGenerator(_components, args)

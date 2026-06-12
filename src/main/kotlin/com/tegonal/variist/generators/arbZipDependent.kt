@@ -4,6 +4,7 @@
 package com.tegonal.variist.generators
 
 import ch.tutteli.kbox.Tuple2
+import com.tegonal.variist.utils.deriveChildSeedOffset
 import com.tegonal.variist.generators.impl.flatMapIndexedInternal
 import com.tegonal.variist.generators.impl.mapIndexedInternal
 import com.tegonal.variist.utils.impl.checkIsPositive
@@ -28,7 +29,7 @@ fun <A1, A2, R> ArbArgsGenerator<A1>.zipDependent(
 	otherFactory: ArbExtensionPoint.(A1) -> ArbArgsGenerator<A2>,
 	transform: (A1, A2) -> R
 ): ArbArgsGenerator<R> = mapIndexedInternal { index, a1, seedOffset ->
-	transform(a1, this._core.arb.otherFactory(a1).generateOne(index + seedOffset))
+	transform(a1, _core.arb.otherFactory(a1).generateOne(deriveChildSeedOffset(seedOffset, index + 1)))
 }
 
 /**
@@ -74,7 +75,7 @@ fun <A1, A2, R> ArbArgsGenerator<A1>.flatZipDependent(
 ): ArbArgsGenerator<R> {
 	checkIsPositive(amount, "amount")
 	return flatMapIndexedInternal { index, a1, seedOffset ->
-		this._core.arb.otherFactory(a1).generate(index + seedOffset).take(amount).map { a2 ->
+		_core.arb.otherFactory(a1).generate(index + seedOffset).take(amount).map { a2 ->
 			transform(a1, a2)
 		}
 	}

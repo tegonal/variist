@@ -9,31 +9,16 @@ import com.tegonal.variist.generators.SemiOrderedExtensionPoint
 
 abstract class BaseGeneratorExtensionPoint(
 	override val componentFactoryContainer: ComponentFactoryContainer,
-	/**
-	 * Will be added to [com.tegonal.variist.config.VariistConfig.seed] for generators consisting of an arbitrary part.
-	 *
-	 * Is allowed to be negative.
-	 */
-	override val seedBaseOffset: Int,
 ) : GeneratorExtensionPoint, ComponentFactoryContainerProvider {
+
 	override val arb: ArbExtensionPoint
-		get() = DefaultArbExtensionPoint(
-			componentFactoryContainer,
-			// expected that this can overflow in the worst case
-			seedBaseOffset + SEED_OFFSET_STEP
-		)
+		get() = DefaultArbExtensionPoint(componentFactoryContainer)
+
 	override val ordered: OrderedExtensionPoint
-		get() = DefaultOrderedExtensionPoint(
-			componentFactoryContainer,
-			// expected that this can overflow in the worst case
-			seedBaseOffset + SEED_OFFSET_STEP
-		)
+		get() = DefaultOrderedExtensionPoint(componentFactoryContainer)
+
 	override val semiOrdered: SemiOrderedExtensionPoint
-		get() = DefaultSemiOrderedExtensionPoint(
-			componentFactoryContainer,
-			// expected that this can overflow in the worst case
-			seedBaseOffset + SEED_OFFSET_STEP
-		)
+		get() = DefaultSemiOrderedExtensionPoint(componentFactoryContainer)
 }
 
 /**
@@ -44,8 +29,7 @@ abstract class BaseGeneratorExtensionPoint(
  */
 class DefaultOrderedExtensionPoint(
 	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
-) : BaseGeneratorExtensionPoint(componentFactoryContainer, seedBaseOffset), OrderedExtensionPoint
+) : BaseGeneratorExtensionPoint(componentFactoryContainer), OrderedExtensionPoint
 
 /**
  * !! No backward compatibility guarantees !!
@@ -55,8 +39,7 @@ class DefaultOrderedExtensionPoint(
  */
 class DefaultSemiOrderedExtensionPoint(
 	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
-) : BaseGeneratorExtensionPoint(componentFactoryContainer, seedBaseOffset), SemiOrderedExtensionPoint
+) : BaseGeneratorExtensionPoint(componentFactoryContainer), SemiOrderedExtensionPoint
 
 /**
  * !! No backward compatibility guarantees !!
@@ -66,5 +49,4 @@ class DefaultSemiOrderedExtensionPoint(
  */
 class DefaultArbExtensionPoint(
 	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
-) : BaseGeneratorExtensionPoint(componentFactoryContainer, seedBaseOffset), ArbExtensionPoint
+) : BaseGeneratorExtensionPoint(componentFactoryContainer), ArbExtensionPoint

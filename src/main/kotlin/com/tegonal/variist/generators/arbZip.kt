@@ -3,7 +3,7 @@
 
 package com.tegonal.variist.generators
 
-import com.tegonal.variist.generators.impl.SEED_OFFSET_STEP
+import com.tegonal.variist.generators.impl.ArbArgsGeneratorZipper
 
 /**
  * Zips `this` [ArbArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator], [transform]ing
@@ -24,10 +24,5 @@ import com.tegonal.variist.generators.impl.SEED_OFFSET_STEP
 fun <A1, A2, R> ArbArgsGenerator<A1>.zip(
 	other: ArbArgsGenerator<A2>,
 	transform: (A1, A2) -> R
-): ArbArgsGenerator<R> {
-	val offset = _core.seedBaseOffset + SEED_OFFSET_STEP
-	return transform { seq, seedOffset ->
-		seq.zip(other.generate(offset + seedOffset), transform)
-	}
-}
+): ArbArgsGenerator<R> = ArbArgsGeneratorZipper(this, other, transform)
 

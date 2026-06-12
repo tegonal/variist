@@ -12,10 +12,9 @@ import kotlin.random.Random
  */
 abstract class ClosedRangeBasedArbArgsGenerator<T : Comparable<T>>(
 	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
 	protected val from: T,
 	protected val toInclusive: T,
-) : RandomBasedArbArgsGenerator<T>(componentFactoryContainer, seedBaseOffset) {
+) : RandomBasedArbArgsGenerator<T>(componentFactoryContainer) {
 	init {
 		requireFromLessThanOrEqualToExclusive(from, toInclusive)
 	}

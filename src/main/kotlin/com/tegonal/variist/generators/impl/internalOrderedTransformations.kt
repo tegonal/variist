@@ -22,4 +22,4 @@ import com.tegonal.variist.generators.OrderedArgsGenerator
 @InternalDangerousApi
 fun <R, T> OrderedArgsGenerator<T>.transformInternal(
 	transform: (Sequence<T>) -> Sequence<R>
-): OrderedArgsGenerator<R> = OrderedArgsGeneratorTransformer(this, transform)
+): OrderedArgsGenerator<R> = OrderedArgsGeneratorTransformer(this) { it, _ -> transform(it) }

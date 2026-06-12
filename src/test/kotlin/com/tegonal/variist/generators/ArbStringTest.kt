@@ -9,6 +9,7 @@ import com.tegonal.variist.config.config
 import com.tegonal.variist.providers.ArgsSource
 import com.tegonal.variist.providers.ArgsSourceOptions
 import com.tegonal.variist.testutils.createArbWithCustomConfig
+import com.tegonal.variist.testutils.firstDerivedChildFromSeed0
 import com.tegonal.variist.testutils.withMockedRandom
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
@@ -80,7 +81,7 @@ class ArbStringTest : AbstractArbArgsGeneratorTest<Any>() {
 		val modifiedArb =
 			createArbWithCustomConfig(arb._components.config.copy { seed = 0 })._components.withMockedRandom { seed ->
 				// seed = 0 is the length
-				if (seed == 0) Tuple(listOf(3), emptyList(), emptyList())
+				if (seed == firstDerivedChildFromSeed0) Tuple(listOf(3), emptyList(), emptyList())
 				// everything else are the code points
 				else Tuple(listOf(0xF602 + 1, 1), emptyList(), emptyList())
 			}.arb
