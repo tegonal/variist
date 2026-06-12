@@ -8,6 +8,8 @@ import com.tegonal.variist.config._components
 import com.tegonal.variist.config.config
 import com.tegonal.variist.config.toOffset
 import com.tegonal.variist.providers.ArgsSource
+import com.tegonal.variist.testutils.RepeatProvidedListArbArgsGenerator
+import com.tegonal.variist.testutils.firstDerivedChildFromSeed0
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 
@@ -45,13 +47,29 @@ class ArbMergeRoundRobinTest {
 
 	@Test
 	fun `check same generator generates different values`() {
-		val g = arb.intFromUntil(0, 10)
+		val g = arb.intFromUntil(0, 10_000)
 		val merged = arb.mergeRoundRobin(g, g)
 		val l = merged.generate(0).take(10).toList()
 		val (firstWithIndex, secondWithIndex) = l.withIndex().partition { it.index % 2 == 0 }
-		// if they are exactly the same then most likely no seedOffset was used
 		expect(firstWithIndex.map { it.value }).notToEqual(secondWithIndex.map { it.value })
 	}
+
+	@Test
+	fun `check same generator merged twice receives different seedOffsets`() {
+		val g = RepeatProvidedListArbArgsGenerator(
+			{ seedOffset ->
+				if (seedOffset == firstDerivedChildFromSeed0) (0..20).toList()
+				else (10..20) + (0..10)
+			},
+		)
+
+		val merged = arb.mergeRoundRobin(g, g)
+		val l = merged.generate().take(10).toList()
+
+		expect(g.seedOffsets.toSet()).toHaveSize(2)
+		expect(l).toContainExactly(0, 10, 1, 11, 2, 12, 3, 13, 4, 14)
+	}
+
 
 	companion object {
 		@JvmStatic

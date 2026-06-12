@@ -21,8 +21,11 @@ import com.tegonal.variist.generators.SemiOrderedArgsGenerator
  * @since 2.0.0
  */
 @InternalDangerousApi
-fun <T, R> SemiOrderedArgsGenerator<T>.mapIndexedInternal(transform: (index: Int, T) -> R): SemiOrderedArgsGenerator<R> =
-	transformInternal { seq -> seq.mapIndexed(transform) }
+fun <T, R> SemiOrderedArgsGenerator<T>.mapIndexedInternal(
+	transform: (index: Int, T, seedOffset: Int) -> R
+): SemiOrderedArgsGenerator<R> = transformInternal { seq, seedOffset ->
+	seq.mapIndexed { index, it -> transform(index, it, seedOffset) }
+}
 
 /**
  * Maps the values `this` [ArbArgsGenerator] generates together with an index to a finite
@@ -43,8 +46,11 @@ fun <T, R> SemiOrderedArgsGenerator<T>.mapIndexedInternal(transform: (index: Int
  * @since 2.0.0
  */
 @InternalDangerousApi
-fun <T, R> SemiOrderedArgsGenerator<T>.flatMapIndexedInternal(transform: (index: Int, T) -> Sequence<R>): SemiOrderedArgsGenerator<R> =
-	transformInternal { seq -> seq.flatMapIndexed(transform) }
+fun <T, R> SemiOrderedArgsGenerator<T>.flatMapIndexedInternal(
+	transform: (index: Int, T, seedOffset: Int) -> Sequence<R>
+): SemiOrderedArgsGenerator<R> = transformInternal { seq, seedOffset ->
+	seq.flatMapIndexed { index, it -> transform(index, it, seedOffset) }
+}
 
 /**
  * !! No backward compatibility guarantees !!
@@ -61,10 +67,12 @@ fun <T, R> SemiOrderedArgsGenerator<T>.flatMapIndexedInternal(transform: (index:
  *
  * Use this method only if you are more than convinced that the resulting Sequence still has the same semantics as the
  * original in terms of order, OrderedArgsGenerator.size, and a used offset
- *
  */
 @InternalDangerousApi
 fun <R, T> SemiOrderedArgsGenerator<T>.transformInternal(transform: (Sequence<T>) -> Sequence<R>): SemiOrderedArgsGeneratorTransformer<T, R> =
+	transformInternal { seq, _ -> transform(seq) }
+
+
+@InternalDangerousApi
+fun <R, T> SemiOrderedArgsGenerator<T>.transformInternal(transform: (Sequence<T>, seedBaseOffset: Int) -> Sequence<R>): SemiOrderedArgsGeneratorTransformer<T, R> =
 	SemiOrderedArgsGeneratorTransformer(this, transform)
-
-

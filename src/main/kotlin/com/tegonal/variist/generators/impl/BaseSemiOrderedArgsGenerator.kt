@@ -1,6 +1,7 @@
 package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.config.ComponentFactoryContainer
+import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.CoreSemiOrderedArgsGenerator
 import com.tegonal.variist.generators.OrderedArgsGenerator
 import com.tegonal.variist.utils.BigInt
@@ -14,31 +15,18 @@ import com.tegonal.variist.utils.impl.checkIsPositive
  */
 abstract class BaseSemiOrderedArgsGenerator<T>(
 	final override val componentFactoryContainer: ComponentFactoryContainer,
-	final override val seedBaseOffset: Int,
 	final override val size: Int,
 ) : CoreSemiOrderedArgsGenerator<T> {
 
-	constructor(arbGenerator: CoreSemiOrderedArgsGenerator<*>, size: Int) : this(
-		arbGenerator.componentFactoryContainer,
-		// expected that this can overflow in the worst case
-		arbGenerator.seedBaseOffset + SEED_OFFSET_STEP,
-		size
-	)
-
-	constructor(arbGenerator: CoreSemiOrderedArgsGenerator<*>, size: Long) : this(
-		arbGenerator.componentFactoryContainer,
-		// expected that this can overflow in the worst case
-		arbGenerator.seedBaseOffset + SEED_OFFSET_STEP,
-		size
-	)
+	constructor(generator: CoreSemiOrderedArgsGenerator<*>, size: Int) : this(generator._components, size)
+	constructor(generator: CoreSemiOrderedArgsGenerator<*>, size: Long) : this(generator._components, size)
+	constructor(generator: CoreSemiOrderedArgsGenerator<*>, size: BigInt) : this(generator._components, size)
 
 	constructor(
 		componentFactoryContainer: ComponentFactoryContainer,
-		seedBaseOffset: Int,
 		size: Long
 	) : this(
 		componentFactoryContainer,
-		seedBaseOffset,
 		size.toInt().also {
 			check(it.toLong() == size) {
 				// toInt() overflowed
@@ -47,9 +35,8 @@ abstract class BaseSemiOrderedArgsGenerator<T>(
 		},
 	)
 
-	constructor(componentFactoryContainer: ComponentFactoryContainer, seedBaseOffset: Int, size: BigInt) : this(
+	constructor(componentFactoryContainer: ComponentFactoryContainer, size: BigInt) : this(
 		componentFactoryContainer,
-		seedBaseOffset,
 		size.toInt().also {
 			check(size.bitLength() <= 31) {
 				"${OrderedArgsGenerator::class.simpleName}.${OrderedArgsGenerator<*>::size.name} only supports Int, the given size ($size) is bigger"
@@ -61,14 +48,17 @@ abstract class BaseSemiOrderedArgsGenerator<T>(
 		checkIsPositive(size, "size")
 	}
 
-	final override fun generateOne(offset: Int): T {
+	final override fun generateOne(offset: Int): T = generateOne(offset, seedOffset = 0)
+	final override fun generate(offset: Int): Sequence<T> = generate(offset, seedOffset = 0)
+
+	final override fun generateOne(offset: Int, seedOffset: Int): T {
 		checkOffset(offset)
-		return generateOneAfterChecks(offset)
+		return generateOneAfterChecks(offset, seedOffset)
 	}
 
-	final override fun generate(offset: Int): Sequence<T> {
+	final override fun generate(offset: Int, seedOffset: Int): Sequence<T> {
 		checkOffset(offset)
-		return generateAfterChecks(offset)
+		return generateAfterChecks(offset, seedOffset)
 	}
 
 	private fun checkOffset(offset: Int) {
@@ -77,11 +67,11 @@ abstract class BaseSemiOrderedArgsGenerator<T>(
 		}
 	}
 
-	open fun generateOneAfterChecks(offset: Int): T = run {
+	open fun generateOneAfterChecks(offset: Int, seedOffset: Int): T = run {
 		// we don't use first() as it checks hasNext() in addition and we know that it has to have one as the
 		// Sequence needs to be infinite according to the ArgsGenerator contract
-		generateAfterChecks(offset).iterator().next()
+		generateAfterChecks(offset, seedOffset).iterator().next()
 	}
 
-	abstract fun generateAfterChecks(offset: Int): Sequence<T>
+	abstract fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<T>
 }

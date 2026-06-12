@@ -2,6 +2,7 @@ package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.ArbArgsGenerator
+import com.tegonal.variist.utils.deriveChildSeedOffset
 
 /**
  * !! No backward compatibility guarantees !!
@@ -13,13 +14,11 @@ abstract class BaseMultiArbArgsMerger<T>(
 	firstGenerator: ArbArgsGenerator<T>,
 	secondGenerator: ArbArgsGenerator<T>,
 	otherGenerators: Array<out ArbArgsGenerator<T>>,
-	seedBaseOffset: Int,
 ) : BaseArbArgsGenerator<T>(
 	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,
 	// should you run into weird behaviour (such as one generator uses seed X and the other seed Y) then most likely
 	// someone used two different initial factories
 	firstGenerator._components,
-	seedBaseOffset
 ) {
 	protected val totalGenerators = otherGenerators.size + 2
 	protected val generators = Array(totalGenerators) { index ->
@@ -32,13 +31,7 @@ abstract class BaseMultiArbArgsMerger<T>(
 
 	final override fun generateOne(seedOffset: Int): T {
 		val index = getFirstIndex(seedOffset)
-		return generators[index].generateOne(
-			seedOffset +
-				// + index since we do the same in generate (and generateOne should be the same as generate().first())
-				// to be more precise, we do the same in IteratorsWithOffset when creating the iterators, see
-				// explanation there
-				index
-		)
+		return generators[index].generateOne(deriveChildSeedOffset(seedOffset, index + 1))
 	}
 
 	final override fun generate(seedOffset: Int): Sequence<T> = Sequence { iteratorFactory(seedOffset) }
@@ -51,16 +44,9 @@ abstract class BaseMultiArbArgsMerger<T>(
 		seedOffset: Int
 	) : Iterator<T> {
 		private val iterators = Array<Iterator<T>>(generators.size) { index ->
-			generators[index].generate(
-				// we use `+ index` in order that we use different seedOffsets. This way, even if one e.g. merges the
-				// same generator multiple times they will get different results. Without this, if one specified
-				// the same generator say 3 times, always get 3 times the same value, then 3 times again the next
-				// value etc. because each sequence would start with the same random seed. The same applies for overlapping
-				// generators such as arb.intFromUntil(1, 10) and arb.intFromUntil(1,20). Each time Random generators a
-				// number % 20 < 10, then both generators would yield the same value.
-				seedOffset + index
-			).iterator()
+			generators[index].generate(deriveChildSeedOffset(seedOffset, index + 1)).iterator()
 		}
+
 		final override fun hasNext(): Boolean = true
 		final override fun next(): T = iterators[nextIndex()].next()
 

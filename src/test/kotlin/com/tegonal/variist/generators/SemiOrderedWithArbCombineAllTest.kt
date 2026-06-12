@@ -1,43 +1,42 @@
 package com.tegonal.variist.generators
 
+import ch.tutteli.atrium.api.fluent.en_GB.toHaveSize
+import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
 import ch.tutteli.kbox.mapSecond
 import com.tegonal.variist.config.ordered
-import com.tegonal.variist.testutils.PseudoArbArgsGenerator
+import com.tegonal.variist.testutils.RepeatGivenListArbArgsGenerator
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
 class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnnotationsTest() {
 	val a1s = listOf(1, 2)
 	val a2s = listOf('a', 'b', 'c')
 
-	// implementation detail, since we do seedBaseOffset + SEED_OFFSET_STEP in BaseSemiOrderedArgsGenerator
-	// the a2s are shifted by SEED_OFFSET_STEP
-	val a2sZipped1 = listOf('c','a','b')
-	val a2sZipped2 = listOf(Tuple('c', 'b'), Tuple('a', 'c'), Tuple('b', 'a'))
-	val a2sZipped3 = listOf(Tuple('c', 'b', 'a'), Tuple('a', 'c', 'b'), Tuple('b', 'a', 'c'))
-
-	val generator: SemiOrderedArgsGenerator<Int> = customComponentFactoryContainer.ordered.fromList(a1s)
-	val randomGenerator = PseudoArbArgsGenerator(a2s)
+	val a1GeneratorOrdered: SemiOrderedArgsGenerator<Int> = customComponentFactoryContainer.ordered.fromList(a1s)
+	val a2sGenerator = RepeatGivenListArbArgsGenerator(a2s)
 
 	fun createGenerators(): OrderedArgsTestFactoryResult<Pair<Int, Any>> = sequenceOf(
 		Tuple(
 			"combine with 1 random",
-			Tuple(generator, randomGenerator).combineAll(),
-			a1s.zip(a2sZipped1)
+			Tuple(a1GeneratorOrdered, a2sGenerator).combineAll(),
+			// zip is only correct because for most tests we don't take more than generator.size
+			// see createGeneratorsAllPossibleCombinations where we need to use flatMap
+			a1s.zip(a2s)
 		),
 		Tuple(
 			"combine with 2 random",
-			Tuple(generator, randomGenerator, randomGenerator).combineAll()
+			Tuple(a1GeneratorOrdered, a2sGenerator, a2sGenerator).combineAll()
 				.map { (a1, a2, a3) -> a1 to (a2 to a3) },
-			a1s.zip(a2sZipped2)
+			a1s.zip(a2s.map { it to it })
 		),
 		Tuple(
 			"combine with 3 random",
-			Tuple(generator, randomGenerator, randomGenerator, randomGenerator).combineAll()
+			Tuple(a1GeneratorOrdered, a2sGenerator, a2sGenerator, a2sGenerator).combineAll()
 				.map { (a1, a2, a3, a4) ->
 					a1 to Triple(a2, a3, a4)
 				},
-			a1s.zip(a2sZipped3)
+			a1s.zip(a2s.map { Triple(it, it, it) })
 		)
 	)
 
@@ -45,22 +44,22 @@ class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnno
 		sequenceOf(
 			Tuple(
 				"combine with 1 random",
-				Tuple(generator, randomGenerator).combineAll(),
+				Tuple(a1GeneratorOrdered, a2sGenerator).combineAll(),
 				a1s.flatMap { a1 -> a2s.map { a2 -> a1 to a2 } }
 			),
 			Tuple(
 				"combine with 2 random",
-				Tuple(generator, randomGenerator, randomGenerator).combineAll()
+				Tuple(a1GeneratorOrdered, a2sGenerator, a2sGenerator).combineAll()
 					.map { (a1, a2, a3) -> a1 to (a2 to a3) },
-				a1s.flatMap { a1 -> a2sZipped2.map { a1 to it } }
+				a1s.flatMap { a1 -> a2s.map { a2 -> a1 to (a2 to a2) } }
 			),
 			Tuple(
 				"combine with 3 random",
-				Tuple(generator, randomGenerator, randomGenerator, randomGenerator).combineAll()
+				Tuple(a1GeneratorOrdered, a2sGenerator, a2sGenerator, a2sGenerator).combineAll()
 					.map { (a1, a2, a3, a4) ->
 						a1 to Triple(a2, a3, a4)
 					},
-				a1s.flatMap { a1 -> a2sZipped3.map { a1 to it } }
+				a1s.flatMap { a1 -> a2s.map { a2 -> a1 to Triple(a2, a2, a2) } }
 			)
 		)
 
@@ -92,5 +91,12 @@ class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnno
 			// we want to make sure the ordered part stays ordered
 			createGeneratorsUseOnlyFirstValue()
 		}
+
+	@Test
+	fun `check combineAll passes different seedOffsets`() {
+		val g = RepeatGivenListArbArgsGenerator(listOf(1, 2))
+		Tuple(g, g, g, g).combineAll().generate(seedOffset = 0).take(2).count()
+		expect(g.seedOffsets.toSet()).toHaveSize(4)
+	}
 }
 

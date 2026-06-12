@@ -3,6 +3,7 @@ package com.tegonal.variist.generators.impl
 import com.tegonal.variist.generators.OrderedArgsGenerator
 import com.tegonal.variist.generators.SemiOrderedArgsGenerator
 import com.tegonal.variist.generators._core
+import com.tegonal.variist.utils.deriveChildSeedOffset
 
 /**
  * !! No backward compatibility guarantees !!
@@ -21,7 +22,7 @@ class OrderedArgsGeneratorConcatenator<T>(
 	a1Generator.size.toLong() + a2Generator.size.toLong()
 ), OrderedArgsGenerator<T> {
 
-	override fun generateOneAfterChecks(offset: Int): T {
+	override fun generateOneAfterChecks(offset: Int, seedOffset: Int): T {
 		val offsetInRange = offset % size
 		val a1Size = a1Generator.size
 		return if (offsetInRange < a1Size) {
@@ -31,8 +32,8 @@ class OrderedArgsGeneratorConcatenator<T>(
 		}
 	}
 
-	override fun generateAfterChecks(offset: Int): Sequence<T> =
-		concatenate(a1Generator, a2Generator, size, offset)
+	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<T> =
+		concatenate(a1Generator, a2Generator, size, offset, seedOffset)
 }
 
 /**
@@ -52,15 +53,16 @@ class SemiOrderedArgsGeneratorConcatenator<T>(
 	a1Generator.size.toLong() + a2Generator.size.toLong()
 ) {
 
-	override fun generateAfterChecks(offset: Int): Sequence<T> =
-		concatenate(a1Generator, a2Generator, size, offset)
+	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<T> =
+		concatenate(a1Generator, a2Generator, size, offset, seedOffset)
 }
 
 private fun <T> concatenate(
 	a1Generator: SemiOrderedArgsGenerator<T>,
 	a2Generator: SemiOrderedArgsGenerator<T>,
 	newSize: Int,
-	offset: Int
+	offset: Int,
+	seedOffset: Int
 ): Sequence<T> {
 	// TODO 2.5.0 no micro-benchmarking done yet, maybe we find a more efficient solution?
 
@@ -74,8 +76,8 @@ private fun <T> concatenate(
 
 	return Sequence {
 		object : Iterator<T> {
-			var a1Iterator = a1Generator.generate(countA1).iterator()
-			var a2Iterator = a2Generator.generate(countA2).iterator()
+			val a1Iterator = a1Generator._core.generate(countA1, deriveChildSeedOffset(seedOffset, 1)).iterator()
+			val a2Iterator = a2Generator._core.generate(countA2, deriveChildSeedOffset(seedOffset, 2)).iterator()
 			var isA1IteratorInUse = isOffsetSmallerThanA1Size
 			var count = if (isOffsetSmallerThanA1Size) countA1 else countA2
 

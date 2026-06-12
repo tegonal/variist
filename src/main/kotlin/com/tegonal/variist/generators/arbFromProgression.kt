@@ -43,11 +43,11 @@ fun ArbExtensionPoint.fromProgression(progression: IntProgression): ArbArgsGener
 			else {
 				// check that toInt() did not overflow
 				if (numberOfSteps == numberOfStepsI.toLong()) {
-					IntFromToArbArgsGenerator(_components, seedBaseOffset, 0, numberOfStepsI).map {
+					IntFromToArbArgsGenerator(_components, 0, numberOfStepsI).map {
 						start + it * stepAbs
 					}
 				} else {
-					LongFromToArbArgsGenerator(_components, seedBaseOffset, 0, numberOfSteps).map {
+					LongFromToArbArgsGenerator(_components, 0, numberOfSteps).map {
 						(start + it * stepAbs).toInt()
 					}
 				}
@@ -78,11 +78,11 @@ fun ArbExtensionPoint.fromProgression(progression: LongProgression): ArbArgsGene
 			if (numberOfSteps < 50.toBigInt()) fromList(progression.toList())
 			else {
 				if (numberOfSteps.bitLength() <= 63) {
-					LongFromToArbArgsGenerator(_components, seedBaseOffset, 0, numberOfSteps.toLong()).map {
+					LongFromToArbArgsGenerator(_components, 0, numberOfSteps.toLong()).map {
 						start + it * stepAbs
 					}
 				} else {
-					BigIntFromToArbArgsGenerator(_components, seedBaseOffset, BigInt.ZERO, numberOfSteps).map {
+					BigIntFromToArbArgsGenerator(_components, BigInt.ZERO, numberOfSteps).map {
 						start + it.toLong() * stepAbs
 					}
 				}

@@ -8,6 +8,7 @@ import com.tegonal.variist.generators.impl.InternalDangerousApi
 import com.tegonal.variist.generators.impl.SemiOrderedFlatZipArbArgsGenerator
 import com.tegonal.variist.generators.impl.mapIndexedInternal
 import com.tegonal.variist.generators.impl.throwMaterialisingSemiOrderedArgsGeneratorNotSupported
+import com.tegonal.variist.utils.deriveChildSeedOffset
 
 /**
  * Creates for each generated value of type [A1] by `this` [SemiOrderedArgsGenerator] an [ArbArgsGenerator]
@@ -29,10 +30,9 @@ import com.tegonal.variist.generators.impl.throwMaterialisingSemiOrderedArgsGene
 fun <A1, A2, R> SemiOrderedArgsGenerator<A1>.zipDependent(
 	otherFactory: ArbExtensionPoint.(A1) -> ArbArgsGenerator<A2>,
 	transform: (A1, A2) -> R
-): SemiOrderedArgsGenerator<R> = mapIndexedInternal { index, a1 ->
-	// Note, no need to do generateOne(offset + seedBaseOffset) here because _core.arb already passes the
-	// seedBaseOffset during the creation of ArbArgsGenerator
-	transform(a1, _core.arb.otherFactory(a1).generateOne(seedOffset = index))
+): SemiOrderedArgsGenerator<R> = mapIndexedInternal { index, a1, seedOffset ->
+	val a2 = _core.arb.otherFactory(a1).generateOne(deriveChildSeedOffset(seedOffset, index + 1))
+	transform(a1, a2)
 }
 
 /**

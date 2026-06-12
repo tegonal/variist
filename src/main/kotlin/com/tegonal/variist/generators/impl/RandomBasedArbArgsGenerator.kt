@@ -12,8 +12,7 @@ import kotlin.random.Random
  */
 abstract class RandomBasedArbArgsGenerator<T>(
 	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
-) : BaseArbArgsGenerator<T>(componentFactoryContainer, seedBaseOffset) {
+) : BaseArbArgsGenerator<T>(componentFactoryContainer) {
 
 	override fun generateOne(seedOffset: Int): T =
 		// Random is not thread safe, add synchronisation in case we run into issues

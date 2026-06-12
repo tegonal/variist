@@ -44,7 +44,7 @@ fun <A1, A2, R> OrderedArgsGenerator<A1>.flatZipDependentMaterialised(
 	transform: (A1, A2) -> R
 ): OrderedArgsGenerator<R> = transformMaterialised { seq ->
 	seq.flatMap { a1 ->
-		val otherGenerator = this._components.ordered.otherFactory(a1)
+		val otherGenerator = _components.ordered.otherFactory(a1)
 		otherGenerator.generate(offset = 0).take(otherGenerator.size).map { a2 ->
 			transform(a1, a2)
 		}

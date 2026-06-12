@@ -10,7 +10,7 @@ import com.tegonal.variist.generators.impl.RandomAccessOrderedArgsGenerator
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: ByteArray): OrderedArgsGenerator<Byte> =
-	RandomAccessOrderedArgsGenerator(_components, seedBaseOffset, args.size) { args[it] }
+	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -18,7 +18,7 @@ fun OrderedExtensionPoint.fromArray(args: ByteArray): OrderedArgsGenerator<Byte>
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: CharArray): OrderedArgsGenerator<Char> =
-	RandomAccessOrderedArgsGenerator(_components, seedBaseOffset, args.size) { args[it] }
+	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
 
 
 /**
@@ -27,7 +27,7 @@ fun OrderedExtensionPoint.fromArray(args: CharArray): OrderedArgsGenerator<Char>
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: ShortArray): OrderedArgsGenerator<Short> =
-	RandomAccessOrderedArgsGenerator(_components, seedBaseOffset, args.size) { args[it] }
+	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -35,7 +35,7 @@ fun OrderedExtensionPoint.fromArray(args: ShortArray): OrderedArgsGenerator<Shor
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: IntArray): OrderedArgsGenerator<Int> =
-	RandomAccessOrderedArgsGenerator(_components, seedBaseOffset, args.size) { args[it] }
+	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -43,7 +43,7 @@ fun OrderedExtensionPoint.fromArray(args: IntArray): OrderedArgsGenerator<Int> =
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: LongArray): OrderedArgsGenerator<Long> =
-	RandomAccessOrderedArgsGenerator(_components, seedBaseOffset, args.size) { args[it] }
+	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -51,7 +51,7 @@ fun OrderedExtensionPoint.fromArray(args: LongArray): OrderedArgsGenerator<Long>
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: FloatArray): OrderedArgsGenerator<Float> =
-	RandomAccessOrderedArgsGenerator(_components, seedBaseOffset, args.size) { args[it] }
+	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -59,7 +59,7 @@ fun OrderedExtensionPoint.fromArray(args: FloatArray): OrderedArgsGenerator<Floa
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: DoubleArray): OrderedArgsGenerator<Double> =
-	RandomAccessOrderedArgsGenerator(_components, seedBaseOffset, args.size) { args[it] }
+	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -67,7 +67,7 @@ fun OrderedExtensionPoint.fromArray(args: DoubleArray): OrderedArgsGenerator<Dou
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: BooleanArray): OrderedArgsGenerator<Boolean> =
-	RandomAccessOrderedArgsGenerator(_components, seedBaseOffset, args.size) { args[it] }
+	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -75,4 +75,4 @@ fun OrderedExtensionPoint.fromArray(args: BooleanArray): OrderedArgsGenerator<Bo
  * @since 2.0.0
  */
 fun <T> OrderedExtensionPoint.fromArray(args: Array<out T>): OrderedArgsGenerator<T> =
-	ArrayOrderedArgsGenerator(_components, seedBaseOffset, args)
+	ArrayOrderedArgsGenerator(_components, args)

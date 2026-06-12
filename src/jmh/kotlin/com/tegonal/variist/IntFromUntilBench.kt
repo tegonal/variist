@@ -55,7 +55,6 @@ class IntFromUntilWithIdentityArgsProvider<T>(
 	private val argsProvider: (Int) -> T
 ) : BaseSemiOrderedArgsGenerator<T>(
 	componentFactoryContainer,
-	seedBaseOffset = 0,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
 		// if the invariants are not given
@@ -65,7 +64,7 @@ class IntFromUntilWithIdentityArgsProvider<T>(
 	}
 ), OrderedArgsGenerator<T> {
 
-	override fun generateAfterChecks(offset: Int): Sequence<T> = Sequence {
+	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<T> = Sequence {
 		object : BaseIntFromUntilRepeatingIterator<T>(from, toExclusive, offset, step) {
 			override fun getElementAt(index: Int): T = argsProvider(index)
 		}
@@ -79,7 +78,6 @@ class IntFromUntilWithoutArgsProvider(
 	private val step: Int,
 ) : BaseSemiOrderedArgsGenerator<Int>(
 	componentFactoryContainer,
-	seedBaseOffset = 0,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
 		// if the invariants are not given
@@ -89,7 +87,7 @@ class IntFromUntilWithoutArgsProvider(
 	}
 ), OrderedArgsGenerator<Int> {
 
-	override fun generateAfterChecks(offset: Int): Sequence<Int> = Sequence {
+	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<Int> = Sequence {
 		object : Iterator<Int> {
 			private var index: Int
 
@@ -123,7 +121,6 @@ class IntFromUntilWithoutArgsProviderWithIntFromUntilIterator(
 	private val step: Int,
 ) : BaseSemiOrderedArgsGenerator<Int>(
 	componentFactoryContainer,
-	seedBaseOffset = 0,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
 		// if the invariants are not given
@@ -133,7 +130,7 @@ class IntFromUntilWithoutArgsProviderWithIntFromUntilIterator(
 	}
 ), OrderedArgsGenerator<Int> {
 
-	override fun generateAfterChecks(offset: Int): Sequence<Int> = Sequence {
+	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<Int> = Sequence {
 		object : BaseIntFromUntilRepeatingIterator<Int>(from, toExclusive, offset = 0, step = step) {
 			override fun getElementAt(index: Int): Int = index
 		}

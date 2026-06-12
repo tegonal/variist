@@ -1,56 +1,47 @@
 package com.tegonal.variist.generators
 
+import ch.tutteli.atrium.api.fluent.en_GB.toHaveSize
+import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
 import ch.tutteli.kbox.mapSecond
 import com.tegonal.variist.config.ordered
-import com.tegonal.variist.testutils.PseudoArbArgsGenerator
+import com.tegonal.variist.testutils.RepeatGivenListArbArgsGenerator
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
 class SemiOrderedZipArbTest : AbstractOrderedArgsGeneratorWithoutAnnotationsTest() {
 	val a1s = listOf(1, 2)
 	val a2s = listOf('a', 'b', 'c')
 
-	// implementation detail, since we do seedBaseOffset + SEED_OFFSET_STEP in BaseSemiOrderedArgsGenerator
-	// the a2s are shifted by SEED_OFFSET_STEP
-	val a2sZipped1 = listOf('c','a','b')
-	val a2sZipped2 = listOf(Tuple('c', 'b'), Tuple('a', 'c'), Tuple('b', 'a'))
-	val a2sZipped3 = listOf(Tuple('c', 'b', 'a'), Tuple('a', 'c', 'b'), Tuple('b', 'a', 'c'))
-
-	val generator = customComponentFactoryContainer.ordered.fromList(a1s)
-	val randomGenerator = PseudoArbArgsGenerator(a2s)
+	val a1GeneratorOrdered = customComponentFactoryContainer.ordered.fromList(a1s)
+	val a2sGenerator = RepeatGivenListArbArgsGenerator(a2s)
 
 	fun createGenerators(): OrderedArgsTestFactoryResult<Pair<Int, Any>> = sequenceOf(
 		Tuple(
 			"zip with 1 random",
-			generator.zip(randomGenerator),
+			a1GeneratorOrdered.zip(a2sGenerator),
 			// zip is only correct because for most tests we don't take more than generator.size
 			// see createGeneratorsAllPossibleCombinations where we need to use flatMap
-			a1s.zip(a2sZipped1)
+			a1s.zip(a2s)
 		),
 		Tuple(
 			"zip with 2 random",
-			generator.zip(randomGenerator)
-				.zip(randomGenerator) { pair, a3 ->
-					pair.mapSecond { it to a3 }
-				},
-			a1s.zip(a2sZipped2)
+			a1GeneratorOrdered.zip(a2sGenerator).zip(a2sGenerator) { pair, a3 ->
+				pair.mapSecond { it to a3 }
+			},
+			a1s.zip(a2s.map { it to it })
 		),
 		Tuple(
 			"zip with 3 random",
-			generator.zip(randomGenerator).zip(randomGenerator)
-				.zip(randomGenerator) { (a1, a2, a3), a4 ->
-					a1 to Triple(a2, a3, a4)
-				},
-			a1s.zip(a2sZipped3)
+			a1GeneratorOrdered.zip(a2sGenerator).zip(a2sGenerator).zip(a2sGenerator) { (a1, a2, a3), a4 ->
+				a1 to Triple(a2, a3, a4)
+			},
+			a1s.zip(a2s.map { Triple(it, it, it) })
 		),
 		Tuple(
 			"zipDependent",
-			generator.zipDependent { _ -> randomGenerator },
-			// zip is only correct because for most tests we don't take more than generator.size
-			// see createGeneratorsAllPossibleCombinations where we need to use flatMap
-			// also note that we can zip since we know that zipDependent increases the seedOffset and only because
-			// we use PseudoArbArgsGenerator this corresponds to a regular offset in the Sequence.
-			a1s.zip(a2s)
+			a1GeneratorOrdered.zipDependent { _ -> a2sGenerator },
+			a1s.map { it to a2s.first() }
 		),
 	)
 
@@ -58,28 +49,28 @@ class SemiOrderedZipArbTest : AbstractOrderedArgsGeneratorWithoutAnnotationsTest
 		sequenceOf(
 			Tuple(
 				"zip with 1 random",
-				generator.zip(randomGenerator),
+				a1GeneratorOrdered.zip(a2sGenerator),
 				a1s.flatMap { a1 -> a2s.map { a2 -> a1 to a2 } }
 			),
 			Tuple(
 				"zip with 2 random",
-				generator.zip(randomGenerator)
-					.zip(randomGenerator) { pair, a3 ->
+				a1GeneratorOrdered.zip(a2sGenerator)
+					.zip(a2sGenerator) { pair, a3 ->
 						pair.mapSecond { it to a3 }
 					},
-				a1s.flatMap { a1 -> a2sZipped2.map { a1 to it } }
+				a1s.flatMap { a1 -> a2s.map { a2 -> a1 to (a2 to a2) } }
 			),
 			Tuple(
 				"zip with 3 random",
-				generator.zip(randomGenerator).zip(randomGenerator)
-					.zip(randomGenerator) { (a1, a2, a3), a4 ->
+				a1GeneratorOrdered.zip(a2sGenerator).zip(a2sGenerator)
+					.zip(a2sGenerator) { (a1, a2, a3), a4 ->
 						a1 to Triple(a2, a3, a4)
 					},
-				a1s.flatMap { a1 -> a2sZipped3.map { a1 to it } }
+				a1s.flatMap { a1 -> a2s.map { a2 -> a1 to Triple(a2, a2, a2) } }
 			),
 			Tuple(
 				"zipDependent",
-				generator.zipDependent { _ -> randomGenerator },
+				a1GeneratorOrdered.zipDependent { _ -> a2sGenerator },
 				a1s.flatMap { a1 -> a2s.map { a2 -> a1 to a2 } }
 			),
 		)
@@ -112,5 +103,12 @@ class SemiOrderedZipArbTest : AbstractOrderedArgsGeneratorWithoutAnnotationsTest
 			// we want to make sure the ordered part stays ordered
 			createGeneratorsUseOnlyFirstValue()
 		}
+
+	@Test
+	fun `check zip passes different seedOffsets`() {
+		val g = RepeatGivenListArbArgsGenerator(listOf(1, 2))
+		g.zip(g).zip(g).zip(g).generate(seedOffset = 0).take(2).count()
+		expect(g.seedOffsets.toSet()).toHaveSize(4)
+	}
 }
 

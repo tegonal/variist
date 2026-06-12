@@ -21,25 +21,6 @@ abstract class AbstractArbArgsGeneratorWithoutAnnotationsTest : AbstractArgsGene
 		testFactory({ factory(modifiedArb) }) { generator, _, _ ->
 			expect { generator._core }.notToThrow()
 		}
-
-	fun <T> usingBaseSeedOffsetIsTheSameAsSeedOffsetInGenerateTest(factory: (ArbExtensionPoint) -> ArbArgsTestFactoryResult<T>) =
-		arb.intPositive().generate().first().let { offset ->
-			testFactory({
-				factory(DefaultArbExtensionPoint(customComponentFactoryContainer, seedBaseOffset = 0))
-					.zip(
-						factory(DefaultArbExtensionPoint(customComponentFactoryContainer, seedBaseOffset = offset))
-					) { a, b ->
-						a.mapA3 { listOf(b.a2) }
-					}
-			}) { generator, generatorSeedOffset1InList, _ ->
-				@Suppress("UNCHECKED_CAST")
-				val generatorSeedOffset1 = generatorSeedOffset1InList.first() as ArbArgsGenerator<T>
-
-				expect(generator.generate(seedOffset = offset).take(3).toList()).toEqual(
-					generatorSeedOffset1.generate(seedOffset = 0).take(3).toList()
-				)
-			}
-		}
 }
 
 abstract class AbstractArbArgsGeneratorTest<T> : AbstractArbArgsGeneratorWithoutAnnotationsTest() {
@@ -50,10 +31,6 @@ abstract class AbstractArbArgsGeneratorTest<T> : AbstractArbArgsGeneratorWithout
 
 	@TestFactory
 	fun canBeCastToCoreArbArgsGenerator() = canBeCastToCoreArbArgsGeneratorTest(::createGenerators)
-
-	@TestFactory
-	fun usingBaseSeedOffsetIsTheSameAsSeedOffsetInGenerate() =
-		usingBaseSeedOffsetIsTheSameAsSeedOffsetInGenerateTest(::createGenerators)
 
 	@TestFactory
 	fun usesGivenComponentContainerFactory() =

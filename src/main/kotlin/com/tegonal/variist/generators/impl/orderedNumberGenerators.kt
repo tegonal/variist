@@ -15,13 +15,11 @@ import com.tegonal.variist.utils.toBigInt
  */
 class IntFromUntilOrderedArgsGenerator(
 	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
 	private val from: Int,
 	private val toExclusive: Int,
 	private val step: Int,
 ) : BaseSemiOrderedArgsGenerator<Int>(
 	componentFactoryContainer,
-	seedBaseOffset,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
 		// if the invariants are not given
@@ -31,12 +29,12 @@ class IntFromUntilOrderedArgsGenerator(
 	}
 ), OrderedArgsGenerator<Int> {
 
-	override fun generateOneAfterChecks(offset: Int): Int {
+	override fun generateOneAfterChecks(offset: Int, seedOffset: Int): Int {
 		// index = value so we can directly return it
 		return determineStartingIndex(from, toExclusive, offset, step)
 	}
 
-	override fun generateAfterChecks(offset: Int): Sequence<Int> = Sequence {
+	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<Int> = Sequence {
 		IntFromUntilRepeatingIterator(from, toExclusive, offset = offset, step = step)
 	}
 
@@ -52,13 +50,11 @@ class IntFromUntilOrderedArgsGenerator(
  */
 class LongFromUntilOrderedArgsGenerator(
 	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
 	private val from: Long,
 	private val toExclusive: Long,
 	private val step: Long,
 ) : BaseSemiOrderedArgsGenerator<Long>(
 	componentFactoryContainer,
-	seedBaseOffset,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
 		// if the invariants are not given
@@ -68,7 +64,7 @@ class LongFromUntilOrderedArgsGenerator(
 	}
 ), OrderedArgsGenerator<Long> {
 
-	override fun generateOneAfterChecks(offset: Int): Long {
+	override fun generateOneAfterChecks(offset: Int, seedOffset: Int): Long {
 		// index = value so we can directly return it
 		return determineStartingIndex(
 			// toExclusive - from could overflow, so we use BigInt
@@ -76,7 +72,7 @@ class LongFromUntilOrderedArgsGenerator(
 		).toLong()
 	}
 
-	override fun generateAfterChecks(offset: Int): Sequence<Long> = Sequence {
+	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<Long> = Sequence {
 		LongFromUntilRepeatingIterator(from, toExclusive, offset = offset.toLong(), step = step)
 	}
 }
@@ -89,13 +85,11 @@ class LongFromUntilOrderedArgsGenerator(
  */
 class BigIntFromUntilOrderedArgsGenerator(
 	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
 	private val from: BigInt,
 	private val toExclusive: BigInt,
 	private val step: BigInt,
 ) : BaseSemiOrderedArgsGenerator<BigInt>(
 	componentFactoryContainer,
-	seedBaseOffset,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
 		// if the invariants are not given
@@ -104,12 +98,12 @@ class BigIntFromUntilOrderedArgsGenerator(
 	}
 ), OrderedArgsGenerator<BigInt> {
 
-	override fun generateOneAfterChecks(offset: Int): BigInt {
+	override fun generateOneAfterChecks(offset: Int, seedOffset: Int): BigInt {
 		// index = value so we can directly return it
 		return determineStartingIndex(from, toExclusive, offset.toBigInt(), step)
 	}
 
-	override fun generateAfterChecks(offset: Int): Sequence<BigInt> = Sequence {
+	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<BigInt> = Sequence {
 		BigIntFromUntilRepeatingIterator(from, toExclusive, offset = offset.toBigInt(), step = step)
 	}
 }
@@ -160,7 +154,6 @@ private inline fun <NumberT> calculatedRangeSizeToArgsGeneratorSize(
 @Suppress("FunctionName")
 fun IntFromToOrderedArgsGenerator(
 	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
 	from: Int,
 	toInclusive: Int,
 	step: Int,
@@ -169,12 +162,11 @@ fun IntFromToOrderedArgsGenerator(
 		//TODO 2.5.0 bench what is better (speed vs. memory), this approach or if we would shift the range if possible?
 		LongFromUntilOrderedArgsGenerator(
 			componentFactoryContainer,
-			seedBaseOffset,
 			from.toLong(),
 			toInclusive.toLong() + 1,
 			step.toLong()
 		).map { it.toInt() }
-	} else IntFromUntilOrderedArgsGenerator(componentFactoryContainer, seedBaseOffset, from, toInclusive + 1, step)
+	} else IntFromUntilOrderedArgsGenerator(componentFactoryContainer, from, toInclusive + 1, step)
 
 /**
  * !! No backward compatibility guarantees !!
@@ -185,7 +177,6 @@ fun IntFromToOrderedArgsGenerator(
 @Suppress("FunctionName")
 fun LongFromToOrderedArgsGenerator(
 	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
 	from: Long,
 	toInclusive: Long,
 	step: Long,
@@ -194,9 +185,8 @@ fun LongFromToOrderedArgsGenerator(
 		//TODO 2.5.0 bench what is better (speed vs. memory), this approach or if we would shift the range
 		BigIntFromUntilOrderedArgsGenerator(
 			componentFactoryContainer,
-			seedBaseOffset,
 			from.toBigInt(),
 			toInclusive.toBigInt() + BigInt.ONE,
 			step.toBigInt()
 		).map { it.toLong() }
-	} else LongFromUntilOrderedArgsGenerator(componentFactoryContainer, seedBaseOffset, from, toInclusive + 1, step)
+	} else LongFromUntilOrderedArgsGenerator(componentFactoryContainer, from, toInclusive + 1, step)

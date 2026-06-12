@@ -5,6 +5,12 @@ import com.tegonal.variist.generators.impl.DefaultArbExtensionPoint
 import com.tegonal.variist.generators.impl.DefaultOrderedExtensionPoint
 import com.tegonal.variist.generators.impl.DefaultSemiOrderedExtensionPoint
 
+//TODO 2.3.0 check if it would be worth to introduce SemiOrderedArgsGeneratorLike. I already figured that making
+// Ordered a subtype of SemiOrdered is wrong and we can see now with generateOne requiring a seedOffset for SemiOrdered
+// but never for Ordered that it was indeed not that nice. Maybe something we can neglect due to the benefit of sharing
+// the same logic for SemiOrderedArgsGenerator and OrderedArgsGenerator but in the same time every extension one defines
+// for SemiOrderedArgsGenerator is automatically available for Ordered as well which is again not that nice.
+
 /**
  * Represents an [ArgsGenerator] which provides the method [generate] where some part of [T] is always in the
  * same order and a finite number before repeating and another part of [T] is undefined (could be ordered and finite,
@@ -31,7 +37,7 @@ interface SemiOrderedArgsGenerator<out T> : ArgsGenerator<T> {
 
 	/**
 	 * Returns an infinite [Sequence] of values starting at [offset] and repeating after reaching [size] of values
-	 * where one part of the values are always the same when generated multiple times.
+	 * where one part/aspect of this generator is always the same when generated multiple times.
 	 */
 	fun generate(offset: Int): Sequence<T>
 }
@@ -47,7 +53,21 @@ interface SemiOrderedArgsGenerator<out T> : ArgsGenerator<T> {
  * @since 2.3.0
  */
 interface CoreSemiOrderedArgsGenerator<out T> : SemiOrderedArgsGenerator<T>, ComponentFactoryContainerProvider {
-	val seedBaseOffset: Int
+
+	/**
+	 * Returns the value at the given [offset] passing the given [seedOffset] to composed [ArbArgsGenerator]s.
+	 */
+	fun generateOne(offset: Int, seedOffset: Int): T {
+		// we don't use first as it checks hasNext in addition and we know that it has to have one as the
+		// Sequence needs to be infinite, according to the ArgsGenerator contract
+		return generate(offset, seedOffset).iterator().next()
+	}
+
+	/**
+	 * Returns an infinite [Sequence] of values starting at [offset] and repeating after reaching [size] of values
+	 * where one part/aspect of this generator is always the same when generated multiple times.
+	 */
+	fun generate(offset: Int, seedOffset: Int): Sequence<T>
 }
 
 /**
@@ -56,7 +76,7 @@ interface CoreSemiOrderedArgsGenerator<out T> : SemiOrderedArgsGenerator<T>, Com
  * @since 2.3.0
  */
 val <T> CoreSemiOrderedArgsGenerator<T>.arb: ArbExtensionPoint
-	get() = DefaultArbExtensionPoint(componentFactoryContainer, seedBaseOffset)
+	get() = DefaultArbExtensionPoint(componentFactoryContainer)
 
 /**
  * Creates an [SemiOrderedExtensionPoint] based on `this` [CoreSemiOrderedArgsGenerator].
@@ -64,7 +84,7 @@ val <T> CoreSemiOrderedArgsGenerator<T>.arb: ArbExtensionPoint
  * @since 2.3.0
  */
 val <T> CoreSemiOrderedArgsGenerator<T>.semiOrdered: SemiOrderedExtensionPoint
-	get() = DefaultSemiOrderedExtensionPoint(componentFactoryContainer, seedBaseOffset)
+	get() = DefaultSemiOrderedExtensionPoint(componentFactoryContainer)
 
 /**
  * Creates an [OrderedExtensionPoint] based on `this` [CoreSemiOrderedArgsGenerator].
@@ -72,7 +92,7 @@ val <T> CoreSemiOrderedArgsGenerator<T>.semiOrdered: SemiOrderedExtensionPoint
  * @since 2.3.0
  */
 val <T> CoreSemiOrderedArgsGenerator<T>.ordered: OrderedExtensionPoint
-	get() = DefaultOrderedExtensionPoint(componentFactoryContainer, seedBaseOffset)
+	get() = DefaultOrderedExtensionPoint(componentFactoryContainer)
 
 /**
  * Casts `this` to a [CoreArbArgsGenerator].

@@ -37,12 +37,12 @@ class OrderedTransformationTest : AbstractOrderedArgsGeneratorTest<Int>() {
 			// internal functions --------------------------------------------------------------------------------
 			Tuple(
 				"mapIndexedInternal",
-				generator.mapIndexedInternal { index, it -> (index % l.size) * 10 + mapFun(it) },
+				generator.mapIndexedInternal { index, it, _ -> (index % l.size) * 10 + mapFun(it) },
 				l.mapIndexed { index, it -> (index % l.size) * 10 + mapFun(it) },
 			),
 			Tuple(
 				"transformInternal",
-				generator.transformInternal { it.zipWithNext { a1, a2 -> a1 + a2 + if (a1 == 4) 1 else 0 } },
+				generator.transformInternal { it, _ -> it.zipWithNext { a1, a2 -> a1 + a2 + if (a1 == 4) 1 else 0 } },
 				listOf(3, 5, 7, 6),
 			),
 		)

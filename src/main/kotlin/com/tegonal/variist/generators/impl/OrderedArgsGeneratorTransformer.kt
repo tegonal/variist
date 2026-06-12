@@ -10,5 +10,5 @@ import com.tegonal.variist.generators.OrderedArgsGenerator
  */
 class OrderedArgsGeneratorTransformer<T, R>(
 	baseGenerator: OrderedArgsGenerator<T>,
-	transform: (Sequence<T>) -> Sequence<R>
+	transform: (Sequence<T>, seedOffset: Int) -> Sequence<R>
 ) : BaseSemiOrderedArgsGeneratorTransformer<T, R>(baseGenerator, transform), OrderedArgsGenerator<R>

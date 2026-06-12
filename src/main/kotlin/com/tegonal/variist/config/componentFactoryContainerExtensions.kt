@@ -81,13 +81,7 @@ fun ComponentFactoryContainer.createVariistRandom(seedOffset: Int): Random =
  * @since 2.0.0
  */
 val ComponentFactoryContainer.ordered
-	get() : OrderedExtensionPoint = DefaultOrderedExtensionPoint(
-		this,
-		// -1 because an OrderedArgsGenerator does not have an unknown part yet, i.e. if we combine it somehow with an
-		// ArbArgsGenerator, then the resulting SemiOrderedArgsGenerator will have seedBaseOffset per default because
-		// we do seedBaseOffset + 1 in BaseSemiOrderedArgsGenerator
-		seedBaseOffset = -1
-	)
+	get() : OrderedExtensionPoint = DefaultOrderedExtensionPoint(this)
 
 /**
  * Creates an [SemiOrderedExtensionPoint] based on this [ComponentFactoryContainer].
@@ -95,14 +89,14 @@ val ComponentFactoryContainer.ordered
  * @since 2.0.0
  */
 val ComponentFactoryContainer.semiOrdered
-	get() : SemiOrderedExtensionPoint = DefaultSemiOrderedExtensionPoint(this, seedBaseOffset = 0)
+	get() : SemiOrderedExtensionPoint = DefaultSemiOrderedExtensionPoint(this)
 
 /**
  * Creates an [ArbExtensionPoint] based on this [ComponentFactoryContainer].
  *
  * @since 2.0.0
  */
-val ComponentFactoryContainer.arb get() : ArbExtensionPoint = DefaultArbExtensionPoint(this, seedBaseOffset = 0)
+val ComponentFactoryContainer.arb get() : ArbExtensionPoint = DefaultArbExtensionPoint(this)
 
 
 /**

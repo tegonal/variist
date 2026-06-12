@@ -15,16 +15,15 @@ import com.tegonal.variist.utils.impl.determineStartingIndex
  */
 class RandomAccessOrderedArgsGenerator<T>(
 	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
 	size: Int,
 	private val elementAt: (index: Int) -> T
-) : BaseSemiOrderedArgsGenerator<T>(componentFactoryContainer, seedBaseOffset, size), OrderedArgsGenerator<T> {
+) : BaseSemiOrderedArgsGenerator<T>(componentFactoryContainer, size), OrderedArgsGenerator<T> {
 
-	override fun generateOneAfterChecks(offset: Int): T {
+	override fun generateOneAfterChecks(offset: Int, seedOffset: Int): T {
 		val index = determineStartingIndex(0, size, offset, 1)
 		return elementAt(index)
 	}
 
-	override fun generateAfterChecks(offset: Int): Sequence<T> =
+	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<T> =
 		RepeatingRandomAccessSequence(size, offset, elementAt)
 }

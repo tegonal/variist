@@ -2,8 +2,8 @@ package com.tegonal.variist.generators
 
 import com.tegonal.variist.config._components
 import com.tegonal.variist.config.createVariistRandom
-import com.tegonal.variist.generators.impl.SEED_OFFSET_STEP
 import com.tegonal.variist.generators.impl.mapIndexedInternal
+import com.tegonal.variist.utils.deriveChildSeedOffset
 import com.tegonal.variist.utils.impl.failIfNegative
 import kotlin.random.Random
 
@@ -37,9 +37,9 @@ fun ArbExtensionPoint.string(
 
 	val componentFactoryContainer = _components
 	return intFromTo(minLength, maxLength).mapIndexedInternal { index, length, seedOffset ->
-		// + SEED_OFFSET_STEP so we don't use the same seed as intFromTo otherwise for the first string it will always be:
+		// deriveSeedOffset so we don't use the same seed as intFromTo otherwise for the first string it will always be:
 		// length of the resulting string = first code point
-		componentFactoryContainer.createVariistRandom(seedBaseOffset + seedOffset + index + SEED_OFFSET_STEP).let { random ->
+		componentFactoryContainer.createVariistRandom(deriveChildSeedOffset(seedOffset, index + 1)).let { random ->
 			val sb = StringBuilder(length)
 			var count = 0
 

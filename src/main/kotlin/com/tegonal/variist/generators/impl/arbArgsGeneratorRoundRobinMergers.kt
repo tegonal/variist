@@ -12,10 +12,9 @@ class MultiArbArgsGeneratorRoundRobinMerger<T>(
 	firstGenerator: ArbArgsGenerator<T>,
 	secondGenerator: ArbArgsGenerator<T>,
 	otherGenerators: Array<out ArbArgsGenerator<T>>,
-	seedBaseOffset: Int,
-) : BaseMultiArbArgsMerger<T>(firstGenerator, secondGenerator, otherGenerators, seedBaseOffset) {
+) : BaseMultiArbArgsMerger<T>(firstGenerator, secondGenerator, otherGenerators) {
 
-	override fun getFirstIndex(seedOffset: Int) = (seedBaseOffset + seedOffset) % totalGenerators
+	override fun getFirstIndex(seedOffset: Int) = seedOffset % totalGenerators
 
 	override fun iteratorFactory(seedOffset: Int): IteratorsWithOffset<T> =
 		object : IteratorsWithOffset<T>(generators, seedOffset) {

@@ -11,9 +11,8 @@ import com.tegonal.variist.utils.repeatForever
  */
 class ConstantArbArgsGenerator<T>(
 	componentFactoryContainer: ComponentFactoryContainer,
-	seedBaseOffset: Int,
 	private val constant: T,
-) : BaseArbArgsGenerator<T>(componentFactoryContainer, seedBaseOffset) {
+) : BaseArbArgsGenerator<T>(componentFactoryContainer) {
 	val sequence = repeatForever(constant)
 
 	override fun generateOne(seedOffset: Int): T = constant

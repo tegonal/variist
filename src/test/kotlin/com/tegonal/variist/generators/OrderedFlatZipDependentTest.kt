@@ -8,7 +8,7 @@ import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
 import com.tegonal.variist.config._components
 import com.tegonal.variist.config.ordered
-import com.tegonal.variist.testutils.PseudoArbArgsGenerator
+import com.tegonal.variist.testutils.RepeatGivenListArbArgsGenerator
 import org.junit.jupiter.api.TestFactory
 import kotlin.test.Test
 
@@ -20,7 +20,7 @@ class OrderedFlatZipDependentTest : AbstractOrderedArgsGeneratorTest<Int>() {
 			Tuple(
 				"flatZipDependent - amount 1",
 				generator.flatZipDependent(amount = 1, { a1 ->
-					PseudoArbArgsGenerator(listOf(a1 - 1), seedBaseOffset = 0, generator._components)
+					RepeatGivenListArbArgsGenerator(listOf(a1 - 1), generator._components)
 				}) { a1, a2 ->
 					a1 + a2
 				},
@@ -28,19 +28,14 @@ class OrderedFlatZipDependentTest : AbstractOrderedArgsGeneratorTest<Int>() {
 				listOf(1, 3, 5)
 			),
 			Tuple(
-				// this test only works due to implementation details, thus...
 				"flatZipDependent - amount 2",
-				// ... we need to have an even amount of elements for the test as otherwise the order changes when
-				// repeating, due to the way PseudoArbArgsGenerator drops by index.
-				// (flatZipDependent returns a SemiOrderedArgsGenerator but we use AbstractOrderedArgsGeneratorTest)
-				modifiedOrdered.fromList(listOf(1, 2)).flatZipDependent(amount = 2, { a1 ->
-					PseudoArbArgsGenerator(listOf(a1 - 2, a1 - 1), seedBaseOffset = 0, generator._components)
+				generator.flatZipDependent(amount = 2, { a1 ->
+					RepeatGivenListArbArgsGenerator(listOf(a1 - 2, a1 - 1), generator._components)
 				}) { a1, a2 ->
 					a1 + a2
 				},
-				// PseudoArbArgsGenerator drops by index, i.e. for a1=1 it drops 0, for a1=2 it drops 1...
-				//1+-1/1+0,  2+1/2+0
-				listOf(0, 1, 3, 2)
+				//1+-1/1+0, 2+0/2+1, 3+1/3+2,
+				listOf(0, 1, 2, 3, 4, 5)
 			),
 			Tuple(
 				"flatZipDependentMaterialised",

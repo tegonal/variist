@@ -2,6 +2,7 @@
 package com.tegonal.variist
 
 import ch.tutteli.kbox.Tuple2
+import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.*
 import com.tegonal.variist.generators.impl.BaseSemiOrderedArgsGenerator
 import com.tegonal.variist.generators.impl.OrderedCartesianProductArgsGenerator
@@ -147,7 +148,7 @@ class Radix<A, B, R>(
 	val aSize = a.size
 	val bSize = b.size
 
-	override fun generateAfterChecks(offset: Int): Sequence<R> {
+	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<R> {
 		var i = offset % size
 		val bItr = b.generate(offset).iterator()
 		return repeatForever().map {
@@ -173,7 +174,7 @@ class SmallerBiggerArgsGenerator<A1, A2, R>(
 ) {
 	private val a2Size: Int = a2Generator.size
 
-	override fun generateOneAfterChecks(offset: Int): R = withOffsets(offset) { _, _, a1Offset, a2Offset ->
+	override fun generateOneAfterChecks(offset: Int, seedOffset: Int): R = withOffsets(offset) { _, _, a1Offset, a2Offset ->
 		val a1 = a1Generator.generateOne(a1Offset)
 		val a2 = a2Generator.generateOne(a2Offset)
 		transform(a1, a2)
@@ -210,7 +211,7 @@ class SmallerBiggerArgsGenerator<A1, A2, R>(
 	 *
 	 * This approach allows to generate lazily combined values without the need to generate more data than needed.
 	 */
-	override fun generateAfterChecks(offset: Int): Sequence<R> = Sequence {
+	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<R> = Sequence {
 		withOffsets(offset) { chunkOffset, offsetInFirstChunk, a1Offset, a2Offset ->
 			object : Iterator<R> {
 				private var chunkIndex = chunkOffset

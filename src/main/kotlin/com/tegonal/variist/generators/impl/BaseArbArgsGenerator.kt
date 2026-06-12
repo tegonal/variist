@@ -12,16 +12,12 @@ import kotlin.random.Random
  */
 abstract class BaseArbArgsGenerator<T>(
 	override val componentFactoryContainer: ComponentFactoryContainer,
-	override val seedBaseOffset: Int
 ) : CoreArbArgsGenerator<T>, ComponentFactoryContainerProvider {
 
-	constructor(arbGenerator: CoreArbArgsGenerator<*>) : this(
-		arbGenerator.componentFactoryContainer,
-		arbGenerator.seedBaseOffset
-	)
+	constructor(arbGenerator: CoreArbArgsGenerator<*>) : this(arbGenerator.componentFactoryContainer)
 
 	protected val config get(): VariistConfig = componentFactoryContainer.config
 
 	protected fun createVariistRandom(seedOffset: Int): Random =
-		componentFactoryContainer.createVariistRandom(seedBaseOffset + seedOffset)
+		componentFactoryContainer.createVariistRandom(seedOffset)
 }

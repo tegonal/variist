@@ -1,8 +1,13 @@
 package com.tegonal.variist.generators
 
+import ch.tutteli.atrium.api.fluent.en_GB.toContainExactly
+import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
 import com.tegonal.variist.generators.impl.flatMapIndexedInternal
 import com.tegonal.variist.generators.impl.mapIndexedInternal
+import com.tegonal.variist.testutils.RepeatGivenListArbArgsGenerator
+import com.tegonal.variist.testutils.firstDerivedChildFromSeed0
+import org.junit.jupiter.api.Test
 
 class ArbTransformationTest : AbstractArbArgsGeneratorTest<Any>() {
 
@@ -66,4 +71,12 @@ class ArbTransformationTest : AbstractArbArgsGeneratorTest<Any>() {
 				),
 			)
 		}
+
+	@Test
+	fun `check transform passes different seedOffset`() {
+		val g = RepeatGivenListArbArgsGenerator(listOf(1, 2))
+		g.transform { int -> int + 10 }.generate(seedOffset = 0).take(2).count()
+		expect(g.seedOffsets).toContainExactly(firstDerivedChildFromSeed0)
+	}
+
 }

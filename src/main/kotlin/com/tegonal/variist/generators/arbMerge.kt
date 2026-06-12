@@ -36,11 +36,11 @@ fun <T> ArbExtensionPoint.mergeWeighted(
 	vararg others: Pair<Int, ArbArgsGenerator<T>>,
 ): ArbArgsGenerator<T> {
 	return if (others.isEmpty()) {
-		ArbArgsGeneratorWeightedMerger(first, second, seedBaseOffset)
+		ArbArgsGeneratorWeightedMerger(first, second)
 	} else {
 		// TODO 2.5.0 we could use a binary search instead of indexOf starting from ~20 elements (would need to
 		//  be benchmarked). I think most of the time there are <= 10 weights and thus indexOf performs better
-		MultiArbArgsGeneratorIndexOfWeightedMerger(first, second, others, seedBaseOffset)
+		MultiArbArgsGeneratorIndexOfWeightedMerger(first, second, others)
 	}
 }
 
@@ -65,4 +65,4 @@ fun <T> ArbExtensionPoint.mergeRoundRobin(
 	first: ArbArgsGenerator<T>,
 	second: ArbArgsGenerator<T>,
 	vararg others: ArbArgsGenerator<T>,
-): ArbArgsGenerator<T> = MultiArbArgsGeneratorRoundRobinMerger(first, second, others, seedBaseOffset)
+): ArbArgsGenerator<T> = MultiArbArgsGeneratorRoundRobinMerger(first, second, others)

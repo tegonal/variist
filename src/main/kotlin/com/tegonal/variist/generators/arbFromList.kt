@@ -13,7 +13,7 @@ import com.tegonal.variist.generators.impl.checkNotEmptyReturnNullIfOneElementAn
 @JvmName("fromValueList")
 fun <T> ArbExtensionPoint.fromList(args: List<T>): ArbArgsGenerator<T> =
 	checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize(args.size)?.map(args::get)
-		?: ConstantArbArgsGenerator(_components, seedBaseOffset, args.first())
+		?: ConstantArbArgsGenerator(_components, args.first())
 
 /**
  * Returns an [ArbArgsGenerator] based on the given [weightWithValueList] which picks the next value

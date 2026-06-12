@@ -53,7 +53,10 @@ interface ArbArgsGenerator<out T> : ArgsGenerator<T> {
  * @since 2.0.0
  */
 interface CoreArbArgsGenerator<out T> : ArbArgsGenerator<T>, ComponentFactoryContainerProvider {
-	val seedBaseOffset: Int
+	@Deprecated(
+		"will be removed with 2.4.0, instead make sure you use the passed seedOffset and use deriveChildSeed when passing it to sub ArbArgsGnerators",
+	)
+	val seedBaseOffset: Int get() = 0
 }
 
 /**
@@ -62,7 +65,7 @@ interface CoreArbArgsGenerator<out T> : ArbArgsGenerator<T>, ComponentFactoryCon
  * @since 2.0.0
  */
 val <T> CoreArbArgsGenerator<T>.arb: ArbExtensionPoint
-	get() = DefaultArbExtensionPoint(componentFactoryContainer, seedBaseOffset)
+	get() = DefaultArbExtensionPoint(componentFactoryContainer)
 
 /**
  * Creates an [SemiOrderedExtensionPoint] based on `this` [CoreArbArgsGenerator].
@@ -70,7 +73,7 @@ val <T> CoreArbArgsGenerator<T>.arb: ArbExtensionPoint
  * @since 2.3.0
  */
 val <T> CoreArbArgsGenerator<T>.semiOrdered: SemiOrderedExtensionPoint
-	get() = DefaultSemiOrderedExtensionPoint(componentFactoryContainer, seedBaseOffset)
+	get() = DefaultSemiOrderedExtensionPoint(componentFactoryContainer)
 
 /**
  * Creates an [OrderedExtensionPoint] based on `this` [CoreArbArgsGenerator].
@@ -78,7 +81,7 @@ val <T> CoreArbArgsGenerator<T>.semiOrdered: SemiOrderedExtensionPoint
  * @since 2.3.0
  */
 val <T> CoreArbArgsGenerator<T>.ordered: OrderedExtensionPoint
-	get() = DefaultOrderedExtensionPoint(componentFactoryContainer, seedBaseOffset)
+	get() = DefaultOrderedExtensionPoint(componentFactoryContainer)
 
 /**
  * Casts `this` to a [CoreArbArgsGenerator].

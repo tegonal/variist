@@ -75,14 +75,3 @@ fun throwDontKnowHowToConvertToArgsGenerator(notAnArgsGenerator: Any?): Nothing 
 fun throwMaterialisingSemiOrderedArgsGeneratorNotSupported(): Nothing {
 	throw UnsupportedOperationException("Materialising SemiOrderedArgsGenerator is not supported out of the box to prevent bugs in the test setup")
 }
-
-/**
- * golden ratio, used as a multiplier because we had clashes when using 1. For instance, when using
- * seed=-434151884 two arb.string, produces the same sequence
- *
- * !! No backward compatibility guarantees !!
- * Reuse at your own risk
- *
- * @since 2.3.0
- */
-const val SEED_OFFSET_STEP = 0x9E3779B9.toInt()

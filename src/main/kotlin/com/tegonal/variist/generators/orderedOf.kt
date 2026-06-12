@@ -10,4 +10,4 @@ import com.tegonal.variist.generators.impl.ArrayOrderedArgsGenerator
  */
 // note: not `arg: T, vararg args: T` on purpose for performance reasons, we have a check on size
 fun <T> OrderedExtensionPoint.of(vararg args: T): OrderedArgsGenerator<T> =
-	ArrayOrderedArgsGenerator(_components, seedBaseOffset, args)
+	ArrayOrderedArgsGenerator(_components, args)

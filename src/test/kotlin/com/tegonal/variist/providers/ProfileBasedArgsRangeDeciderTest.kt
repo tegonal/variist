@@ -68,14 +68,6 @@ class ProfileBasedArgsRangeDeciderTest : BaseTest() {
 		}
 	}
 
-	@ParameterizedTest
-	@ValueSource(ints = [Int.MAX_VALUE, Int.MIN_VALUE])
-	fun canCopeWithALargeSeedOffset(offset: Int) {
-		expect {
-			DefaultArbExtensionPoint(arb._components, offset).arb.int().generateAndTakeBasedOnDecider().count()
-		}.notToThrow()
-	}
-
 	@Test
 	fun canCopeWithALargeSkip() {
 		expect {

@@ -2,15 +2,17 @@ package com.tegonal.variist.generators
 
 import ch.tutteli.atrium.api.fluent.en_GB.*
 import ch.tutteli.atrium.api.verbs.expect
-import ch.tutteli.atrium.api.verbs.expectGrouped
 import ch.tutteli.kbox.append
 import ch.tutteli.kbox.toList
 import ch.tutteli.kbox.toVararg
 import com.tegonal.variist.config._components
 import com.tegonal.variist.providers.ArgsSource
-import com.tegonal.variist.testutils.PseudoArbArgsGenerator
+import com.tegonal.variist.testutils.RepeatGivenListArbArgsGenerator
+import com.tegonal.variist.testutils.RepeatProvidedListArbArgsGenerator
+import com.tegonal.variist.testutils.firstDerivedChildFromSeed0
 import com.tegonal.variist.testutils.withMockedRandom
 import com.tegonal.variist.utils.createVariistRandom
+import com.tegonal.variist.utils.deriveChildSeedOffset
 import com.tegonal.variist.utils.repeatForever
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -20,110 +22,87 @@ class ArbMergeWeightedTest {
 	@ParameterizedTest
 	@ArgsSource("arbWeightsInTotalAlways100")
 	fun `check weights are correct`(weights: List<Int>) {
-		val g1 = PseudoArbArgsGenerator(
+		val g1 = RepeatGivenListArbArgsGenerator(
 			(0..9).toList(),
-			seedBaseOffset = 0,
 			arb._components.withMockedRandom(ints = (1..100).toList())
 		)
 		val (secondWithWeights, othersWithWeights) = weights.drop(1).mapIndexed { index, weight ->
-			weight to PseudoArbArgsGenerator(
+			weight to RepeatGivenListArbArgsGenerator(
 				(0..9).asSequence().map { it + (index + 1) * 10 },
-				// we know that mergeWeighted uses an index based offset, we revert this to get exactly the above list
-				// of values
-				seedBaseOffset = -index - 1
 			)
 		}.toVararg()
 
 		val merged = arb.mergeWeighted(weights.first() to g1, secondWithWeights, *othersWithWeights)
 
-		val l = merged.generate().take(100).toList()
+		val l = merged.generate(seedOffset = 0).take(100).toList()
 
 		// The following depends heavily on implementation details: we know that we use Random inside for a
 		// uniform distribution and we know that weights keep the given order, i.e. if g1 has weight 10 then if
 		// Random.next(1,100) yields a value between 1 and 10 g1 is picked to contribute a value
 		val expected = weights.flatMapIndexed { index, weight ->
-			val s = repeatForever().flatMap { (0..9).asSequence().map { it + index * 10 } }
-			s.take(weight)
+			repeatForever().flatMap {
+				(0..9).asSequence().map { it + index * 10 }
+			}.take(weight)
 		}.toList()
 
 		expect(l).toContainExactlyElementsOf(expected)
 	}
 
 	@Test
-	fun `check same generator merged twice generates different values`() {
+	fun `check same generator merged twice receives different seedOffsets`() {
 		val numOfValues = 10
 		// The following depends heavily on implementation details: we know that we use Random inside for a
 		// uniform distribution, so if we use equal weights and a mocked random which picks alternating the first or
-		// the second, we can check if mergeWeighted uses a seedOffset if we use a PseudoArbArgsGenerator with a
-		// known order
+		// the second, we know what the result should look like
 		val alternate = (1..50).asSequence().zip((51..100).asSequence()) { a, b -> listOf(a, b) }
 			.flatten().take(numOfValues).toList()
-		val g = PseudoArbArgsGenerator(
-			(0..20).toList(),
+		val g = RepeatProvidedListArbArgsGenerator(
+			{ seedOffset ->
+				if (seedOffset == firstDerivedChildFromSeed0) (0..20).toList()
+				else (10..20) + (0..10)
+			},
 			componentFactoryContainer = arb._components.withMockedRandom(ints = alternate)
 		)
 
 		val merged = arb.mergeWeighted(50 to g, 50 to g)
 		val l = merged.generate().take(numOfValues).toList()
-		val (firstWithIndex, secondWithIndex) = l.withIndex().partition { it.index % 2 == 0 }
-		// if they are exactly the same then most likely no seedOffset was used
-		expect(firstWithIndex.map { it.value }).notToEqual(secondWithIndex.map { it.value })
+
+		expect(g.seedOffsets.toSet()).toHaveSize(2)
+		expect(l).toContainExactly(0, 10, 1, 11, 2, 12, 3, 13, 4, 14)
 	}
 
-
 	@Test
-	fun `check same generator merged four times generates different values`() {
+	fun `check same generator merged four times receives different seedOffsets`() {
 		val numOfValues = 12
+
 		// The following depends heavily on implementation details: we know that we use Random inside for a
-		// uniform distribution, so if we use equal weights and a mocked random which picks alternating the first to
-		// fourth generator, we can check if mergeWeighted uses a seedOffset if we use a PseudoArbArgsGenerator with
-		// a known order
+		// uniform distribution, so if we use equal weights and a mocked random which picks alternating the first-to-
+		// fourth generator, we know what the result should look like
 		val alternate = (1..25).asSequence()
 			.zip((26..50).asSequence())
 			.zip((51..75).asSequence(), transform = { p, b -> p.append(b) })
 			.zip((76..100).asSequence(), transform = { t, b -> t.append(b).toList() })
 			.flatten().take(numOfValues).toList()
 
-		val g = PseudoArbArgsGenerator(
-			(0..20).toList(),
+		val s2 = deriveChildSeedOffset(0, 2)
+		val s3 = deriveChildSeedOffset(0, 3)
+
+		val g = RepeatProvidedListArbArgsGenerator(
+			{ seedOffset ->
+				when (seedOffset) {
+					firstDerivedChildFromSeed0 -> (0..20).toList()
+					s2 -> (6..20) + (0..6)
+					s3 -> (10..20) + (0..10)
+					else -> (15..20) + (0..15)
+				}
+			},
 			componentFactoryContainer = arb._components.withMockedRandom(ints = alternate)
 		)
 		val merged = arb.mergeWeighted(25 to g, 25 to g, 25 to g, 25 to g)
 		val l = merged.generate(0).take(numOfValues).toList()
-		val (firstAndThird, secondAndFourth) = l.withIndex().partition { it.index % 2 == 0 }
-		val (firstWithIndex, thirdWithIndex) = firstAndThird.map { it.value }.withIndex()
-			.partition { it.index % 2 == 0 }
-		val (secondWithIndex, fourthWithIndex) = secondAndFourth.map { it.value }.withIndex()
-			.partition { it.index % 2 == 0 }
 
-		val first = firstWithIndex.map { it.value }
-		val second = secondWithIndex.map { it.value }
-		val third = thirdWithIndex.map { it.value }
-		val fourth = fourthWithIndex.map { it.value }
-
-		// if they are exactly the same then most likely no seedOffset was used
-		expectGrouped {
-			group("first != second") {
-				expect(first).notToEqual(second)
-			}
-			group("first != third") {
-				expect(first).notToEqual(third)
-			}
-			group("first != fourth") {
-				expect(first).notToEqual(fourth)
-			}
-
-			group("second != third") {
-				expect(second).notToEqual(third)
-			}
-			group("second != fourth") {
-				expect(second).notToEqual(fourth)
-			}
-
-			group("third != fourth") {
-				expect(third).notToEqual(fourth)
-			}
-		}
+		expect(g.seedOffsets.toSet()).toHaveSize(4)
+		expect(l).toContainExactly(0, 6, 10, 15, 1, 7, 11, 16, 2, 8, 12, 17)
 	}
 
 
@@ -160,7 +139,7 @@ class ArbMergeWeightedTest {
 
 	@ParameterizedTest
 	@ArgsSource("arbTwoWeightsInTotalIntMaxOrMore")
-	fun `invalid total weights in case of 2`(weight1: Int, weight2: Int) {
+	fun `total weights overflow in case of 2, throws exception`(weight1: Int, weight2: Int) {
 		val g1 = arb.intFromUntil(1, 10)
 		val g2 = arb.intFromUntil(20, 30)
 
@@ -173,7 +152,7 @@ class ArbMergeWeightedTest {
 
 	@ParameterizedTest
 	@ArgsSource("arbThreeWeightsInTotalIntMaxOrMore")
-	fun `invalid total weights in case of 3`(weight1: Int, weight2: Int, weight3: Int) {
+	fun `total weights overflow in case of 3, throws exception`(weight1: Int, weight2: Int, weight3: Int) {
 		val g1 = arb.intFromUntil(1, 10)
 		val g2 = arb.intFromUntil(20, 30)
 		val g3 = arb.intFromUntil(40, 50)
