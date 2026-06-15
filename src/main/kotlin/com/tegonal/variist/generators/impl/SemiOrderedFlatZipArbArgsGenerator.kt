@@ -1,7 +1,10 @@
 package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.config._components
-import com.tegonal.variist.generators.*
+import com.tegonal.variist.config.arb
+import com.tegonal.variist.generators.ArbArgsGenerator
+import com.tegonal.variist.generators.ArbExtensionPoint
+import com.tegonal.variist.generators.SemiOrderedArgsGenerator
 
 /**
  * !! No backward compatibility guarantees !!
@@ -10,13 +13,12 @@ import com.tegonal.variist.generators.*
  * @since 2.0.0
  */
 class SemiOrderedFlatZipArbArgsGenerator<A1, A2, R>(
-	semiOrderedArgsGenerator: SemiOrderedArgsGenerator<A1>,
+	private val semiOrderedArgsGenerator: SemiOrderedArgsGenerator<A1>,
 	private val otherFactory: ArbExtensionPoint.(A1) -> ArbArgsGenerator<A2>,
 	private val amount: Int,
 	private val transform: (A1, A2) -> R
 ) : BaseSemiOrderedArgsGenerator<R>(semiOrderedArgsGenerator._components, semiOrderedArgsGenerator.size * amount) {
 
-	private val semiOrderedArgsGenerator: CoreSemiOrderedArgsGenerator<A1> = semiOrderedArgsGenerator._core
 
 	override fun generateOneAfterChecks(offset: Int, seedOffset: Int): R {
 		val orderedOffset = offset / amount
@@ -24,7 +26,7 @@ class SemiOrderedFlatZipArbArgsGenerator<A1, A2, R>(
 		val a1 = semiOrderedArgsGenerator.generateOne(orderedOffset, seedOffset)
 		// Note, no need to do generate(offset + seedBaseOffset) here because semiOrderedArgsGenerator.arb already
 		// passes the seedBaseOffset of this generator during the creation of ArbArgsGenerator
-		val a2 = _core.arb.otherFactory(a1).generate(seedOffset = seedOffset)
+		val a2 = _components.arb.otherFactory(a1).generate(seedOffset = seedOffset)
 			.drop(transformationOffset).first()
 		return transform(a1, a2)
 	}
@@ -36,11 +38,11 @@ class SemiOrderedFlatZipArbArgsGenerator<A1, A2, R>(
 		return semiOrderedArgsGenerator.flatMapIndexedInternal { index, a1, innerSeedOffset ->
 			// Note, no need to do generate(offset + seedBaseOffset) here because semiOrderedArgsGenerator.arb
 			// passes the seedBaseOffset of this generator during the creation of ArbArgsGenerator
-			_core.arb.otherFactory(a1).generate(seedOffset = innerSeedOffset + index)
+			_components.arb.otherFactory(a1).generate(seedOffset = innerSeedOffset + index)
 				.take(amount).drop(transformationOffset).map { a2 ->
 					transform(a1, a2)
 				}
-		}._core.generate(orderedOffset, seedOffset)
+		}.generate(orderedOffset, seedOffset)
 	}
 }
 

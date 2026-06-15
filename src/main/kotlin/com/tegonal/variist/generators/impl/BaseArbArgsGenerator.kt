@@ -1,7 +1,6 @@
 package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.config.*
-import com.tegonal.variist.generators.CoreArbArgsGenerator
 import kotlin.random.Random
 
 /**
@@ -10,11 +9,12 @@ import kotlin.random.Random
  *
  * @since 2.0.0
  */
+@Suppress("DEPRECATION")
 abstract class BaseArbArgsGenerator<T>(
 	override val componentFactoryContainer: ComponentFactoryContainer,
-) : CoreArbArgsGenerator<T>, ComponentFactoryContainerProvider {
-
-	constructor(arbGenerator: CoreArbArgsGenerator<*>) : this(arbGenerator.componentFactoryContainer)
+) :
+//TODO 3.0.0 replace with ArbArgsGenerator<T>
+	com.tegonal.variist.generators.CoreArbArgsGenerator<T>, ComponentFactoryContainerProvider {
 
 	protected val config get(): VariistConfig = componentFactoryContainer.config
 

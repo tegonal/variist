@@ -1,7 +1,7 @@
 package com.tegonal.variist
 
+import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.ArbArgsGenerator
-import com.tegonal.variist.generators._core
 import com.tegonal.variist.generators.arb
 import com.tegonal.variist.generators.impl.BaseArbArgsGenerator
 import com.tegonal.variist.generators.impl.MultiArbArgsGeneratorRoundRobinMerger
@@ -43,7 +43,6 @@ open class RoundRobinMergerBench {
 			firstGenerator,
 			secondGenerator,
 			emptyArray(),
-			seedBaseOffset = 0
 		).generate().take(1000).count()
 }
 
@@ -54,7 +53,7 @@ class ArbArgsGeneratorRoundRobinMerger<T>(
 	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,
 	// should you run into weird behaviour (such as one generator uses seed X and the other seed Y) then most likely
 	// someone used two different initial factories
-	a1Generator._core,
+	a1Generator._components,
 ), ArbArgsGenerator<T> {
 
 	override fun generateOne(seedOffset: Int): T =

@@ -6,6 +6,7 @@ import ch.tutteli.kbox.Tuple3
 import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.*
 import com.tegonal.variist.generators.impl.BaseSemiOrderedArgsGenerator
+import com.tegonal.variist.utils.deriveChildSeedOffset
 import org.openjdk.jmh.annotations.*
 import java.util.concurrent.TimeUnit
 
@@ -82,7 +83,7 @@ abstract class CartesianProductMultiArgsGenerator<R>(
 	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,
 	// should you run into weird behaviour (such as one generator uses seed X and the other seed Y) then most likely
 	// someone used two different initial factories
-	generators.first()._core,
+	generators.first()._components,
 	generators.fold(1L) { acc, gen -> acc * gen.size }
 ) {
 	private val numOfGenerators = generators.size
@@ -105,8 +106,7 @@ abstract class CartesianProductMultiArgsGenerator<R>(
 
 			object : Iterator<R> {
 				private val iterators = Array(numOfGenerators) {
-					generators[it]._core.generate(offsetInFirstChunk, deriveChildSeedOffset(seedOffset, it + 1))
-						.iterator()
+					generators[it].generate(offsetInFirstChunk, deriveChildSeedOffset(seedOffset, it + 1)).iterator()
 				}
 
 				// in the first chunk we might have an offset and if so will produce fewer values

@@ -1,9 +1,9 @@
 package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.config.ComponentFactoryContainer
-import com.tegonal.variist.config._components
-import com.tegonal.variist.generators.CoreSemiOrderedArgsGenerator
+import com.tegonal.variist.config.ComponentFactoryContainerProvider
 import com.tegonal.variist.generators.OrderedArgsGenerator
+import com.tegonal.variist.generators.SemiOrderedArgsGenerator
 import com.tegonal.variist.utils.BigInt
 import com.tegonal.variist.utils.impl.checkIsPositive
 
@@ -16,11 +16,7 @@ import com.tegonal.variist.utils.impl.checkIsPositive
 abstract class BaseSemiOrderedArgsGenerator<T>(
 	final override val componentFactoryContainer: ComponentFactoryContainer,
 	final override val size: Int,
-) : CoreSemiOrderedArgsGenerator<T> {
-
-	constructor(generator: CoreSemiOrderedArgsGenerator<*>, size: Int) : this(generator._components, size)
-	constructor(generator: CoreSemiOrderedArgsGenerator<*>, size: Long) : this(generator._components, size)
-	constructor(generator: CoreSemiOrderedArgsGenerator<*>, size: BigInt) : this(generator._components, size)
+) : SemiOrderedArgsGenerator<T>, ComponentFactoryContainerProvider {
 
 	constructor(
 		componentFactoryContainer: ComponentFactoryContainer,
@@ -47,9 +43,6 @@ abstract class BaseSemiOrderedArgsGenerator<T>(
 	init {
 		checkIsPositive(size, "size")
 	}
-
-	final override fun generateOne(offset: Int): T = generateOne(offset, seedOffset = 0)
-	final override fun generate(offset: Int): Sequence<T> = generate(offset, seedOffset = 0)
 
 	final override fun generateOne(offset: Int, seedOffset: Int): T {
 		checkOffset(offset)

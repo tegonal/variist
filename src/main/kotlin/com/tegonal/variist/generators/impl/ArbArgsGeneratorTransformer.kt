@@ -1,7 +1,7 @@
 package com.tegonal.variist.generators.impl
 
+import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.ArbArgsGenerator
-import com.tegonal.variist.generators._core
 import com.tegonal.variist.utils.deriveTwoChildSeedOffsets
 
 /**
@@ -13,7 +13,7 @@ import com.tegonal.variist.utils.deriveTwoChildSeedOffsets
 class ArbArgsGeneratorTransformer<T, R>(
 	private val baseGenerator: ArbArgsGenerator<T>,
 	private val transform: (Sequence<T>, seedOffset: Int) -> Sequence<R>
-) : BaseArbArgsGenerator<R>(baseGenerator._core) {
+) : BaseArbArgsGenerator<R>(baseGenerator._components) {
 
 	//TODO 2.3.0 implement generateOne
 
