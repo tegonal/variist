@@ -34,15 +34,7 @@ interface SemiOrderedExtensionPoint : GeneratorExtensionPoint
  *
  * @since 2.0.0
  */
-interface ArbExtensionPoint : GeneratorExtensionPoint {
-	/**
-	 * Is ignored since 2.3.0 and has a default of 0, will be removed with 3.0.0
-	 */
-	@Deprecated(
-		"will be removed with 3.0.0, instead make sure you use the passed seedOffset and use deriveChildSeed when passing it to sub ArbArgsGnerators",
-	)
-	val seedBaseOffset: Int get() = 0
-}
+interface ArbExtensionPoint : GeneratorExtensionPoint
 
 private val propertiesBasedComponentFactoryContainer: ComponentFactoryContainer = run {
 	val config = VariistConfigViaPropertiesLoader().config

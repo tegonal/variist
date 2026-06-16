@@ -21,8 +21,6 @@ dependencyResolutionManagement {
 	}
 }
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-
 include("basics")
 include("build-parameters")
 include("dev")
