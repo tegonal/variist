@@ -7,6 +7,7 @@ import ch.tutteli.kbox.flatten
 import com.tegonal.variist.config.*
 import com.tegonal.variist.config.impl.createVia
 import com.tegonal.variist.generators.*
+import com.tegonal.variist.testutils.Tuple2LikeStructure
 import com.tegonal.variist.testutils.Tuple4LikeStructure
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -109,10 +110,10 @@ class ArgsProviderTest {
 
 
 	@ParameterizedTest
-	@ArgsSource("rawTupleLike")
+	@ArgsSource("rawTupleLikeInList")
 	fun rawTupleLike_isNotSplit(tupleLike: Tuple4LikeStructure<Int, Long, Double, Float>) {
 		// TODO would be nicer if we take the index from ParameterizedTest, could be possible with junit 5.4/6
-		val expectedTupleLike = rawTupleLike()[tupleLike.a1]
+		val expectedTupleLike = rawTupleLikeInList()[tupleLike.a1]
 		expect(tupleLike).toEqual(expectedTupleLike)
 	}
 
@@ -120,7 +121,7 @@ class ArgsProviderTest {
 	@ArgsSource("orderedTupleLike")
 	fun orderedTupleLike_isNotSplit(tupleLike: Tuple4LikeStructure<Int, Long, Double, Float>) {
 		// TODO would be nicer if we take the index from ParameterizedTest, could be possible with junit 5.4/6
-		val expectedTupleLike = rawTupleLike()[tupleLike.a1]
+		val expectedTupleLike = rawTupleLikeInList()[tupleLike.a1]
 		expect(tupleLike).toEqual(expectedTupleLike)
 	}
 
@@ -128,7 +129,7 @@ class ArgsProviderTest {
 	@ArgsSource("arbTupleLike")
 	fun arbTupleLike_isNotSplit(tupleLike: Tuple4LikeStructure<Int, Long, Double, Float>) {
 		// TODO would be nicer if we take the index from ParameterizedTest, could be possible with junit 5.4/6
-		val expectedTupleLike = rawTupleLike()[tupleLike.a1]
+		val expectedTupleLike = rawTupleLikeInList()[tupleLike.a1]
 		expect(tupleLike).toEqual(expectedTupleLike)
 	}
 
@@ -152,15 +153,37 @@ class ArgsProviderTest {
 	}
 
 	@ParameterizedTest
+	@ArgsSource("rawNestedTupleLike")
+	fun rawNestedTupleLike_onlyTupleAreFlattened(
+		@Suppress("unused") c: Char,
+		@Suppress("unused") s: String,
+		t: Tuple4LikeStructure<Int, Long, Double, Float>
+	) {
+		expect(t.a1.toDouble() + t.a2.toDouble()).toEqual(t.a3)
+	}
+
+	@ParameterizedTest
 	@ArgsSource("tupleOfOrdered")
 	fun tupleOfOrdered_areSplit(i: Int, c: Char, l: Long) {
 		expect(i.toLong() + c.code).toEqual(l)
 	}
 
 	@ParameterizedTest
+	@ArgsSource("tupleLikeOfOrdered")
+	fun tupleLikeOfOrdered_areSplit(i: Int, c: Char, l: Long, result: Long) {
+		expect(i.toLong() + c.code + l).toEqual(result)
+	}
+
+	@ParameterizedTest
 	@ArgsSource("tupleOfArb")
 	fun tupleOfArb_areSplit(i: Int, c: Char, l: Long) {
 		expect(i.toLong() + c.code).toEqual(l)
+	}
+
+	@ParameterizedTest
+	@ArgsSource("tupleLikeOfArb")
+	fun tupleLikeOfArb_areSplit(i: Int, c: Char, l: Long, result: Long) {
+		expect(i.toLong() + c.code + l).toEqual(result)
 	}
 
 	@ParameterizedTest
@@ -179,6 +202,26 @@ class ArgsProviderTest {
 	@ArgsSource("tupleOfOrderedAndArbReturningTuples")
 	fun tupleOfOrderedAndArbReturningTuples_areFlattenedAndSplit(i1: Int, i2: Int, c1: Char, c2: Char, l: Long) {
 		expect(i1.toLong() + i2 + c1.code + c2.code).toEqual(l)
+	}
+
+	@ParameterizedTest
+	@ArgsSource("nestedTupleOfOrdered")
+	fun nestedTupleOfOrdered_areFlattenedAndSplit(i: Int, c: Char, result: Long) {
+		expect(i.toLong() + c.code).toEqual(result)
+	}
+
+	@Suppress("unused")
+	@ParameterizedTest
+	@ArgsSource("nestedTupleLikeOfOrdered")
+	fun nestedTupleLikeOfOrdered_areFlattenedAndSplit(
+		ignoredChar: Char,
+		ignoredString: String,
+		i: Int,
+		c: Char,
+		l: Long,
+		result: Long
+	) {
+		expect(i.toLong() + c.code + l).toEqual(result)
 	}
 
 	@ParameterizedTest
@@ -358,16 +401,23 @@ class ArgsProviderTest {
 		fun rawPairsInList() = rawValuesInRange().mapIndexed { index, it -> listOf(index to it) }
 
 		@JvmStatic
-		fun rawTupleLike() = listOf(Tuple4LikeStructure(0, 2L, 3.0, 4.0f), Tuple4LikeStructure(1, 20L, 30.0, 40.0f))
+		fun rawTupleLikeInList() =
+			listOf(Tuple4LikeStructure(0, 2L, 3.0, 4.0f), Tuple4LikeStructure(1, 20L, 30.0, 40.0f))
 
 		@JvmStatic
-		fun orderedTupleLike() = ordered.fromList(rawTupleLike())
+		fun orderedTupleLike() = ordered.fromList(rawTupleLikeInList())
 
 		@JvmStatic
-		fun arbTupleLike() = arb.fromList(rawTupleLike())
+		fun arbTupleLike() = arb.fromList(rawTupleLikeInList())
 
 		@JvmStatic
-		fun rawNestedTuples() = listOf(Tuple(Tuple(1, 2L), 3.0), Tuple(Tuple(2, 1L), 3.0))
+		fun rawNestedTuples() = listOf(Tuple(Tuple(1, Tuple(2L, 3.0)), Tuple(Tuple(2, 1L), 3.0)))
+
+		@JvmStatic
+		fun rawNestedTupleLike() = listOf(
+			Tuple('a', "b", Tuple4LikeStructure(0, 2L, 2.0, 4.0f)),
+			Tuple('b', "c", Tuple4LikeStructure(1, 3L, 4.0, 5.0f))
+		)
 
 		@JvmStatic
 		fun orderedNestedTuples() = ordered.fromList(rawNestedTuples())
@@ -415,6 +465,17 @@ class ArgsProviderTest {
 		fun tupleOfOrdered() = Tuple(ordered.of(1), ordered.of('a'), ordered.of(1 + 'a'.code.toLong()))
 
 		@JvmStatic
+		fun tupleLikeOfOrdered() =
+			Tuple4LikeStructure(ordered.of(1), ordered.of('a'), ordered.of(2L), ordered.of(1 + 'a'.code.toLong() + 2L))
+
+		@JvmStatic
+		fun tupleOfArb() = Tuple(arb.of(1), arb.of('a'), arb.of(1 + 'a'.code.toLong()))
+
+		@JvmStatic
+		fun tupleLikeOfArb() =
+			Tuple4LikeStructure(arb.of(1), arb.of('a'), arb.of(2L), arb.of(1 + 'a'.code.toLong() + 2L))
+
+		@JvmStatic
 		fun tupleOfOrderedReturningTuples() =
 			Tuple(ordered.of(1 to 2), ordered.of('a' to 'b'), ordered.of(1 + 2 + 'a'.code.toLong() + 'b'.code))
 
@@ -427,7 +488,19 @@ class ArgsProviderTest {
 			Tuple(ordered.of(1 to 2), arb.of('a' to 'b'), arb.of(1 + 2 + 'a'.code.toLong() + 'b'.code))
 
 		@JvmStatic
-		fun tupleOfArb() = Tuple(arb.of(1), arb.of('a'), arb.of(1 + 'a'.code.toLong()))
+		fun nestedTupleOfOrdered() = Tuple(Tuple(ordered.of(1), ordered.of('a')), ordered.of(1 + 'a'.code.toLong()))
+
+
+		@JvmStatic
+		fun nestedTupleLikeOfOrdered() = Tuple(
+			ordered.of('a'),
+			Tuple4LikeStructure(
+				Tuple2LikeStructure(ordered.of("b"), ordered.of(1)),
+				ordered.of('a'),
+				ordered.of(2),
+				ordered.of(1 + 'a'.code.toLong() + 2L)
+			)
+		)
 
 		@JvmStatic
 		fun pairOfSameSemiOrdered() = run {
