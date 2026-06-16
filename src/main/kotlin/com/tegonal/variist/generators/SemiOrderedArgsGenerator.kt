@@ -1,10 +1,5 @@
 package com.tegonal.variist.generators
 
-import com.tegonal.variist.config.ComponentFactoryContainerProvider
-import com.tegonal.variist.generators.impl.DefaultArbExtensionPoint
-import com.tegonal.variist.generators.impl.DefaultOrderedExtensionPoint
-import com.tegonal.variist.generators.impl.DefaultSemiOrderedExtensionPoint
-
 //TODO 2.3.0 check if it would be worth to introduce SemiOrderedArgsGeneratorLike. I already figured that making
 // Ordered a subtype of SemiOrdered is wrong and we can see now with generateOne requiring a seedOffset for SemiOrdered
 // but never for Ordered that it was indeed not that nice. Maybe something we can neglect due to the benefit of sharing
@@ -27,81 +22,19 @@ interface SemiOrderedArgsGenerator<out T> : ArgsGenerator<T> {
 	val size: Int
 
 	/**
-	 * Returns the value at the given [offset].
+	 * Returns the value at the given [offset] requesting to pass the given [seedOffset] to
+	 * composed [ArbArgsGenerator]s.
 	 */
-	fun generateOne(offset: Int): T {
+	fun generateOne(offset: Int, seedOffset: Int = 0): T {
 		// we don't use first as it checks hasNext in addition and we know that it has to have one as the
 		// Sequence needs to be infinite according to the ArgsGenerator contract
-		return generate(offset).iterator().next()
-	}
-
-	/**
-	 * Returns an infinite [Sequence] of values starting at [offset] and repeating after reaching [size] of values
-	 * where one part/aspect of this generator is always the same when generated multiple times.
-	 */
-	fun generate(offset: Int): Sequence<T>
-}
-
-/**
- * Represents an interface each [SemiOrderedArgsGenerator] must implement which provides additional core functionality
- * which is relevant for users which create own [SemiOrderedArgsGenerator]s or combiner functions.
- *
- * The separation between [SemiOrderedArgsGenerator] and [CoreSemiOrderedArgsGenerator] makes sure the API stays clean
- * for regular users which just use [ordered]/[semiOrdered] but don't define own
- * [SemiOrderedArgsGenerator] implementations.
- *
- * @since 2.3.0
- */
-interface CoreSemiOrderedArgsGenerator<out T> : SemiOrderedArgsGenerator<T>, ComponentFactoryContainerProvider {
-
-	/**
-	 * Returns the value at the given [offset] passing the given [seedOffset] to composed [ArbArgsGenerator]s.
-	 */
-	fun generateOne(offset: Int, seedOffset: Int): T {
-		// we don't use first as it checks hasNext in addition and we know that it has to have one as the
-		// Sequence needs to be infinite, according to the ArgsGenerator contract
 		return generate(offset, seedOffset).iterator().next()
 	}
 
 	/**
-	 * Returns an infinite [Sequence] of values starting at [offset] and repeating after reaching [size] of values
-	 * where one part/aspect of this generator is always the same when generated multiple times.
+	 * Returns an infinite [Sequence] of values starting at [offset] -- requesting to pass the given [seedOffset] to
+	 * composed [ArbArgsGenerator]s -- and repeating after reaching [size] of values where one part/aspect of
+	 * this generator is always the same when generated multiple times.
 	 */
-	fun generate(offset: Int, seedOffset: Int): Sequence<T>
+	fun generate(offset: Int, seedOffset: Int = 0): Sequence<T>
 }
-
-/**
- * Creates an [ArbExtensionPoint] based on `this` [CoreSemiOrderedArgsGenerator].
- *
- * @since 2.3.0
- */
-val <T> CoreSemiOrderedArgsGenerator<T>.arb: ArbExtensionPoint
-	get() = DefaultArbExtensionPoint(componentFactoryContainer)
-
-/**
- * Creates an [SemiOrderedExtensionPoint] based on `this` [CoreSemiOrderedArgsGenerator].
- *
- * @since 2.3.0
- */
-val <T> CoreSemiOrderedArgsGenerator<T>.semiOrdered: SemiOrderedExtensionPoint
-	get() = DefaultSemiOrderedExtensionPoint(componentFactoryContainer)
-
-/**
- * Creates an [OrderedExtensionPoint] based on `this` [CoreSemiOrderedArgsGenerator].
- *
- * @since 2.3.0
- */
-val <T> CoreSemiOrderedArgsGenerator<T>.ordered: OrderedExtensionPoint
-	get() = DefaultOrderedExtensionPoint(componentFactoryContainer)
-
-/**
- * Casts `this` to a [CoreArbArgsGenerator].
- *
- * @since 2.0.0
- */
-@Suppress("ObjectPropertyName")
-val <T> SemiOrderedArgsGenerator<T>._core: CoreSemiOrderedArgsGenerator<T>
-	get() = when (this) {
-		is CoreSemiOrderedArgsGenerator<T> -> this
-		else -> error("The ${SemiOrderedArgsGenerator::class.simpleName} ${this::class.qualifiedName} does not implement ${CoreSemiOrderedArgsGenerator::class.qualifiedName}, please inform the author.")
-	}

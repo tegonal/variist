@@ -22,9 +22,9 @@ interface OrderedArgsGenerator<out T> : SemiOrderedArgsGenerator<T> {
 
 	/**
 	 * Returns an infinite [Sequence] of values starting at [offset] and repeating after reaching [size] of values
-	 * where always the same values are generated when called multiple times.
+	 * where the same values are always generated when called multiple times.
 	 *
 	 * @since 2.0.0
 	 */
-	override fun generate(offset: Int): Sequence<T>
+	override fun generate(offset: Int, seedOffset: Int): Sequence<T>
 }

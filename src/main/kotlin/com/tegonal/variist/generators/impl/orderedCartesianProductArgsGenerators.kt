@@ -1,10 +1,8 @@
 package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.config._components
-import com.tegonal.variist.generators.CoreSemiOrderedArgsGenerator
 import com.tegonal.variist.generators.OrderedArgsGenerator
 import com.tegonal.variist.generators.SemiOrderedArgsGenerator
-import com.tegonal.variist.generators._core
 import com.tegonal.variist.utils.deriveChildSeedOffset
 import com.tegonal.variist.utils.deriveTwoChildSeedOffsets
 
@@ -39,19 +37,16 @@ class SemiOrderedCartesianProductArgsGenerator<A1, A2, R>(
  * @since 2.1.0
  */
 abstract class CartesianProductArgsGenerator<A1, A2, R>(
-	a1Generator: SemiOrderedArgsGenerator<A1>,
-	a2Generator: SemiOrderedArgsGenerator<A2>,
+	private val a1Generator: SemiOrderedArgsGenerator<A1>,
+	private val a2Generator: SemiOrderedArgsGenerator<A2>,
 	private val transform: (A1, A2) -> R
 ) : BaseSemiOrderedArgsGenerator<R>(
 	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,
 	// should you run into weird behaviour (such as one generator uses seed X and the other seed Y) then most likely
 	// someone used two different initial factories
-	a1Generator._core,
+	a1Generator._components,
 	a1Generator.size.toLong() * a2Generator.size.toLong()
 ) {
-	private val a1Generator: CoreSemiOrderedArgsGenerator<A1> = a1Generator._core
-	private val a2Generator: CoreSemiOrderedArgsGenerator<A2> = a2Generator._core
-
 	// Note calculating the lcm doesn't bring much in speed: up to -10% if less than 3 values, up to 13% for > 12 values
 	// comparing max time for lcm / min for previous approach: overall an improvement around 4%.
 	// But is uses about 10% less memory in case of Int/Char values (less Iterators are created).
