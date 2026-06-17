@@ -9,5 +9,5 @@ class ArgsRangeOptionsTest : RequestedMinAndMaxArgsTest {
 		ArgsRangeOptions(requestedMinArgs = requestedMinArgs, maxArgs = maxArgs)
 	}
 
-	//TODO 2.2.0 check profile is not blank
+	//TODO 3.2.0 check profile is not blank
 }

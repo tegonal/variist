@@ -41,7 +41,7 @@ fun <T> ArbExtensionPoint.fromListWeighted(
 	val weightWithGeneratorList = weightWithValueList.map { weightWithValue ->
 		weightWithValue.mapSecond { arb.of(it) }
 	}
-	//TODO 2.5.0 we could introduce a specialised version which does not require ArbArgsGenerator but works on the list directly
+	//TODO 3.5.0 we could introduce a specialised version which does not require ArbArgsGenerator but works on the list directly
 	return mergeWeighted(
 		weightWithGeneratorList[0],
 		weightWithGeneratorList[1],

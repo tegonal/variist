@@ -6,11 +6,13 @@ package com.tegonal.variist.generators
  *
  * @since 2.0.0
  */
-//TODO 2.2.0 introduce an interface which signifies that the values are statically known.
+//TODO 3.2.0 introduce an interface which signifies that the values are statically known.
 // There are cases where we materialise an OrderedArgsGenerator because we think it is small enough but what if the
-// generation of the values is very expensive, then it would be better to not materialise it. If we have something like
-// StaticOrderedArgsGenerator and DynamicOrderedArgsGenerator then we can distinguish.
-// Once we have it, we can check if it is worth materialising for combinators like map
+// generation of the values is very expensive because it for instance have to fetch data from a database or from files,
+// then it would be better to not materialise it. If we have something like StaticOrderedArgsGenerator and
+// DynamicOrderedArgsGenerator then we can distinguish the cases and only materialise in case of a
+// StaticOrderedArgsGenerator.
+// Also Static/Dynamic is not very intuitive, search for a better name
 interface OrderedArgsGenerator<out T> : SemiOrderedArgsGenerator<T> {
 
 	/**

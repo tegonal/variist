@@ -52,7 +52,7 @@ class SemiOrderedArgsGeneratorConcatenator<T>(
 	a1Generator._components,
 	a1Generator.size.toLong() + a2Generator.size.toLong()
 ) {
-	//TODO 2.4.0 implement generateOneAfterChecks
+	//TODO 3.1.0 implement generateOneAfterChecks
 
 	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<T> =
 		concatenate(a1Generator, a2Generator, size, offset, seedOffset)
@@ -65,7 +65,7 @@ private fun <T> concatenate(
 	offset: Int,
 	seedOffset: Int
 ): Sequence<T> {
-	// TODO 2.5.0 no micro-benchmarking done yet, maybe we find a more efficient solution?
+	// TODO 3.5.0 no micro-benchmarking done yet, maybe we find a more efficient solution?
 
 	val offsetInRange = offset % newSize
 	val a1Size = a1Generator.size

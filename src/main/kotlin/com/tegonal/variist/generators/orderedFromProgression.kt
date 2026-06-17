@@ -18,7 +18,7 @@ fun OrderedExtensionPoint.fromProgression(progression: CharProgression): Ordered
 			progression.step
 		).map { it.toChar() }
 	}
-	//TODO 2.2.0 no longer needed once we support minus steps in the iterator
+	//TODO 3.2.0 no longer needed once we support minus steps in the iterator
 	else fromList(progression.toList())
 
 /**
@@ -35,7 +35,7 @@ fun OrderedExtensionPoint.fromProgression(progression: IntProgression): OrderedA
 			progression.step
 		)
 	}
-	//TODO 2.2.0 no longer needed once we support minus steps in the iterator
+	//TODO 3.2.0 no longer needed once we support minus steps in the iterator
 	else fromList(progression.toList())
 
 /**
@@ -52,5 +52,5 @@ fun OrderedExtensionPoint.fromProgression(progression: LongProgression): Ordered
 			progression.step
 		)
 	}
-	//TODO 2.2.0 no longer needed once we support minus steps in the iterator
+	//TODO 3.2.0 no longer needed once we support minus steps in the iterator
 	else fromList(progression.toList())
