@@ -121,7 +121,7 @@ class VariistPropertiesParserTest {
 		testProfiles = VariistConfig.defaultTestProfiles.toMutableMap(),
 	)
 
-	//TODO 2.2.0 tests for testProfiles
+	//TODO 3.2.0 tests for testProfiles
 
 	companion object {
 		val propertiesWithNewValues = mapOf(

@@ -6,6 +6,9 @@ import java.time.*
 import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalUnit
 
+
+//TODO 3.1.0 add shortcut localTime()
+
 /**
  * Returns an [ArbArgsGenerator] which generates [LocalTime]s ranging [from] (inclusive) to [toExclusive]
  * where [temporalUnit] defines the steps which defaults to [ChronoUnit.SECONDS].
@@ -23,6 +26,9 @@ fun ArbExtensionPoint.localTimeFromUntil(
  * Returns an [ArbArgsGenerator] which generates [LocalDate]s ranging [from] (inclusive) to [toExclusive]
  * where [temporalUnit] defines the steps which defaults to [ChronoUnit.DAYS].
  *
+ * @throws java.time.temporal.UnsupportedTemporalTypeException In case you choose a [TemporalUnit] which is smaller
+ *   than days.
+ *
  * @since 2.0.0
  */
 fun ArbExtensionPoint.localDateFromUntil(
@@ -35,6 +41,8 @@ fun ArbExtensionPoint.localDateFromUntil(
 /**
  * Returns an [ArbArgsGenerator] which generates [LocalDateTime]s ranging [from] (inclusive) to [toExclusive]
  * where [temporalUnit] defines the steps.
+ *
+ * @throws ArithmeticException in case the difference between [from] and [toExclusive] is too big.
  *
  * @since 2.0.0
  */
@@ -49,6 +57,8 @@ fun ArbExtensionPoint.localDateTimeFromUntil(
  * Returns an [ArbArgsGenerator] which generates [ZonedDateTime]s ranging [from] (inclusive) to [toExclusive]
  * where [temporalUnit] defines the steps.
  *
+ * @throws ArithmeticException in case the difference between [from] and [toExclusive] is too big.
+ *
  * @since 2.0.0
  */
 //TODO 3.0.0 also define a parameter to steer timezone
@@ -62,6 +72,8 @@ fun ArbExtensionPoint.zonedDateTimeFromUntil(
 /**
  * Returns an [ArbArgsGenerator] which generates [OffsetDateTime]s ranging [from] (inclusive) to [toExclusive]
  * where [temporalUnit] defines the steps.
+ *
+ * @throws ArithmeticException in case the difference between [from] and [toExclusive] is too big.
  *
  * @since 2.0.0
  */
@@ -90,6 +102,9 @@ fun ArbExtensionPoint.localTimeFromTo(
  * Returns an [ArbArgsGenerator] which generates [LocalDate]s ranging [from] (inclusive) to [toInclusive]
  * where [temporalUnit] defines the steps which defaults to [ChronoUnit.DAYS].
  *
+ * @throws java.time.temporal.UnsupportedTemporalTypeException In case you choose a [TemporalUnit] which is smaller
+ *   than days.
+ *
  * @since 2.0.0
  */
 fun ArbExtensionPoint.localDateFromTo(
@@ -103,6 +118,8 @@ fun ArbExtensionPoint.localDateFromTo(
  * Returns an [ArbArgsGenerator] which generates [LocalDateTime]s ranging [from] (inclusive) to [toInclusive]
  * where [temporalUnit] defines the steps.
  *
+ * @throws ArithmeticException in case the difference between [from] and [toInclusive] is too big.
+ *
  * @since 2.0.0
  */
 fun ArbExtensionPoint.localDateTimeFromTo(
@@ -115,6 +132,8 @@ fun ArbExtensionPoint.localDateTimeFromTo(
 /**
  * Returns an [ArbArgsGenerator] which generates [ZonedDateTime]s ranging [from] (inclusive) to [toInclusive]
  * where [temporalUnit] defines the steps.
+ *
+ * @throws ArithmeticException in case the difference between [from] and [toInclusive] is too big.
  *
  * @since 2.0.0
  */
@@ -130,6 +149,8 @@ fun ArbExtensionPoint.zonedDateTimeFromTo(
  * Returns an [ArbArgsGenerator] which generates [OffsetDateTime]s ranging [from] (inclusive) to [toInclusive]
  * where [temporalUnit] defines the steps.
  *
+ * @throws ArithmeticException in case the difference between [from] and [toInclusive] is too big.
+ *
  * @since 2.0.0
  */
 //TODO 3.0.0 also define a parameter to steer the offset
@@ -139,3 +160,5 @@ fun ArbExtensionPoint.offsetDateTimeFromTo(
 	temporalUnit: TemporalUnit
 ): ArbArgsGenerator<OffsetDateTime> =
 	OffsetDateTimeFromToArbArgsGenerator(_components, from, toInclusive, temporalUnit)
+
+//TODO 3.1.0 add

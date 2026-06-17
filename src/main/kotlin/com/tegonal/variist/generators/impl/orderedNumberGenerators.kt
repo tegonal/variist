@@ -38,7 +38,8 @@ class IntFromUntilOrderedArgsGenerator(
 		IntFromUntilRepeatingIterator(from, toExclusive, offset = offset, step = step)
 	}
 
-	//TODO 2.5.0 bench if overriding toArbArgsGenerator with delegating to arb.fromProgression would be faster than the
+	//TODO 3.0.0 bench if overriding toArbArgsGenerator (maybe move it to SemiOrdered(Like)ArgsGenerator so
+	// that third-party implementation can also optimise) with delegating to arb.fromProgression would be faster than the
 	// default implementation.
 }
 
@@ -159,7 +160,7 @@ fun IntFromToOrderedArgsGenerator(
 	step: Int,
 ): OrderedArgsGenerator<Int> =
 	if (toInclusive == Int.MAX_VALUE) {
-		//TODO 2.5.0 bench what is better (speed vs. memory), this approach or if we would shift the range if possible?
+		//TODO 3.5.0 bench what is better (speed vs. memory), this approach or if we would shift the range if possible?
 		LongFromUntilOrderedArgsGenerator(
 			componentFactoryContainer,
 			from.toLong(),
@@ -182,7 +183,7 @@ fun LongFromToOrderedArgsGenerator(
 	step: Long,
 ): OrderedArgsGenerator<Long> =
 	if (toInclusive == Long.MAX_VALUE) {
-		//TODO 2.5.0 bench what is better (speed vs. memory), this approach or if we would shift the range
+		//TODO 3.5.0 bench what is better (speed vs. memory), this approach or if we would shift the range
 		BigIntFromUntilOrderedArgsGenerator(
 			componentFactoryContainer,
 			from.toBigInt(),

@@ -1,6 +1,7 @@
 package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.config.ComponentFactoryContainer
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -269,8 +270,6 @@ abstract class TemporalFromUntilArbArgsGenerator<T>(
 	from,
 	toExclusive,
 ) where T : Temporal, T : Comparable<T> {
-	//TODO 2.2.0 between can overflow (just use a small enough TemporalUnit) -- which results in an
-	// ArithmeticOverflowException. Use BigInt in such cases?
 	private val diffInLong = temporalUnit.between(this.from, this.toExclusive)
 	final override fun nextElementInRange(random: Random): T =
 		from.plusTyped(random.nextLong(0, diffInLong), temporalUnit)
@@ -293,8 +292,6 @@ abstract class TemporalFromToArbArgsGenerator<T>(
 	from,
 	toInclusive,
 ) where T : Temporal, T : Comparable<T> {
-	//TODO 2.2.0 between (and addExact) can overflow (just use a small enough TemporalUnit) -- which results in an
-	// ArithmeticOverflowException. Use BigInt in such cases?
 	private val diffPlusOneInLong = Math.addExact(temporalUnit.between(this.from, this.toInclusive), 1)
 	final override fun nextElementInRange(random: Random): T =
 		from.plusTyped(random.nextLong(0, diffPlusOneInLong), temporalUnit)

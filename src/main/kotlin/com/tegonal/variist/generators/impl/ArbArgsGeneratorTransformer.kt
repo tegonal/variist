@@ -15,7 +15,7 @@ class ArbArgsGeneratorTransformer<T, R>(
 	private val transform: (Sequence<T>, seedOffset: Int) -> Sequence<R>
 ) : BaseArbArgsGenerator<R>(baseGenerator._components) {
 
-	//TODO 2.3.0 implement generateOne
+	//TODO 3.1.0 implement generateOne
 
 	override fun generate(seedOffset: Int): Sequence<R> {
 		val (seedOffset1, seedOffset2) = deriveTwoChildSeedOffsets(seedOffset)

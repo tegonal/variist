@@ -1,6 +1,6 @@
 package com.tegonal.variist.generators
 
-//TODO 2.3.0 check if it would be worth to introduce SemiOrderedArgsGeneratorLike. I already figured that making
+//TODO 3.0.0 check if it would be worth to introduce SemiOrderedArgsGeneratorLike. I already figured that making
 // Ordered a subtype of SemiOrdered is wrong and we can see now with generateOne requiring a seedOffset for SemiOrdered
 // but never for Ordered that it was indeed not that nice. Maybe something we can neglect due to the benefit of sharing
 // the same logic for SemiOrderedArgsGenerator and OrderedArgsGenerator but in the same time every extension one defines
