@@ -79,22 +79,34 @@ class ArgsProvider : ArgumentsProvider {
 		return generateArguments(first, maybeArgGeneratorsRest, testMethod)
 	}
 
-	private fun toListOfMaybeArgGenerators(result: Any): List<Any?> = tupleAndTupleLikeToList(result) ?: when (result) {
-		is ArgsGenerator<*> -> listOf(result)
-		is Iterable<*> -> result.toList()
-		is Sequence<*> -> result.toList()
-		is Array<*> -> result.toList()
-		is ByteArray -> result.toList()
-		is CharArray -> result.toList()
-		is ShortArray -> result.toList()
-		is IntArray -> result.toList()
-		is LongArray -> result.toList()
-		is FloatArray -> result.toList()
-		is DoubleArray -> result.toList()
-		is BooleanArray -> result.toList()
+	private fun toListOfMaybeArgGenerators(result: Any): List<Any?> = run {
+		tupleAndTupleLikeToList(result) ?: when (result) {
+			is ArgsGenerator<*> -> listOf(result)
+			is Iterable<*> -> result.toList()
+			is Sequence<*> -> result.toList()
+			is Array<*> -> result.toList()
+			is ByteArray -> result.toList()
+			is CharArray -> result.toList()
+			is ShortArray -> result.toList()
+			is IntArray -> result.toList()
+			is LongArray -> result.toList()
+			is FloatArray -> result.toList()
+			is DoubleArray -> result.toList()
+			is BooleanArray -> result.toList()
 
-		else -> throw UnsupportedOperationException("don't know how to convert ${result::class.qualifiedName ?: result} into Arguments, please open a feature request: $FEATURE_REQUEST_URL&title=Convert%20${result::class}%20to%20Arguments")
-	}
+			else -> throw UnsupportedOperationException("don't know how to convert ${result::class.qualifiedName ?: result} into Arguments, please open a feature request: $FEATURE_REQUEST_URL&title=Convert%20${result::class}%20to%20Arguments")
+		}
+	}.let(::flattenTuplesContainingGenerators)
+
+	private fun flattenTuplesContainingGenerators(maybeGenerators: List<*>): List<*> =
+		maybeGenerators.flatMap { result ->
+			tupleAndTupleLikeToList(result)
+				?.let(::flattenTuplesContainingGenerators)
+				// we only flatten Tuples/TupleLike if the first element is an ArgsGenerator (in which case we assume
+				// all are ArgsGenerators -- if not, then we will fail later)
+				?.takeIf { it.firstOrNull() is ArgsGenerator<*> }
+				?: listOf(result)
+		}
 
 	private fun generateArguments(
 		firstArgsGenerator: ArgsGenerator<*>,
@@ -118,14 +130,14 @@ class ArgsProvider : ArgumentsProvider {
 			?.let { suffixArgsGenerator -> restMaybeArgGenerators + listOf(suffixArgsGenerator) }
 			?: restMaybeArgGenerators
 
-		genericArgsGeneratorCombiner.combineFirstWithRest(firstArgsGenerator, restMaybeArgGeneratorsWithSuffix)
-			.let { argsGeneratorsCombined ->
-				argsGeneratorToArgumentsConverter.toArguments(
-					testMethod.declaringClass.name + "#" + testMethod.name,
-					annotationData,
-					argsGeneratorsCombined
-				)
-			}
+		val argsGeneratorsCombined = genericArgsGeneratorCombiner
+			.combineFirstWithRest(firstArgsGenerator, restMaybeArgGeneratorsWithSuffix)
+
+		argsGeneratorToArgumentsConverter.toArguments(
+			testMethod.declaringClass.name + "#" + testMethod.name,
+			annotationData,
+			argsGeneratorsCombined
+		)
 	}
 }
 

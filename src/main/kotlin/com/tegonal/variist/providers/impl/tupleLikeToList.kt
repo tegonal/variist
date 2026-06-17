@@ -1,20 +1,6 @@
 package com.tegonal.variist.providers.impl
 
-import ch.tutteli.kbox.Tuple2Like
-import ch.tutteli.kbox.Tuple3Like
-import ch.tutteli.kbox.Tuple4
-import ch.tutteli.kbox.Tuple4Like
-import ch.tutteli.kbox.Tuple5
-import ch.tutteli.kbox.Tuple5Like
-import ch.tutteli.kbox.Tuple6
-import ch.tutteli.kbox.Tuple6Like
-import ch.tutteli.kbox.Tuple7
-import ch.tutteli.kbox.Tuple7Like
-import ch.tutteli.kbox.Tuple8
-import ch.tutteli.kbox.Tuple8Like
-import ch.tutteli.kbox.Tuple9
-import ch.tutteli.kbox.Tuple9Like
-import ch.tutteli.kbox.toList
+import ch.tutteli.kbox.*
 
 /**
  * !! No backward compatibility guarantees !!
@@ -32,8 +18,8 @@ fun tupleAndTupleLikeToList(maybeTupleOrTupleLike: Any?): List<*>? =
  * @since 2.0.0
  */
 fun tupleToList(maybeTuple: Any?): List<*>? = when (maybeTuple) {
-	is Pair<*, *> -> maybeTuple.toList()
-	is Triple<*, *, *> -> maybeTuple.toList()
+	is Tuple2<*, *> -> maybeTuple.toList()
+	is Tuple3<*, *, *> -> maybeTuple.toList()
 	is Tuple4<*, *, *, *> -> maybeTuple.toList()
 	is Tuple5<*, *, *, *, *> -> maybeTuple.toList()
 	is Tuple6<*, *, *, *, *, *> -> maybeTuple.toList()
