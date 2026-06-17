@@ -7,7 +7,7 @@ plugins {
 	id("me.champeau.jmh") version "0.7.3"
 }
 
-version = "2.3.0-SNAPSHOT"
+version = "2.3.0"
 group = "com.tegonal.variist"
 description = "Library which helps to setup and prioritise parameterized tests"
 
@@ -95,7 +95,7 @@ Release & deploy a commit
 1. update main:
 
 
-export VARIIST_PREVIOUS_VERSION=2.2.0
+export VARIIST_PREVIOUS_VERSION=2.3.0
 export VARIIST_VERSION=2.3.0
 find ./ -name "*.md" | xargs perl -0777 -i \
    -pe "s@$VARIIST_PREVIOUS_VERSION@$VARIIST_VERSION@g;" \
