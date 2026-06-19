@@ -5,6 +5,7 @@ import com.tegonal.variist.generators.impl.*
 import java.time.*
 import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalUnit
+import kotlin.math.sign
 
 /**
  * Returns an [ArbArgsGenerator] which generates [LocalTime]s ranging from [LocalTime.MIN] to inclusive [LocalTime.MAX]
@@ -67,13 +68,14 @@ fun ArbExtensionPoint.localDateTimeFromUntil(
  *
  * @since 2.0.0
  */
-//TODO 3.0.0 also define a parameter to steer timezone
 fun ArbExtensionPoint.zonedDateTimeFromUntil(
 	from: ZonedDateTime,
 	toExclusive: ZonedDateTime,
 	temporalUnit: TemporalUnit,
+	arbZoneId: ArbArgsGenerator<ZoneId> = zoneId(),
 ): ArbArgsGenerator<ZonedDateTime> =
 	ZonedDateTimeFromUntilArbArgsGenerator(_components, from, toExclusive, temporalUnit)
+		.withZoneSameInstant(arbZoneId)
 
 /**
  * Returns an [ArbArgsGenerator] which generates [OffsetDateTime]s ranging [from] (inclusive) to [toExclusive]
@@ -83,13 +85,14 @@ fun ArbExtensionPoint.zonedDateTimeFromUntil(
  *
  * @since 2.0.0
  */
-//TODO 3.0.0 also define a parameter to steer the offset
 fun ArbExtensionPoint.offsetDateTimeFromUntil(
 	from: OffsetDateTime,
 	toExclusive: OffsetDateTime,
 	temporalUnit: TemporalUnit,
+	arbZoneOffset: ArbArgsGenerator<ZoneOffset> = zoneOffset()
 ): ArbArgsGenerator<OffsetDateTime> =
 	OffsetDateTimeFromUntilArbArgsGenerator(_components, from, toExclusive, temporalUnit)
+		.withOffsetSameInstant(arbZoneOffset)
 
 /**
  * Returns an [ArbArgsGenerator] which generates [LocalTime]s ranging [from] (inclusive) to [toInclusive]
@@ -143,13 +146,14 @@ fun ArbExtensionPoint.localDateTimeFromTo(
  *
  * @since 2.0.0
  */
-//TODO 3.0.0 also define a parameter to steer timezone
 fun ArbExtensionPoint.zonedDateTimeFromTo(
 	from: ZonedDateTime,
 	toInclusive: ZonedDateTime,
-	temporalUnit: TemporalUnit
+	temporalUnit: TemporalUnit,
+	arbZoneId: ArbArgsGenerator<ZoneId> = zoneId()
 ): ArbArgsGenerator<ZonedDateTime> =
 	ZonedDateTimeFromToArbArgsGenerator(_components, from, toInclusive, temporalUnit)
+		.withZoneSameInstant(arbZoneId)
 
 /**
  * Returns an [ArbArgsGenerator] which generates [OffsetDateTime]s ranging [from] (inclusive) to [toInclusive]
@@ -159,13 +163,34 @@ fun ArbExtensionPoint.zonedDateTimeFromTo(
  *
  * @since 2.0.0
  */
-//TODO 3.0.0 also define a parameter to steer the offset
 fun ArbExtensionPoint.offsetDateTimeFromTo(
 	from: OffsetDateTime,
 	toInclusive: OffsetDateTime,
-	temporalUnit: TemporalUnit
+	temporalUnit: TemporalUnit,
+	arbZoneOffset: ArbArgsGenerator<ZoneOffset> = zoneOffset()
 ): ArbArgsGenerator<OffsetDateTime> =
 	OffsetDateTimeFromToArbArgsGenerator(_components, from, toInclusive, temporalUnit)
+		.withOffsetSameInstant(arbZoneOffset)
+
+/**
+ * Returns an [ArbArgsGenerator] which generates [ZoneId]s.
+ *
+ * @since 2.3.0
+ */
+fun ArbExtensionPoint.zoneId(): ArbArgsGenerator<ZoneId> = arb.fromList(zoneIds)
+
+private val zoneIds by lazy { ZoneId.getAvailableZoneIds().map { ZoneId.of(it) } }
+
+/**
+ * Returns an [ArbArgsGenerator] which generates [ZoneId]s.
+ *
+ * @since 2.3.0
+ */
+fun ArbExtensionPoint.zoneOffset(): ArbArgsGenerator<ZoneOffset> =
+	arb.intFromTo(-18, 18).zip(arb.intFromTo(0, 59)).zip(arb.intFromTo(0, 59)) { (h, m), s ->
+		if (h == 18 || h == -18) ZoneOffset.ofHours(h)
+		else ZoneOffset.ofHoursMinutesSeconds(h, m * h.sign, s * h.sign)
+	}
 
 /**
  * Adjust the [ZoneId] of the generated [ZonedDateTime] based on the given [ArbArgsGenerator].

@@ -12,4 +12,5 @@ interface PredefinedArgsProviders :
 	PredefinedBooleanProviders,
 	PredefinedBoundProviders,
 	PredefinedCharProviders,
-	PredefinedNumberProviders
+	PredefinedNumberProviders,
+	PredefinedDateRelatedProviders
