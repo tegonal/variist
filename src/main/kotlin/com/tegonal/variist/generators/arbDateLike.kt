@@ -6,8 +6,14 @@ import java.time.*
 import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalUnit
 
-
-//TODO 3.1.0 add shortcut localTime()
+/**
+ * Returns an [ArbArgsGenerator] which generates [LocalTime]s ranging from [LocalTime.MIN] to inclusive [LocalTime.MAX]
+ * where [temporalUnit] defines the steps which defaults to [ChronoUnit.SECONDS].
+ *
+ * @since 2.3.0
+ */
+fun ArbExtensionPoint.localTime(temporalUnit: TemporalUnit = ChronoUnit.SECONDS) =
+	localTimeFromTo(LocalTime.MIN, LocalTime.MAX, temporalUnit)
 
 /**
  * Returns an [ArbArgsGenerator] which generates [LocalTime]s ranging [from] (inclusive) to [toExclusive]

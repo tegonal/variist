@@ -2,6 +2,8 @@ package com.tegonal.variist.generators
 
 import ch.tutteli.kbox.Tuple
 import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
@@ -16,6 +18,11 @@ class ArbDateLikeTest : AbstractArbArgsGeneratorTest<Any>() {
 			val nowLocalDate = nowZonedDateTime.toLocalDate()
 			val nowOffsetDateTime = nowZonedDateTime.toOffsetDateTime()
 			sequenceOf(
+				Tuple(
+					"localTime",
+					modifiedArb.localTime(ChronoUnit.HOURS),
+					(0..23).map { LocalTime.of(it, 0, 0) }
+				),
 				Tuple(
 					"localTimeFromUntil",
 					modifiedArb.localTimeFromUntil(nowLocalTime, nowLocalTime.plusHours(2), ChronoUnit.HOURS),
