@@ -167,4 +167,24 @@ fun ArbExtensionPoint.offsetDateTimeFromTo(
 ): ArbArgsGenerator<OffsetDateTime> =
 	OffsetDateTimeFromToArbArgsGenerator(_components, from, toInclusive, temporalUnit)
 
-//TODO 3.1.0 add
+/**
+ * Adjust the [ZoneId] of the generated [ZonedDateTime] based on the given [ArbArgsGenerator].
+ *
+ * @since 2.3.0
+ */
+fun ArbArgsGenerator<ZonedDateTime>.withZoneSameInstant(
+	arbZoneId: ArbArgsGenerator<ZoneId>
+): ArbArgsGenerator<ZonedDateTime> = zip(arbZoneId) { date, zoneId ->
+	date.withZoneSameInstant(zoneId)
+}
+
+/**
+ * Adjust the [ZoneOffset] of the generated [OffsetDateTime] based on the given [ArbArgsGenerator].
+ *
+ * @since 2.3.0
+ */
+fun ArbArgsGenerator<OffsetDateTime>.withOffsetSameInstant(
+	arbZoneOffset: ArbArgsGenerator<ZoneOffset>
+): ArbArgsGenerator<OffsetDateTime> = zip(arbZoneOffset) { date, zoneOffset ->
+	date.withOffsetSameInstant(zoneOffset)
+}

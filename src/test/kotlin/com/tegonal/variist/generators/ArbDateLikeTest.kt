@@ -51,6 +51,17 @@ class ArbDateLikeTest : AbstractArbArgsGeneratorTest<Any>() {
 					),
 					(0L until 3 * 60).map { nowZonedDateTime.plusMinutes(it) }
 				),
+				ZoneId.of("Asia/Tokyo").let { tokyo ->
+					Tuple(
+						"zonedDateTimeFromUntil.withZoneSameInstant",
+						modifiedArb.zonedDateTimeFromUntil(
+							nowZonedDateTime,
+							nowZonedDateTime.plusHours(3),
+							ChronoUnit.MINUTES
+						).withZoneSameInstant(arb.of(tokyo)),
+						(0L until 3 * 60).map { nowZonedDateTime.withZoneSameInstant(tokyo).plusMinutes(it) }
+					)
+				},
 				Tuple(
 					"offsetDateTimeFromUntil",
 					modifiedArb.offsetDateTimeFromUntil(
@@ -60,6 +71,17 @@ class ArbDateLikeTest : AbstractArbArgsGeneratorTest<Any>() {
 					),
 					(0L until 2 * 60).map { nowOffsetDateTime.plusSeconds(it) }
 				),
+				ZoneOffset.ofHoursMinutes(3, 14).let { offset ->
+					Tuple(
+						"offsetDateTimeFromUntil.withOffsetSameInstant",
+						modifiedArb.offsetDateTimeFromUntil(
+							nowOffsetDateTime,
+							nowOffsetDateTime.plusMinutes(2),
+							ChronoUnit.SECONDS
+						).withOffsetSameInstant(arb.of(offset)),
+						(0L until 2 * 60).map { nowOffsetDateTime.withOffsetSameInstant(offset).plusSeconds(it) }
+					)
+				},
 				Tuple(
 					"localTimeFromTo",
 					modifiedArb.localTimeFromTo(nowLocalTime, nowLocalTime.plusMinutes(2), ChronoUnit.MINUTES),
