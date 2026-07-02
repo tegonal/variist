@@ -1,4 +1,3 @@
-//TODO 3.0.0 rename file to semiOrderedLike...
 package com.tegonal.variist.generators
 
 import com.tegonal.variist.generators.impl.throwUnsupportedArgsGenerator

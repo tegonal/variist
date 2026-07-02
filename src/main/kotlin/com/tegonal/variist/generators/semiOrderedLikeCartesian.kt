@@ -1,5 +1,4 @@
-//TODO 3.0.0 rename file to semiOrderedLike...
-@file:JvmName("SemiOrderedCartesianKt")
+@file:JvmName("SemiOrderedLikeCartesianKt")
 @file:JvmMultifileClass
 
 package com.tegonal.variist.generators
