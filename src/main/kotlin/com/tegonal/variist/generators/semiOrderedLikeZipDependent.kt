@@ -1,5 +1,4 @@
-//TODO 3.0.0 rename to semiOrderedLike...
-@file:JvmName("SemiOrderedZipDependentKt")
+@file:JvmName("SemiOrderedLikeZipDependentKt")
 @file:JvmMultifileClass
 
 package com.tegonal.variist.generators

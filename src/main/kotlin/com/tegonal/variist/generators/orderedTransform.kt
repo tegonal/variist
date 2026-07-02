@@ -74,5 +74,5 @@ fun <T, R> OrderedArgsGenerator<T>.transformMaterialised(
 	transform: (Sequence<T>) -> Sequence<R>,
 ): OrderedArgsGenerator<R> = generate(offset = 0).take(size).let(transform).toList().let(_components.ordered::fromList)
 
-//TODO 3.0.0 provide an overload which has type (Sequence<T>) -> List<R> once the following issue is fixed:
+//TODO 4.0.0 provide an overload which has type (Sequence<T>) -> List<R> once the following issue is fixed:
 // https://youtrack.jetbrains.com/issue/KT-23883/Problem-with-overload-resolution-when-functions-have-generic-functional-types-that-differ-only-by-return-type

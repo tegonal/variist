@@ -1,4 +1,3 @@
-//TODO 3.0.0 rename file to semiOrderedLikeCartesianProductArgsGenerators
 package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.config._components
