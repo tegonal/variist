@@ -5,6 +5,7 @@ import com.tegonal.variist.config._components
 import com.tegonal.variist.config.createVariistRandom
 import com.tegonal.variist.config.ordered
 import com.tegonal.variist.generators.SemiOrderedArgsGenerator
+import com.tegonal.variist.generators.SemiOrderedLikeArgsGenerator
 import com.tegonal.variist.generators.ordered
 import com.tegonal.variist.generators.toArbArgsGenerator
 import kotlin.random.Random
@@ -53,7 +54,7 @@ fun <T> Array<T>.pickOneRandomly(): T =
  *
  * @since 2.0.0
  */
-fun <T> SemiOrderedArgsGenerator<T>.pickOneRandomly(seedOffset: Int = 0): T =
+fun <T> SemiOrderedLikeArgsGenerator<T>.pickOneRandomly(seedOffset: Int = 0): T =
 	_components.createVariistRandom(seedOffset).nextInt(0, size).let { offset ->
 		generateOne(offset)
 	}
@@ -63,7 +64,7 @@ fun <T> SemiOrderedArgsGenerator<T>.pickOneRandomly(seedOffset: Int = 0): T =
  *
  * @since 2.0.0
  */
-fun <T> SemiOrderedArgsGenerator<T>.takeRandomly(amount: Int, seedOffset: Int = 0): List<T> =
+fun <T> SemiOrderedLikeArgsGenerator<T>.takeRandomly(amount: Int, seedOffset: Int = 0): List<T> =
 	//TODO 3.5.0 this does not guarantee that we pick the same index only once before repeating in contrast
 	// to Iterable.takeRandomly. This creates a semantical inconsistency, better use shuffled once implemented
 	toArbArgsGenerator().generate(seedOffset).take(amount).toList()

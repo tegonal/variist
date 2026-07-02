@@ -10,7 +10,7 @@ abstract class AbstractOrderedCombinerTest : BaseTest() {
 
 	@OptIn(ExperimentalWithOptions::class)
 	protected fun validateGeneration(
-		generator: SemiOrderedArgsGenerator<List<Any>>,
+		generator: SemiOrderedLikeArgsGenerator<List<Any>>,
 		values: List<List<Any>>
 	) {
 		val numberOfCombinations = values.fold(1) { acc, l -> acc * l.size }

@@ -17,13 +17,13 @@ import ch.tutteli.kbox.Tuple8
 import ch.tutteli.kbox.Tuple9
 
 /**
- * Combines `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[SemiOrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple2].
+ * Combines `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[SemiOrderedLikeArgsGenerator] resulting in their
+ * Cartesian product where the values are transformed into a [Tuple2].
  *
  * The resulting [SemiOrderedArgsGenerator] generates
  * [this.size][SemiOrderedArgsGenerator.size] * [other.size][SemiOrderedArgsGenerator.size] values before repeating.
  *
- * @param other The other [SemiOrderedArgsGenerator] which generates values of type [A2].
+ * @param other The other [SemiOrderedLikeArgsGenerator] which generates values of type [A2].
  *
  * @return The resulting [SemiOrderedArgsGenerator] which represents the cartesian product and
  *   generates values of type [Tuple2].
@@ -31,18 +31,18 @@ import ch.tutteli.kbox.Tuple9
  * @since 2.0.0
  */
 @JvmName("cartesianToTuple2")
-fun <A1, A2> SemiOrderedArgsGenerator<A1>.cartesian(
-	other: SemiOrderedArgsGenerator<A2>
+fun <A1, A2> SemiOrderedLikeArgsGenerator<A1>.cartesian(
+	other: SemiOrderedLikeArgsGenerator<A2>
 ): SemiOrderedArgsGenerator<Tuple2<A1, A2>> = cartesian(other, ::Tuple2)
 
 /**
- * Combines `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[SemiOrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple3].
+ * Combines `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[SemiOrderedLikeArgsGenerator] resulting in their
+ * Cartesian product where the values are transformed into a [Tuple3].
  *
  * The resulting [SemiOrderedArgsGenerator] generates
  * [this.size][SemiOrderedArgsGenerator.size] * [other.size][SemiOrderedArgsGenerator.size] values before repeating.
  *
- * @param other The other [SemiOrderedArgsGenerator] which generates values of type [A3].
+ * @param other The other [SemiOrderedLikeArgsGenerator] which generates values of type [A3].
  *
  * @return The resulting [SemiOrderedArgsGenerator] which represents the cartesian product and
  *   generates values of type [Tuple3].
@@ -50,20 +50,20 @@ fun <A1, A2> SemiOrderedArgsGenerator<A1>.cartesian(
  * @since 2.0.0
  */
 @JvmName("cartesianToTuple3")
-fun <A1, A2, A3> SemiOrderedArgsGenerator<Tuple2<A1, A2>>.cartesian(
-	other: SemiOrderedArgsGenerator<A3>
+fun <A1, A2, A3> SemiOrderedLikeArgsGenerator<Tuple2<A1, A2>>.cartesian(
+	other: SemiOrderedLikeArgsGenerator<A3>
 ): SemiOrderedArgsGenerator<Tuple3<A1, A2, A3>> = cartesian(other) { args, otherArg ->
 	args.append(otherArg)
 }
 
 /**
- * Combines `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[SemiOrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple4].
+ * Combines `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[SemiOrderedLikeArgsGenerator] resulting in their
+ * Cartesian product where the values are transformed into a [Tuple4].
  *
  * The resulting [SemiOrderedArgsGenerator] generates
  * [this.size][SemiOrderedArgsGenerator.size] * [other.size][SemiOrderedArgsGenerator.size] values before repeating.
  *
- * @param other The other [SemiOrderedArgsGenerator] which generates values of type [A4].
+ * @param other The other [SemiOrderedLikeArgsGenerator] which generates values of type [A4].
  *
  * @return The resulting [SemiOrderedArgsGenerator] which represents the cartesian product and
  *   generates values of type [Tuple4].
@@ -71,20 +71,20 @@ fun <A1, A2, A3> SemiOrderedArgsGenerator<Tuple2<A1, A2>>.cartesian(
  * @since 2.0.0
  */
 @JvmName("cartesianToTuple4")
-fun <A1, A2, A3, A4> SemiOrderedArgsGenerator<Tuple3<A1, A2, A3>>.cartesian(
-	other: SemiOrderedArgsGenerator<A4>
+fun <A1, A2, A3, A4> SemiOrderedLikeArgsGenerator<Tuple3<A1, A2, A3>>.cartesian(
+	other: SemiOrderedLikeArgsGenerator<A4>
 ): SemiOrderedArgsGenerator<Tuple4<A1, A2, A3, A4>> = cartesian(other) { args, otherArg ->
 	args.append(otherArg)
 }
 
 /**
- * Combines `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[SemiOrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple5].
+ * Combines `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[SemiOrderedLikeArgsGenerator] resulting in their
+ * Cartesian product where the values are transformed into a [Tuple5].
  *
  * The resulting [SemiOrderedArgsGenerator] generates
  * [this.size][SemiOrderedArgsGenerator.size] * [other.size][SemiOrderedArgsGenerator.size] values before repeating.
  *
- * @param other The other [SemiOrderedArgsGenerator] which generates values of type [A5].
+ * @param other The other [SemiOrderedLikeArgsGenerator] which generates values of type [A5].
  *
  * @return The resulting [SemiOrderedArgsGenerator] which represents the cartesian product and
  *   generates values of type [Tuple5].
@@ -92,20 +92,20 @@ fun <A1, A2, A3, A4> SemiOrderedArgsGenerator<Tuple3<A1, A2, A3>>.cartesian(
  * @since 2.0.0
  */
 @JvmName("cartesianToTuple5")
-fun <A1, A2, A3, A4, A5> SemiOrderedArgsGenerator<Tuple4<A1, A2, A3, A4>>.cartesian(
-	other: SemiOrderedArgsGenerator<A5>
+fun <A1, A2, A3, A4, A5> SemiOrderedLikeArgsGenerator<Tuple4<A1, A2, A3, A4>>.cartesian(
+	other: SemiOrderedLikeArgsGenerator<A5>
 ): SemiOrderedArgsGenerator<Tuple5<A1, A2, A3, A4, A5>> = cartesian(other) { args, otherArg ->
 	args.append(otherArg)
 }
 
 /**
- * Combines `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[SemiOrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple6].
+ * Combines `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[SemiOrderedLikeArgsGenerator] resulting in their
+ * Cartesian product where the values are transformed into a [Tuple6].
  *
  * The resulting [SemiOrderedArgsGenerator] generates
  * [this.size][SemiOrderedArgsGenerator.size] * [other.size][SemiOrderedArgsGenerator.size] values before repeating.
  *
- * @param other The other [SemiOrderedArgsGenerator] which generates values of type [A6].
+ * @param other The other [SemiOrderedLikeArgsGenerator] which generates values of type [A6].
  *
  * @return The resulting [SemiOrderedArgsGenerator] which represents the cartesian product and
  *   generates values of type [Tuple6].
@@ -113,20 +113,20 @@ fun <A1, A2, A3, A4, A5> SemiOrderedArgsGenerator<Tuple4<A1, A2, A3, A4>>.cartes
  * @since 2.0.0
  */
 @JvmName("cartesianToTuple6")
-fun <A1, A2, A3, A4, A5, A6> SemiOrderedArgsGenerator<Tuple5<A1, A2, A3, A4, A5>>.cartesian(
-	other: SemiOrderedArgsGenerator<A6>
+fun <A1, A2, A3, A4, A5, A6> SemiOrderedLikeArgsGenerator<Tuple5<A1, A2, A3, A4, A5>>.cartesian(
+	other: SemiOrderedLikeArgsGenerator<A6>
 ): SemiOrderedArgsGenerator<Tuple6<A1, A2, A3, A4, A5, A6>> = cartesian(other) { args, otherArg ->
 	args.append(otherArg)
 }
 
 /**
- * Combines `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[SemiOrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple7].
+ * Combines `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[SemiOrderedLikeArgsGenerator] resulting in their
+ * Cartesian product where the values are transformed into a [Tuple7].
  *
  * The resulting [SemiOrderedArgsGenerator] generates
  * [this.size][SemiOrderedArgsGenerator.size] * [other.size][SemiOrderedArgsGenerator.size] values before repeating.
  *
- * @param other The other [SemiOrderedArgsGenerator] which generates values of type [A7].
+ * @param other The other [SemiOrderedLikeArgsGenerator] which generates values of type [A7].
  *
  * @return The resulting [SemiOrderedArgsGenerator] which represents the cartesian product and
  *   generates values of type [Tuple7].
@@ -134,20 +134,20 @@ fun <A1, A2, A3, A4, A5, A6> SemiOrderedArgsGenerator<Tuple5<A1, A2, A3, A4, A5>
  * @since 2.0.0
  */
 @JvmName("cartesianToTuple7")
-fun <A1, A2, A3, A4, A5, A6, A7> SemiOrderedArgsGenerator<Tuple6<A1, A2, A3, A4, A5, A6>>.cartesian(
-	other: SemiOrderedArgsGenerator<A7>
+fun <A1, A2, A3, A4, A5, A6, A7> SemiOrderedLikeArgsGenerator<Tuple6<A1, A2, A3, A4, A5, A6>>.cartesian(
+	other: SemiOrderedLikeArgsGenerator<A7>
 ): SemiOrderedArgsGenerator<Tuple7<A1, A2, A3, A4, A5, A6, A7>> = cartesian(other) { args, otherArg ->
 	args.append(otherArg)
 }
 
 /**
- * Combines `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[SemiOrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple8].
+ * Combines `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[SemiOrderedLikeArgsGenerator] resulting in their
+ * Cartesian product where the values are transformed into a [Tuple8].
  *
  * The resulting [SemiOrderedArgsGenerator] generates
  * [this.size][SemiOrderedArgsGenerator.size] * [other.size][SemiOrderedArgsGenerator.size] values before repeating.
  *
- * @param other The other [SemiOrderedArgsGenerator] which generates values of type [A8].
+ * @param other The other [SemiOrderedLikeArgsGenerator] which generates values of type [A8].
  *
  * @return The resulting [SemiOrderedArgsGenerator] which represents the cartesian product and
  *   generates values of type [Tuple8].
@@ -155,20 +155,20 @@ fun <A1, A2, A3, A4, A5, A6, A7> SemiOrderedArgsGenerator<Tuple6<A1, A2, A3, A4,
  * @since 2.0.0
  */
 @JvmName("cartesianToTuple8")
-fun <A1, A2, A3, A4, A5, A6, A7, A8> SemiOrderedArgsGenerator<Tuple7<A1, A2, A3, A4, A5, A6, A7>>.cartesian(
-	other: SemiOrderedArgsGenerator<A8>
+fun <A1, A2, A3, A4, A5, A6, A7, A8> SemiOrderedLikeArgsGenerator<Tuple7<A1, A2, A3, A4, A5, A6, A7>>.cartesian(
+	other: SemiOrderedLikeArgsGenerator<A8>
 ): SemiOrderedArgsGenerator<Tuple8<A1, A2, A3, A4, A5, A6, A7, A8>> = cartesian(other) { args, otherArg ->
 	args.append(otherArg)
 }
 
 /**
- * Combines `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[SemiOrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple9].
+ * Combines `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[SemiOrderedLikeArgsGenerator] resulting in their
+ * Cartesian product where the values are transformed into a [Tuple9].
  *
  * The resulting [SemiOrderedArgsGenerator] generates
  * [this.size][SemiOrderedArgsGenerator.size] * [other.size][SemiOrderedArgsGenerator.size] values before repeating.
  *
- * @param other The other [SemiOrderedArgsGenerator] which generates values of type [A9].
+ * @param other The other [SemiOrderedLikeArgsGenerator] which generates values of type [A9].
  *
  * @return The resulting [SemiOrderedArgsGenerator] which represents the cartesian product and
  *   generates values of type [Tuple9].
@@ -176,8 +176,8 @@ fun <A1, A2, A3, A4, A5, A6, A7, A8> SemiOrderedArgsGenerator<Tuple7<A1, A2, A3,
  * @since 2.0.0
  */
 @JvmName("cartesianToTuple9")
-fun <A1, A2, A3, A4, A5, A6, A7, A8, A9> SemiOrderedArgsGenerator<Tuple8<A1, A2, A3, A4, A5, A6, A7, A8>>.cartesian(
-	other: SemiOrderedArgsGenerator<A9>
+fun <A1, A2, A3, A4, A5, A6, A7, A8, A9> SemiOrderedLikeArgsGenerator<Tuple8<A1, A2, A3, A4, A5, A6, A7, A8>>.cartesian(
+	other: SemiOrderedLikeArgsGenerator<A9>
 ): SemiOrderedArgsGenerator<Tuple9<A1, A2, A3, A4, A5, A6, A7, A8, A9>> = cartesian(other) { args, otherArg ->
 	args.append(otherArg)
 }

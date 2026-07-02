@@ -1,3 +1,4 @@
+//TODO 3.0.0 move to file semiOrderedLikeArgsGeneratorTransformers
 package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.generators.OrderedArgsGenerator
@@ -11,4 +12,5 @@ import com.tegonal.variist.generators.OrderedArgsGenerator
 class OrderedArgsGeneratorTransformer<T, R>(
 	baseGenerator: OrderedArgsGenerator<T>,
 	transform: (Sequence<T>, seedOffset: Int) -> Sequence<R>
-) : BaseSemiOrderedArgsGeneratorTransformer<T, R>(baseGenerator, transform), OrderedArgsGenerator<R>
+) : BaseSemiOrderedLikeArgsGeneratorTransformer<T, R>(baseGenerator, transform),
+	OrderedArgsGenerator<R>

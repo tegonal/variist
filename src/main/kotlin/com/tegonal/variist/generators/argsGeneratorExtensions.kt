@@ -16,7 +16,7 @@ import com.tegonal.variist.utils.seedToOffset
  *
  * @since 2.0.0
  */
-fun <T> SemiOrderedArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData: AnnotationData? = null): Sequence<T> =
+fun <T> SemiOrderedLikeArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData: AnnotationData? = null): Sequence<T> =
 	decideArgsRange(annotationData).let(::generateAndTake)
 
 /**
@@ -33,7 +33,7 @@ fun <T> OrderedArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData: An
  *
  * @since 2.0.0
  */
-fun <T> SemiOrderedArgsGenerator<T>.generateOneBasedOnDecider(annotationData: AnnotationData? = null): T =
+fun <T> SemiOrderedLikeArgsGenerator<T>.generateOneBasedOnDecider(annotationData: AnnotationData? = null): T =
 	decideArgsRange(annotationData).offset.let(::generateOne)
 
 /**
@@ -57,7 +57,7 @@ fun <T> ArgsGenerator<T>.decideArgsRange(annotationData: AnnotationData? = null)
  *
  * @since 2.0.0
  */
-fun <T> SemiOrderedArgsGenerator<T>.generateAndTake(argsRange: ArgsRange): Sequence<T> =
+fun <T> SemiOrderedLikeArgsGenerator<T>.generateAndTake(argsRange: ArgsRange): Sequence<T> =
 	skipByConfigAndTake({ generate(argsRange.offset) }, argsRange.take)
 
 /**
@@ -66,6 +66,8 @@ fun <T> SemiOrderedArgsGenerator<T>.generateAndTake(argsRange: ArgsRange): Seque
  * @since 2.0.0
  */
 fun <T> OrderedArgsGenerator<T>.generateAndTake(argsRange: ArgsRange): Sequence<T> {
+	// this extension method exists as optimisation. If we deal with an OrderedArgsGenerator we can calculate the offset
+	// which avoids generating and discarding values as we have to do with skip
 	val offset = getOffsetTakingSkipIntoAccount(argsRange)
 	return generate(offset).take(argsRange.take)
 }

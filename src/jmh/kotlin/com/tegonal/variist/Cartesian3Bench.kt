@@ -77,7 +77,7 @@ class OrderedCartesianProduct3ArgsGenerator<A1, A2, A3, R>(
  * @since 2.1.0
  */
 abstract class CartesianProductMultiArgsGenerator<R>(
-	private val generators: List<SemiOrderedArgsGenerator<*>>,
+	private val generators: List<SemiOrderedLikeArgsGenerator<*>>,
 	private val transform: (Array<*>) -> R
 ) : BaseSemiOrderedArgsGenerator<R>(
 	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,

@@ -17,13 +17,13 @@ class RandomAccessOrderedArgsGenerator<T>(
 	componentFactoryContainer: ComponentFactoryContainer,
 	size: Int,
 	private val elementAt: (index: Int) -> T
-) : BaseSemiOrderedArgsGenerator<T>(componentFactoryContainer, size), OrderedArgsGenerator<T> {
+) : BaseOrderedArgsGenerator<T>(componentFactoryContainer, size) {
 
-	override fun generateOneAfterChecks(offset: Int, seedOffset: Int): T {
+	override fun generateOneAfterChecks(offset: Int): T {
 		val index = determineStartingIndex(0, size, offset, 1)
 		return elementAt(index)
 	}
 
-	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<T> =
+	override fun generateAfterChecks(offset: Int): Sequence<T> =
 		RepeatingRandomAccessSequence(size, offset, elementAt)
 }

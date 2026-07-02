@@ -17,7 +17,7 @@ import ch.tutteli.kbox.Tuple8
 import ch.tutteli.kbox.Tuple9
 
 /**
- * Zips `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
+ * Zips `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
  *
  * @param other The other [ArbArgsGenerator] which generates values of type [A2].
  *
@@ -26,12 +26,12 @@ import ch.tutteli.kbox.Tuple9
  * @since 2.0.0
  */
 @JvmName("zipToTuple2")
-fun <A1, A2> SemiOrderedArgsGenerator<A1>.zip(
+fun <A1, A2> SemiOrderedLikeArgsGenerator<A1>.zip(
 	other: ArbArgsGenerator<A2>
 ): SemiOrderedArgsGenerator<Tuple2<A1, A2>> = zip(other, ::Tuple2)
 
 /**
- * Zips `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
+ * Zips `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
  *
  * @param other The other [ArbArgsGenerator] which generates values of type [A3].
  *
@@ -40,14 +40,14 @@ fun <A1, A2> SemiOrderedArgsGenerator<A1>.zip(
  * @since 2.0.0
  */
 @JvmName("zipToTuple3")
-fun <A1, A2, A3> SemiOrderedArgsGenerator<Tuple2<A1, A2>>.zip(
+fun <A1, A2, A3> SemiOrderedLikeArgsGenerator<Tuple2<A1, A2>>.zip(
 	other: ArbArgsGenerator<A3>
 ): SemiOrderedArgsGenerator<Tuple3<A1, A2, A3>> = zip(other) { args, otherArg ->
 	args.append(otherArg)
 }
 
 /**
- * Zips `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
+ * Zips `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
  *
  * @param other The other [ArbArgsGenerator] which generates values of type [A4].
  *
@@ -56,14 +56,14 @@ fun <A1, A2, A3> SemiOrderedArgsGenerator<Tuple2<A1, A2>>.zip(
  * @since 2.0.0
  */
 @JvmName("zipToTuple4")
-fun <A1, A2, A3, A4> SemiOrderedArgsGenerator<Tuple3<A1, A2, A3>>.zip(
+fun <A1, A2, A3, A4> SemiOrderedLikeArgsGenerator<Tuple3<A1, A2, A3>>.zip(
 	other: ArbArgsGenerator<A4>
 ): SemiOrderedArgsGenerator<Tuple4<A1, A2, A3, A4>> = zip(other) { args, otherArg ->
 	args.append(otherArg)
 }
 
 /**
- * Zips `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
+ * Zips `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
  *
  * @param other The other [ArbArgsGenerator] which generates values of type [A5].
  *
@@ -72,14 +72,14 @@ fun <A1, A2, A3, A4> SemiOrderedArgsGenerator<Tuple3<A1, A2, A3>>.zip(
  * @since 2.0.0
  */
 @JvmName("zipToTuple5")
-fun <A1, A2, A3, A4, A5> SemiOrderedArgsGenerator<Tuple4<A1, A2, A3, A4>>.zip(
+fun <A1, A2, A3, A4, A5> SemiOrderedLikeArgsGenerator<Tuple4<A1, A2, A3, A4>>.zip(
 	other: ArbArgsGenerator<A5>
 ): SemiOrderedArgsGenerator<Tuple5<A1, A2, A3, A4, A5>> = zip(other) { args, otherArg ->
 	args.append(otherArg)
 }
 
 /**
- * Zips `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
+ * Zips `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
  *
  * @param other The other [ArbArgsGenerator] which generates values of type [A6].
  *
@@ -88,14 +88,14 @@ fun <A1, A2, A3, A4, A5> SemiOrderedArgsGenerator<Tuple4<A1, A2, A3, A4>>.zip(
  * @since 2.0.0
  */
 @JvmName("zipToTuple6")
-fun <A1, A2, A3, A4, A5, A6> SemiOrderedArgsGenerator<Tuple5<A1, A2, A3, A4, A5>>.zip(
+fun <A1, A2, A3, A4, A5, A6> SemiOrderedLikeArgsGenerator<Tuple5<A1, A2, A3, A4, A5>>.zip(
 	other: ArbArgsGenerator<A6>
 ): SemiOrderedArgsGenerator<Tuple6<A1, A2, A3, A4, A5, A6>> = zip(other) { args, otherArg ->
 	args.append(otherArg)
 }
 
 /**
- * Zips `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
+ * Zips `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
  *
  * @param other The other [ArbArgsGenerator] which generates values of type [A7].
  *
@@ -104,14 +104,14 @@ fun <A1, A2, A3, A4, A5, A6> SemiOrderedArgsGenerator<Tuple5<A1, A2, A3, A4, A5>
  * @since 2.0.0
  */
 @JvmName("zipToTuple7")
-fun <A1, A2, A3, A4, A5, A6, A7> SemiOrderedArgsGenerator<Tuple6<A1, A2, A3, A4, A5, A6>>.zip(
+fun <A1, A2, A3, A4, A5, A6, A7> SemiOrderedLikeArgsGenerator<Tuple6<A1, A2, A3, A4, A5, A6>>.zip(
 	other: ArbArgsGenerator<A7>
 ): SemiOrderedArgsGenerator<Tuple7<A1, A2, A3, A4, A5, A6, A7>> = zip(other) { args, otherArg ->
 	args.append(otherArg)
 }
 
 /**
- * Zips `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
+ * Zips `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
  *
  * @param other The other [ArbArgsGenerator] which generates values of type [A8].
  *
@@ -120,14 +120,14 @@ fun <A1, A2, A3, A4, A5, A6, A7> SemiOrderedArgsGenerator<Tuple6<A1, A2, A3, A4,
  * @since 2.0.0
  */
 @JvmName("zipToTuple8")
-fun <A1, A2, A3, A4, A5, A6, A7, A8> SemiOrderedArgsGenerator<Tuple7<A1, A2, A3, A4, A5, A6, A7>>.zip(
+fun <A1, A2, A3, A4, A5, A6, A7, A8> SemiOrderedLikeArgsGenerator<Tuple7<A1, A2, A3, A4, A5, A6, A7>>.zip(
 	other: ArbArgsGenerator<A8>
 ): SemiOrderedArgsGenerator<Tuple8<A1, A2, A3, A4, A5, A6, A7, A8>> = zip(other) { args, otherArg ->
 	args.append(otherArg)
 }
 
 /**
- * Zips `this` [SemiOrderedArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
+ * Zips `this` [SemiOrderedLikeArgsGenerator] with the given [other]&nbsp;[ArbArgsGenerator].
  *
  * @param other The other [ArbArgsGenerator] which generates values of type [A9].
  *
@@ -136,7 +136,7 @@ fun <A1, A2, A3, A4, A5, A6, A7, A8> SemiOrderedArgsGenerator<Tuple7<A1, A2, A3,
  * @since 2.0.0
  */
 @JvmName("zipToTuple9")
-fun <A1, A2, A3, A4, A5, A6, A7, A8, A9> SemiOrderedArgsGenerator<Tuple8<A1, A2, A3, A4, A5, A6, A7, A8>>.zip(
+fun <A1, A2, A3, A4, A5, A6, A7, A8, A9> SemiOrderedLikeArgsGenerator<Tuple8<A1, A2, A3, A4, A5, A6, A7, A8>>.zip(
 	other: ArbArgsGenerator<A9>
 ): SemiOrderedArgsGenerator<Tuple9<A1, A2, A3, A4, A5, A6, A7, A8, A9>> = zip(other) { args, otherArg ->
 	args.append(otherArg)

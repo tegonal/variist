@@ -9,22 +9,23 @@ import com.tegonal.variist.testutils.getTestValue
 @Suppress("UNCHECKED_CAST")
 class SemiOrderedConcatenateTest : AbstractOrderedConcatenateTest() {
 
-    override fun createGenerators(modifiedOrdered: OrderedExtensionPoint): OrderedArgsTestFactoryResult<Any> {
-        val g1Variants = variants(modifiedOrdered, 0)
-        val g2Variants = variants(modifiedOrdered, 1)
+	override fun createGenerators(modifiedOrdered: OrderedExtensionPoint): OrderedArgsTestFactoryResult<Any> {
+		val g1Variants = variants(modifiedOrdered, 0)
+		val g2Variants = variants(modifiedOrdered, 1)
 
-        val concatenated = g1Variants.cartesian(g2Variants) { (name1, g1), (name2, g2) ->
-            val semiG1: SemiOrderedArgsGenerator<Any> = g1
-            val semiG2: SemiOrderedArgsGenerator<Any> = g2
+		val concatenated: OrderedArgsGenerator<Triple<String, SemiOrderedArgsGenerator<Any>, List<Any>>> =
+			g1Variants.cartesian(g2Variants) { (name1, g1), (name2, g2) ->
+				val semiG1: SemiOrderedArgsGenerator<Any> = g1.zip(arb.of(1)) { a1, _ -> a1 }
+				val semiG2: SemiOrderedArgsGenerator<Any> = g2.zip(arb.of(1)) { a1, _ -> a1 }
 
-            Tuple(
-                "$name1 + $name2",
-                semiG1 + semiG2,
-                anyToList(getTestValue(name1, 0)) + anyToList(getTestValue(name2, 1))
-            )
-        }
+				Tuple(
+					"$name1 + $name2",
+					semiG1 + semiG2,
+					anyToList(getTestValue(name1, 0)) + anyToList(getTestValue(name2, 1))
+				)
+			}
 		val argsRange = customComponentFactoryContainer.build<ArgsRangeDecider>().decide(concatenated)
 		// not using generateAndTake here is it would be based on modifiedOrdered skip
 		return concatenated.generate(argsRange.offset).take(argsRange.take)
-    }
+	}
 }

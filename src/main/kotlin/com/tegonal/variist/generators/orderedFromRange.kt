@@ -9,7 +9,7 @@ fun OrderedExtensionPoint.fromRange(args: CharRange): OrderedArgsGenerator<Char>
 	fromProgression(args)
 
 /**
- * Returns an [OrderedArgsGenerator] generating [Char]s based on the given [args].
+ * Returns an [OrderedArgsGenerator] generating [Int]s based on the given [args].
  *
  * @since 2.0.0
  */
@@ -17,7 +17,7 @@ fun OrderedExtensionPoint.fromRange(args: IntRange): OrderedArgsGenerator<Int> =
 	fromProgression(args)
 
 /**
- * Returns an [OrderedArgsGenerator] generating [Char]s based on the given [args].
+ * Returns an [OrderedArgsGenerator] generating [Long]s based on the given [args].
  *
  * @since 2.0.0
  */

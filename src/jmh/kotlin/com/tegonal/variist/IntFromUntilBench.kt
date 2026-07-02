@@ -1,12 +1,12 @@
 @file:Suppress("unused")
+
 package com.tegonal.variist
 
 import ch.tutteli.kbox.identity
 import com.tegonal.variist.config.ComponentFactoryContainer
 import com.tegonal.variist.config._components
-import com.tegonal.variist.generators.OrderedArgsGenerator
 import com.tegonal.variist.generators.generateAndTake
-import com.tegonal.variist.generators.impl.BaseSemiOrderedArgsGenerator
+import com.tegonal.variist.generators.impl.BaseOrderedArgsGenerator
 import com.tegonal.variist.generators.ordered
 import com.tegonal.variist.providers.ArgsRange
 import com.tegonal.variist.utils.impl.BaseIntFromUntilRepeatingIterator
@@ -53,7 +53,7 @@ class IntFromUntilWithIdentityArgsProvider<T>(
 	private val toExclusive: Int,
 	private val step: Int,
 	private val argsProvider: (Int) -> T
-) : BaseSemiOrderedArgsGenerator<T>(
+) : BaseOrderedArgsGenerator<T>(
 	componentFactoryContainer,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
@@ -62,9 +62,9 @@ class IntFromUntilWithIdentityArgsProvider<T>(
 		// range size could be bigger than Int.MAX_VALUE, hence we use toLong
 		(toExclusive - from + step - 1) / step
 	}
-), OrderedArgsGenerator<T> {
+) {
 
-	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<T> = Sequence {
+	override fun generateAfterChecks(offset: Int): Sequence<T> = Sequence {
 		object : BaseIntFromUntilRepeatingIterator<T>(from, toExclusive, offset, step) {
 			override fun getElementAt(index: Int): T = argsProvider(index)
 		}
@@ -76,7 +76,7 @@ class IntFromUntilWithoutArgsProvider(
 	private val from: Int,
 	private val toExclusive: Int,
 	private val step: Int,
-) : BaseSemiOrderedArgsGenerator<Int>(
+) : BaseOrderedArgsGenerator<Int>(
 	componentFactoryContainer,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
@@ -85,9 +85,9 @@ class IntFromUntilWithoutArgsProvider(
 		checkRangeNumbers(from, toExclusive, offset = 0, step = step)
 		(toExclusive - from + step - 1) / step
 	}
-), OrderedArgsGenerator<Int> {
+) {
 
-	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<Int> = Sequence {
+	override fun generateAfterChecks(offset: Int): Sequence<Int> = Sequence {
 		object : Iterator<Int> {
 			private var index: Int
 
@@ -119,7 +119,7 @@ class IntFromUntilWithoutArgsProviderWithIntFromUntilIterator(
 	private val from: Int,
 	private val toExclusive: Int,
 	private val step: Int,
-) : BaseSemiOrderedArgsGenerator<Int>(
+) : BaseOrderedArgsGenerator<Int>(
 	componentFactoryContainer,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
@@ -128,9 +128,9 @@ class IntFromUntilWithoutArgsProviderWithIntFromUntilIterator(
 		checkRangeNumbers(from, toExclusive, offset = 0, step = step)
 		(toExclusive - from + step - 1) / step
 	}
-), OrderedArgsGenerator<Int> {
+) {
 
-	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<Int> = Sequence {
+	override fun generateAfterChecks(offset: Int): Sequence<Int> = Sequence {
 		object : BaseIntFromUntilRepeatingIterator<Int>(from, toExclusive, offset = 0, step = step) {
 			override fun getElementAt(index: Int): Int = index
 		}

@@ -78,7 +78,7 @@ class SemiOrderedZipArbTest : AbstractOrderedArgsGeneratorWithoutAnnotationsTest
 	private fun createGeneratorsUseOnlyFirstValue(): Sequence<Triple<String, SemiOrderedArgsGenerator<Int>, List<Pair<Int, Any>>>> =
 		createGenerators().map { triple ->
 			triple.mapSecond { semiOrderedArgsGenerator ->
-				semiOrderedArgsGenerator.map { it.first }
+				(semiOrderedArgsGenerator as SemiOrderedArgsGenerator<Pair<Int, Any>>).map { it.first }
 			}
 		}
 
