@@ -1,5 +1,4 @@
 import ch.tutteli.kbox.Tuple
-import ch.tutteli.kbox.a2
 import ch.tutteli.kbox.append
 
 val generationFolder: ConfigurableFileCollection = project.files("src/main/generated/kotlin")
@@ -66,8 +65,14 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 		}
 
 		val semiOrderedArgsLikeGeneratorCartesian = listOf(
-			Tuple("orderedCartesianGenerated", "OrderedCartesianKt", "OrderedArgsGenerator"),
-			Tuple("semiOrderedCartesianGenerated", "SemiOrderedCartesianKt", "SemiOrderedArgsGenerator"),
+			Tuple("orderedCartesianGenerated", "OrderedCartesianKt", "OrderedArgsGenerator", "OrderedArgsGenerator"),
+			//TODO 3.0.0 rename file to semiOrderedLikeCartesianGenerated
+			Tuple(
+				"semiOrderedCartesianGenerated",
+				"SemiOrderedCartesianKt",
+				"SemiOrderedArgsGenerator",
+				"SemiOrderedLikeArgsGenerator"
+			),
 		).map {
 			it.append(
 				StringBuilder("@file:JvmName(\"${it.a2}\")\n@file:JvmMultifileClass\n")
@@ -79,8 +84,14 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 		}
 
 		val arbZip = listOf(
-			Tuple("arbZipGenerated", "ArbZipKt", "ArbArgsGenerator"),
-			Tuple("semiOrderedZipGenerated", "SemiOrderedZipKt", "SemiOrderedArgsGenerator")
+			Tuple("arbZipGenerated", "ArbZipKt", "ArbArgsGenerator", "ArbArgsGenerator"),
+			//TODO 3.0.0 rename file to semiOrderedLikeZipGenerated
+			Tuple(
+				"semiOrderedZipGenerated",
+				"SemiOrderedZipKt",
+				"SemiOrderedArgsGenerator",
+				"SemiOrderedLikeArgsGenerator"
+			)
 		).map {
 			it.append(
 				StringBuilder("@file:JvmName(\"${it.a2}\")\n@file:JvmMultifileClass\n")
@@ -92,8 +103,14 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 		}
 
 		val zipDependent = listOf(
-			Tuple("arbZipDependentGenerated", "ArbZipDependentKt", "ArbArgsGenerator"),
-			Tuple("semiOrderedZipDependentGenerated", "SemiOrderedZipDependentKt", "SemiOrderedArgsGenerator")
+			Tuple("arbZipDependentGenerated", "ArbZipDependentKt", "ArbArgsGenerator", "ArbArgsGenerator"),
+			Tuple(
+				//TODO 3.0.0 rename file to semiOrderedLikeZipDependentGenerated
+				"semiOrderedZipDependentGenerated",
+				"SemiOrderedZipDependentKt",
+				"SemiOrderedArgsGenerator",
+				"SemiOrderedLikeArgsGenerator"
+			)
 		).map {
 			it.append(
 				StringBuilder("@file:JvmName(\"${it.a2}\")\n@file:JvmMultifileClass\n")
@@ -168,17 +185,17 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 				val typeArgsPlus1 = (1..upperNumberPlus1).joinToString { "A$it" }
 				val tupleXPlus1 = tupleTypeWithTypeArgs(upperNumberPlus1, typeArgsPlus1)
 
-				semiOrderedArgsLikeGeneratorCartesian.forEach { (_, _, className, sb) ->
+				semiOrderedArgsLikeGeneratorCartesian.forEach { (_, _, className, receiverName, sb) ->
 					sb.append(
 						"""
 						|/**
-						| * Combines `this` [${className}] with the given [other]&nbsp;[${className}] resulting in their
-						| * cartesian product where the values are transformed into a [${"Tuple$upperNumberPlus1"}].
+						| * Combines `this` [${receiverName}] with the given [other]&nbsp;[${receiverName}] resulting in their
+						| * Cartesian product where the values are transformed into a [${"Tuple$upperNumberPlus1"}].
 						| *
 						| * The resulting [$className] generates
 						| * [this.size][$className.size] * [other.size][$className.size] values before repeating.
 						| *
-						| * @param other The other [${className}] which generates values of type [A$upperNumberPlus1].
+						| * @param other The other [${receiverName}] which generates values of type [A$upperNumberPlus1].
 						| *
 						| * @return The resulting [${className}] which represents the cartesian product and
 						| *   generates values of type [${"Tuple$upperNumberPlus1"}].
@@ -186,8 +203,8 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 						| * @since 2.0.0
 						| */
 						|@JvmName("cartesianToTuple${upperNumberPlus1}")
-						|fun <$typeArgsPlus1> ${className}<$tupleX>.cartesian(
-						|	other: ${className}<A$upperNumberPlus1>
+						|fun <$typeArgsPlus1> ${receiverName}<$tupleX>.cartesian(
+						|	other: ${receiverName}<A$upperNumberPlus1>
 						|): ${className}<$tupleXPlus1> = cartesian(other${
 							if (upperNumber == 1) ", ::Tuple2)"
 							else """) { args, otherArg ->
@@ -198,11 +215,11 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 					).appendLine()
 				}
 
-				arbZip.forEach { (_, _, className, sb) ->
+				arbZip.forEach { (_, _, className, receiverName, sb) ->
 					sb.append(
 						"""
 						|/**
-						| * Zips `this` [${className}] with the given [other]&nbsp;[ArbArgsGenerator].
+						| * Zips `this` [${receiverName}] with the given [other]&nbsp;[ArbArgsGenerator].
 						| *
 						| * @param other The other [ArbArgsGenerator] which generates values of type [A$upperNumberPlus1].
 						| *
@@ -213,7 +230,7 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 						| * @since 2.0.0
 						| */
 						|@JvmName("zipToTuple${upperNumberPlus1}")
-						|fun <$typeArgsPlus1> ${className}<$tupleX>.zip(
+						|fun <$typeArgsPlus1> ${receiverName}<$tupleX>.zip(
 						|	other: ArbArgsGenerator<A$upperNumberPlus1>
 						|): ${className}<$tupleXPlus1> = zip(other${
 							if (upperNumber == 1) ", ::Tuple2)"
@@ -225,18 +242,18 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 					).appendLine()
 				}
 
-				zipDependent.forEach { (_, _, className, sb) ->
+				zipDependent.forEach { (_, _, className, receiverName, sb) ->
 					val tupleType = tupleType(upperNumber, "A1")
 					sb.append(
 						"""
 						|/**
-						| * Creates for each generated value of type [$tupleType] by `this` [$className] an [ArbArgsGenerator]
-						| * with the help of the given [otherFactory] and then zips the value of `this` [${className}]
+						| * Creates for each generated value of type [$tupleType] by `this` [$receiverName] an [ArbArgsGenerator]
+						| * with the help of the given [otherFactory] and then zips the value of `this` [${receiverName}]
 						| * with one value of the other [ArbArgsGenerator].
 						| *
 						| * @param otherFactory Builds an [ArbArgsGenerator] based on a given value of type [$tupleType].
 						| *
-						| * @param A1 The type of values generated by `this` [$className].
+						| * @param A1 The type of values generated by `this` [$receiverName].
 						| * @param A2 The type of values generated by the other [ArbArgsGenerator] (built by the given [otherFactory]).
 						| *
 						| * @return The resulting [${className}] which generates values of type [${"Tuple$upperNumberPlus1"}].
@@ -244,7 +261,7 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 						| * @since 2.0.0
 						| */
 						|@JvmName("zipDependentToTuple${upperNumberPlus1}")
-						|fun <$typeArgsPlus1> ${className}<$tupleX>.zipDependent(
+						|fun <$typeArgsPlus1> ${receiverName}<$tupleX>.zipDependent(
 						|	otherFactory: ArbExtensionPoint.($tupleX) -> ArbArgsGenerator<A$upperNumberPlus1>
 						|): ${className}<$tupleXPlus1> = zipDependent(otherFactory${
 							if (upperNumber == 1) ", ::Tuple2)"
@@ -262,15 +279,15 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 		semiOrderedArgsLikeGeneratorCombineAll.forEach { (fileName, _, _, _, sb) ->
 			sb.writeToFile("generators/$fileName.kt")
 		}
-		semiOrderedArgsLikeGeneratorCartesian.forEach { (fileName, _, _, sb) ->
+		semiOrderedArgsLikeGeneratorCartesian.forEach { (fileName, _, _, _, sb) ->
 			sb.writeToFile("generators/$fileName.kt")
 		}
 
-		arbZip.forEach { (fileName, _, _, sb) ->
+		arbZip.forEach { (fileName, _, _, _, sb) ->
 			sb.writeToFile("generators/$fileName.kt")
 		}
 
-		zipDependent.forEach { (fileName, _, _, sb) ->
+		zipDependent.forEach { (fileName, _, _, _, sb) ->
 			sb.writeToFile("generators/$fileName.kt")
 		}
 	}

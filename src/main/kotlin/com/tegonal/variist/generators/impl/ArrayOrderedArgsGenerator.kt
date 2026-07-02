@@ -16,13 +16,13 @@ import com.tegonal.variist.utils.repeatForever
 class ArrayOrderedArgsGenerator<T>(
 	componentFactoryContainer: ComponentFactoryContainer,
 	private val values: Array<T>,
-) : BaseSemiOrderedArgsGenerator<T>(componentFactoryContainer, values.size), OrderedArgsGenerator<T> {
+) : BaseOrderedArgsGenerator<T>(componentFactoryContainer, values.size) {
 
-	override fun generateOneAfterChecks(offset: Int, seedOffset: Int): T {
+	override fun generateOneAfterChecks(offset: Int): T {
 		val index = determineStartingIndex(0, size, offset, 1)
 		return values[index]
 	}
 
-	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<T> =
+	override fun generateAfterChecks(offset: Int): Sequence<T> =
 		repeatForever(values, offset)
 }

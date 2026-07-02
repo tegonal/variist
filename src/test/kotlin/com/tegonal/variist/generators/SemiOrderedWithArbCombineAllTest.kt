@@ -13,7 +13,7 @@ class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnno
 	val a1s = listOf(1, 2)
 	val a2s = listOf('a', 'b', 'c')
 
-	val a1GeneratorOrdered: SemiOrderedArgsGenerator<Int> = customComponentFactoryContainer.ordered.fromList(a1s)
+	val a1GeneratorOrdered: SemiOrderedArgsGenerator<Int> = customComponentFactoryContainer.ordered.fromList(a1s).zip(arb.of(1)) { a1, _ -> a1 }
 	val a2sGenerator = RepeatGivenListArbArgsGenerator(a2s)
 
 	fun createGenerators(): OrderedArgsTestFactoryResult<Pair<Int, Any>> = sequenceOf(
@@ -66,7 +66,7 @@ class SemiOrderedWithArbCombineAllTest : AbstractOrderedArgsGeneratorWithoutAnno
 	private fun createGeneratorsUseOnlyFirstValue(): Sequence<Triple<String, SemiOrderedArgsGenerator<Int>, List<Pair<Int, Any>>>> =
 		createGenerators().map { triple ->
 			triple.mapSecond { semiOrderedArgsGenerator ->
-				semiOrderedArgsGenerator.map { it.first }
+				(semiOrderedArgsGenerator as SemiOrderedArgsGenerator<Pair<Int, Any>>).map { it.first }
 			}
 		}
 

@@ -2,11 +2,12 @@ package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.generators.ArbArgsGenerator
 import com.tegonal.variist.generators.SemiOrderedArgsGenerator
+import com.tegonal.variist.generators.SemiOrderedLikeArgsGenerator
 
 
 /**
- * Maps the values `this` [SemiOrderedArgsGenerator] generates together with an index to type [R] with the help of the
- * given [transform] function.
+ * Maps the values `this` [SemiOrderedLikeArgsGenerator] generates together with an index to type [R] with the help
+ * of the given [transform] function.
  *
  * !! No backward compatibility guarantees !!
  * Reuse at your own risk
@@ -21,16 +22,16 @@ import com.tegonal.variist.generators.SemiOrderedArgsGenerator
  * @since 2.0.0
  */
 @InternalDangerousApi
-fun <T, R> SemiOrderedArgsGenerator<T>.mapIndexedInternal(
+fun <T, R> SemiOrderedLikeArgsGenerator<T>.mapIndexedInternal(
 	transform: (index: Int, T, seedOffset: Int) -> R
 ): SemiOrderedArgsGenerator<R> = transformInternal { seq, seedOffset ->
 	seq.mapIndexed { index, it -> transform(index, it, seedOffset) }
 }
 
 /**
- * Maps the values `this` [ArbArgsGenerator] generates together with an index to a finite
+ * Maps the values `this` [SemiOrderedLikeArgsGenerator] generates together with an index to a finite
  * [Sequence]`<R>` with the help of the given [transform] function and then flattens them so that the
- * resulting [ArbArgsGenerator] returns values of type [R].
+ * resulting [SemiOrderedArgsGenerator] returns values of type [R].
  *
  * !! No backward compatibility guarantees !!
  * Reuse at your own risk
@@ -46,7 +47,7 @@ fun <T, R> SemiOrderedArgsGenerator<T>.mapIndexedInternal(
  * @since 2.0.0
  */
 @InternalDangerousApi
-fun <T, R> SemiOrderedArgsGenerator<T>.flatMapIndexedInternal(
+fun <T, R> SemiOrderedLikeArgsGenerator<T>.flatMapIndexedInternal(
 	transform: (index: Int, T, seedOffset: Int) -> Sequence<R>
 ): SemiOrderedArgsGenerator<R> = transformInternal { seq, seedOffset ->
 	seq.flatMapIndexed { index, it -> transform(index, it, seedOffset) }
@@ -69,10 +70,10 @@ fun <T, R> SemiOrderedArgsGenerator<T>.flatMapIndexedInternal(
  * original in terms of order, OrderedArgsGenerator.size, and a used offset
  */
 @InternalDangerousApi
-fun <R, T> SemiOrderedArgsGenerator<T>.transformInternal(transform: (Sequence<T>) -> Sequence<R>): SemiOrderedArgsGeneratorTransformer<T, R> =
+fun <R, T> SemiOrderedLikeArgsGenerator<T>.transformInternal(transform: (Sequence<T>) -> Sequence<R>): SemiOrderedArgsGeneratorTransformer<T, R> =
 	transformInternal { seq, _ -> transform(seq) }
 
 
 @InternalDangerousApi
-fun <R, T> SemiOrderedArgsGenerator<T>.transformInternal(transform: (Sequence<T>, seedBaseOffset: Int) -> Sequence<R>): SemiOrderedArgsGeneratorTransformer<T, R> =
+fun <R, T> SemiOrderedLikeArgsGenerator<T>.transformInternal(transform: (Sequence<T>, seedBaseOffset: Int) -> Sequence<R>): SemiOrderedArgsGeneratorTransformer<T, R> =
 	SemiOrderedArgsGeneratorTransformer(this, transform)

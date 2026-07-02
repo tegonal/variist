@@ -7,7 +7,7 @@ import com.tegonal.variist.config._components
 import com.tegonal.variist.config.config
 import com.tegonal.variist.generators.ArbArgsGenerator
 import com.tegonal.variist.generators.ArgsGenerator
-import com.tegonal.variist.generators.SemiOrderedArgsGenerator
+import com.tegonal.variist.generators.SemiOrderedLikeArgsGenerator
 import com.tegonal.variist.generators.impl.throwUnsupportedArgsGenerator
 import com.tegonal.variist.providers.AnnotationData
 import com.tegonal.variist.providers.ArgsRange
@@ -60,7 +60,7 @@ abstract class BaseArgsRangeOptionsBasedArgsRangeDecider : ArgsRangeDecider {
 				minOf(maxArgs!!, take)
 			}.let { take ->
 				when (argsGenerator) {
-					is SemiOrderedArgsGenerator -> {
+					is SemiOrderedLikeArgsGenerator -> {
 						// don't take more than the generator size (otherwise we repeat values) unless we allow it
 						// yet, take could also be smaller than the size...
 						minOf(argsGenerator.size, take)

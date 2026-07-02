@@ -1,0 +1,74 @@
+package com.tegonal.variist.generators.impl
+
+import com.tegonal.variist.config.ComponentFactoryContainer
+import com.tegonal.variist.config.ComponentFactoryContainerProvider
+import com.tegonal.variist.generators.SemiOrderedLikeArgsGenerator
+import com.tegonal.variist.utils.BigInt
+import com.tegonal.variist.utils.impl.checkIsPositive
+
+/**
+ * !! No backward compatibility guarantees !!
+ * Reuse at your own risk
+ *
+ * @since 3.0.0
+ */
+abstract class BaseSemiOrderedLikeArgsGenerator<T>(
+	final override val componentFactoryContainer: ComponentFactoryContainer,
+	final override val size: Int
+) : SemiOrderedLikeArgsGenerator<T>, ComponentFactoryContainerProvider {
+
+	constructor(
+		componentFactoryContainer: ComponentFactoryContainer,
+		size: Long
+	) : this(componentFactoryContainer, sizeLongToInt(size))
+
+	constructor(
+		componentFactoryContainer: ComponentFactoryContainer,
+		size: BigInt
+	) : this(componentFactoryContainer, sizeBigIntToInt(size))
+
+	init {
+		checkIsPositive(size, "size")
+	}
+
+	final override fun generateOne(offset: Int, seedOffset: Int): T {
+		checkOffset(offset)
+		return generateOneAfterChecks(offset, seedOffset)
+	}
+
+	final override fun generate(offset: Int, seedOffset: Int): Sequence<T> {
+		checkOffset(offset)
+		return generateAfterChecks(offset, seedOffset)
+	}
+
+	private fun checkOffset(offset: Int) {
+		check(offset >= 0) {
+			"negative offsets are not supported, given $offset"
+		}
+	}
+
+	open fun generateOneAfterChecks(offset: Int, seedOffset: Int): T = run {
+		// we don't use first() as it checks hasNext() in addition and we know that it has to have one as the
+		// Sequence needs to be infinite according to the ArgsGenerator contract
+		generateAfterChecks(offset, seedOffset).iterator().next()
+	}
+
+	abstract fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<T>
+
+	companion object {
+		fun sizeLongToInt(size: Long) =
+			size.toInt().also {
+				check(it.toLong() == size) {
+					// toInt() overflowed
+					"${SemiOrderedLikeArgsGenerator::class.simpleName}.${SemiOrderedLikeArgsGenerator<*>::size.name} only supports Int, the given size ($size) is greater"
+				}
+			}
+
+		fun sizeBigIntToInt(size: BigInt) =
+			size.toInt().also {
+				check(size.bitLength() <= 31) {
+					"${SemiOrderedLikeArgsGenerator::class.simpleName}.${SemiOrderedLikeArgsGenerator<*>::size.name} only supports Int, the given size ($size) is greater"
+				}
+			}
+	}
+}

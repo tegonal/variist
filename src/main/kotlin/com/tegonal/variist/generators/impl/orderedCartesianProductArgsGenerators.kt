@@ -1,8 +1,10 @@
+//TODO 3.0.0 rename file to semiOrderedLikeCartesianProductArgsGenerators
 package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.OrderedArgsGenerator
 import com.tegonal.variist.generators.SemiOrderedArgsGenerator
+import com.tegonal.variist.generators.SemiOrderedLikeArgsGenerator
 import com.tegonal.variist.utils.deriveChildSeedOffset
 import com.tegonal.variist.utils.deriveTwoChildSeedOffsets
 
@@ -16,7 +18,8 @@ class OrderedCartesianProductArgsGenerator<A1, A2, R>(
 	a1Generator: OrderedArgsGenerator<A1>,
 	a2Generator: OrderedArgsGenerator<A2>,
 	transform: (A1, A2) -> R
-) : CartesianProductArgsGenerator<A1, A2, R>(a1Generator, a2Generator, transform), OrderedArgsGenerator<R>
+) : CartesianProductArgsGenerator<A1, A2, R>(a1Generator, a2Generator, transform),
+	OrderedArgsGenerator<R>
 
 /**
  * !! No backward compatibility guarantees !!
@@ -25,10 +28,11 @@ class OrderedCartesianProductArgsGenerator<A1, A2, R>(
  * @since 2.0.0
  */
 class SemiOrderedCartesianProductArgsGenerator<A1, A2, R>(
-	a1Generator: SemiOrderedArgsGenerator<A1>,
-	a2Generator: SemiOrderedArgsGenerator<A2>,
+	a1Generator: SemiOrderedLikeArgsGenerator<A1>,
+	a2Generator: SemiOrderedLikeArgsGenerator<A2>,
 	transform: (A1, A2) -> R
-) : CartesianProductArgsGenerator<A1, A2, R>(a1Generator, a2Generator, transform)
+) : CartesianProductArgsGenerator<A1, A2, R>(a1Generator, a2Generator, transform),
+	SemiOrderedArgsGenerator<R>
 
 /**
  * !! No backward compatibility guarantees !!
@@ -37,10 +41,10 @@ class SemiOrderedCartesianProductArgsGenerator<A1, A2, R>(
  * @since 2.1.0
  */
 abstract class CartesianProductArgsGenerator<A1, A2, R>(
-	private val a1Generator: SemiOrderedArgsGenerator<A1>,
-	private val a2Generator: SemiOrderedArgsGenerator<A2>,
+	private val a1Generator: SemiOrderedLikeArgsGenerator<A1>,
+	private val a2Generator: SemiOrderedLikeArgsGenerator<A2>,
 	private val transform: (A1, A2) -> R
-) : BaseSemiOrderedArgsGenerator<R>(
+) : BaseSemiOrderedLikeArgsGenerator<R>(
 	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,
 	// should you run into weird behaviour (such as one generator uses seed X and the other seed Y) then most likely
 	// someone used two different initial factories

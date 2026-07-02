@@ -155,8 +155,8 @@ class ArgsProviderTest {
 	@ParameterizedTest
 	@ArgsSource("rawNestedTupleLike")
 	fun rawNestedTupleLike_onlyTupleAreFlattened(
-		@Suppress("unused") c: Char,
-		@Suppress("unused") s: String,
+		@Suppress("UNUSED_PARAMETER") ignoredChar: Char,
+		@Suppress("UNUSED_PARAMETER") ignoredString: String,
 		t: Tuple4LikeStructure<Int, Long, Double, Float>
 	) {
 		expect(t.a1.toDouble() + t.a2.toDouble()).toEqual(t.a3)
@@ -210,12 +210,12 @@ class ArgsProviderTest {
 		expect(i.toLong() + c.code).toEqual(result)
 	}
 
-	@Suppress("unused")
+
 	@ParameterizedTest
 	@ArgsSource("nestedTupleLikeOfOrdered")
 	fun nestedTupleLikeOfOrdered_areFlattenedAndSplit(
-		ignoredChar: Char,
-		ignoredString: String,
+		@Suppress("UNUSED_PARAMETER") ignoredChar: Char,
+		@Suppress("UNUSED_PARAMETER") ignoredString: String,
 		i: Int,
 		c: Char,
 		l: Long,

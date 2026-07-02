@@ -12,7 +12,7 @@ import com.tegonal.variist.config.toOffset
 import com.tegonal.variist.providers.ArgsRange
 import com.tegonal.variist.utils.createVariistRandom
 
-typealias OrderedArgsTestFactoryResult<T> = ArgsTestFactoryResult<T, SemiOrderedArgsGenerator<T>>
+typealias OrderedArgsTestFactoryResult<T> = ArgsTestFactoryResult<T, SemiOrderedLikeArgsGenerator<T>>
 
 abstract class AbstractOrderedArgsGeneratorWithoutAnnotationsTest : AbstractArgsGeneratorTest() {
 

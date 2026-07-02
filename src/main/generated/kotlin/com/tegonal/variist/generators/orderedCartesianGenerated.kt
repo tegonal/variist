@@ -18,7 +18,7 @@ import ch.tutteli.kbox.Tuple9
 
 /**
  * Combines `this` [OrderedArgsGenerator] with the given [other]&nbsp;[OrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple2].
+ * Cartesian product where the values are transformed into a [Tuple2].
  *
  * The resulting [OrderedArgsGenerator] generates
  * [this.size][OrderedArgsGenerator.size] * [other.size][OrderedArgsGenerator.size] values before repeating.
@@ -37,7 +37,7 @@ fun <A1, A2> OrderedArgsGenerator<A1>.cartesian(
 
 /**
  * Combines `this` [OrderedArgsGenerator] with the given [other]&nbsp;[OrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple3].
+ * Cartesian product where the values are transformed into a [Tuple3].
  *
  * The resulting [OrderedArgsGenerator] generates
  * [this.size][OrderedArgsGenerator.size] * [other.size][OrderedArgsGenerator.size] values before repeating.
@@ -58,7 +58,7 @@ fun <A1, A2, A3> OrderedArgsGenerator<Tuple2<A1, A2>>.cartesian(
 
 /**
  * Combines `this` [OrderedArgsGenerator] with the given [other]&nbsp;[OrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple4].
+ * Cartesian product where the values are transformed into a [Tuple4].
  *
  * The resulting [OrderedArgsGenerator] generates
  * [this.size][OrderedArgsGenerator.size] * [other.size][OrderedArgsGenerator.size] values before repeating.
@@ -79,7 +79,7 @@ fun <A1, A2, A3, A4> OrderedArgsGenerator<Tuple3<A1, A2, A3>>.cartesian(
 
 /**
  * Combines `this` [OrderedArgsGenerator] with the given [other]&nbsp;[OrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple5].
+ * Cartesian product where the values are transformed into a [Tuple5].
  *
  * The resulting [OrderedArgsGenerator] generates
  * [this.size][OrderedArgsGenerator.size] * [other.size][OrderedArgsGenerator.size] values before repeating.
@@ -100,7 +100,7 @@ fun <A1, A2, A3, A4, A5> OrderedArgsGenerator<Tuple4<A1, A2, A3, A4>>.cartesian(
 
 /**
  * Combines `this` [OrderedArgsGenerator] with the given [other]&nbsp;[OrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple6].
+ * Cartesian product where the values are transformed into a [Tuple6].
  *
  * The resulting [OrderedArgsGenerator] generates
  * [this.size][OrderedArgsGenerator.size] * [other.size][OrderedArgsGenerator.size] values before repeating.
@@ -121,7 +121,7 @@ fun <A1, A2, A3, A4, A5, A6> OrderedArgsGenerator<Tuple5<A1, A2, A3, A4, A5>>.ca
 
 /**
  * Combines `this` [OrderedArgsGenerator] with the given [other]&nbsp;[OrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple7].
+ * Cartesian product where the values are transformed into a [Tuple7].
  *
  * The resulting [OrderedArgsGenerator] generates
  * [this.size][OrderedArgsGenerator.size] * [other.size][OrderedArgsGenerator.size] values before repeating.
@@ -142,7 +142,7 @@ fun <A1, A2, A3, A4, A5, A6, A7> OrderedArgsGenerator<Tuple6<A1, A2, A3, A4, A5,
 
 /**
  * Combines `this` [OrderedArgsGenerator] with the given [other]&nbsp;[OrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple8].
+ * Cartesian product where the values are transformed into a [Tuple8].
  *
  * The resulting [OrderedArgsGenerator] generates
  * [this.size][OrderedArgsGenerator.size] * [other.size][OrderedArgsGenerator.size] values before repeating.
@@ -163,7 +163,7 @@ fun <A1, A2, A3, A4, A5, A6, A7, A8> OrderedArgsGenerator<Tuple7<A1, A2, A3, A4,
 
 /**
  * Combines `this` [OrderedArgsGenerator] with the given [other]&nbsp;[OrderedArgsGenerator] resulting in their
- * cartesian product where the values are transformed into a [Tuple9].
+ * Cartesian product where the values are transformed into a [Tuple9].
  *
  * The resulting [OrderedArgsGenerator] generates
  * [this.size][OrderedArgsGenerator.size] * [other.size][OrderedArgsGenerator.size] values before repeating.

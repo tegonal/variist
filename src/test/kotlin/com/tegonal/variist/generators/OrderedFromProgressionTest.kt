@@ -44,7 +44,7 @@ class OrderedFromProgressionTest : AbstractOrderedArgsGeneratorTest<Any>() {
 		expect {
 			ordered.fromProgression(from..Int.MAX_VALUE step 1)
 		}.toThrow<IllegalStateException> {
-			messageToContain("OrderedArgsGenerator.size only supports Int")
+			messageToContain("SemiOrderedLikeArgsGenerator.size only supports Int")
 		}
 	}
 
@@ -55,7 +55,7 @@ class OrderedFromProgressionTest : AbstractOrderedArgsGeneratorTest<Any>() {
 		expect {
 			ordered.fromProgression(from.toLong()..Int.MAX_VALUE.toLong() step 1)
 		}.toThrow<IllegalStateException> {
-			messageToContain("OrderedArgsGenerator.size only supports Int")
+			messageToContain("SemiOrderedLikeArgsGenerator.size only supports Int")
 		}
 	}
 
@@ -66,7 +66,7 @@ class OrderedFromProgressionTest : AbstractOrderedArgsGeneratorTest<Any>() {
 		expect {
 			ordered.fromProgression(from..Long.MAX_VALUE step 1)
 		}.toThrow<IllegalStateException> {
-			messageToContain("OrderedArgsGenerator.size only supports Int")
+			messageToContain("SemiOrderedLikeArgsGenerator.size only supports Int")
 		}
 	}
 

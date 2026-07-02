@@ -20,7 +20,12 @@ class DefaultGenericArgsGeneratorCombiner : GenericArgsGeneratorCombiner {
 		is ArbArgsGenerator<*> ->
 			combineWithArbArgGenerator(firstArgsGenerator, restMaybeArgGenerators)
 
+		//TODO 3.0.0 move map to SemiOrderedLikeArgsGenerator or maybe even to ArgsGenerator? (would require a self-type
+		// or how about providing an extension method and bail out of it is an unknown type?
 		is SemiOrderedArgsGenerator<*> ->
+			combineWithSemiOrderedGenerator(firstArgsGenerator.map { mutableListOf(it) }, restMaybeArgGenerators)
+
+		is OrderedArgsGenerator<*> ->
 			combineWithSemiOrderedGenerator(firstArgsGenerator.map { mutableListOf(it) }, restMaybeArgGenerators)
 
 		else -> throwUnsupportedArgsGenerator(firstArgsGenerator)
@@ -38,7 +43,7 @@ class DefaultGenericArgsGeneratorCombiner : GenericArgsGeneratorCombiner {
 					list.also { it.add(aNext) }
 				}
 
-				is SemiOrderedArgsGenerator<*> -> {
+				is SemiOrderedLikeArgsGenerator<*> -> {
 					// return early, i.e. exit the for loop and return the result of combineWithSemiOrderedGenerator
 					return combineWithSemiOrderedGenerator(acc.toSemiOrdered(), restMaybeArgGenerators.drop(i))
 				}
@@ -50,9 +55,9 @@ class DefaultGenericArgsGeneratorCombiner : GenericArgsGeneratorCombiner {
 	}
 
 	private fun combineWithSemiOrderedGenerator(
-		first: SemiOrderedArgsGenerator<MutableList<Any?>>,
+		first: SemiOrderedLikeArgsGenerator<MutableList<Any?>>,
 		restMaybeArgGenerators: List<*>
-	): SemiOrderedArgsGenerator<List<Any?>> = restMaybeArgGenerators.fold(first) { generator, next ->
+	): SemiOrderedLikeArgsGenerator<List<Any?>> = restMaybeArgGenerators.fold(first) { generator, next ->
 		when (next) {
 			is ArgsGenerator<*> -> generator.combine(next) { list, aNext ->
 				list.also { it.add(aNext) }

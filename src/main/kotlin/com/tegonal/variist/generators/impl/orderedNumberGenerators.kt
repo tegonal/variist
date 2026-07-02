@@ -18,7 +18,7 @@ class IntFromUntilOrderedArgsGenerator(
 	private val from: Int,
 	private val toExclusive: Int,
 	private val step: Int,
-) : BaseSemiOrderedArgsGenerator<Int>(
+) : BaseOrderedArgsGenerator<Int>(
 	componentFactoryContainer,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
@@ -27,20 +27,20 @@ class IntFromUntilOrderedArgsGenerator(
 		// range size could be bigger than Int.MAX_VALUE, hence we use toLong
 		calculatedRangeSizeToArgsGeneratorSize(from.toLong(), toExclusive.toLong(), step.toLong())
 	}
-), OrderedArgsGenerator<Int> {
+) {
 
-	override fun generateOneAfterChecks(offset: Int, seedOffset: Int): Int {
+	override fun generateOneAfterChecks(offset: Int): Int {
 		// index = value so we can directly return it
 		return determineStartingIndex(from, toExclusive, offset, step)
 	}
 
-	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<Int> = Sequence {
+	override fun generateAfterChecks(offset: Int): Sequence<Int> = Sequence {
 		IntFromUntilRepeatingIterator(from, toExclusive, offset = offset, step = step)
 	}
 
 	//TODO 3.0.0 bench if overriding toArbArgsGenerator (maybe move it to SemiOrdered(Like)ArgsGenerator so
-	// that third-party implementation can also optimise) with delegating to arb.fromProgression would be faster than the
-	// default implementation.
+	// that third-party implementation can also optimise) with delegating to arb.fromProgression would be faster than
+	// the default implementation.
 }
 
 /**
@@ -54,7 +54,7 @@ class LongFromUntilOrderedArgsGenerator(
 	private val from: Long,
 	private val toExclusive: Long,
 	private val step: Long,
-) : BaseSemiOrderedArgsGenerator<Long>(
+) : BaseOrderedArgsGenerator<Long>(
 	componentFactoryContainer,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
@@ -63,9 +63,9 @@ class LongFromUntilOrderedArgsGenerator(
 		// range size could be bigger than Int.MAX_VALUE, hence we use toBigInt
 		calculatedRangeSizeToArgsGeneratorSize(from.toBigInt(), toExclusive.toBigInt(), step.toBigInt())
 	}
-), OrderedArgsGenerator<Long> {
+) {
 
-	override fun generateOneAfterChecks(offset: Int, seedOffset: Int): Long {
+	override fun generateOneAfterChecks(offset: Int): Long {
 		// index = value so we can directly return it
 		return determineStartingIndex(
 			// toExclusive - from could overflow, so we use BigInt
@@ -73,7 +73,7 @@ class LongFromUntilOrderedArgsGenerator(
 		).toLong()
 	}
 
-	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<Long> = Sequence {
+	override fun generateAfterChecks(offset: Int): Sequence<Long> = Sequence {
 		LongFromUntilRepeatingIterator(from, toExclusive, offset = offset.toLong(), step = step)
 	}
 }
@@ -89,7 +89,7 @@ class BigIntFromUntilOrderedArgsGenerator(
 	private val from: BigInt,
 	private val toExclusive: BigInt,
 	private val step: BigInt,
-) : BaseSemiOrderedArgsGenerator<BigInt>(
+) : BaseOrderedArgsGenerator<BigInt>(
 	componentFactoryContainer,
 	run {
 		// we first check the numbers before calculating the size as the size would be wrong
@@ -99,12 +99,12 @@ class BigIntFromUntilOrderedArgsGenerator(
 	}
 ), OrderedArgsGenerator<BigInt> {
 
-	override fun generateOneAfterChecks(offset: Int, seedOffset: Int): BigInt {
+	override fun generateOneAfterChecks(offset: Int): BigInt {
 		// index = value so we can directly return it
 		return determineStartingIndex(from, toExclusive, offset.toBigInt(), step)
 	}
 
-	override fun generateAfterChecks(offset: Int, seedOffset: Int): Sequence<BigInt> = Sequence {
+	override fun generateAfterChecks(offset: Int): Sequence<BigInt> = Sequence {
 		BigIntFromUntilRepeatingIterator(from, toExclusive, offset = offset.toBigInt(), step = step)
 	}
 }

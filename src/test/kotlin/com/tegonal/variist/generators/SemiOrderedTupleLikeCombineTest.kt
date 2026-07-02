@@ -14,8 +14,8 @@ class SemiOrderedTupleLikeCombineTest : AbstractOrderedCombinerTest() {
 	fun combineAll_Pair(numOfInts: Int, numOfChars: Int) {
 		val a1s = (1..numOfInts).toList()
 		val a2s = (1..numOfChars).map { 'A' + it }
-		val a1Generator: SemiOrderedArgsGenerator<Int> = ordered.fromList(a1s)
-		val a2Generator: SemiOrderedArgsGenerator<Char> = ordered.fromList(a2s)
+		val a1Generator: SemiOrderedArgsGenerator<Int> = ordered.fromList(a1s).zip(arb.of(1)) { a1, _ -> a1 }
+		val a2Generator: SemiOrderedArgsGenerator<Char> = ordered.fromList(a2s).zip(arb.of(1)) { a1, _ -> a1 }
 		val generator: SemiOrderedArgsGenerator<Pair<Int, Char>> = Tuple(a1Generator, a2Generator).combineAll()
 
 		validateGeneration(generator.map { pair -> pair.toList() }, listOf(a1s, a2s))
@@ -27,9 +27,9 @@ class SemiOrderedTupleLikeCombineTest : AbstractOrderedCombinerTest() {
 		val a1s = (1..numOfInts).toList()
 		val a2s = (1..numOfChars).map { 'A' + it }
 		val a3s = (1..numOfStrings).map { ('a' + it).toString() }
-		val a1Generator: SemiOrderedArgsGenerator<Int> = ordered.fromList(a1s)
-		val a2Generator: SemiOrderedArgsGenerator<Char> = ordered.fromList(a2s)
-		val a3Generator: SemiOrderedArgsGenerator<String> = ordered.fromList(a3s)
+		val a1Generator: SemiOrderedArgsGenerator<Int> = ordered.fromList(a1s).zip(arb.of(1)) { a1, _ -> a1 }
+		val a2Generator: SemiOrderedArgsGenerator<Char> = ordered.fromList(a2s).zip(arb.of(1)) { a1, _ -> a1 }
+		val a3Generator: SemiOrderedArgsGenerator<String> = ordered.fromList(a3s).zip(arb.of(1)) { a1, _ -> a1 }
 		val generator: SemiOrderedArgsGenerator<Triple<Int, Char, String>> =
 			Tuple(a1Generator, a2Generator, a3Generator).combineAll()
 
@@ -42,9 +42,9 @@ class SemiOrderedTupleLikeCombineTest : AbstractOrderedCombinerTest() {
 		val a1s = (1..numOfInts).toList()
 		val a2s = (1..numOfChars).map { 'A' + it }
 		val a3s = (1..numOfStrings).map { ('a' + it).toString() }
-		val a1Generator: SemiOrderedArgsGenerator<Int> = ordered.fromList(a1s)
-		val a2Generator: SemiOrderedArgsGenerator<Char> = ordered.fromList(a2s)
-		val a3Generator: SemiOrderedArgsGenerator<String> = ordered.fromList(a3s)
+		val a1Generator: SemiOrderedArgsGenerator<Int> = ordered.fromList(a1s).zip(arb.of(1)) { a1, _ -> a1 }
+		val a2Generator: SemiOrderedArgsGenerator<Char> = ordered.fromList(a2s).zip(arb.of(1)) { a1, _ -> a1 }
+		val a3Generator: SemiOrderedArgsGenerator<String> = ordered.fromList(a3s).zip(arb.of(1)) { a1, _ -> a1 }
 		val generator: SemiOrderedArgsGenerator<Tuple4<Int, Char, String, Int>> =
 			Tuple4LikeStructure(a1Generator, a2Generator, a3Generator, a1Generator).toTuple().combineAll()
 

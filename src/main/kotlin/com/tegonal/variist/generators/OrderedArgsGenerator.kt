@@ -13,20 +13,31 @@ package com.tegonal.variist.generators
 // DynamicOrderedArgsGenerator then we can distinguish the cases and only materialise in case of a
 // StaticOrderedArgsGenerator.
 // Also Static/Dynamic is not very intuitive, search for a better name
-interface OrderedArgsGenerator<out T> : SemiOrderedArgsGenerator<T> {
+interface OrderedArgsGenerator<out T> : SemiOrderedLikeArgsGenerator<T> {
 
 	/**
 	 * Returns the maximum of values `this` generator is able to generate before it starts over again.
-	 *
-	 * @since 2.0.0
 	 */
 	override val size: Int
 
 	/**
+	 * Returns the value at the given [offset].
+	 */
+	fun generateOne(offset: Int): T =
+		@Suppress("DEPRECATION")
+		generateOne(offset, seedOffset = 0)
+
+	/**
 	 * Returns an infinite [Sequence] of values starting at [offset] and repeating after reaching [size] of values
 	 * where the same values are always generated when called multiple times.
-	 *
-	 * @since 2.0.0
 	 */
+	fun generate(offset: Int): Sequence<T> =
+		@Suppress("DEPRECATION")
+		generate(offset, seedOffset = 0)
+
+	@Deprecated("Use generateOne without seedOffset because seedOffset is ignored. This method mainly exists so that you can abstract over SemiOrderedLikeArgsGenerator")
+	override fun generateOne(offset: Int, seedOffset: Int): T
+
+	@Deprecated("Use generate without seedOffset because seedOffset is ignored. This method mainly exists so that you can abstract over SemiOrderedLikeArgsGenerator")
 	override fun generate(offset: Int, seedOffset: Int): Sequence<T>
 }

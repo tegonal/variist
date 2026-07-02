@@ -7,6 +7,12 @@ import com.tegonal.variist.generators.GeneratorExtensionPoint
 import com.tegonal.variist.generators.OrderedExtensionPoint
 import com.tegonal.variist.generators.SemiOrderedExtensionPoint
 
+/**
+ * !! No backward compatibility guarantees !!
+ * Reuse at your own risk
+ *
+ * @since 2.3.0
+ */
 abstract class BaseGeneratorExtensionPoint(
 	override val componentFactoryContainer: ComponentFactoryContainer,
 ) : GeneratorExtensionPoint, ComponentFactoryContainerProvider {

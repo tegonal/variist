@@ -9,7 +9,7 @@ class OrderedAsSemiOrderedTransformationTest : AbstractOrderedArgsGeneratorTest<
 	override fun createGenerators(modifiedOrdered: OrderedExtensionPoint) =
 		listOf(1, 2, 3, 4).let { l ->
 			val mapFun: (Int) -> Int = { it + 1 }
-			val generator = modifiedOrdered.fromList(l) as SemiOrderedArgsGenerator<Int>
+			val generator = modifiedOrdered.fromList(l).zip(arb.of(1)) { a1, _ -> a1 }
 
 			sequenceOf(
 				Tuple("map", generator.map(mapFun), l.map(mapFun)),
