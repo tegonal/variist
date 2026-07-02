@@ -1,4 +1,3 @@
-//TODO 3.0.0 rename file to semiOrderedLike...
 package com.tegonal.variist.generators
 
 import com.tegonal.variist.generators.impl.SemiOrderedArgsGeneratorConcatenator
@@ -53,8 +52,8 @@ fun <T> Sequence<SemiOrderedArgsGenerator<T>>.concatAll(): SemiOrderedArgsGenera
 	// we know that we use SemiOrderedArgsGeneratorConcatenator which is a SemiOrderedArgsGenerator. I.e. as soon as we
 	// have 2 or more generators in the Sequence we can be sure we deal with a SemiOrderedArgsGenerator.
 	// Since we know that also the first generator in the Sequence has to be a SemiOrderedArgsGenerator we can be
-	// sure it the resulting is a SemiOrderedArgsGenerator as well.
-	return concatAll(iterator()) as SemiOrderedArgsGenerator<T>
+	// sure the resulting generator is a SemiOrderedArgsGenerator as well.
+	return (this as Sequence<SemiOrderedLikeArgsGenerator<T>>).concatAll() as SemiOrderedArgsGenerator<T>
 }
 
 /**
@@ -74,8 +73,8 @@ fun <T> Iterable<SemiOrderedArgsGenerator<T>>.concatAll(): SemiOrderedArgsGenera
 	// we know that we use SemiOrderedArgsGeneratorConcatenator which is a SemiOrderedArgsGenerator. I.e. as soon as we
 	// have 2 or more generators in the Sequence we can be sure we deal with a SemiOrderedArgsGenerator.
 	// Since we know that also the first generator in the Sequence has to be a SemiOrderedArgsGenerator we can be
-	// sure it the resulting is a SemiOrderedArgsGenerator as well.
-	return concatAll(iterator()) as SemiOrderedArgsGenerator<T>
+	// sure the resulting generator is a SemiOrderedArgsGenerator as well.
+	return (this as Iterable<SemiOrderedLikeArgsGenerator<T>>).concatAll() as SemiOrderedArgsGenerator<T>
 }
 
 private fun <T> concatAll(iterator: Iterator<SemiOrderedLikeArgsGenerator<T>>): SemiOrderedLikeArgsGenerator<T> {

@@ -1,4 +1,4 @@
-@file:JvmName("SemiOrderedZipKt")
+@file:JvmName("SemiOrderedLikeZipKt")
 @file:JvmMultifileClass
 // --------------------------------------------------------------------------------------------------------------------
 // automatically generated, don't modify here but in:

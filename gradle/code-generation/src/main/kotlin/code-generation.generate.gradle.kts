@@ -66,10 +66,9 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 
 		val semiOrderedArgsLikeGeneratorCartesian = listOf(
 			Tuple("orderedCartesianGenerated", "OrderedCartesianKt", "OrderedArgsGenerator", "OrderedArgsGenerator"),
-			//TODO 3.0.0 rename file to semiOrderedLikeCartesianGenerated
 			Tuple(
-				"semiOrderedCartesianGenerated",
-				"SemiOrderedCartesianKt",
+				"semiOrderedLikeCartesianGenerated",
+				"SemiOrderedLikeCartesianKt",
 				"SemiOrderedArgsGenerator",
 				"SemiOrderedLikeArgsGenerator"
 			),
@@ -85,10 +84,9 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 
 		val arbZip = listOf(
 			Tuple("arbZipGenerated", "ArbZipKt", "ArbArgsGenerator", "ArbArgsGenerator"),
-			//TODO 3.0.0 rename file to semiOrderedLikeZipGenerated
 			Tuple(
-				"semiOrderedZipGenerated",
-				"SemiOrderedZipKt",
+				"semiOrderedLikeZipGenerated",
+				"SemiOrderedLikeZipKt",
 				"SemiOrderedArgsGenerator",
 				"SemiOrderedLikeArgsGenerator"
 			)
@@ -105,9 +103,8 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 		val zipDependent = listOf(
 			Tuple("arbZipDependentGenerated", "ArbZipDependentKt", "ArbArgsGenerator", "ArbArgsGenerator"),
 			Tuple(
-				//TODO 3.0.0 rename file to semiOrderedLikeZipDependentGenerated
-				"semiOrderedZipDependentGenerated",
-				"SemiOrderedZipDependentKt",
+				"semiOrderedLikeZipDependentGenerated",
+				"SemiOrderedLikeZipDependentKt",
 				"SemiOrderedArgsGenerator",
 				"SemiOrderedLikeArgsGenerator"
 			)
