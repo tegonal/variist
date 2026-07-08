@@ -20,12 +20,7 @@ class DefaultGenericArgsGeneratorCombiner : GenericArgsGeneratorCombiner {
 		is ArbArgsGenerator<*> ->
 			combineWithArbArgGenerator(firstArgsGenerator, restMaybeArgGenerators)
 
-		//TODO 3.0.0 move map to SemiOrderedLikeArgsGenerator or maybe even to ArgsGenerator? (would require a self-type
-		// or how about providing an extension method and bail out of it is an unknown type?
-		is SemiOrderedArgsGenerator<*> ->
-			combineWithSemiOrderedGenerator(firstArgsGenerator.map { mutableListOf(it) }, restMaybeArgGenerators)
-
-		is OrderedArgsGenerator<*> ->
+		is SemiOrderedLikeArgsGenerator<*> ->
 			combineWithSemiOrderedGenerator(firstArgsGenerator.map { mutableListOf(it) }, restMaybeArgGenerators)
 
 		else -> throwUnsupportedArgsGenerator(firstArgsGenerator)
@@ -34,7 +29,7 @@ class DefaultGenericArgsGeneratorCombiner : GenericArgsGeneratorCombiner {
 	private fun combineWithArbArgGenerator(
 		firstArgsGenerator: ArbArgsGenerator<*>,
 		restMaybeArgGenerators: List<*>
-	): ArgsGenerator<List<*>> {
+	): ArgsGenerator<List<Any?>> {
 		var acc = firstArgsGenerator.map { mutableListOf(it) }
 		for (i in restMaybeArgGenerators.indices) {
 			val next = restMaybeArgGenerators[i]

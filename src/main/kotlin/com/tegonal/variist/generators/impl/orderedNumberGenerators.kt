@@ -2,7 +2,6 @@ package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.config.ComponentFactoryContainer
 import com.tegonal.variist.generators.OrderedArgsGenerator
-import com.tegonal.variist.generators.map
 import com.tegonal.variist.utils.BigInt
 import com.tegonal.variist.utils.impl.*
 import com.tegonal.variist.utils.toBigInt

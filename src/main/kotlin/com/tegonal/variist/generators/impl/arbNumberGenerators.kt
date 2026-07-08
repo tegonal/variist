@@ -2,7 +2,6 @@ package com.tegonal.variist.generators.impl
 
 import com.tegonal.variist.config.ComponentFactoryContainer
 import com.tegonal.variist.generators.ArbArgsGenerator
-import com.tegonal.variist.generators.map
 import com.tegonal.variist.utils.BigInt
 import com.tegonal.variist.utils.nextBigInt
 import com.tegonal.variist.utils.toBigInt
