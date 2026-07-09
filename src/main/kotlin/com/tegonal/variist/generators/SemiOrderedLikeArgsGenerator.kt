@@ -12,6 +12,9 @@ package com.tegonal.variist.generators
  * @since 3.0.0
  */
 interface SemiOrderedLikeArgsGenerator<out T> : ArgsGenerator<T> {
+
+	override fun <R> map(transform: (T) -> R): SemiOrderedLikeArgsGenerator<R>
+
 	/**
 	 * Returns the maximum of values `this` generator is able to generate before some part/aspect of it starts
 	 * over again.
