@@ -194,7 +194,7 @@ val generate: TaskProvider<Task> = tasks.register("generate") {
 						| *
 						| * @param other The other [${receiverName}] which generates values of type [A$upperNumberPlus1].
 						| *
-						| * @return The resulting [${className}] which represents the cartesian product and
+						| * @return The resulting [${className}] which represents the Cartesian product and
 						| *   generates values of type [${"Tuple$upperNumberPlus1"}].
 						| *
 						| * @since 2.0.0

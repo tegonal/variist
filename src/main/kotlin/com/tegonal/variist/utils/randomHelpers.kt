@@ -128,7 +128,7 @@ fun createVariistRandom(): Random = ordered._components.createVariistRandom(seed
 
 
 /**
- * Makes sure the given [seed] is positive, so that it can be used as offset in an [SemiOrderedArgsGenerator].
+ * Makes sure the given [seed] is 0 or positive, so that it can be used as offset in an [SemiOrderedLikeArgsGenerator].
  *
  * @since 2.0.0
  */

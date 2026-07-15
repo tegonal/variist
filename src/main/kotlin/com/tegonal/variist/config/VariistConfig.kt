@@ -1,10 +1,6 @@
 package com.tegonal.variist.config
 
-import com.tegonal.variist.generators.ArbArgsGenerator
-import com.tegonal.variist.generators.ArgsGenerator
-import com.tegonal.variist.generators.SemiOrderedArgsGenerator
-import com.tegonal.variist.generators.generateAndTake
-import com.tegonal.variist.generators.generateAndTakeBasedOnDecider
+import com.tegonal.variist.generators.*
 import com.tegonal.variist.providers.ArgsGeneratorToArgumentsConverter
 import com.tegonal.variist.providers.ArgsRange
 import com.tegonal.variist.providers.ArgsRangeDecider
@@ -38,7 +34,7 @@ class VariistConfig(
 	 * Influences an [ArgsGeneratorToArgumentsConverter]'s choice of how many values should be skipped (dropped),
 	 * i.e. allows to skip certain test cases.
 	 *
-	 * It also affects the helper methods [SemiOrderedArgsGenerator.generateAndTakeBasedOnDecider],
+	 * It also affects the helper methods [SemiOrderedLikeArgsGenerator.generateAndTakeBasedOnDecider],
 	 * [ArbArgsGenerator.generateAndTake] and co.
 	 *
 	 * Must be greater than 0 if set.
