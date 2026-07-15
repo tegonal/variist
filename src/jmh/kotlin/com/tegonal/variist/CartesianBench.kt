@@ -162,8 +162,8 @@ class Radix<A, B, R>(
 
 
 class SmallerBiggerArgsGenerator<A1, A2, R>(
-	private val a1Generator: SemiOrderedArgsGenerator<A1>,
-	private val a2Generator: SemiOrderedArgsGenerator<A2>,
+	private val a1Generator: SemiOrderedLikeArgsGenerator<A1>,
+	private val a2Generator: SemiOrderedLikeArgsGenerator<A2>,
 	private val transform: (A1, A2) -> R
 ) : BaseSemiOrderedArgsGenerator<R>(
 	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,
@@ -205,8 +205,8 @@ class SmallerBiggerArgsGenerator<A1, A2, R>(
 	}
 
 	/**
-	 * Combines two [SemiOrderedArgsGenerator] by letting the bigger
-	 * (in terms of [SemiOrderedArgsGenerator.size] = maxSize) generate repeatedly values starting from the defined offset and by letting the smaller generate chunks of maxSize
+	 * Combines two [SemiOrderedLikeArgsGenerator] by letting the bigger
+	 * (in terms of [SemiOrderedLikeArgsGenerator.size] = maxSize) generate repeatedly values starting from the defined offset and by letting the smaller generate chunks of maxSize
 	 * whereas the offset progresses from the given [offset] until its [SemiOrderedArgsGenerator.size].
 	 *
 	 * This approach allows to generate lazily combined values without the need to generate more data than needed.

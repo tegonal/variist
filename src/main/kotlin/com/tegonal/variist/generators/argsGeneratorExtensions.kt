@@ -66,8 +66,8 @@ fun <T> SemiOrderedLikeArgsGenerator<T>.generateAndTake(argsRange: ArgsRange): S
  * @since 2.0.0
  */
 fun <T> OrderedArgsGenerator<T>.generateAndTake(argsRange: ArgsRange): Sequence<T> {
-	// this extension method exists as optimisation. If we deal with an OrderedArgsGenerator we can calculate the offset
-	// which avoids generating and discarding values as we have to do with skip
+	// this extension method exists as an optimisation. If we deal with an OrderedArgsGenerator we can calculate
+	// the offset which avoids generating and discarding values as we have to do with skip
 	val offset = getOffsetTakingSkipIntoAccount(argsRange)
 	return generate(offset).take(argsRange.take)
 }

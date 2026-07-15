@@ -25,7 +25,7 @@ import ch.tutteli.kbox.Tuple9
  *
  * @param other The other [OrderedArgsGenerator] which generates values of type [A2].
  *
- * @return The resulting [OrderedArgsGenerator] which represents the cartesian product and
+ * @return The resulting [OrderedArgsGenerator] which represents the Cartesian product and
  *   generates values of type [Tuple2].
  *
  * @since 2.0.0
@@ -44,7 +44,7 @@ fun <A1, A2> OrderedArgsGenerator<A1>.cartesian(
  *
  * @param other The other [OrderedArgsGenerator] which generates values of type [A3].
  *
- * @return The resulting [OrderedArgsGenerator] which represents the cartesian product and
+ * @return The resulting [OrderedArgsGenerator] which represents the Cartesian product and
  *   generates values of type [Tuple3].
  *
  * @since 2.0.0
@@ -65,7 +65,7 @@ fun <A1, A2, A3> OrderedArgsGenerator<Tuple2<A1, A2>>.cartesian(
  *
  * @param other The other [OrderedArgsGenerator] which generates values of type [A4].
  *
- * @return The resulting [OrderedArgsGenerator] which represents the cartesian product and
+ * @return The resulting [OrderedArgsGenerator] which represents the Cartesian product and
  *   generates values of type [Tuple4].
  *
  * @since 2.0.0
@@ -86,7 +86,7 @@ fun <A1, A2, A3, A4> OrderedArgsGenerator<Tuple3<A1, A2, A3>>.cartesian(
  *
  * @param other The other [OrderedArgsGenerator] which generates values of type [A5].
  *
- * @return The resulting [OrderedArgsGenerator] which represents the cartesian product and
+ * @return The resulting [OrderedArgsGenerator] which represents the Cartesian product and
  *   generates values of type [Tuple5].
  *
  * @since 2.0.0
@@ -107,7 +107,7 @@ fun <A1, A2, A3, A4, A5> OrderedArgsGenerator<Tuple4<A1, A2, A3, A4>>.cartesian(
  *
  * @param other The other [OrderedArgsGenerator] which generates values of type [A6].
  *
- * @return The resulting [OrderedArgsGenerator] which represents the cartesian product and
+ * @return The resulting [OrderedArgsGenerator] which represents the Cartesian product and
  *   generates values of type [Tuple6].
  *
  * @since 2.0.0
@@ -128,7 +128,7 @@ fun <A1, A2, A3, A4, A5, A6> OrderedArgsGenerator<Tuple5<A1, A2, A3, A4, A5>>.ca
  *
  * @param other The other [OrderedArgsGenerator] which generates values of type [A7].
  *
- * @return The resulting [OrderedArgsGenerator] which represents the cartesian product and
+ * @return The resulting [OrderedArgsGenerator] which represents the Cartesian product and
  *   generates values of type [Tuple7].
  *
  * @since 2.0.0
@@ -149,7 +149,7 @@ fun <A1, A2, A3, A4, A5, A6, A7> OrderedArgsGenerator<Tuple6<A1, A2, A3, A4, A5,
  *
  * @param other The other [OrderedArgsGenerator] which generates values of type [A8].
  *
- * @return The resulting [OrderedArgsGenerator] which represents the cartesian product and
+ * @return The resulting [OrderedArgsGenerator] which represents the Cartesian product and
  *   generates values of type [Tuple8].
  *
  * @since 2.0.0
@@ -170,7 +170,7 @@ fun <A1, A2, A3, A4, A5, A6, A7, A8> OrderedArgsGenerator<Tuple7<A1, A2, A3, A4,
  *
  * @param other The other [OrderedArgsGenerator] which generates values of type [A9].
  *
- * @return The resulting [OrderedArgsGenerator] which represents the cartesian product and
+ * @return The resulting [OrderedArgsGenerator] which represents the Cartesian product and
  *   generates values of type [Tuple9].
  *
  * @since 2.0.0
