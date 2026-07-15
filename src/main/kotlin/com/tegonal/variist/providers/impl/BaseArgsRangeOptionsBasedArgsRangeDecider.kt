@@ -31,7 +31,7 @@ abstract class BaseArgsRangeOptionsBasedArgsRangeDecider : ArgsRangeDecider {
 		val config = argsGenerator._components.config
 		val profile = annotationData?.argsRangeOptions?.profile ?: config.defaultProfile
 
-		return decideArgsRange(profile, config.activeEnv, argsGenerator)
+		return decideArgsRange(profile, config.activeEnv, argsGenerator, annotationData?.offset)
 			.adjustTakeIfNecessary(config, annotationData?.argsRangeOptions, argsGenerator)
 	}
 
@@ -44,7 +44,8 @@ abstract class BaseArgsRangeOptionsBasedArgsRangeDecider : ArgsRangeDecider {
 	protected abstract fun decideArgsRange(
 		profileName: String,
 		env: String,
-		argsGenerator: ArgsGenerator<*>
+		argsGenerator: ArgsGenerator<*>,
+		seedOffset: Int?
 	): ArgsRange
 
 	private fun ArgsRange.adjustTakeIfNecessary(

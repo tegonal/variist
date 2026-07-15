@@ -9,7 +9,17 @@ import com.tegonal.variist.config.merge
  * @since 2.0.0
  */
 class AnnotationData(
-	val argsRangeOptions: ArgsRangeOptions,
+	val argsRangeOptions: ArgsRangeOptions? = null,
+
+	/**
+	 * Offset to be used to derive a new offset or a new seed based on [com.tegonal.variist.config.VariistConfig.seed].
+	 *
+	 * This is useful when you want to generate different arguments for the same/similar ArgsProviders, e.g. for
+	 * different test methods/classes.
+	 *
+	 * @since 3.0.0
+	 */
+	val offset: Int? = null,
 
 	/**
 	 * Generic map for extensions of Variist (or your own custom code), intended to be filled by an
@@ -29,8 +39,16 @@ class AnnotationData(
  * @since 2.0.0
  */
 fun AnnotationData.merge(other: AnnotationData): AnnotationData {
+	val thisArgsRangeOptions = this.argsRangeOptions
+	val otherArgsRangeOptions = other.argsRangeOptions
+
 	return AnnotationData(
-		argsRangeOptions = this.argsRangeOptions.merge(other.argsRangeOptions),
+		argsRangeOptions = when {
+			thisArgsRangeOptions == null -> otherArgsRangeOptions
+			otherArgsRangeOptions == null -> thisArgsRangeOptions
+			else -> thisArgsRangeOptions.merge(otherArgsRangeOptions)
+		},
+		offset = other.offset ?: this.offset,
 		extensionData = this.extensionData + other.extensionData
 	)
 }

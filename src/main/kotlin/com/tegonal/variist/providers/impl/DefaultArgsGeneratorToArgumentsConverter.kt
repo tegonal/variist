@@ -2,11 +2,7 @@ package com.tegonal.variist.providers.impl
 
 import com.tegonal.variist.config._components
 import com.tegonal.variist.config.build
-import com.tegonal.variist.generators.ArbArgsGenerator
-import com.tegonal.variist.generators.ArgsGenerator
-import com.tegonal.variist.generators.OrderedArgsGenerator
-import com.tegonal.variist.generators.SemiOrderedArgsGenerator
-import com.tegonal.variist.generators.generateAndTake
+import com.tegonal.variist.generators.*
 import com.tegonal.variist.generators.impl.throwUnsupportedArgsGenerator
 import com.tegonal.variist.providers.AnnotationData
 import com.tegonal.variist.providers.ArgsGeneratorToArgumentsConverter
@@ -29,9 +25,9 @@ class DefaultArgsGeneratorToArgumentsConverter : ArgsGeneratorToArgumentsConvert
 	): Sequence<Arguments> {
 		val argsRange = decideArgsRange(annotationData, argsGenerator)
 		val sequenceOfList = when (argsGenerator) {
-			is ArbArgsGenerator<List<*>> -> argsGenerator.generateAndTake(argsRange.take)
+			is ArbArgsGenerator<List<*>> -> argsGenerator.generateAndTake(argsRange.take, annotationData)
 			is OrderedArgsGenerator<List<*>> -> argsGenerator.generateAndTake(argsRange)
-			is SemiOrderedArgsGenerator<List<*>> -> argsGenerator.generateAndTake(argsRange)
+			is SemiOrderedLikeArgsGenerator<List<*>> -> argsGenerator.generateAndTake(argsRange, annotationData)
 			else -> throwUnsupportedArgsGenerator(argsGenerator)
 		}
 		return sequenceOfList.map { generatorResults ->
