@@ -21,8 +21,8 @@ buildParameters {
 	group("kotlin") {
 		string("version") {
 			fromEnvironment()
-			// we use enumEntries which is only available since 1.9, thus min requirement 1.9
-			defaultValue.set(KotlinVersion.KOTLIN_1_9.version)
+			// Kotlin 2.4 requires at least Kotlin 2.0 and we want to stay up to date with the latest Kotlin version
+			defaultValue.set(KotlinVersion.KOTLIN_2_0.version)
 			description.set("kotlin version used for apiVersion and languageVersion")
 		}
 		bool("werror") {
