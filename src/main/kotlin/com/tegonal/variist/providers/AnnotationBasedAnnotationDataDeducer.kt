@@ -1,5 +1,6 @@
 package com.tegonal.variist.providers
 
+import ch.tutteli.kbox.letIf
 import org.junit.platform.commons.support.AnnotationSupport
 import java.lang.reflect.AnnotatedElement
 import java.lang.reflect.Method
@@ -19,10 +20,17 @@ abstract class BaseAnnotationDataDeducer<A : Annotation>(
 	final override fun deduce(testMethod: Method): AnnotationData? {
 		val classData = deduceData(testMethod.declaringClass)
 		val methodData = deduceData(testMethod)
-		return when {
+		val annotationData = when {
 			classData == null -> methodData
 			methodData == null -> classData
 			else -> classData.merge(methodData)
+		}
+		return AnnotationData(
+			// methods with the same name get the same offset. We guess that's fine and it is not worth to combine it
+			// with the fully qualified class name.
+			offset = testMethod.hashCode()
+		).letIf(annotationData != null) {
+			it.merge(annotationData!!)
 		}
 	}
 

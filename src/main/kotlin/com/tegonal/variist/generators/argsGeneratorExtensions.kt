@@ -16,8 +16,10 @@ import com.tegonal.variist.utils.seedToOffset
  *
  * @since 2.0.0
  */
-fun <T> SemiOrderedLikeArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData: AnnotationData? = null): Sequence<T> =
-	decideArgsRange(annotationData).let(::generateAndTake)
+fun <T> SemiOrderedLikeArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData: AnnotationData? = null): Sequence<T> {
+	val argsRange = decideArgsRange(annotationData)
+	return generateAndTake(argsRange, annotationData)
+}
 
 /**
  * Returns a finite [Sequence] of values based on [VariistConfig.skip] and the [ArgsRange] that the configured
@@ -33,8 +35,10 @@ fun <T> OrderedArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData: An
  *
  * @since 2.0.0
  */
-fun <T> SemiOrderedLikeArgsGenerator<T>.generateOneBasedOnDecider(annotationData: AnnotationData? = null): T =
-	decideArgsRange(annotationData).offset.let(::generateOne)
+fun <T> SemiOrderedLikeArgsGenerator<T>.generateOneBasedOnDecider(annotationData: AnnotationData? = null): T {
+	val argsRange = decideArgsRange(annotationData)
+	return generateOne(argsRange.offset, seedOffset = annotationData?.offset ?: 0)
+}
 
 /**
  * Returns a finite [Sequence] of values based [VariistConfig.skip] and thee [ArgsRange] that the configured
@@ -42,8 +46,10 @@ fun <T> SemiOrderedLikeArgsGenerator<T>.generateOneBasedOnDecider(annotationData
  *
  * @since 2.0.0
  */
-fun <T> ArbArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData: AnnotationData? = null): Sequence<T> =
-	decideArgsRange(annotationData).take.let(this::generateAndTake)
+fun <T> ArbArgsGenerator<T>.generateAndTakeBasedOnDecider(annotationData: AnnotationData? = null): Sequence<T> {
+	val argsRange = decideArgsRange(annotationData)
+	return generateAndTake(argsRange.take, annotationData)
+}
 
 /**
  * Returns the [ArgsRange] the configured [ArgsRangeDecider] decides for this [ArgsGenerator] and the given [annotationData].
@@ -53,12 +59,24 @@ fun <T> ArgsGenerator<T>.decideArgsRange(annotationData: AnnotationData? = null)
 	_components.build<ArgsRangeDecider>().decide(this, annotationData)
 
 /**
+ * Returns a finite [Sequence] of values based on [VariistConfig.skip], the given [argsRange]
+ * and the given [annotationData].[offset][AnnotationData.offset].
+ *
+ * @since 3.0.0
+ */
+fun <T> SemiOrderedLikeArgsGenerator<T>.generateAndTake(
+	argsRange: ArgsRange,
+	annotationData: AnnotationData?
+): Sequence<T> = generateAndTake(argsRange, seedOffset = annotationData?.offset ?: 0)
+
+
+/**
  * Returns a finite [Sequence] of values based on [VariistConfig.skip] and the given [argsRange].
  *
  * @since 2.0.0
  */
-fun <T> SemiOrderedLikeArgsGenerator<T>.generateAndTake(argsRange: ArgsRange): Sequence<T> =
-	skipByConfigAndTake({ generate(argsRange.offset) }, argsRange.take)
+fun <T> SemiOrderedLikeArgsGenerator<T>.generateAndTake(argsRange: ArgsRange, seedOffset: Int = 0): Sequence<T> =
+	skipByConfigAndTake({ generate(argsRange.offset, seedOffset) }, argsRange.take)
 
 /**
  * Returns a finite [Sequence] of values based on [VariistConfig.skip] and the given [argsRange].
@@ -92,12 +110,24 @@ private fun <T> OrderedArgsGenerator<T>.getOffsetTakingSkipIntoAccount(argsRange
 }
 
 /**
+ * Returns a finite [Sequence] of values of size [take] respecting the configured [VariistConfig.skip] and the given
+ * [annotationData].[offset][AnnotationData.offset].
+ *
+ * @since 3.0.0
+ */
+fun <T> ArbArgsGenerator<T>.generateAndTake(take: Int, annotationData: AnnotationData?): Sequence<T> =
+	generateAndTake(take, seedOffset = annotationData?.offset ?: 0)
+
+/**
  * Returns a finite [Sequence] of values of size [take] respecting the configured [VariistConfig.skip].
+ *
+ * @param seedOffset seedOffset which is passed to [ArbArgsGenerator.generate] (since 3.0.0)
  *
  * @since 2.0.0
  */
-fun <T> ArbArgsGenerator<T>.generateAndTake(take: Int): Sequence<T> =
-	skipByConfigAndTake({ generate() }, take)
+fun <T> ArbArgsGenerator<T>.generateAndTake(take: Int, seedOffset: Int = 0): Sequence<T> =
+	skipByConfigAndTake({ generate(seedOffset) }, take)
+
 
 private inline fun <T> ArgsGenerator<T>.skipByConfigAndTake(generate: () -> Sequence<T>, take: Int): Sequence<T> =
 	generate().skipAndTake(_components.config.skip, take)

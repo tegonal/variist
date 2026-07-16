@@ -28,7 +28,7 @@ class ArgsRangeOptions(
 	 * If `true` then [SemiOrderedArgsGenerator.size] does not limit the range size
 	 * in case [requestedMinArgs] is greater.
 	 */
-	val minArgsOverridesSizeLimit: Boolean = false,
+	val minArgsOverridesSizeLimit: Boolean? = null,
 
 	/**
 	 * Should influence an [ArgsRangeDecider]'s choice of [ArgsRange.take], signalling that it should not be greater
@@ -52,7 +52,7 @@ fun ArgsRangeOptions.merge(other: ArgsRangeOptions): ArgsRangeOptions {
 	return ArgsRangeOptions(
 		profile = other.profile ?: this.profile,
 		requestedMinArgs = other.requestedMinArgs ?: this.requestedMinArgs,
-		minArgsOverridesSizeLimit = other.minArgsOverridesSizeLimit,
+		minArgsOverridesSizeLimit = other.minArgsOverridesSizeLimit ?: this.minArgsOverridesSizeLimit,
 		maxArgs = other.maxArgs ?: this.maxArgs,
 	)
 }
