@@ -15,5 +15,12 @@ class ArbOfTest : AbstractArbArgsGeneratorTest<Any>() {
 			modifiedArb.of(1, 5),
 			listOf(1, 5)
 		),
+		listOf("a", "b", "c").let {
+			Tuple(
+				"ofWeighted",
+				modifiedArb.ofWeighted(10 to it[0], 10 to it[2], *it.map { e -> 10 to e }.toTypedArray()),
+				it
+			)
+		}
 	)
 }

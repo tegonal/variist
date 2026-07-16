@@ -30,6 +30,7 @@ import com.tegonal.variist.generators.impl.MultiArbArgsGeneratorRoundRobinMerger
  *
  * @since 2.0.0
  */
+@Suppress("UnusedReceiverParameter")
 fun <T> ArbExtensionPoint.mergeWeighted(
 	first: Pair<Int, ArbArgsGenerator<T>>,
 	second: Pair<Int, ArbArgsGenerator<T>>,
@@ -61,6 +62,7 @@ fun <T> ArbExtensionPoint.mergeWeighted(
  *
  * @since 2.1.0
  */
+@Suppress("UnusedReceiverParameter")
 fun <T> ArbExtensionPoint.mergeRoundRobin(
 	first: ArbArgsGenerator<T>,
 	second: ArbArgsGenerator<T>,
