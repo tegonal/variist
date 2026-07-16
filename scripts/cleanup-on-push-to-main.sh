@@ -21,9 +21,9 @@ sourceOnce "$scriptsDir/run-shfmt.sh"
 
 function cleanupOnPushToMain() {
 	customRunShfmt || die "was not able to format"
-	"$projectDir/gradlew" generateAll
-	"$projectDir/gradlew" :readme-examples:build
-	logSuccess "code generated"
+	"$projectDir/gradlew" generateAll || die "was not able to generateAll"
+	"$projectDir/gradlew" :readme-examples:build || die "was not able to build the readme examples"
+	logSuccess "formatted shell scripts and generated code"
 }
 
 ${__SOURCED__:+return}

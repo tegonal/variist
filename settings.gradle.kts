@@ -17,12 +17,12 @@ dependencyResolutionManagement {
 
 rootProject.name = "variist"
 
-include("misc/tools", "readme-examples")
+includeProject("misc/tools", "readme-examples")
 
-fun Settings_gradle.include(subPath: String, projectName: String) {
-	val dir = file("${rootProject.projectDir}/$subPath/$projectName")
-	if (!dir.exists()) {
-		throw GradleException("cannot include project $projectName as its projectDir $dir does not exist")
+fun Settings.includeProject(subPath: String, projectName: String) {
+	val dir = file("$rootDir/$subPath/$projectName")
+	require(dir.isDirectory) {
+		"Cannot include project `$projectName` because its projectDir file://$dir does not exist."
 	}
 	include(projectName)
 	project(":$projectName").projectDir = dir

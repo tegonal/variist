@@ -10,6 +10,10 @@ plugins {
 	id("ch.tutteli.gradle.plugins.junitjacoco")
 }
 
+junitjacoco {
+	jacoco.toolVersion = "0.8.15"
+}
+
 tasks.configureEach<KotlinCompile> {
 	compilerOptions {
 		jvmTarget.set(JvmTarget.fromTarget(buildParameters.defaultJdkVersion.toString()))
