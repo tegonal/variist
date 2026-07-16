@@ -109,7 +109,7 @@ dependencies {
 
 Minimum requirements:
 
-- Kotlin: 1.9
+- Kotlin: 2.0
 - JDK: 17
 - JUnit: 5.13.0
 

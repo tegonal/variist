@@ -179,7 +179,7 @@ cd ../variist
 
 3. deploy to sonatype central portal:
 (assumes you have an alias named gr pointing to ./gradlew)
-    a) java -version 2>&1 | grep "version \"11" || { echo "please switch the jdk version, is currently not 11"; return 1; } && PUB=true CI=true gr clean pubToMaLo &&
+    a) java -version 2>&1 | grep "version \"17" || { echo "please switch the jdk version, is currently not 17"; return 1; } && PUB=true CI=true gr clean pubToMaLo &&
        tmpDir=$(mktemp -d -t "variist-release-$VARIIST_VERSION-XXXXXXXXXX") &&
        find "$HOME/.m2/repository/com/tegonal/variist" -type d -name "*$VARIIST_VERSION" -print0 |
          while read -r -d $'\0' versionDir; do
