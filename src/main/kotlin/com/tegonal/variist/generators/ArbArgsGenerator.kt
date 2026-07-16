@@ -1,8 +1,6 @@
 package com.tegonal.variist.generators
 
-import com.tegonal.variist.config.ComponentFactoryContainerProvider
 import com.tegonal.variist.config.VariistConfig
-import com.tegonal.variist.generators.impl.DefaultArbExtensionPoint
 import com.tegonal.variist.utils.createVariistRandom
 
 /**
@@ -52,43 +50,3 @@ interface ArbArgsGenerator<out T> : ArgsGenerator<T> {
 	 */
 	fun generate(seedOffset: Int = 0): Sequence<T>
 }
-
-/**
- * Represents an interface each [ArbArgsGenerator] must implement which provides additional core functionality which
- * is relevant for users which create own [ArbArgsGenerator]s or combiner functions.
- *
- * The separation between [ArbArgsGenerator] and [CoreArbArgsGenerator] makes sure the API stays clean for
- * regular users which just use [arb] but don't define own [ArbArgsGenerator] implementations.
- *
- * @since 2.0.0
- */
-@Deprecated("Will be removed with 3.0.0, instead make sure you use the passed seedOffset and use deriveChildSeed when passing it to sub ArbArgsGnerators")
-interface CoreArbArgsGenerator<out T> : ArbArgsGenerator<T>, ComponentFactoryContainerProvider {
-	@Deprecated(
-		"will be removed with 3.0.0, instead make sure you use the passed seedOffset and use deriveChildSeed when passing it to sub ArbArgsGnerators",
-	)
-	val seedBaseOffset: Int get() = 0
-}
-
-/**
- * Creates an [ArbExtensionPoint] based on `this` [CoreArbArgsGenerator].
- *
- * @since 2.0.0
- */
-@Suppress("DEPRECATION")
-@Deprecated("Will be removed with 3.0.0, use arb from ComponentFactoryProvider")
-val <T> CoreArbArgsGenerator<T>.arb: ArbExtensionPoint
-	get() = DefaultArbExtensionPoint(componentFactoryContainer)
-
-/**
- * Casts `this` to a [CoreArbArgsGenerator].
- *
- * @since 2.0.0
- */
-@Deprecated("Will be removed with 3.0.0, instead make sure you use the passed seedOffset and use deriveChildSeed when passing it to sub ArbArgsGnerators")
-@Suppress("ObjectPropertyName", "DEPRECATION")
-val <T> ArbArgsGenerator<T>._core: CoreArbArgsGenerator<T>
-	get() = when (this) {
-		is CoreArbArgsGenerator<T> -> this
-		else -> error("The ${ArbArgsGenerator::class.simpleName} ${this::class.qualifiedName} does not implement ${CoreArbArgsGenerator::class.qualifiedName}, please inform the author.")
-	}
