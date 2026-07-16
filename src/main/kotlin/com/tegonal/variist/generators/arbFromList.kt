@@ -1,6 +1,5 @@
 package com.tegonal.variist.generators
 
-import ch.tutteli.kbox.mapSecond
 import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.impl.ConstantArbArgsGenerator
 import com.tegonal.variist.generators.impl.checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize
@@ -20,31 +19,26 @@ fun <T> ArbExtensionPoint.fromList(args: List<T>): ArbArgsGenerator<T> =
  * according to the defined weights.
  *
  * See [mergeWeighted] for an explanation of the weights.
- * Note, if you want equal probability for each element, then use [arb]`.`&nbsp;[fromList]`(...)` instead.
+ * Note, if you want equal probability for each element, then use
+ * [arb]`.`&nbsp;[fromList][ArbExtensionPoint.fromList]`(...)` instead.
  *
- * @param weightWithValueList A list of values with associated weights where the values will be converted into
- *   a constant [ArbArgsGenerator]
+ * @param weightWithValueList A list of values with associated weights.
  *
- * @throws IllegalArgumentException in case a weight is wrong (is less than 1)
+ * @throws IllegalArgumentException in case a weight is wrong (is less than 1).
+ * @throws IllegalArgumentException if less than two pairs are passed.
  * @throws ArithmeticException in case the weights sum up to [Int.MAX_VALUE] or more.
  *
  * @return The resulting [ArbArgsGenerator].
  *
  * @since 2.2.0
  */
-fun <T> ArbExtensionPoint.fromListWeighted(
-	weightWithValueList: List<Pair<Int, T>>,
-): ArbArgsGenerator<T> {
+fun <T> ArbExtensionPoint.fromListWeighted(weightWithValueList: List<Pair<Int, T>>): ArbArgsGenerator<T> {
 	require(weightWithValueList.size >= 2) {
-		"At least two values must be provided to fromListWeighted"
+		"At least two values must be provided to fromListWeighted, given ${weightWithValueList.size}"
 	}
-	val weightWithGeneratorList = weightWithValueList.map { weightWithValue ->
-		weightWithValue.mapSecond { arb.of(it) }
-	}
-	//TODO 3.5.0 we could introduce a specialised version which does not require ArbArgsGenerator but works on the list directly
-	return mergeWeighted(
-		weightWithGeneratorList[0],
-		weightWithGeneratorList[1],
-		others = weightWithGeneratorList.drop(2).toTypedArray()
+	return ofWeighted(
+		weightWithValueList[0],
+		weightWithValueList[1],
+		othersWeightWithValue = weightWithValueList.drop(2).toTypedArray()
 	)
 }
