@@ -35,7 +35,7 @@ jobs:
           fetch-depth: 1
       - id: set-matrix
         run: |
-          node .github/workflows/matrix.js
+          node .github/workflows/matrix.mjs
 
   gradle_build:
     needs: matrix_prep
