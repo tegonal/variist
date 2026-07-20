@@ -7,14 +7,11 @@
 //
 //                                         Version: v2.0.0-RC-3
 //##################################
-// adapted version of https://github.com/vlsi/github-actions-random-matrix/blob/main/examples/matrix.js
-//##################################
-const {MatrixBuilder} = require('./matrix_builder');
-const {configureKotlinDefaults, javaDistributionAxis, javaVersionAxis, setMatrix} = require('./matrix_commons');
+import {createGitHubMatrixBuilder} from './vlsi_matrix_builder.mjs';
+import {configureKotlinDefaults, filterValues, generateJvmRows, javaVersionAxis, setMatrix} from "./matrix_commons.mjs";
 
-const matrix = new MatrixBuilder();
+const {matrix} = createGitHubMatrixBuilder();
 // we no longer support jdk 11
-const withoutJdk25 = {...javaVersionAxis, values: javaVersionAxis.values.filter(x => x !== '11') };
-configureKotlinDefaults(matrix, javaDistributionAxis, withoutJdk25);
-
-setMatrix(matrix, 4);
+configureKotlinDefaults(matrix, {versionAxis: filterValues(javaVersionAxis, x => x !== '11')});
+const include = generateJvmRows(matrix, process.env.GITHUB_EVENT_NAME === "pull_request" ? 3 : 1)
+setMatrix(matrix, include);
