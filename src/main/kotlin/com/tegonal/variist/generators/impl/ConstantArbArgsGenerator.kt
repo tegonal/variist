@@ -13,7 +13,7 @@ class ConstantArbArgsGenerator<T>(
 	componentFactoryContainer: ComponentFactoryContainer,
 	private val constant: T,
 ) : BaseArbArgsGenerator<T>(componentFactoryContainer) {
-	val sequence = repeatForever(constant)
+	private val sequence = repeatForever(constant)
 
 	override fun generateOne(seedOffset: Int): T = constant
 	override fun generate(seedOffset: Int): Sequence<T> = sequence
