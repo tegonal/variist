@@ -1,8 +1,6 @@
 package com.tegonal.variist.generators
 
-import com.tegonal.variist.config._components
-import com.tegonal.variist.generators.impl.ConstantArbArgsGenerator
-import com.tegonal.variist.generators.impl.checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize
+import com.tegonal.variist.generators.impl.checkNotEmptyCreateIndexBasedGenerator
 
 /**
  * Returns an [ArbArgsGenerator] based on the given [args].
@@ -11,8 +9,7 @@ import com.tegonal.variist.generators.impl.checkNotEmptyReturnNullIfOneElementAn
  */
 @JvmName("fromValueList")
 fun <T> ArbExtensionPoint.fromList(args: List<T>): ArbArgsGenerator<T> =
-	checkNotEmptyReturnNullIfOneElementAndOtherwiseIntFromUntilSize(args.size)?.map(args::get)
-		?: ConstantArbArgsGenerator(_components, args.first())
+	checkNotEmptyCreateIndexBasedGenerator(args.size, args::get)
 
 /**
  * Returns an [ArbArgsGenerator] based on the given [weightWithValueList] which picks the next value

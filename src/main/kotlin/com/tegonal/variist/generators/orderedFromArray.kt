@@ -2,7 +2,8 @@ package com.tegonal.variist.generators
 
 import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.impl.ArrayOrderedArgsGenerator
-import com.tegonal.variist.generators.impl.RandomAccessOrderedArgsGenerator
+import com.tegonal.variist.generators.impl.ConstantOrderedArgsGenerator
+import com.tegonal.variist.generators.impl.checkNotEmptyCreateIndexBasedGenerator
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -10,7 +11,7 @@ import com.tegonal.variist.generators.impl.RandomAccessOrderedArgsGenerator
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: ByteArray): OrderedArgsGenerator<Byte> =
-	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
+	checkNotEmptyCreateIndexBasedGenerator(args.size, args::get)
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -18,8 +19,7 @@ fun OrderedExtensionPoint.fromArray(args: ByteArray): OrderedArgsGenerator<Byte>
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: CharArray): OrderedArgsGenerator<Char> =
-	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
-
+	checkNotEmptyCreateIndexBasedGenerator(args.size, args::get)
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -27,7 +27,7 @@ fun OrderedExtensionPoint.fromArray(args: CharArray): OrderedArgsGenerator<Char>
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: ShortArray): OrderedArgsGenerator<Short> =
-	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
+	checkNotEmptyCreateIndexBasedGenerator(args.size, args::get)
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -35,7 +35,7 @@ fun OrderedExtensionPoint.fromArray(args: ShortArray): OrderedArgsGenerator<Shor
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: IntArray): OrderedArgsGenerator<Int> =
-	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
+	checkNotEmptyCreateIndexBasedGenerator(args.size, args::get)
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -43,7 +43,7 @@ fun OrderedExtensionPoint.fromArray(args: IntArray): OrderedArgsGenerator<Int> =
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: LongArray): OrderedArgsGenerator<Long> =
-	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
+	checkNotEmptyCreateIndexBasedGenerator(args.size, args::get)
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -51,7 +51,7 @@ fun OrderedExtensionPoint.fromArray(args: LongArray): OrderedArgsGenerator<Long>
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: FloatArray): OrderedArgsGenerator<Float> =
-	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
+	checkNotEmptyCreateIndexBasedGenerator(args.size, args::get)
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -59,7 +59,7 @@ fun OrderedExtensionPoint.fromArray(args: FloatArray): OrderedArgsGenerator<Floa
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: DoubleArray): OrderedArgsGenerator<Double> =
-	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
+	checkNotEmptyCreateIndexBasedGenerator(args.size, args::get)
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -67,7 +67,7 @@ fun OrderedExtensionPoint.fromArray(args: DoubleArray): OrderedArgsGenerator<Dou
  * @since 2.0.0
  */
 fun OrderedExtensionPoint.fromArray(args: BooleanArray): OrderedArgsGenerator<Boolean> =
-	RandomAccessOrderedArgsGenerator(_components, args.size) { args[it] }
+	checkNotEmptyCreateIndexBasedGenerator(args.size, args::get)
 
 /**
  * Returns an [OrderedArgsGenerator] based on the given [args].
@@ -75,4 +75,5 @@ fun OrderedExtensionPoint.fromArray(args: BooleanArray): OrderedArgsGenerator<Bo
  * @since 2.0.0
  */
 fun <T> OrderedExtensionPoint.fromArray(args: Array<out T>): OrderedArgsGenerator<T> =
-	ArrayOrderedArgsGenerator(_components, args)
+	if (args.size == 1) ConstantOrderedArgsGenerator(_components, args.first())
+	else ArrayOrderedArgsGenerator(_components, args)
