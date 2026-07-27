@@ -5,7 +5,7 @@ kbox = "3.3.0"
 kotlin = "2.4.10"
 task-tree = "4.0.1"
 tutteli = "5.0.3"
-vlsi = "3.0.2"
+vlsi = "4.0.0"
 
 [libraries]
 dokka-plugin = { module = "org.jetbrains.dokka:org.jetbrains.dokka.gradle.plugin", version.ref = "dokka" }
