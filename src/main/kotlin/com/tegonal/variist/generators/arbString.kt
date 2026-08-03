@@ -161,6 +161,70 @@ private fun checkCanGenerateRequiredLength(
 	}
 }
 
-//TODO 3.1.0 combinations on case
-//arb.stringRandomCase(s: String)
+/**
+ * Returns an [ArbArgsGenerator] which generates different case variants of the given [string] where only
+ * a-z (A-Z) change case.
+ *
+ * It is intended for ASCII identifiers, e.g. for testing case-insensitive matching for things like:
+ * - HTTP headers
+ * - JSON/XML property names
+ * - enum values
+ * - configuration keys
+ * - protocol names
+ * - identifiers
+ *
+ * It is not intended for Unicode strings where case conversion is more complex.
+
+ * @param string The string for which different case variants shall be generated.
+ *
+ * @since 3.0.0
+ */
+fun ArbExtensionPoint.caseVariant(string: String): ArbArgsGenerator<String> =
+	string.asSequence()
+		.map { char ->
+			val charAsString = char.toString()
+			when (char) {
+				in 'a'..'z' -> arb.of(charAsString, char.uppercaseChar().toString())
+				in 'A'..'Z' -> arb.of(charAsString, char.lowercaseChar().toString())
+				else -> arb.of(charAsString)
+			}
+		}.concatToString()
+
+/**
+ * Combines the given [ArbArgsGenerator] by concatenating the individual generated strings to one big string.
+ *
+ * @throws IllegalStateException in case the [Iterable] is empty.
+ * @since 3.0.0
+ */
+fun Iterable<ArbArgsGenerator<String>>.concatToString(): ArbArgsGenerator<String> =
+	iterator().concatToString()
+
+/**
+ * Combines the given [ArbArgsGenerator]s by concatenating the individual generated strings to one big string.
+ *
+ * @throws IllegalStateException in case the [Sequence] is empty.
+ * @since 3.0.0
+ */
+fun Sequence<ArbArgsGenerator<String>>.concatToString(): ArbArgsGenerator<String> =
+	iterator().concatToString()
+
+/**
+ * Combines the given [ArbArgsGenerator]s by concatenating the individual generated strings to one big string.
+ *
+ * @throws IllegalStateException in case the [Iterator] is empty.
+ * @since 3.0.0
+ */
+fun Iterator<ArbArgsGenerator<String>>.concatToString(): ArbArgsGenerator<String> {
+	check(hasNext()) {
+		"The Iterator must contain at least one ArbArgsGenerator"
+	}
+	val first = next()
+	return asSequence().fold(first.map { StringBuilder(it) }) { acc, next ->
+		acc.zip(next) { sb, substring ->
+			sb.append(substring)
+		}
+	}.map {
+		it.toString()
+	}
+}
 
