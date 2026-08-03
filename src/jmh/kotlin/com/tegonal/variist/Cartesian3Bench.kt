@@ -5,7 +5,6 @@ package com.tegonal.variist
 import ch.tutteli.kbox.Tuple3
 import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.*
-import com.tegonal.variist.generators.impl.BaseSemiOrderedArgsGenerator
 import com.tegonal.variist.generators.impl.BaseSemiOrderedLikeArgsGenerator
 import com.tegonal.variist.utils.deriveChildSeedOffset
 import org.openjdk.jmh.annotations.*
