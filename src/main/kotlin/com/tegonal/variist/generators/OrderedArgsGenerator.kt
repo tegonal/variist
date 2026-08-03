@@ -1,7 +1,6 @@
 package com.tegonal.variist.generators
 
-import com.tegonal.variist.generators.impl.InternalDangerousApi
-import com.tegonal.variist.generators.impl.transformInternal
+import com.tegonal.variist.generators.impl.OrderedArgsGeneratorMapper
 
 /**
  * Represents an [ArgsGenerator] which provides the method [generate] which generates [T]s always in the same
@@ -31,11 +30,8 @@ interface OrderedArgsGenerator<out T> : SemiOrderedLikeArgsGenerator<T> {
 	 *
 	 * @since 2.0.0
 	 */
-	@OptIn(InternalDangerousApi::class)
 	override fun <R> map(transform: (T) -> R): OrderedArgsGenerator<R> =
-	// TODO 3.5.0 bench if it would be worth it to introduce an OrderedArgsGeneratorMapper which takes T -> R and
-		//  provides an optimised generateOne method
-		transformInternal { seq -> seq.map(transform) }
+		OrderedArgsGeneratorMapper(this, transform)
 
 	/**
 	 * Returns the maximum of values `this` generator is able to generate before it starts over again.

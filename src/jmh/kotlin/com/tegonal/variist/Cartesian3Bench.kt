@@ -6,6 +6,7 @@ import ch.tutteli.kbox.Tuple3
 import com.tegonal.variist.config._components
 import com.tegonal.variist.generators.*
 import com.tegonal.variist.generators.impl.BaseSemiOrderedArgsGenerator
+import com.tegonal.variist.generators.impl.BaseSemiOrderedLikeArgsGenerator
 import com.tegonal.variist.utils.deriveChildSeedOffset
 import org.openjdk.jmh.annotations.*
 import java.util.concurrent.TimeUnit
@@ -69,7 +70,6 @@ class OrderedCartesianProduct3ArgsGenerator<A1, A2, A3, R>(
 	transform(args[0] as A1, args[1] as A2, args[2] as A3)
 }), OrderedArgsGenerator<R>
 
-
 /**
  * !! No backward compatibility guarantees !!
  * Reuse at your own risk
@@ -79,7 +79,7 @@ class OrderedCartesianProduct3ArgsGenerator<A1, A2, A3, R>(
 abstract class CartesianProductMultiArgsGenerator<R>(
 	private val generators: List<SemiOrderedLikeArgsGenerator<*>>,
 	private val transform: (Array<*>) -> R
-) : BaseSemiOrderedArgsGenerator<R>(
+) : BaseSemiOrderedLikeArgsGenerator<R>(
 	// note, we don't (and cannot) check that a1Generator and a2Generator use the same ComponentContainer,
 	// should you run into weird behaviour (such as one generator uses seed X and the other seed Y) then most likely
 	// someone used two different initial factories
