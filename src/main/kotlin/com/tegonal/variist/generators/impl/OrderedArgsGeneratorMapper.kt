@@ -11,7 +11,7 @@ import com.tegonal.variist.generators.OrderedArgsGenerator
  *
  * @since 3.0.0
  */
-class OrderedArgsGeneratorMapper<T, R>(
+open class OrderedArgsGeneratorMapper<T, R>(
 	private val baseGenerator: OrderedArgsGenerator<T>,
 	private val transform: (T) -> R
 ) : OrderedArgsGenerator<R>, ComponentFactoryContainerProvider {
