@@ -162,13 +162,19 @@ private fun checkCanGenerateRequiredLength(
 }
 
 /**
- * Returns an [ArbArgsGenerator] which generates different case variants of the given [string] where only
- * a-z (A-Z) change case.
+ * Returns an [ArbArgsGenerator] which generates different case variants of the given [enum].[name][Enum.name],
+ * where only the letters a-z and A-Z are permuted.
+ */
+fun ArbExtensionPoint.caseVariant(enum: Enum<*>) =
+	caseVariant(enum.name)
+
+/**
+ * Returns an [ArbArgsGenerator] which generates different case variants of the given [string],
+ * where only the letters a-z and A-Z are permuted.
  *
- * It is intended for ASCII identifiers, e.g. for testing case-insensitive matching for things like:
+ * It is intended for ASCII identifiers, e.g. for testing case-(in)sensitive matching for things like:
  * - HTTP headers
  * - JSON/XML property names
- * - enum values
  * - configuration keys
  * - protocol names
  * - identifiers

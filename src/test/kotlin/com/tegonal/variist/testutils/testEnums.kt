@@ -7,3 +7,6 @@ enum class AbcdEnum {
 enum class XyzEnum {
 	X, Y, Z
 }
+enum class Color {
+	Red, Blue, Green
+}

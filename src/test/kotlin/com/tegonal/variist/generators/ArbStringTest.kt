@@ -8,6 +8,7 @@ import com.tegonal.variist.config.arb
 import com.tegonal.variist.config.config
 import com.tegonal.variist.providers.ArgsSource
 import com.tegonal.variist.providers.ArgsSourceOptions
+import com.tegonal.variist.testutils.Color
 import com.tegonal.variist.testutils.createArbWithCustomConfig
 import com.tegonal.variist.testutils.firstDerivedChildFromSeed0
 import com.tegonal.variist.testutils.withMockedRandom
@@ -36,9 +37,14 @@ class ArbStringTest : AbstractArbArgsGeneratorTest<Any>() {
 			)
 		},
 		Tuple(
-			"caseVariant",
+			"caseVariant string",
 			modifiedArb.caseVariant("bla"),
 			listOf("bla", "blA", "bLa", "bLA", "Bla", "BlA", "BLa", "BLA")
+		),
+		Tuple(
+			"caseVariant Enum",
+			modifiedArb.caseVariant(Color.Red),
+			listOf("red", "reD", "rEd", "rED", "Red", "ReD", "REd", "RED")
 		)
 	)
 
