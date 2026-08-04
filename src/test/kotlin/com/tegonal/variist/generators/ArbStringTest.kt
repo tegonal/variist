@@ -34,7 +34,12 @@ class ArbStringTest : AbstractArbArgsGeneratorTest<Any>() {
 				modifiedArb.string(maxLength = 1, allowedRanges = it.ranges),
 				listOf("") + it.toStrings()
 			)
-		}
+		},
+		Tuple(
+			"caseVariant",
+			modifiedArb.caseVariant("bla"),
+			listOf("bla", "blA", "bLa", "bLA", "Bla", "BlA", "BLa", "BLA")
+		)
 	)
 
 	private fun UnicodeRanges.toStrings() = ranges.flatMap { range ->
@@ -46,7 +51,7 @@ class ArbStringTest : AbstractArbArgsGeneratorTest<Any>() {
 	@ParameterizedTest
 	@ArgsSource("arb1To20")
 	@ArgsSourceOptions(maxArgs = 5)
-	fun failsIMinLengthIsOddAndMultipleNonBmpRange(numberOfUnicodeRanges: Int) {
+	fun failsIfMinLengthIsOddAndMultipleNonBmpRange(numberOfUnicodeRanges: Int) {
 		expect {
 			arb.string(
 				minLength = 1, maxLength = 2,
@@ -85,7 +90,6 @@ class ArbStringTest : AbstractArbArgsGeneratorTest<Any>() {
 				// everything else are the code points
 				else Tuple(listOf(0xF602 + 1, 1), emptyList(), emptyList())
 			}.arb
-
 
 		val g = modifiedArb.string(
 			minLength = 3,
