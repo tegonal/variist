@@ -1,6 +1,7 @@
 package com.tegonal.variist.generators
 
 import ch.tutteli.atrium.api.fluent.en_GB.toContainExactly
+import ch.tutteli.atrium.api.fluent.en_GB.toThrow
 import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
 import com.tegonal.variist.generators.impl.flatMapIndexedInternal
@@ -34,6 +35,12 @@ class ArbTransformationTest : AbstractArbArgsGeneratorTest<Any>() {
 				Tuple(
 					"chunked with transform", generator.chunked(2) { it.toSet() },
 					(1..4).flatMap { first -> (1..4).map { second -> setOf(first, second) } }
+				),
+				Tuple(
+					"chunkedDistinctValues", generator.chunkedDistinctValues(2),
+					(1..4).flatMap { first ->
+						(1..4).filterNot { it == first }.map { second -> listOf(first, second) }
+					}
 				),
 				Tuple(
 					"transform - flatMap",
@@ -79,4 +86,45 @@ class ArbTransformationTest : AbstractArbArgsGeneratorTest<Any>() {
 		expect(g.seedOffsets).toContainExactly(firstDerivedChildFromSeed0)
 	}
 
+	@Test
+	fun chunkedDistinctValues_generateOne_failsForImpossibleCases() {
+		val g = arb.of(1).chunkedDistinctValues(size = 2, maxRejections = 10)
+		expect {
+			g.generateOne()
+		}.toThrow<VariistGenerationException>()
+	}
+
+	@Test
+	fun chunkedDistinctValues_generate_failsForImpossibleCases() {
+		val g = arb.of(1).chunkedDistinctValues(size = 2, maxRejections = 10)
+		expect {
+			g.generate().first()
+		}.toThrow<VariistGenerationException>()
+	}
+
+	@Test
+	fun chunkedDistinctValues_generateOne_failsForHardProblems() {
+		val g = arb.intFromUntil(1, 100).chunkedDistinctValues(size = 99, maxRejections = 1)
+		expect {
+			g.generateOne()
+		}.toThrow<VariistGenerationException>()
+	}
+
+	@Test
+	fun chunkedDistinctValues_generate_failsForHardProblems() {
+		val g = arb.intFromUntil(1, 100).chunkedDistinctValues(size = 99, maxRejections = 1)
+		expect {
+			g.generate().first()
+		}.toThrow<VariistGenerationException>()
+	}
+
+	@Test
+	fun chunkedDistinctValues_generateOne_successIfEnoughRejectionsAllowed() {
+		arb.intFromUntil(1, 100).chunkedDistinctValues(size = 90).generateOne()
+	}
+
+	@Test
+	fun chunkedDistinctValues_generate_successIfEnoughRejectionsAllowed() {
+		arb.intFromUntil(1, 100).chunkedDistinctValues(size = 90).generate().first()
+	}
 }
