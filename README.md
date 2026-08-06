@@ -341,6 +341,10 @@ arb.longBoundsBased(minInclusive = -10, maxInclusive = 10, minSize = 0, maxSize 
 //...
 
 arb.string(minLength = 0, maxLength = 20, allowedRanges = UnicodeRanges.ASCII_PRINTABLE.ranges)
+// generates: "bla", "blA", "bLa", "bLA", "Bla", "BlA", "BLa", "BLA"
+arb.caseVariant("bla")
+// generates: "red", "reD", "rEd", "rED", "Red", "ReD", "REd", "RED"
+arb.caseVariant(Color.Red)
 ```
 
 </code-arb-1>
