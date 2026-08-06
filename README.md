@@ -47,7 +47,8 @@ version: [README of v2.3.0](https://github.com/tegonal/variist/tree/main/README.
 		- [transform](#transform)
 		- [map](#map)
 		- [filter/filterNot](#filter)
-		- [chunked](#chunked)
+		- [arb.chunked](#arb-chunked)
+		- [arb.chunkedDistinctValues](#arb-chunkedDistinctValues)
 		- [ordered.concatenation](#ordered-concatenation)
 		- [arb.mergeWeighted](#arb-mergeWeighted)
           - [arb.fromList/EnumWeighted](#arb-fromListWeighted--fromEnumWeighted)
@@ -749,7 +750,7 @@ arb.intFromTo(1, 1000).filter { it % 2 == 1 }
 
 </code-dont-filter>
 
-### chunked
+### arb chunked
 
 If you want to take a static number of values from an `ArbArgsGenerator` and transform them into another type, then
 `chunked` comes in handy where as for `Sequence` two overloads are provided. The first transforms the values into a
@@ -770,6 +771,11 @@ So far we did not come across a use case where `chunked` would be valuable for `
 provide a shortcut. [Let us know your use cases](https://github.com/tegonal/variist/discussions/new?category=ideas),
 we happily add the shortcut if it is of value (we try to not clutter the API with methods we have not
 used ourselves so far).
+
+### arb chunkedDistinctValues
+
+Similar to `chunked`, `chunkedDistinctValues` chunks the generated values into a `List` of a given size but assures, 
+that each chunk contains distinct values (no guarantee, that values or distinct overall).
 
 ### ordered concatenation
 
