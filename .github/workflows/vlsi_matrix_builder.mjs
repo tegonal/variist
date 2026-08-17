@@ -5,7 +5,7 @@
 //  \__/\__/\_, /\___/_//_/\_,_/_/         It is licensed under Apache License 2.0
 //         /___/                           Please report bugs and contribute back your improvements
 //
-//                                         Version: v6.0.0
+//                                         Version: v6.0.1
 //##################################
 // It's kind of a fat-file, including everyhting from
 // https://github.com/vlsi/github-actions-random-matrix/blob/main/src
