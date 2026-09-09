@@ -4,6 +4,7 @@ import ch.tutteli.atrium.api.fluent.en_GB.toContainExactly
 import ch.tutteli.atrium.api.fluent.en_GB.toThrow
 import ch.tutteli.atrium.api.verbs.expect
 import ch.tutteli.kbox.Tuple
+import ch.tutteli.kbox.takeUnless
 import com.tegonal.variist.generators.impl.flatMapIndexedInternal
 import com.tegonal.variist.generators.impl.mapIndexedInternal
 import com.tegonal.variist.testutils.RepeatGivenListArbArgsGenerator
@@ -20,6 +21,11 @@ class ArbTransformationTest : AbstractArbArgsGeneratorTest<Any>() {
 			val generator = modifiedArb.fromList(l)
 			sequenceOf(
 				Tuple("map", generator.map(mapFun), l.map(mapFun)),
+				Tuple(
+					"mapNotNull",
+					generator.mapNotNull { takeUnless(it == 1) { it + 1 } },
+					l.mapNotNull { takeUnless(it == 1) { it + 1 } }
+				),
 				Tuple(
 					"filter", generator.filter { it % 2 == 0 },
 					listOf(2, 4)
