@@ -155,7 +155,7 @@ class VariistConfigViaPropertiesLoader {
 		val deadlinePropertyName = deadlinePropertyName(localPropertiesPrefix, propertyName)
 		if (propertyValue == null) {
 			if (definedDeadline != null) {
-				localPropertiesPath.unsetErrorDeadlineFor(deadlinePropertyName, localPropertiesPrefix)
+				localPropertiesPath.unsetErrorDeadlineFor(deadlinePropertyName)
 			}
 		} else {
 			if (definedDeadline == null) {
@@ -206,9 +206,9 @@ class VariistConfigViaPropertiesLoader {
 		return deadlinePropertyName
 	}
 
-	private fun Path.unsetErrorDeadlineFor(deadlinePropertyName: String, localPropertiesPrefix: String) {
+	private fun Path.unsetErrorDeadlineFor(deadlinePropertyName: String) {
 		replaceText {
-			it.replace(Regex("\n(#.*\n)*${localPropertiesPrefix}${deadlinePropertyName}=.*"), "")
+			it.replace(Regex("\n(#.*\n)*${Regex.escape(deadlinePropertyName)}=.*"), "")
 		}
 	}
 
