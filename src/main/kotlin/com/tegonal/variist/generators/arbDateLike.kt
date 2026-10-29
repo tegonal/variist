@@ -11,7 +11,7 @@ import kotlin.math.sign
  * Returns an [ArbArgsGenerator] which generates [LocalTime]s ranging from [LocalTime.MIN] to inclusive [LocalTime.MAX]
  * where [temporalUnit] defines the steps which defaults to [ChronoUnit.SECONDS].
  *
- * @since 2.3.0
+ * @since 3.0.0
  */
 fun ArbExtensionPoint.localTime(temporalUnit: TemporalUnit = ChronoUnit.SECONDS) =
 	localTimeFromTo(LocalTime.MIN, LocalTime.MAX, temporalUnit)
@@ -175,7 +175,7 @@ fun ArbExtensionPoint.offsetDateTimeFromTo(
 /**
  * Returns an [ArbArgsGenerator] which generates [ZoneId]s.
  *
- * @since 2.3.0
+ * @since 3.0.0
  */
 fun ArbExtensionPoint.zoneId(): ArbArgsGenerator<ZoneId> = arb.fromList(zoneIds)
 
@@ -184,7 +184,7 @@ private val zoneIds by lazy { ZoneId.getAvailableZoneIds().map { ZoneId.of(it) }
 /**
  * Returns an [ArbArgsGenerator] which generates [ZoneId]s.
  *
- * @since 2.3.0
+ * @since 3.0.0
  */
 fun ArbExtensionPoint.zoneOffset(): ArbArgsGenerator<ZoneOffset> =
 	arb.intFromTo(-18, 18).zip(arb.intFromTo(0, 59)).zip(arb.intFromTo(0, 59)) { (h, m), s ->
@@ -195,7 +195,7 @@ fun ArbExtensionPoint.zoneOffset(): ArbArgsGenerator<ZoneOffset> =
 /**
  * Adjust the [ZoneId] of the generated [ZonedDateTime] based on the given [ArbArgsGenerator].
  *
- * @since 2.3.0
+ * @since 3.0.0
  */
 fun ArbArgsGenerator<ZonedDateTime>.withZoneSameInstant(
 	arbZoneId: ArbArgsGenerator<ZoneId>
