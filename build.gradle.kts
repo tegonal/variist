@@ -4,7 +4,7 @@
 plugins {
 	id("build-logic.published-kotlin-jvm")
 	id("code-generation.generate")
-	id("me.champeau.jmh") version "0.7.3"
+	id("me.champeau.jmh") version "0.7.4"
 }
 
 version = "2.4.0-SNAPSHOT"
