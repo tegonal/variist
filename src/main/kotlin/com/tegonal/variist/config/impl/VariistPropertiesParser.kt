@@ -128,7 +128,7 @@ class VariistPropertiesParser {
 				key,
 				value,
 				supportedKeys = listOf("maxArgs"),
-				within = "$PROFILES_PREFIX.$envName."
+				within = "$PROFILES_PREFIX$envName."
 			)
 		}
 		// currently we only have 1 property, so we can simply replace, not yet a need to merge

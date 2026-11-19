@@ -21,8 +21,8 @@ class DefaultTestProfiles(profiles: Map<String, Map<String, TestConfig>>) : Test
 			check(testConfigPerEnv.isNotEmpty()) {
 				"You need to define at least one environment in test profile $profile"
 			}
-			testConfigPerEnv.keys.forEach { it ->
-				checkIsNotBlank(it, "env in profile $profile")
+			testConfigPerEnv.keys.forEach { env ->
+				checkIsNotBlank(env, "env in profile $profile")
 			}
 			put(profile, testConfigPerEnv.toMap())
 		}
@@ -30,19 +30,27 @@ class DefaultTestProfiles(profiles: Map<String, Map<String, TestConfig>>) : Test
 
 	override operator fun contains(profileName: String) = profiles.contains(profileName)
 
-	override fun get(profileName: String, env: String): TestConfig =
-		find(profileName, env) ?: throw IllegalArgumentException(
-			"profile $profileName not defined, available profiles: ${
-				profiles.keys.joinToString(", ")
+	override fun get(profileName: String, env: String): TestConfig {
+		val envs = envsToTestConfigFor(profileName)
+		return envs[env] ?: throw IllegalArgumentException(
+			"env $env not defined in profile $profileName, available envs: ${
+				envs.keys.joinToString(", ")
 			}"
 		)
+	}
 
 	override fun find(profileName: String, env: String): TestConfig? = profiles[profileName]?.get(env)
 
 	override fun profileNames(): Set<String> = profiles.keys
-	override fun envs(profileName: String): Set<String> = run {
-		profiles[profileName] ?: error("profile $profileName does not exist")
-	}.keys
+	override fun envs(profileName: String): Set<String> =
+		envsToTestConfigFor(profileName).keys
+
+	private fun envsToTestConfigFor(profileName: String): Map<String, TestConfig> =
+		profiles[profileName] ?: throw IllegalArgumentException(
+			"profile $profileName not defined, available profiles: ${
+				profiles.keys.joinToString(", ")
+			}"
+		)
 
 	override fun toMutableMap(): MutableMap<String, MutableMap<String, TestConfig>> =
 		HashMap<String, MutableMap<String, TestConfig>>(profiles.size)
